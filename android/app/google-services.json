@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "825250749124",
+    "project_id": "happily-ever-after-4b2fe",
+    "storage_bucket": "happily-ever-after-4b2fe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:825250749124:android:923da7b610b7a15c090791",
+        "android_client_info": {
+          "package_name": "studio.protoplasm.hea"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "825250749124-97v2kpkssgvm07egkqu116bjdhrh059k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7CT0_8_IENsJrCzUWkmd1g8RMcUzyYmY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "825250749124-97v2kpkssgvm07egkqu116bjdhrh059k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
