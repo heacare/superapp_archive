@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+import 'package:hea/providers/auth.dart';
 import 'package:hea/screens/home.dart';
+import 'package:hea/screens/login.dart';
 
 void main() {
   runApp(const App());
@@ -30,12 +32,26 @@ class _AppState extends State<App> {
           ),
           // TODO design a loading page and a 'error' page
           // Match Firebase initialization result
-          home:
-            snapshot.hasError ? const Text("Firebase initialization failed!") :
-                snapshot.connectionState != ConnectionState.done ? const Text("Loading...") :
-                  const HomeScreen(),
+          home: mainScreen(snapshot)
         );
       },
     );
+  }
+
+  Widget mainScreen(AsyncSnapshot<Object?> snapshot) {
+    if (snapshot.hasError) {
+      return const Text("Firebase initialization failed!");
+    }
+
+    if (snapshot.connectionState != ConnectionState.done) {
+      return const Text("Loading...");
+    }
+
+    if (Authentication().currentUser() == null) {
+      // TODO this should be StageA first
+      return LoginScreen();
+    } else {
+      return HomeScreen();
+    }
   }
 }
