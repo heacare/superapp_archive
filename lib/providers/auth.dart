@@ -13,31 +13,36 @@ class Authentication {
     return firebaseAuth.currentUser;
   }
 
-  void signup(String email, String password) async {
+  Future signup(String email, String password) async {
     try {
-      firebaseAuth.createUserWithEmailAndPassword(
+      await firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
     } on FirebaseAuthException catch(e) {
       if (e.code == 'weak-password') {
         throw AuthenticationException(message: "Password is weak");
       } else if (e.code == 'email-already-in-use') {
-        throw AuthenticationException(message: "Email is already in use - did you mean to login instead?");
+        throw AuthenticationException(
+            message: "Email is already in use - did you mean to login instead?");
       }
-      throw AuthenticationException(message: "An unknown authentication error occurred in signup! Please try again");
+      throw AuthenticationException(
+          message: "Unknown authentication error occurred in signup! Please try again");
     }
   }
 
-  void login(String email, String password) async {
+  Future login(String email, String password) async {
     try {
-      firebaseAuth.signInWithEmailAndPassword(
+      await firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
     } on FirebaseAuthException catch(e) {
       if (e.code == 'user-not-found') {
-        throw AuthenticationException(message: "Username not found - did you mean to signup instead?");
+        throw AuthenticationException(
+            message: "Username not found - did you mean to signup instead?");
       } else if (e.code == 'wrong-password') {
-        throw AuthenticationException(message: "Wrong password - don't use hunter2");
+        throw AuthenticationException(
+            message: "Wrong password - is it really hunter2?");
       }
-      throw AuthenticationException(message: "An unknown authentication error occurred in login! Please try again");
+      throw AuthenticationException(
+          message: "An unknown authentication error occurred in login! Please try again");
     }
   }
 }
