@@ -2,7 +2,8 @@
   "project_info": {
     "project_number": "825250749124",
     "project_id": "happily-ever-after-4b2fe",
-    "storage_bucket": "happily-ever-after-4b2fe.appspot.com"
+    "storage_bucket": "happily-ever-after-4b2fe.appspot.com",
+    "firebase_url": "happily-ever-after-4b2fe-default-rtdb.asia-southeast1.firebasedatabase.app"
   },
   "client": [
     {
