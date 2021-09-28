@@ -32,6 +32,7 @@ dependencies:
 
   # Firebase
   firebase_core: ^1.6.0
+  firebase_auth: ^3.1.1
 
 
   # UI
