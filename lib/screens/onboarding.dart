@@ -14,10 +14,11 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
 
   var currentTemplateId = onboardingStartId;
-  var templates = OnboardingTemplate.fetchTemplates();
 
   @override
   Widget build(BuildContext context) {
+
+    var templatesFuture = OnboardingTemplate.fetchTemplates();
 
     return Scaffold(
       appBar: AppBar(
