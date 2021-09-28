@@ -2,9 +2,11 @@ import 'package:firebase_database/firebase_database.dart';
 
 const databaseUrl = "https://happily-ever-after-4b2fe-default-rtdb.asia-southeast1.firebasedatabase.app";
 
+typedef OnboardingTemplateMap = Map<String, OnboardingTemplate>;
+
 class OnboardingTemplate {
 
-  static Map<String, OnboardingTemplate>? _templates;
+  static OnboardingTemplateMap? _templates;
 
   final String title;
   final String? subtitle;
@@ -32,7 +34,7 @@ class OnboardingTemplate {
       ),
       text = json["text"];
 
-  static Future<Map<String, OnboardingTemplate>> fetchTemplates() async {
+  static Future<OnboardingTemplateMap> fetchTemplates() async {
 
     if (_templates == null) {
       // Fetch from Firebase
@@ -44,7 +46,7 @@ class OnboardingTemplate {
             MapEntry(key, OnboardingTemplate.fromJson(Map<String, dynamic>.from(value)))
           );
 
-          _templates = mappedData;
+          _templates = Map.unmodifiable(mappedData);
         },
         onError: (error) => print("Error connecting to Firebase Database: $error")
       );
