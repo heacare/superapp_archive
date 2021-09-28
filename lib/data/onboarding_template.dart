@@ -1,6 +1,7 @@
-import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 const databaseUrl = "https://happily-ever-after-4b2fe-default-rtdb.asia-southeast1.firebasedatabase.app";
+const templateCollection = "templates";
 
 typedef OnboardingTemplateMap = Map<String, OnboardingTemplate>;
 
@@ -38,18 +39,19 @@ class OnboardingTemplate {
 
     if (_templates == null) {
       // Fetch from Firebase
-      // TODO: Why the hell do I have to hardcode this? google-services.json doesn't provide the proper region URL for whatever reason
-      final ref = FirebaseDatabase(databaseURL: databaseUrl).reference().child("templates");
-      await ref.get().then(
-        (DataSnapshot data) {
-          var mappedData = Map<String, dynamic>.from(data.value).map((key, value) =>
-            MapEntry(key, OnboardingTemplate.fromJson(Map<String, dynamic>.from(value)))
+      final templates = FirebaseFirestore.instance
+          .collection(templateCollection)
+          .withConverter<OnboardingTemplate>(
+            fromFirestore: (snapshot, _) => OnboardingTemplate.fromJson(Map<String, dynamic>.from(snapshot.data()!)),
+            // TODO: Not really needed since we shouldn't be writing any templates
+            toFirestore: (template, _) => {}
           );
 
-          _templates = Map.unmodifiable(mappedData);
-        },
-        onError: (error) => print("Error connecting to Firebase Database: $error")
+      await templates.get().then(
+          (value) => _templates = Map.unmodifiable({ for (var doc in value.docs) doc.id: doc.data() }),
+          onError: (error) => print("Error connecting to Firestore: $error")
       );
+
     }
 
     return _templates!;

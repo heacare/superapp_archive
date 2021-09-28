@@ -100,6 +100,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       children = <Widget>[
         const Text("Oops, something broke")
       ];
+
+      print("Error: ${snapshot.error}");
     }
     else {
       // Loading screen
