@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:hea/providers/auth.dart';
 
+import 'package:hea/screens/content.dart';
+
 final auth = Authentication();
 
 class HomeScreen extends StatefulWidget {
@@ -18,8 +20,15 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text("Happily Ever After - Home"),
       ),
-      body: const Center(
-        child: Text("Hello welcome to mai shiny app")
+      body: Center(
+        child: Row(
+          children: [
+            Text("Hello welcome to mai shiny app"),
+            TextButton(child: Text("VIEW CONTENT"), onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) { return ContentScreen(); }));
+            })
+          ]
+        )
       ),
     );
   }

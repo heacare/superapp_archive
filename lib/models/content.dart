@@ -13,7 +13,7 @@ class Content {
           id: num.parse(id),
           title: json["title"]! as String,
           icon: json["icon"]! as String,
-          chapters: json["subchapters"].map((e) => Chapter.fromJson(e)).toList()
+          chapters: (json["subchapters"] as List<dynamic>).map((e) => Chapter.fromJson(e)).toList()
       );
 
   Map<String, dynamic> toJson() {
