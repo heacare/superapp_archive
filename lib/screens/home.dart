@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:hea/providers/auth.dart';
 
-import 'package:hea/screens/content.dart';
+import 'package:hea/screens/contents.dart';
 
 final auth = Authentication();
 
@@ -21,11 +21,11 @@ class _HomeScreenState extends State<HomeScreen> {
         title: const Text("Happily Ever After - Home"),
       ),
       body: Center(
-        child: Row(
+        child: Column(
           children: [
             Text("Hello welcome to mai shiny app"),
             TextButton(child: Text("VIEW CONTENT"), onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) { return ContentScreen(); }));
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ContentsScreen() ));
             })
           ]
         )
