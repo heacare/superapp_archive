@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-import 'package:hea/data/onboarding_template.dart';
+import 'package:hea/model/onboarding_template.dart';
 
 // const onboardingStartId = "onboard_start";
-const onboardingStartId = "bmi_0";
+const onboardingStartId = "smoking_2";
 
 class OnboardingScreen extends StatefulWidget {
   OnboardingScreen({Key? key}) : super(key: key);
@@ -16,7 +18,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   var currentTemplateId = onboardingStartId;
 
-  List<Widget> fromTemplateInputs(List<OnboardingTemplateInput> inputs) {
+  List<Widget> _fromTemplateInputs(List<OnboardingTemplateInput> inputs) {
 
     final inputWidgets = inputs.map(
       (input) => TextField(
@@ -44,7 +46,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     return List<Widget>.from(inputWidgets);
   }
 
-  List<Widget> fromTemplateOptions(List<OnboardingTemplateOption> options) {
+  List<Widget> _fromTemplateOptions(List<OnboardingTemplateOption> options) {
 
     final optionWidgets = options.map(
       (option) {
@@ -59,7 +61,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     return List<Widget>.from(optionWidgets);
   }
 
-  Widget templateBuilder(BuildContext context, AsyncSnapshot<OnboardingTemplateMap> snapshot) {
+  Widget _templateBuilder(BuildContext context, AsyncSnapshot<OnboardingTemplateMap> snapshot) {
     List<Widget> children;
 
     if (snapshot.hasData) {
@@ -87,12 +89,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         // TODO: Images
 
         if (template.inputs.isNotEmpty)
-          ...fromTemplateInputs(template.inputs),
-
-        ...fromTemplateOptions(template.options),
+          ..._fromTemplateInputs(template.inputs),
 
         if (template.text != null)
-          Text(template.text!)
+          MarkdownBody(
+              data: template.text!,
+              onTapLink: (text, href, title) => _launchUrl(href!),
+          ),
+
+        ..._fromTemplateOptions(template.options),
       ];
     }
     else if (snapshot.hasError) {
@@ -101,7 +106,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         const Text("Oops, something broke")
       ];
 
-      print("Error: ${snapshot.error}");
+      throw "Error in fetching templates: ${snapshot.error}";
     }
     else {
       // Loading screen
@@ -134,9 +139,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       body: Center(
           child: FutureBuilder<OnboardingTemplateMap>(
             future: templatesFuture,
-            builder: templateBuilder
+            builder: _templateBuilder
           )
       )
     );
+  }
+
+  _launchUrl(String url) async {
+    if (await canLaunch(url)) {
+      // Try to open web view within the app
+      await launch(url, forceWebView: true, forceSafariVC: true);
+    }
+    else {
+      throw "Failed to open $url";
+    }
   }
 }
