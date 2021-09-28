@@ -22,12 +22,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       await _auth.login(_email.text, _password.text);
+      await navigateSuccess();
     } on AuthenticationException catch (e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(e.message)));
     }
-
-    await navigateSuccess();
   }
 
   void signup() async {
@@ -35,12 +34,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       await _auth.signup(_email.text, _password.text);
+      await navigateSuccess();
     } on AuthenticationException catch (e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(e.message)));
     }
-
-    await navigateSuccess();
   }
 
   Future navigateSuccess() async {
