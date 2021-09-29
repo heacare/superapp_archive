@@ -7,7 +7,7 @@ import 'package:hea/models/user.dart';
 import 'home.dart';
 
 const onboardingStartId = "onboard_start";
-const onboardingLastId = "smoking_2";
+const onboardingLastId = "birth_control_1";
 
 class OnboardingScreen extends StatefulWidget {
   OnboardingScreen({Key? key}) : super(key: key);
@@ -26,7 +26,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Map<String, dynamic> user = User.testUser().toJson();
 
   _advanceNextTemplate(String nextTemplate) {
-    if (nextTemplate != onboardingLastId) {
+    if (currentTemplateId != onboardingLastId) {
       setState(() => currentTemplateId = nextTemplate);
     }
     else {
@@ -35,6 +35,23 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         MaterialPageRoute(builder: (context) => const HomeScreen()),
         (route) => false
       );
+    }
+  }
+
+  _updateUserField(String varName, String? value) {
+    // Check for single level nesting
+    if (varName.contains(".")) {
+      final idx = varName.indexOf(".");
+      final baseName = varName.substring(0, idx);
+      varName = varName.substring(idx+1);
+
+      if (user[baseName] == null) {
+        user[baseName] = {};
+      }
+      user[baseName][varName] = value;
+    }
+    else {
+      user[varName] = value ?? "";
     }
   }
 
@@ -82,7 +99,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 labelText: input.text
             ),
             onSaved: (String? value) {
-              user[input.varName] = value;
+              _updateUserField(input.varName, value);
             },
           )
       );
