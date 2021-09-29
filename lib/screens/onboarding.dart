@@ -1,9 +1,10 @@
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:hea/models/onboarding_custom.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:hea/data/user_repo.dart';
+import 'package:hea/models/onboarding_custom.dart';
 import 'package:hea/models/onboarding_template.dart';
 import 'package:hea/models/user.dart';
 import 'home.dart';
@@ -32,6 +33,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       setState(() => currentTemplateId = nextTemplate);
     }
     else {
+      // Push to Firestore
+      UserRepo().insert(User.fromJson(user));
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text("Welcome to Happily Ever After!")
+          )
+      );
+
       // Return to home screen
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => const HomeScreen()),
