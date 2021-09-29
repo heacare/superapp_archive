@@ -7,10 +7,20 @@ class User {
   final num weight;
   final String country;
   final String icon;
-  final Map<String, String> onboardingResponses;
+  final Map<String, dynamic> onboardingResponses;
 
   num get bmi {
     return weight / (height * height);
+  }
+
+  num get age {
+    DateTime now = DateTime.now();
+    int age = now.year - birthday.year;
+    if (now.month < birthday.month || (now.month == birthday.month && now.day < birthday.day)) {
+      age--;
+    }
+
+    return age;
   }
 
   User(this.id, this.gender, this.name, this.birthday, this.height, this.weight, this.country, this.icon, this.onboardingResponses);
@@ -36,7 +46,7 @@ class User {
     weight = data["weight"]! as num,
     country = data["country"]! as String,
     icon = data["icon"]! as String,
-    onboardingResponses = data["onboardingResponses"]! as Map<String, String>;
+    onboardingResponses = data["onboardingResponses"]! as Map<String, dynamic>;
 
   Map<String, dynamic> toJson() {
     return {
@@ -62,7 +72,6 @@ class Gender {
 
   static const male = Gender._internal("Male");
   static const female = Gender._internal("Female");
-  static const others = Gender._internal("Others");
 
-  static const genderList = [male, female, others];
+  static const genderList = [male, female];
 }

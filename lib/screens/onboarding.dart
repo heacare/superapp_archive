@@ -1,5 +1,7 @@
+import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:hea/models/onboarding_custom.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:hea/models/onboarding_template.dart';
@@ -18,8 +20,8 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
 
-  Gender? _gender = Gender.others;
-  final GlobalKey<FormState> _formState = GlobalKey<FormState>();
+  Gender? _gender;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   var currentTemplateId = onboardingStartId;
   // TODO: Fetch user using connector
@@ -38,7 +40,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
   }
 
-  _updateUserField(String varName, String? value) {
+  _updateUserField(String varName, dynamic value) {
     // Check for single level nesting
     if (varName.contains(".")) {
       final idx = varName.indexOf(".");
@@ -51,33 +53,77 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       user[baseName][varName] = value;
     }
     else {
-      user[varName] = value ?? "";
+      user[varName] = value;
     }
   }
 
   Form _fromTemplateInputs(List<OnboardingTemplateInput> inputs) {
 
-    // Return a configured TextInputType from option
-    getTextInputType(OnboardingTemplateInput input) {
-      final inputType = input.type;
+    // Return a configured widget
+    makeInputWidget(OnboardingTemplateInput input) {
 
-      if (inputType == "number") {
-        return const TextInputType.numberWithOptions(
-            signed: false,
-            decimal: true
+      // Checks for empty fields and type
+      getValidator(String? value) {
+        if (value == null || value.isEmpty) {
+          return "Field is required!";
+        }
+        if (input.type == "number") {
+          if (num.tryParse(value) == null) {
+            return "Invalid input!";
+          }
+        }
+        return null;
+      }
+
+      getTextInputType() {
+        if (input.type == "number") {
+          return const TextInputType.numberWithOptions(
+              signed: false,
+              decimal: true
+          );
+        }
+        else {
+          return TextInputType.text;
+        }
+      }
+
+      if (input.type == "date") {
+        return DateTimePicker(
+          type: DateTimePickerType.date,
+          firstDate: DateTime(1900),
+          lastDate: DateTime.now(),
+          dateLabelText: input.text,
+          onSaved: (String? value) {
+            _updateUserField(input.varName, DateTime.parse(value!));
+          },
+          validator: getValidator,
         );
       }
-      else if (inputType == "date") {
-        return TextInputType.datetime;
-      }
       else {
-        return TextInputType.text;
+        return TextFormField(
+            keyboardType: getTextInputType(),
+            decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                labelText: input.text
+            ),
+            onSaved: (String? value) {
+              if (input.type == "number") {
+                _updateUserField(input.varName, num.parse(value!));
+              }
+              else {
+                _updateUserField(input.varName, value);
+              }
+            },
+            validator: getValidator
+        );
       }
+
     }
 
     final inputWidgets;
     if (currentTemplateId == "gender_0") {
       // TODO: Hardcoded options for gender
+      // TODO: Missing validator
       inputWidgets = Gender.genderList.map(
           (gender) => RadioListTile<Gender>(
             title: Text(gender.toString()),
@@ -86,27 +132,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               setState(() => _gender = value);
               user["gender"] = value.toString();
             },
-            groupValue: _gender
+            groupValue: _gender,
           )
       );
     }
     else {
       inputWidgets = inputs.map(
-        (input) => TextFormField(
-            keyboardType: getTextInputType(input),
-            decoration: InputDecoration(
-                border: const OutlineInputBorder(),
-                labelText: input.text
-            ),
-            onSaved: (String? value) {
-              _updateUserField(input.varName, value);
-            },
-          )
+        (input) => makeInputWidget(input)
       );
     }
 
     return Form(
-      key: _formState,
+      key: _formKey,
       child: Wrap(
         children: List<Widget>.from(inputWidgets)
       )
@@ -121,12 +158,25 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           child: Text(option.text),
           onPressed: () {
             // Update user fields
-            _formState.currentState!
-                ..save()
-                ..reset();
+            if (!_formKey.currentState!.validate()) {
+              return;
+            }
+
+            _formKey.currentState!
+              ..save()
+              ..reset();
             print("User: $user");
 
-            _advanceNextTemplate(option.nextTemplate);
+            // Check for additional logic
+            if (customNextTemplate[currentTemplateId] != null) {
+              print(customNextTemplate[currentTemplateId]!(User.fromJson(user)));
+              _advanceNextTemplate(
+                customNextTemplate[currentTemplateId]!(User.fromJson(user))
+              );
+            }
+            else {
+              _advanceNextTemplate(option.nextTemplate);
+            }
           }
         );
       }
