@@ -6,7 +6,7 @@ import 'package:hea/models/onboarding_template.dart';
 import 'package:hea/models/user.dart';
 
 // const onboardingStartId = "onboard_start";
-const onboardingStartId = "bmi_0";
+const onboardingStartId = "gender_0";
 
 class OnboardingScreen extends StatefulWidget {
   OnboardingScreen({Key? key}) : super(key: key);
@@ -17,6 +17,7 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
 
+  Gender? _gender = Gender.others;
   final GlobalKey<FormState> _formState = GlobalKey<FormState>();
 
   var currentTemplateId = onboardingStartId;
@@ -43,18 +44,35 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       }
     }
 
-    final inputWidgets = inputs.map(
-      (input) => TextFormField(
-        keyboardType: getTextInputType(input),
-        decoration: InputDecoration(
-          border: const OutlineInputBorder(),
-          labelText: input.text
-        ),
-        onSaved: (String? value) {
-          user[input.varName] = value;
-        },
-      )
-    );
+    final inputWidgets;
+    if (currentTemplateId == "gender_0") {
+      // TODO: Hardcoded options for gender
+      inputWidgets = Gender.genderList.map(
+          (gender) => RadioListTile<Gender>(
+            title: Text(gender.toString()),
+            value: gender,
+            onChanged: (Gender? value) {
+              setState(() => _gender = value);
+              user["gender"] = value.toString();
+            },
+            groupValue: _gender
+          )
+      );
+    }
+    else {
+      inputWidgets = inputs.map(
+        (input) => TextFormField(
+            keyboardType: getTextInputType(input),
+            decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                labelText: input.text
+            ),
+            onSaved: (String? value) {
+              user[input.varName] = value;
+            },
+          )
+      );
+    }
 
     return Form(
       key: _formState,
