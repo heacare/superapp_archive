@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:hea/model/onboarding_template.dart';
+import 'package:hea/models/onboarding_template.dart';
+import 'package:hea/models/user.dart';
 
 // const onboardingStartId = "onboard_start";
-const onboardingStartId = "smoking_2";
+const onboardingStartId = "bmi_0";
 
 class OnboardingScreen extends StatefulWidget {
   OnboardingScreen({Key? key}) : super(key: key);
@@ -16,44 +17,67 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
 
-  var currentTemplateId = onboardingStartId;
+  final GlobalKey<FormState> _formState = GlobalKey<FormState>();
 
-  List<Widget> _fromTemplateInputs(List<OnboardingTemplateInput> inputs) {
+  var currentTemplateId = onboardingStartId;
+  // TODO: Fetch user using connector
+  Map<String, dynamic> user = User.testUser().toJson();
+
+  Form _fromTemplateInputs(List<OnboardingTemplateInput> inputs) {
+
+    // Return a configured TextInputType from option
+    getTextInputType(OnboardingTemplateInput input) {
+      final inputType = input.type;
+
+      if (inputType == "number") {
+        return const TextInputType.numberWithOptions(
+            signed: false,
+            decimal: true
+        );
+      }
+      else if (inputType == "date") {
+        return TextInputType.datetime;
+      }
+      else {
+        return TextInputType.text;
+      }
+    }
 
     final inputWidgets = inputs.map(
-      (input) => TextField(
-        keyboardType: ((inputType) {
-          if (inputType == "number") {
-            return const TextInputType.numberWithOptions(
-              signed: false,
-              decimal: true
-            );
-          }
-          else if (inputType == "date") {
-            return TextInputType.datetime;
-          }
-          else {
-            return TextInputType.text;
-          }
-        })(input.type),
+      (input) => TextFormField(
+        keyboardType: getTextInputType(input),
         decoration: InputDecoration(
           border: const OutlineInputBorder(),
           labelText: input.text
         ),
+        onSaved: (String? value) {
+          user[input.varName] = value;
+        },
       )
     );
 
-    return List<Widget>.from(inputWidgets);
+    return Form(
+      key: _formState,
+      child: Wrap(
+        children: List<Widget>.from(inputWidgets)
+      )
+    );
   }
 
-  List<Widget> _fromTemplateOptions(List<OnboardingTemplateOption> options) {
+  List<Widget> _fromTemplateOptions(List<OnboardingTemplateOption> options, Form inputForm) {
 
     final optionWidgets = options.map(
       (option) {
         return OutlinedButton(
           child: Text(option.text),
-          // TODO: Advance to next onboarding template
-          onPressed: () => print("Next template: ${option.nextTemplate}"),
+          onPressed: () {
+            // TODO: Advance to next onboarding template
+            print("Next template: ${option.nextTemplate}");
+
+            // Update user fields
+            _formState.currentState!.save();
+            print("User: $user");
+          }
         );
       }
     );
@@ -67,6 +91,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     if (snapshot.hasData) {
       // Retrieve specific OnboardTemplate object
       final template = snapshot.data![currentTemplateId]!;
+
+      // Build input widgets
+      Form inputForm = _fromTemplateInputs(template.inputs);
+      List<Widget> optionWidgets = _fromTemplateOptions(template.options, inputForm);
+
       children = <Widget>[
         Text(
           template.title,
@@ -87,17 +116,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           ),
 
         // TODO: Images
-
-        if (template.inputs.isNotEmpty)
-          ..._fromTemplateInputs(template.inputs),
+        inputForm,
 
         if (template.text != null)
           MarkdownBody(
-              data: template.text!,
-              onTapLink: (text, href, title) => _launchUrl(href!),
+            data: template.text!,
+            // Support opening links
+            onTapLink: (text, href, title) => _launchUrl(href!),
           ),
 
-        ..._fromTemplateOptions(template.options),
+        ...optionWidgets
       ];
     }
     else if (snapshot.hasError) {

@@ -61,12 +61,14 @@ class OnboardingTemplate {
 class OnboardingTemplateInput {
   final String text;
   final String type;
+  final String varName;
 
-  OnboardingTemplateInput(this.text, this.type);
+  OnboardingTemplateInput(this.text, this.type, this.varName);
 
   OnboardingTemplateInput.fromJson(Map<String, dynamic> json) :
       text = json["text"],
-      type = json["type"];
+      type = json["type"],
+      varName = json["varName"];
 }
 
 class OnboardingTemplateOption {
