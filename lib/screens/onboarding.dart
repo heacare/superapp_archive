@@ -4,9 +4,10 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:hea/models/onboarding_template.dart';
 import 'package:hea/models/user.dart';
+import 'home.dart';
 
-// const onboardingStartId = "onboard_start";
-const onboardingStartId = "gender_0";
+const onboardingStartId = "onboard_start";
+const onboardingLastId = "smoking_2";
 
 class OnboardingScreen extends StatefulWidget {
   OnboardingScreen({Key? key}) : super(key: key);
@@ -23,6 +24,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   var currentTemplateId = onboardingStartId;
   // TODO: Fetch user using connector
   Map<String, dynamic> user = User.testUser().toJson();
+
+  _advanceNextTemplate(String nextTemplate) {
+    if (nextTemplate != onboardingLastId) {
+      setState(() => currentTemplateId = nextTemplate);
+    }
+    else {
+      // Return to home screen
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
+        (route) => false
+      );
+    }
+  }
 
   Form _fromTemplateInputs(List<OnboardingTemplateInput> inputs) {
 
@@ -89,12 +103,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         return OutlinedButton(
           child: Text(option.text),
           onPressed: () {
-            // TODO: Advance to next onboarding template
-            print("Next template: ${option.nextTemplate}");
-
             // Update user fields
-            _formState.currentState!.save();
+            _formState.currentState!
+                ..save()
+                ..reset();
             print("User: $user");
+
+            _advanceNextTemplate(option.nextTemplate);
           }
         );
       }
