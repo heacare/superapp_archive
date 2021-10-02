@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:hea/data/user_repo.dart';
 import 'package:hea/providers/auth.dart';
 import 'package:hea/screens/home.dart';
+import 'package:hea/screens/onboarding.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({Key? key}) : super(key: key);
@@ -42,10 +44,25 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future navigateSuccess() async {
-    // TODO check if user is onboarded first!
-    await Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => HomeScreen()),
-      (route) => false);
+    final userId = _auth.currentUser()!.uid;
+    final user = await UserRepo().get(userId);
+
+    if (user == null) {
+      // User is not onboarded yet
+      await Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => OnboardingScreen(userId: userId)),
+          (route) => false
+      );
+    }
+    else {
+      await Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+          (route) => false
+      );
+    }
+
+
+
   }
 
   @override

@@ -8,10 +8,9 @@ class UserRepo {
         fromFirestore: (snapshot, _) => User.fromJson(snapshot.data()!),
         toFirestore: (user, _) => user.toJson());
 
-  Future<User?> get() async {
-    throw "Unimplemented";
-    // final users = await collection.where("id", isEqualTo: auth.user()).get();
-    // return users.docs.isEmpty ? null : users.docs[0].data();
+  Future<User?> get(String userId) async {
+    final users = await collection.where("id", isEqualTo: userId).get();
+    return users.docs.isEmpty ? null : users.docs[0].data();
   }
 
   void insert(User user) async {

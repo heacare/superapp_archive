@@ -4,7 +4,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:hea/providers/auth.dart';
 import 'package:hea/screens/home.dart';
 import 'package:hea/screens/login.dart';
-import 'package:hea/screens/onboarding.dart';
 
 void main() {
   runApp(const App());
@@ -50,8 +49,7 @@ class _AppState extends State<App> {
 
     if (Authentication().currentUser() == null) {
       // TODO this should be StageA first
-      // return LoginScreen();
-      return OnboardingScreen();
+      return LoginScreen();
     } else {
       return HomeScreen();
     }

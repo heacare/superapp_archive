@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -13,7 +14,12 @@ const onboardingStartId = "onboard_start";
 const onboardingLastId = "birth_control_1";
 
 class OnboardingScreen extends StatefulWidget {
-  OnboardingScreen({Key? key}) : super(key: key);
+  final String userId;
+  Map<String, dynamic> userJson;
+
+  OnboardingScreen({Key? key, required this.userId}) :
+        userJson = User(userId).toJson(),
+        super(key: key);
 
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();
@@ -25,8 +31,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   var currentTemplateId = onboardingStartId;
-  // TODO: Fetch user using connector
-  Map<String, dynamic> user = User.testUser().toJson();
 
   _advanceNextTemplate(String nextTemplate) {
     if (currentTemplateId != onboardingLastId) {
@@ -34,11 +38,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
     else {
       // Push to Firestore
-      UserRepo().insert(User.fromJson(user));
+      UserRepo().insert(User.fromJson(widget.userJson));
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text("Welcome to Happily Ever After!")
-          )
+        const SnackBar(
+            content: Text("Welcome to Happily Ever After!")
+        )
       );
 
       // Return to home screen
@@ -56,13 +60,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       final baseName = varName.substring(0, idx);
       varName = varName.substring(idx+1);
 
-      if (user[baseName] == null) {
-        user[baseName] = {};
+      if (widget.userJson[baseName] == null) {
+        widget.userJson[baseName] = {};
       }
-      user[baseName][varName] = value;
+      widget.userJson[baseName][varName] = value;
     }
     else {
-      user[varName] = value;
+      widget.userJson[varName] = value;
     }
   }
 
@@ -103,7 +107,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           lastDate: DateTime.now(),
           dateLabelText: input.text,
           onSaved: (String? value) {
-            _updateUserField(input.varName, DateTime.parse(value!));
+            // Use Timestamp objects for all datetimes
+            _updateUserField(input.varName, Timestamp.fromDate(DateTime.parse(value!)));
           },
           validator: getValidator,
         );
@@ -139,7 +144,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             value: gender,
             onChanged: (Gender? value) {
               setState(() => _gender = value);
-              user["gender"] = value.toString();
+              widget.userJson["gender"] = value.toString();
             },
             groupValue: _gender,
           )
@@ -174,13 +179,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             _formKey.currentState!
               ..save()
               ..reset();
-            print("User: $user");
+            print("User: ${widget.userJson}");
 
             // Check for additional logic
             if (customNextTemplate[currentTemplateId] != null) {
-              print(customNextTemplate[currentTemplateId]!(User.fromJson(user)));
+              User user = User.fromJson(widget.userJson);
+              print(customNextTemplate[currentTemplateId]!(user));
+
               _advanceNextTemplate(
-                customNextTemplate[currentTemplateId]!(User.fromJson(user))
+                customNextTemplate[currentTemplateId]!(user)
               );
             }
             else {
@@ -266,7 +273,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     final templatesFuture = OnboardingTemplate.fetchTemplates();
 
     return Scaffold(

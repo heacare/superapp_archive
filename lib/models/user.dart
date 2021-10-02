@@ -1,8 +1,12 @@
+
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class User {
   final String id;
   final String gender;
   final String name;
-  final DateTime birthday;
+  final Timestamp birthday;
   final num height;
   final num weight;
   final String country;
@@ -15,33 +19,30 @@ class User {
 
   num get age {
     DateTime now = DateTime.now();
-    int age = now.year - birthday.year;
-    if (now.month < birthday.month || (now.month == birthday.month && now.day < birthday.day)) {
+    DateTime birthdayDt = birthday.toDate();
+    int age = now.year - birthdayDt.year;
+    if (now.month < birthdayDt.month || (now.month == birthdayDt.month && now.day < birthdayDt.day)) {
       age--;
     }
 
     return age;
   }
 
-  User(this.id, this.gender, this.name, this.birthday, this.height, this.weight, this.country, this.icon, this.onboardingResponses);
-
-  // TODO: Remove once connector is up
-  User.testUser() :
-    id = "id",
-    gender = Gender.male.toString(),
-    name = "name",
-    birthday = DateTime.now(),
-    height = 169,
-    weight = 42.0,
-    country = "Alaska",
-    icon = "default_icon_id",
+  User(this.id) :
+    gender = "",
+    name = "",
+    birthday = Timestamp.fromDate(DateTime.now()),
+    height = 0,
+    weight = 0,
+    country = "",
+    icon = "",
     onboardingResponses = {};
 
   User.fromJson(Map<String, dynamic> data) :
     id = data["id"]! as String,
     gender = data["gender"]! as String,
     name = data["name"]! as String,
-    birthday = data["birthday"]! as DateTime,
+    birthday = data["birthday"]! as Timestamp,
     height = data["height"]! as num,
     weight = data["weight"]! as num,
     country = data["country"]! as String,
