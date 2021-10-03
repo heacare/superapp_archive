@@ -14,11 +14,10 @@ const onboardingStartId = "onboard_start";
 const onboardingLastId = "birth_control_1";
 
 class OnboardingScreen extends StatefulWidget {
-  final String userId;
   Map<String, dynamic> userJson;
 
-  OnboardingScreen({Key? key, required this.userId}) :
-        userJson = User(userId).toJson(),
+  // Pass a JSON representing User since we don't have reflection
+  OnboardingScreen({Key? key, required this.userJson}) :
         super(key: key);
 
   @override
@@ -179,7 +178,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             _formKey.currentState!
               ..save()
               ..reset();
-            print("User: ${widget.userJson}");
 
             // Check for additional logic
             if (customNextTemplate[currentTemplateId] != null) {

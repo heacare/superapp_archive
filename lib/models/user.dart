@@ -1,6 +1,7 @@
 
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:health/health.dart';
 
 class User {
   final String id;
@@ -12,6 +13,7 @@ class User {
   final String country;
   final String icon;
   final Map<String, dynamic> onboardingResponses;
+  final List<HealthDataPoint> healthData;
 
   num get bmi {
     return weight / (height * height);
@@ -36,7 +38,8 @@ class User {
     weight = 0,
     country = "",
     icon = "",
-    onboardingResponses = {};
+    onboardingResponses = {},
+    healthData = [];
 
   User.fromJson(Map<String, dynamic> data) :
     id = data["id"]! as String,
@@ -47,7 +50,11 @@ class User {
     weight = data["weight"]! as num,
     country = data["country"]! as String,
     icon = data["icon"]! as String,
-    onboardingResponses = data["onboardingResponses"]! as Map<String, dynamic>;
+    onboardingResponses = data["onboardingResponses"]! as Map<String, dynamic>,
+    healthData =
+      List<Map<String, dynamic>>.from(data["healthData"]!).map(
+            (e) => HealthDataPoint.fromJson(e)
+      ).toList();
 
   Map<String, dynamic> toJson() {
     return {
@@ -60,6 +67,7 @@ class User {
       'country': country,
       'icon': icon,
       'onboardingResponses': onboardingResponses,
+      'healthData': healthData.map((e) => e.toJson()).toList()
     };
   }
 }
