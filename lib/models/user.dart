@@ -53,7 +53,7 @@ class User {
     onboardingResponses = data["onboardingResponses"]! as Map<String, dynamic>,
     healthData =
       List<Map<String, dynamic>>.from(data["healthData"]!).map(
-            (e) => HealthDataPoint.fromJson(e)
+        (e) => HealthDataPoint.fromJson(e)
       ).toList();
 
   Map<String, dynamic> toJson() {

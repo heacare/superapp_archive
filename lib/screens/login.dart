@@ -57,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
       List<HealthDataPoint> healthData = await Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => const HealthSetupScreen())
       );
-      userJson["healthData"] = healthData;
+      userJson["healthData"] = healthData.map((e) => e.toJson()).toList();
 
       // Onboarding
       await Navigator.of(context).push(
