@@ -99,6 +99,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         }
       }
 
+      getInitialValue() {
+        // TODO Assumes data units (kilogram/meters)
+        if (input.varName == "weight" || input.varName == "height") {
+          for (var h in widget.userJson["healthData"]) {
+            if (h["data_type"] == input.varName) {
+              return h["value"].toString();
+            }
+          }
+        }
+
+        return null;
+      }
+
       if (input.type == "date") {
         return DateTimePicker(
           type: DateTimePickerType.date,
@@ -117,7 +130,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             keyboardType: getTextInputType(),
             decoration: InputDecoration(
                 border: const OutlineInputBorder(),
-                labelText: input.text
+                labelText: input.text,
             ),
             onSaved: (String? value) {
               if (input.type == "number") {
@@ -127,7 +140,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 _updateUserField(input.varName, value);
               }
             },
-            validator: getValidator
+            validator: getValidator,
+            initialValue: getInitialValue(),
         );
       }
 
