@@ -65,7 +65,7 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
         print("${h.typeString}: ${h.value} [${h.unitString}]");
       }
 
-      Navigator.of(context).pop(_healthDataList);
+      Navigator.of(context, rootNavigator: true).pop(_healthDataList);
     } catch (e) {
       print("Caught exception in getHealthDataFromTypes: $e");
     }
@@ -78,10 +78,10 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
       children: <Widget>[
         Container(
             padding: const EdgeInsets.all(20),
-            child: const CircularProgressIndicator(
-              strokeWidth: 10,
-            )),
-        const Text('Fetching data...')
+            child: CircularProgressIndicator(
+              color: Theme.of(context).colorScheme.primary,
+              strokeWidth: 8,
+            ))
       ],
     );
   }
@@ -99,19 +99,39 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
         });
   }
 
-  Widget _contentNoData() {
-    return const Text('No Data to show');
-  }
-
   Future<Widget> _contentNotFetched() async {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        SvgPicture.network(
-            await Storage().getFileUrl("health_sync.svg")
+        Expanded(
+          child: SvgPicture.network(
+              // TODO Maybe just cache these on startup
+              await Storage().getFileUrl("health_sync.svg")
+          )
         ),
-        ElevatedButton(
-          child: const Text("Sync health data"),
-          onPressed: fetchData,
+        Container(
+          padding: const EdgeInsets.only(left: 24.0, right: 24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Container(
+                  child: Text("Sync with Apple Health", style: Theme.of(context).textTheme.headline1),
+                  padding: const EdgeInsets.symmetric(vertical: 16.0)
+              ),
+              Text(
+                  "Let’s get some data from you so we can accurately make predictions and offer advice.",
+                  style: Theme.of(context).textTheme.headline2
+              ),
+              Container(
+                  child: TextButton(
+                    child: const Text("SYNC TO APPLE"),
+                    onPressed: fetchData,
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 32.0)
+              )
+            ],
+          )
         )
       ]
     );
@@ -136,8 +156,6 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
   Future<Widget> _content() async {
     if (_state == AppState.DATA_READY) {
       return _contentDataReady();
-    } else if (_state == AppState.NO_DATA) {
-      return _contentNoData();
     } else if (_state == AppState.FETCHING_DATA) {
       return _contentFetchingData();
     } else if (_state == AppState.AUTH_NOT_GRANTED) {
@@ -153,12 +171,9 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
       future: _content(),
       builder: (context, snapshot) {
         return Scaffold(
-            appBar: AppBar(
-              title: const Text('Link Health Data'),
-            ),
-            body: Center(
-              child: snapshot.data,
-            )
+          body: Center(
+            child: snapshot.data,
+          )
         );
       }
     );
