@@ -139,15 +139,13 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-          appBar: AppBar(
-            title: const Text('Link Health Data'),
-          ),
-          body: Center(
-            child: _content(),
-          )
-        ),
+    return Scaffold(
+      appBar: AppBar(
+          title: const Text('Link Health Data'),
+      ),
+      body: Center(
+          child: _content(),
+      )
     );
   }
 }

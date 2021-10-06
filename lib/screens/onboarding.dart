@@ -289,7 +289,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Onboarding"),
+          title: const Text("Onboarding"),
       ),
       body: Center(
           child: FutureBuilder<OnboardingTemplateMap>(
