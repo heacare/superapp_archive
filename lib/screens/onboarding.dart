@@ -2,12 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:hea/data/user_repo.dart';
 import 'package:hea/models/onboarding_custom.dart';
 import 'package:hea/models/onboarding_template.dart';
 import 'package:hea/models/user.dart';
+import 'package:hea/providers/storage.dart';
 import 'home.dart';
 
 const onboardingStartId = "onboard_start";
@@ -30,6 +32,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   var currentTemplateId = onboardingStartId;
+  late Future<OnboardingTemplateMap> templateMapFuture;
 
   _advanceNextTemplate(String nextTemplate) {
     if (currentTemplateId != onboardingLastId) {
@@ -181,7 +184,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
     final optionWidgets = options.map(
       (option) {
-        return OutlinedButton(
+        return TextButton(
           child: Text(option.text),
           onPressed: () {
             // Update user fields
@@ -214,88 +217,103 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   Widget _templateBuilder(BuildContext context, AsyncSnapshot<OnboardingTemplateMap> snapshot) {
-    List<Widget> children;
 
-    if (snapshot.hasData) {
-      // Retrieve specific OnboardTemplate object
-      final template = snapshot.data![currentTemplateId]!;
-
-      // Build input widgets
-      Form inputForm = _fromTemplateInputs(template.inputs);
-      List<Widget> optionWidgets = _fromTemplateOptions(template.options, inputForm);
-
-      children = <Widget>[
-        Text(
-          template.title,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 40
-          )
+    if (snapshot.hasError) {
+      // Error on fetching templates
+      print("Error in fetching templates: ${snapshot.error}");
+      return Text("Oops, something broke", style: Theme.of(context).textTheme.headline1);
+    }
+    else if (!snapshot.hasData) {
+      // Loading screen
+      return Center(
+        child: CircularProgressIndicator(
+          color: Theme.of(context).colorScheme.primary,
+          strokeWidth: 8,
         ),
+      );
+    }
 
-        // Optional subtitle
-        if (template.subtitle != null)
-          Text(
-            template.subtitle!,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 28
+    // Retrieve specific OnboardTemplate object
+    final template = snapshot.data![currentTemplateId]!;
+    print("imageId: ${template.imageId}");
+
+    // Build input widgets
+    Form inputForm = _fromTemplateInputs(template.inputs);
+    List<Widget> optionWidget = _fromTemplateOptions(template.options, inputForm);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        // Optional image
+        if (template.imageId != null)
+          Expanded(
+            child: FutureBuilder<String>(
+              future: Storage().getFileUrl(template.imageId!),
+              builder: (context, snapshot) {
+                // TODO Null check issues
+                return SvgPicture.network(snapshot.data!);
+              },
             )
           ),
 
-        // TODO: Images
-        inputForm,
+        Padding(
+          padding: const EdgeInsets.only(left: 24.0, right: 24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                      child: Text(template.title, style: Theme.of(context).textTheme.headline1),
+                      padding: const EdgeInsets.symmetric(vertical: 16.0)
+                  ),
 
-        if (template.text != null)
-          MarkdownBody(
-            data: template.text!,
-            // Support opening links
-            onTapLink: (text, href, title) => _launchUrl(href!),
-          ),
+                  // Optional subtitle
+                  if (template.subtitle != null)
+                    Text(template.subtitle!, style: Theme.of(context).textTheme.headline2),
+                ]
+              ),
 
-        ...optionWidgets
-      ];
-    }
-    else if (snapshot.hasError) {
-      // Error on fetching templates
-      children = <Widget>[
-        const Text("Oops, something broke")
-      ];
+              inputForm,
 
-      throw "Error in fetching templates: ${snapshot.error}";
-    }
-    else {
-      // Loading screen
-      children = const <Widget>[
-        SizedBox(
-          child: CircularProgressIndicator(),
-          width: 60,
-          height: 60,
+              if (template.text != null)
+                MarkdownBody(
+                  data: template.text!,
+                  // Support opening links
+                  onTapLink: (text, href, title) => _launchUrl(href!),
+                ),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 32.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: List<Widget>.from(optionWidget),
+                )
+              )
+            ]
+          )
         )
-      ];
-    }
-
-    return Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: children
-        )
+      ],
     );
+
+  }
+
+  @override
+  initState() {
+    super.initState();
+    templateMapFuture = OnboardingTemplate.fetchTemplates();
   }
 
   @override
   Widget build(BuildContext context) {
-    final templatesFuture = OnboardingTemplate.fetchTemplates();
-
     return Scaffold(
-      appBar: AppBar(
-          title: const Text("Onboarding"),
-      ),
       body: Center(
-          child: FutureBuilder<OnboardingTemplateMap>(
-            future: templatesFuture,
-            builder: _templateBuilder
-          )
+        child: FutureBuilder<OnboardingTemplateMap>(
+          future: templateMapFuture,
+          builder: _templateBuilder
+        )
       )
     );
   }
