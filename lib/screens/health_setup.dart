@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:health/health.dart';
+
+import 'package:hea/providers/storage.dart';
 
 class HealthSetupScreen extends StatefulWidget {
   const HealthSetupScreen({Key? key}) : super(key: key);
@@ -100,10 +103,17 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
     return const Text('No Data to show');
   }
 
-  Widget _contentNotFetched() {
-    return ElevatedButton(
-      child: const Text("Sync health data"),
-      onPressed: fetchData,
+  Future<Widget> _contentNotFetched() async {
+    return Column(
+      children: [
+        SvgPicture.network(
+            await Storage().getFileUrl("health_sync.svg")
+        ),
+        ElevatedButton(
+          child: const Text("Sync health data"),
+          onPressed: fetchData,
+        )
+      ]
     );
   }
 
@@ -123,7 +133,7 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
     );
   }
 
-  Widget _content() {
+  Future<Widget> _content() async {
     if (_state == AppState.DATA_READY) {
       return _contentDataReady();
     } else if (_state == AppState.NO_DATA) {
@@ -139,13 +149,18 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          title: const Text('Link Health Data'),
-      ),
-      body: Center(
-          child: _content(),
-      )
+    return FutureBuilder<Widget>(
+      future: _content(),
+      builder: (context, snapshot) {
+        return Scaffold(
+            appBar: AppBar(
+              title: const Text('Link Health Data'),
+            ),
+            body: Center(
+              child: snapshot.data,
+            )
+        );
+      }
     );
   }
 }
