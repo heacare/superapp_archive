@@ -104,18 +104,21 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Expanded(
-          child: SvgPicture.network(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SvgPicture.network(
               // TODO Maybe just cache these on startup
               await Storage().getFileUrl("health_sync.svg")
+            )
           )
         ),
-        Container(
-          padding: const EdgeInsets.only(left: 24.0, right: 24.0),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Container(
+              Padding(
                   child: Text("Sync with Apple Health", style: Theme.of(context).textTheme.headline1),
                   padding: const EdgeInsets.symmetric(vertical: 16.0)
               ),
@@ -123,8 +126,8 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
                   "Let’s get some data from you so we can accurately make predictions and offer advice.",
                   style: Theme.of(context).textTheme.headline2
               ),
-              Container(
-                  child: TextButton(
+              Padding(
+                  child: OutlinedButton(
                     child: const Text("SYNC TO APPLE"),
                     onPressed: fetchData,
                   ),

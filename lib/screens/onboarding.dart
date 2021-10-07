@@ -107,7 +107,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         if (input.varName == "weight" || input.varName == "height") {
           for (var h in widget.userJson["healthData"]) {
             if (h["data_type"] == input.varName) {
-              return h["value"].toString();
+              return (h["value"] as num).toStringAsFixed(2);
             }
           }
         }
@@ -116,6 +116,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       }
 
       if (input.type == "date") {
+        // TODO Fix style
         return DateTimePicker(
           type: DateTimePickerType.date,
           firstDate: DateTime(1900),
@@ -131,10 +132,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       else {
         return TextFormField(
             keyboardType: getTextInputType(),
-            decoration: InputDecoration(
-                border: const OutlineInputBorder(),
-                labelText: input.text,
-            ),
+            // decoration: InputDecoration(
+            //     border: const OutlineInputBorder(),
+            //     labelText: input.text,
+            // ),
             onSaved: (String? value) {
               if (input.type == "number") {
                 _updateUserField(input.varName, num.parse(value!));
@@ -157,6 +158,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       inputWidgets = Gender.genderList.map(
           (gender) => RadioListTile<Gender>(
             title: Text(gender.toString()),
+            activeColor: Theme.of(context).colorScheme.primary,
             value: gender,
             onChanged: (Gender? value) {
               setState(() => _gender = value);
@@ -180,40 +182,46 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
-  List<Widget> _fromTemplateOptions(List<OnboardingTemplateOption> options, Form inputForm) {
+  Widget _fromTemplateOptions(List<OnboardingTemplateOption> options, Form inputForm) {
 
     final optionWidgets = options.map(
       (option) {
-        return TextButton(
-          child: Text(option.text),
-          onPressed: () {
-            // Update user fields
-            if (!_formKey.currentState!.validate()) {
-              return;
-            }
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4.0),
+          child: OutlinedButton(
+            child: Text(option.text),
+            onPressed: () {
+              // Update user fields
+              if (!_formKey.currentState!.validate()) {
+                return;
+              }
 
-            _formKey.currentState!
-              ..save()
-              ..reset();
+              _formKey.currentState!
+                ..save()
+                ..reset();
 
-            // Check for additional logic
-            if (customNextTemplate[currentTemplateId] != null) {
-              User user = User.fromJson(widget.userJson);
-              print(customNextTemplate[currentTemplateId]!(user));
+              // Check for additional logic
+              if (customNextTemplate[currentTemplateId] != null) {
+                User user = User.fromJson(widget.userJson);
+                print(customNextTemplate[currentTemplateId]!(user));
 
-              _advanceNextTemplate(
-                customNextTemplate[currentTemplateId]!(user)
-              );
+                _advanceNextTemplate(
+                  customNextTemplate[currentTemplateId]!(user)
+                );
+              }
+              else {
+                _advanceNextTemplate(option.nextTemplate);
+              }
             }
-            else {
-              _advanceNextTemplate(option.nextTemplate);
-            }
-          }
+          )
         );
       }
     );
 
-    return List<Widget>.from(optionWidgets);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: List<Widget>.from(optionWidgets),
+    );
   }
 
   Widget _templateBuilder(BuildContext context, AsyncSnapshot<OnboardingTemplateMap> snapshot) {
@@ -235,26 +243,34 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
     // Retrieve specific OnboardTemplate object
     final template = snapshot.data![currentTemplateId]!;
-    print("imageId: ${template.imageId}");
 
     // Build input widgets
     Form inputForm = _fromTemplateInputs(template.inputs);
-    List<Widget> optionWidget = _fromTemplateOptions(template.options, inputForm);
+    Widget optionWidget = _fromTemplateOptions(template.options, inputForm);
 
     return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         // Optional image
-        if (template.imageId != null)
+        ((template.imageId != null) ?
           Expanded(
             child: FutureBuilder<String>(
               future: Storage().getFileUrl(template.imageId!),
               builder: (context, snapshot) {
-                // TODO Null check issues
+                if (!snapshot.hasData) {
+                  return CircularProgressIndicator(
+                    color: Theme.of(context).colorScheme.primary,
+                    strokeWidth: 8,
+                  );
+                }
+
                 return SvgPicture.network(snapshot.data!);
               },
             )
-          ),
+          ) :
+          const Spacer()
+        ),
 
         Padding(
           padding: const EdgeInsets.only(left: 24.0, right: 24.0),
@@ -267,7 +283,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 children: [
                   Padding(
                       child: Text(template.title, style: Theme.of(context).textTheme.headline1),
-                      padding: const EdgeInsets.symmetric(vertical: 16.0)
+                      padding: const EdgeInsets.symmetric(vertical: 24.0)
                   ),
 
                   // Optional subtitle
@@ -287,10 +303,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 32.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: List<Widget>.from(optionWidget),
-                )
+                child: optionWidget
               )
             ]
           )
@@ -309,6 +322,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(36.0),
+        child: SafeArea(
+          child: LinearProgressIndicator(
+            color: Theme.of(context).colorScheme.primary,
+            backgroundColor: Colors.transparent,
+            minHeight: 36.0,
+            value: 0.25,
+          )
+        )
+      ),
       body: Center(
         child: FutureBuilder<OnboardingTemplateMap>(
           future: templateMapFuture,

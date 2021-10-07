@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:hea/providers/storage.dart';
 import 'package:health/health.dart';
 
 import 'package:hea/data/user_repo.dart';
@@ -75,10 +77,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Login/Signup"),
-      ),
       body: Center(
         child: Form(
           key: _formKey,
@@ -86,17 +86,57 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
 
-                  // TODO validate email
-                  TextFormField(controller: _email, decoration: const InputDecoration(labelText: "Email")),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: FutureBuilder<String>(
+                        // TODO Check Firebase perms for storage
+                        future: Storage().getFileUrl("health_sync.svg"),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return CircularProgressIndicator(
+                              color: Theme.of(context).colorScheme.primary,
+                              strokeWidth: 8,
+                            );
+                          }
 
-                  TextFormField(controller: _password, decoration: const InputDecoration(labelText: "Password"), obscureText: true),
+                          return SvgPicture.network(snapshot.data!);
+                        },
+                      ),
+                    )
+                  ),
 
-                  TextButton(child: const Text("LOGIN"), onPressed: login),
-                  TextButton(child: const Text("SIGNUP"), onPressed: signup),
-
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        // TODO validate email
+                        TextFormField(controller: _email, decoration: const InputDecoration(labelText: "Email")),
+                        TextFormField(controller: _password, decoration: const InputDecoration(labelText: "Password"), obscureText: true),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4.0),
+                          child: OutlinedButton(child: const Text("LOGIN"), onPressed: login)
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4.0),
+                          child: OutlinedButton(
+                            child: const Text("SIGNUP"),
+                            onPressed: signup,
+                            style: TextButton.styleFrom(
+                              primary: Theme.of(context).colorScheme.primary,
+                              backgroundColor: Colors.grey[100]
+                            ),
+                          )
+                        ),
+                      ],
+                    )
+                  )
                 ],
               )
             )
