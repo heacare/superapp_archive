@@ -203,8 +203,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
 
+                  // TODO Lots of whitespace for image but changing flex ratio causes overfill on smaller devices
                   Expanded(
-                    flex: 3,
                     child: Transform.translate(
                       child: SvgPicture.asset(svgAssetName),
                       offset: Offset(-MediaQuery.of(context).size.width / 6, 0.0)
@@ -212,7 +212,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
 
                   Expanded(
-                    flex: 2,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 24.0),
                       child: Column(
