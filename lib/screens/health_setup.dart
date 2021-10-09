@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hea/widgets/firebase_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:health/health.dart';
+
+const svgAssetName = "assets/svg/health_sync.svg";
 
 class HealthSetupScreen extends StatefulWidget {
   const HealthSetupScreen({Key? key}) : super(key: key);
@@ -20,11 +22,6 @@ enum AppState {
 class _HealthSetupScreenState extends State<HealthSetupScreen> {
   List<HealthDataPoint> _healthDataList = [];
   AppState _state = AppState.DATA_NOT_FETCHED;
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   Future fetchData() async {
     HealthFactory health = HealthFactory();
@@ -104,7 +101,7 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: FirebaseSvg("health_sync.svg").load()
+            child: SvgPicture.asset(svgAssetName)
           )
         ),
         Padding(

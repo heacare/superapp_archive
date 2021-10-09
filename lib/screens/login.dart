@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hea/widgets/firebase_svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:health/health.dart';
 
 import 'package:hea/data/user_repo.dart';
@@ -8,6 +8,8 @@ import 'package:hea/providers/auth.dart';
 import 'package:hea/screens/health_setup.dart';
 import 'package:hea/screens/home.dart';
 import 'package:hea/screens/onboarding.dart';
+
+const svgAssetName = "assets/svg/login.svg";
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({Key? key}) : super(key: key);
@@ -173,6 +175,15 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    precachePicture(
+      ExactAssetPicture(SvgPicture.svgStringDecoder, svgAssetName),
+      context
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
 
     return Scaffold(
@@ -193,7 +204,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Expanded(
                     flex: 3,
                     child: Transform.translate(
-                      child: FirebaseSvg("login.svg").load(),
+                      child: SvgPicture.asset(svgAssetName),
                       offset: Offset(-MediaQuery.of(context).size.width / 6, 0.0)
                     )
                   ),
