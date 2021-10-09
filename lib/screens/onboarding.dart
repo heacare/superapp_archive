@@ -2,14 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hea/widgets/firebase_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:hea/data/user_repo.dart';
 import 'package:hea/models/onboarding_custom.dart';
 import 'package:hea/models/onboarding_template.dart';
 import 'package:hea/models/user.dart';
-import 'package:hea/providers/storage.dart';
 import 'home.dart';
 
 const onboardingStartId = "onboard_start";
@@ -253,27 +252,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         // Optional image
-        ((template.imageId != null) ?
-          Expanded(
-            child: FutureBuilder<String>(
-              future: Storage().getFileUrl(template.imageId!),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return CircularProgressIndicator(
-                    color: Theme.of(context).colorScheme.primary,
-                    strokeWidth: 8,
-                  );
-                }
-
-                return SvgPicture.network(snapshot.data!);
-              },
-            )
-          ) :
-          const Spacer()
+        ((template.imageId != null)
+          ? Expanded(child: FirebaseSvg(template.imageId!).load())
+          : const Spacer()
         ),
 
         Padding(
-          padding: const EdgeInsets.only(left: 24.0, right: 24.0),
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.end,

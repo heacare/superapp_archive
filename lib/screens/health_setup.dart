@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hea/widgets/firebase_svg.dart';
 import 'package:health/health.dart';
-
-import 'package:hea/providers/storage.dart';
 
 class HealthSetupScreen extends StatefulWidget {
   const HealthSetupScreen({Key? key}) : super(key: key);
@@ -99,17 +97,14 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
         });
   }
 
-  Future<Widget> _contentNotFetched() async {
+  Widget _contentNotFetched() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Expanded(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: SvgPicture.network(
-              // TODO Maybe just cache these on startup
-              await Storage().getFileUrl("health_sync.svg")
-            )
+            child: FirebaseSvg("health_sync.svg").load()
           )
         ),
         Padding(
@@ -119,19 +114,19 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Padding(
-                  child: Text("Sync with Apple Health", style: Theme.of(context).textTheme.headline1),
-                  padding: const EdgeInsets.symmetric(vertical: 16.0)
+                child: Text("Sync with Apple Health", style: Theme.of(context).textTheme.headline1),
+                padding: const EdgeInsets.symmetric(vertical: 16.0)
               ),
               Text(
-                  "Let’s get some data from you so we can accurately make predictions and offer advice.",
-                  style: Theme.of(context).textTheme.headline2
+                "Let’s get some data from you so we can accurately make predictions and offer advice.",
+                style: Theme.of(context).textTheme.headline2
               ),
               Padding(
-                  child: OutlinedButton(
-                    child: const Text("SYNC TO APPLE"),
-                    onPressed: fetchData,
-                  ),
-                  padding: const EdgeInsets.symmetric(vertical: 32.0)
+                child: OutlinedButton(
+                  child: const Text("SYNC TO APPLE"),
+                  onPressed: fetchData,
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 32.0)
               )
             ],
           )
@@ -156,7 +151,7 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
     );
   }
 
-  Future<Widget> _content() async {
+  Widget _content() {
     if (_state == AppState.DATA_READY) {
       return _contentDataReady();
     } else if (_state == AppState.FETCHING_DATA) {
@@ -170,15 +165,10 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Widget>(
-      future: _content(),
-      builder: (context, snapshot) {
-        return Scaffold(
-          body: Center(
-            child: snapshot.data,
-          )
-        );
-      }
+    return Scaffold(
+      body: Center(
+        child: _content(),
+      )
     );
   }
 }
