@@ -37,6 +37,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // TODO
   Widget pageFor(num index) {
+    if (index == 3) {
+      return ProfileScreen();
+    }
     return Scaffold(
       appBar: AppBar(title: Text("Page "+index.toString())),
       body: Center(
