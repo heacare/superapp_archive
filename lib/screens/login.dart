@@ -145,10 +145,22 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
 
         const SizedBox(height: 24.0),
-        TextFormField(controller: _email, decoration: const InputDecoration(labelText: "Email")),
+
+        TextFormField(
+          controller: _email,
+          decoration: const InputDecoration(labelText: "Email")
+        ),
+
         const SizedBox(height: 8.0),
-        TextFormField(controller: _password, decoration: const InputDecoration(labelText: "Password"), obscureText: true),
+
+        TextFormField(
+          controller: _password,
+          decoration: const InputDecoration(labelText: "Password"),
+          obscureText: true
+        ),
+
         const SizedBox(height: 36.0),
+
         OutlinedButton(
           child: const Text("LET'S GO"),
           onPressed: () {
@@ -164,39 +176,44 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      body: Center(
-        child: Form(
-          key: _formKey,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 24.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
+      body: SingleChildScrollView(
+        // TODO Scroll to end when textfields have focus (I've tried and it doesn't want to work)
+        physics: const ClampingScrollPhysics(),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: Form(
+            key: _formKey,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 24.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
 
-                Expanded(
-                  flex: 3,
-                  child: Transform.translate(
-                    child: FirebaseSvg("login.svg").load(),
-                    offset: Offset(-MediaQuery.of(context).size.width / 6, 0.0)
-                  )
-                ),
-
-                Expanded(
-                  flex: 2,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        _credsOrText(),
-                      ],
+                  Expanded(
+                    flex: 3,
+                    child: Transform.translate(
+                      child: FirebaseSvg("login.svg").load(),
+                      offset: Offset(-MediaQuery.of(context).size.width / 6, 0.0)
                     )
-                  )
-                ),
+                  ),
 
-              ],
+                  Expanded(
+                    flex: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          _credsOrText(),
+                        ],
+                      )
+                    )
+                  ),
+
+                ],
+              )
             )
           )
         )

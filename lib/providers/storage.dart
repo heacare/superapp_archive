@@ -5,7 +5,6 @@ class Storage {
 
   Future<String> getFileUrl(String filename) async {
     final fileRef = _firebaseStorage.ref().child(filename);
-    print(fileRef.getDownloadURL());
     return fileRef.getDownloadURL();
   }
 
