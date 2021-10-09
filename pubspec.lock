@@ -56,22 +56,14 @@ packages:
       name: cloud_firestore_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "5.4.1"
-=======
     version: "5.4.2"
->>>>>>> main
   cloud_firestore_web:
     dependency: transitive
     description:
       name: cloud_firestore_web
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "2.4.2"
-=======
     version: "2.4.3"
->>>>>>> main
   collection:
     dependency: transitive
     description:
