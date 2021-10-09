@@ -22,6 +22,10 @@ class _AppState extends State<App> {
 
   ThemeData _getThemeData() {
 
+    const primaryColor = Color(0xFFCC3363);
+    const accentColor = Color(0xFF62C370);
+    const textColor = Color(0xFF191919);
+
     // Stolen from https://medium.com/@filipvk/creating-a-custom-color-swatch-in-flutter-554bcdcb27f3
     MaterialColor createMaterialColor(int argb) {
       Color color = Color(argb);
@@ -45,20 +49,53 @@ class _AppState extends State<App> {
       return MaterialColor(color.value, swatch);
     }
 
+    final colorScheme = ColorScheme.fromSwatch(
+        primarySwatch: createMaterialColor(primaryColor.value),
+        accentColor: createMaterialColor(accentColor.value)
+    );
+
     return ThemeData(
-      colorScheme: ColorScheme.fromSwatch(
-        primarySwatch: createMaterialColor(0xFFCC3363),
-        accentColor: createMaterialColor(0xFF62C370)
-      ),
+      colorScheme: colorScheme,
       fontFamily: "BreeSerif",
       textTheme: const TextTheme(
-        headline1: TextStyle(fontSize: 48.0, fontWeight: FontWeight.bold),
-        bodyText1: TextStyle(fontSize: 21.0),
-        button: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold)
-      ).apply(
-        displayColor: const Color(0xFF191919),
-        bodyColor: const Color(0xFF191919)
-      )
+        headline1: TextStyle(fontSize: 48.0, fontWeight: FontWeight.bold, height: 1.1, color: primaryColor),
+        headline2: TextStyle(fontSize: 20.0, fontWeight: FontWeight.normal, height: 1.4, color: textColor),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: TextButton.styleFrom(
+          padding: const EdgeInsets.all(12.0),
+          primary: Colors.white,
+          backgroundColor: primaryColor,
+          textStyle: const TextStyle(fontFamily: "BreeSerif", fontSize: 24.0, fontWeight: FontWeight.bold, height: 1)
+        ),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
+        floatingLabelStyle: const TextStyle(fontSize: 16.0),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16.0),
+        ),
+        enabledBorder: const OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.grey,
+            width: 2.0
+          )
+        ),
+        focusedBorder: const OutlineInputBorder(
+          borderSide: BorderSide(
+            color: primaryColor,
+            width: 2.0
+          )
+        ),
+        errorBorder: const OutlineInputBorder(
+          borderSide: BorderSide(
+            color: accentColor,
+            width: 2.0
+          )
+        )
+        // TODO Error looks funky
+      ),
+      textSelectionTheme: ThemeData.light().textSelectionTheme
     );
   }
 

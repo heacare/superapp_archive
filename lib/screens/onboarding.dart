@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:hea/widgets/firebase_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:hea/data/user_repo.dart';
@@ -26,10 +28,10 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
 
-  Gender? _gender;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   var currentTemplateId = onboardingStartId;
+  late Future<OnboardingTemplateMap> templateMapFuture;
 
   _advanceNextTemplate(String nextTemplate) {
     if (currentTemplateId != onboardingLastId) {
@@ -69,7 +71,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
   }
 
-  Form _fromTemplateInputs(List<OnboardingTemplateInput> inputs) {
+  Widget _fromTemplateInputs(List<OnboardingTemplateInput> inputs) {
 
     // Return a configured widget
     makeInputWidget(OnboardingTemplateInput input) {
@@ -100,11 +102,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       }
 
       getInitialValue() {
-        // TODO Assumes data units (kilogram/meters)
+        // Health API gives data in kg/m
         if (input.varName == "weight" || input.varName == "height") {
           for (var h in widget.userJson["healthData"]) {
             if (h["data_type"] == input.varName) {
-              return h["value"].toString();
+              return (h["value"] as num).toStringAsFixed(2);
             }
           }
         }
@@ -113,23 +115,27 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       }
 
       if (input.type == "date") {
-        return DateTimePicker(
-          type: DateTimePickerType.date,
-          firstDate: DateTime(1900),
-          lastDate: DateTime.now(),
-          dateLabelText: input.text,
-          onSaved: (String? value) {
-            // Use Timestamp objects for all datetimes
-            _updateUserField(input.varName, Timestamp.fromDate(DateTime.parse(value!)));
-          },
-          validator: getValidator,
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4.0),
+          child: DateTimePicker(
+            type: DateTimePickerType.date,
+            firstDate: DateTime(1900),
+            lastDate: DateTime.now(),
+            dateLabelText: input.text,
+            onSaved: (String? value) {
+              // Use Timestamp objects for all datetimes
+              _updateUserField(input.varName, Timestamp.fromDate(DateTime.parse(value!)));
+            },
+            validator: getValidator,
+          )
         );
       }
       else {
-        return TextFormField(
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4.0),
+          child: TextFormField(
             keyboardType: getTextInputType(),
             decoration: InputDecoration(
-                border: const OutlineInputBorder(),
                 labelText: input.text,
             ),
             onSaved: (String? value) {
@@ -142,160 +148,192 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             },
             validator: getValidator,
             initialValue: getInitialValue(),
+          )
         );
       }
 
     }
 
-    final inputWidgets;
     if (currentTemplateId == "gender_0") {
       // TODO: Hardcoded options for gender
-      // TODO: Missing validator
-      inputWidgets = Gender.genderList.map(
-          (gender) => RadioListTile<Gender>(
-            title: Text(gender.toString()),
-            value: gender,
-            onChanged: (Gender? value) {
-              setState(() => _gender = value);
-              widget.userJson["gender"] = value.toString();
-            },
-            groupValue: _gender,
-          )
+      return FormBuilderRadioGroup(
+        name: "gender",
+        // TODO: Fixes bug in library :')
+        focusNode: FocusNode(),
+        activeColor: Theme.of(context).colorScheme.primary,
+        orientation: OptionsOrientation.vertical,
+        validator: FormBuilderValidators.required(context),
+        onChanged: (String? value) {
+          widget.userJson["gender"] = value.toString();
+        },
+        options: Gender.genderList.map((gender) {
+          return FormBuilderFieldOption(
+            child: Text(gender.toString(), style: Theme.of(context).textTheme.headline2),
+            value: gender.toString()
+          );
+        })
+        .toList(growable: false)
       );
+
     }
     else {
-      inputWidgets = inputs.map(
-        (input) => makeInputWidget(input)
+      return Form(
+        key: _formKey,
+        child: Wrap(
+          children: inputs.map(
+            (input) => makeInputWidget(input)
+          ).toList(growable: false)
+        )
       );
     }
 
-    return Form(
-      key: _formKey,
-      child: Wrap(
-        children: List<Widget>.from(inputWidgets)
-      )
-    );
   }
 
-  List<Widget> _fromTemplateOptions(List<OnboardingTemplateOption> options, Form inputForm) {
+  Widget _fromTemplateOptions(List<OnboardingTemplateOption> options, Widget inputForm) {
 
     final optionWidgets = options.map(
       (option) {
-        return OutlinedButton(
-          child: Text(option.text),
-          onPressed: () {
-            // Update user fields
-            if (!_formKey.currentState!.validate()) {
-              return;
-            }
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4.0),
+          child: OutlinedButton(
+            child: Text(option.text),
+            onPressed: () {
+              // Update user fields
+              if (_formKey.currentState != null) {
+                if (!_formKey.currentState!.validate()) {
+                  // Invalid data
+                  return;
+                }
 
-            _formKey.currentState!
-              ..save()
-              ..reset();
+                _formKey.currentState!
+                  ..save()
+                  ..reset();
+              }
+              
+              // Check for additional logic
+              if (customNextTemplate[currentTemplateId] != null) {
+                User user = User.fromJson(widget.userJson);
+                print(customNextTemplate[currentTemplateId]!(user));
 
-            // Check for additional logic
-            if (customNextTemplate[currentTemplateId] != null) {
-              User user = User.fromJson(widget.userJson);
-              print(customNextTemplate[currentTemplateId]!(user));
-
-              _advanceNextTemplate(
-                customNextTemplate[currentTemplateId]!(user)
-              );
+                _advanceNextTemplate(
+                  customNextTemplate[currentTemplateId]!(user)
+                );
+              }
+              else {
+                _advanceNextTemplate(option.nextTemplate);
+              }
             }
-            else {
-              _advanceNextTemplate(option.nextTemplate);
-            }
-          }
+          )
         );
       }
     );
 
-    return List<Widget>.from(optionWidgets);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: List<Widget>.from(optionWidgets),
+    );
   }
 
   Widget _templateBuilder(BuildContext context, AsyncSnapshot<OnboardingTemplateMap> snapshot) {
-    List<Widget> children;
 
-    if (snapshot.hasData) {
-      // Retrieve specific OnboardTemplate object
-      final template = snapshot.data![currentTemplateId]!;
+    if (snapshot.hasError) {
+      // Error on fetching templates
+      print("Error in fetching templates: ${snapshot.error}");
+      return Text("Oops, something broke", style: Theme.of(context).textTheme.headline1);
+    }
+    else if (!snapshot.hasData) {
+      // Loading screen
+      return Center(
+        child: CircularProgressIndicator(
+          color: Theme.of(context).colorScheme.primary,
+          strokeWidth: 8,
+        ),
+      );
+    }
 
-      // Build input widgets
-      Form inputForm = _fromTemplateInputs(template.inputs);
-      List<Widget> optionWidgets = _fromTemplateOptions(template.options, inputForm);
+    // Retrieve specific OnboardTemplate object
+    final template = snapshot.data![currentTemplateId]!;
 
-      children = <Widget>[
-        Text(
-          template.title,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 40
-          )
+    // Build input widgets
+    Widget inputWidget = _fromTemplateInputs(template.inputs);
+    Widget optionWidget = _fromTemplateOptions(template.options, inputWidget);
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        // Optional image
+        ((template.imageId != null)
+          ? Expanded(child: FirebaseSvg(template.imageId!).load())
+          : const Spacer()
         ),
 
-        // Optional subtitle
-        if (template.subtitle != null)
-          Text(
-            template.subtitle!,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 28
-            )
-          ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                      child: Text(template.title, style: Theme.of(context).textTheme.headline1),
+                      padding: const EdgeInsets.symmetric(vertical: 24.0)
+                  ),
 
-        // TODO: Images
-        inputForm,
+                  // Optional subtitle
+                  if (template.subtitle != null)
+                    Text(template.subtitle!, style: Theme.of(context).textTheme.headline2),
+                ]
+              ),
 
-        if (template.text != null)
-          MarkdownBody(
-            data: template.text!,
-            // Support opening links
-            onTapLink: (text, href, title) => _launchUrl(href!),
-          ),
+              inputWidget,
 
-        ...optionWidgets
-      ];
-    }
-    else if (snapshot.hasError) {
-      // Error on fetching templates
-      children = <Widget>[
-        const Text("Oops, something broke")
-      ];
+              if (template.text != null)
+                MarkdownBody(
+                  data: template.text!,
+                  // Support opening links
+                  onTapLink: (text, href, title) => _launchUrl(href!),
+                ),
 
-      throw "Error in fetching templates: ${snapshot.error}";
-    }
-    else {
-      // Loading screen
-      children = const <Widget>[
-        SizedBox(
-          child: CircularProgressIndicator(),
-          width: 60,
-          height: 60,
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 32.0),
+                child: optionWidget
+              )
+            ]
+          )
         )
-      ];
-    }
-
-    return Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: children
-        )
+      ],
     );
+
+  }
+
+  @override
+  initState() {
+    super.initState();
+    templateMapFuture = OnboardingTemplate.fetchTemplates();
   }
 
   @override
   Widget build(BuildContext context) {
-    final templatesFuture = OnboardingTemplate.fetchTemplates();
-
     return Scaffold(
-      appBar: AppBar(
-          title: const Text("Onboarding"),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(36.0),
+        child: SafeArea(
+          child: LinearProgressIndicator(
+            color: Theme.of(context).colorScheme.primary,
+            backgroundColor: Colors.transparent,
+            minHeight: 36.0,
+            value: 0.25,
+          )
+        )
       ),
       body: Center(
-          child: FutureBuilder<OnboardingTemplateMap>(
-            future: templatesFuture,
-            builder: _templateBuilder
-          )
+        child: FutureBuilder<OnboardingTemplateMap>(
+          future: templateMapFuture,
+          builder: _templateBuilder
+        )
       )
     );
   }

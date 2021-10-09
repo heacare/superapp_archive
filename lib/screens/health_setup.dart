@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:health/health.dart';
 
-import 'package:hea/providers/storage.dart';
+const svgAssetName = "assets/svg/health_sync.svg";
 
 class HealthSetupScreen extends StatefulWidget {
   const HealthSetupScreen({Key? key}) : super(key: key);
@@ -22,11 +22,6 @@ enum AppState {
 class _HealthSetupScreenState extends State<HealthSetupScreen> {
   List<HealthDataPoint> _healthDataList = [];
   AppState _state = AppState.DATA_NOT_FETCHED;
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   Future fetchData() async {
     HealthFactory health = HealthFactory();
@@ -65,7 +60,7 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
         print("${h.typeString}: ${h.value} [${h.unitString}]");
       }
 
-      Navigator.of(context).pop(_healthDataList);
+      Navigator.of(context, rootNavigator: true).pop(_healthDataList);
     } catch (e) {
       print("Caught exception in getHealthDataFromTypes: $e");
     }
@@ -78,10 +73,10 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
       children: <Widget>[
         Container(
             padding: const EdgeInsets.all(20),
-            child: const CircularProgressIndicator(
-              strokeWidth: 10,
-            )),
-        const Text('Fetching data...')
+            child: CircularProgressIndicator(
+              color: Theme.of(context).colorScheme.primary,
+              strokeWidth: 8,
+            ))
       ],
     );
   }
@@ -99,19 +94,39 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
         });
   }
 
-  Widget _contentNoData() {
-    return const Text('No Data to show');
-  }
-
-  Future<Widget> _contentNotFetched() async {
+  Widget _contentNotFetched() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        SvgPicture.network(
-            await Storage().getFileUrl("health_sync.svg")
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SvgPicture.asset(svgAssetName)
+          )
         ),
-        ElevatedButton(
-          child: const Text("Sync health data"),
-          onPressed: fetchData,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Padding(
+                child: Text("Sync with Apple Health", style: Theme.of(context).textTheme.headline1),
+                padding: const EdgeInsets.symmetric(vertical: 16.0)
+              ),
+              Text(
+                "Let’s get some data from you so we can accurately make predictions and offer advice.",
+                style: Theme.of(context).textTheme.headline2
+              ),
+              Padding(
+                child: OutlinedButton(
+                  child: const Text("SYNC TO APPLE"),
+                  onPressed: fetchData,
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 32.0)
+              )
+            ],
+          )
         )
       ]
     );
@@ -133,11 +148,9 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
     );
   }
 
-  Future<Widget> _content() async {
+  Widget _content() {
     if (_state == AppState.DATA_READY) {
       return _contentDataReady();
-    } else if (_state == AppState.NO_DATA) {
-      return _contentNoData();
     } else if (_state == AppState.FETCHING_DATA) {
       return _contentFetchingData();
     } else if (_state == AppState.AUTH_NOT_GRANTED) {
@@ -149,18 +162,10 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Widget>(
-      future: _content(),
-      builder: (context, snapshot) {
-        return Scaffold(
-            appBar: AppBar(
-              title: const Text('Link Health Data'),
-            ),
-            body: Center(
-              child: snapshot.data,
-            )
-        );
-      }
+    return Scaffold(
+      body: Center(
+        child: _content(),
+      )
     );
   }
 }
