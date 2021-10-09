@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:hea/screens/profile.dart';
 import 'package:hea/providers/auth.dart';
 
+import 'package:hea/screens/contents.dart';
+
 final auth = Authentication();
 
 class HomeScreen extends StatefulWidget {
@@ -37,6 +39,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // TODO
   Widget pageFor(num index) {
+
+    if (index == 1) {
+      return ContentsScreen();
+    }
+
     if (index == 3) {
       return ProfileScreen();
     }
