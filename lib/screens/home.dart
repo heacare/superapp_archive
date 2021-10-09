@@ -39,6 +39,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // TODO
   Widget pageFor(num index) {
+
+    if (index == 1) {
+      return ContentsScreen();
+    }
+
     if (index == 3) {
       return ProfileScreen();
     }

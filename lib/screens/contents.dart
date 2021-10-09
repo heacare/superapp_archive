@@ -23,33 +23,35 @@ class _ContentsScreenState extends State<ContentsScreen> {
       ),
       body: Center(
           child: StreamBuilder<QuerySnapshot<Content>>(
-            stream: contents.getAll(),
-            builder: (context, snapshot) {
-              print(snapshot);
-              if (snapshot.hasError) {
-                return Text("An error occured");
-              }
-
-              if (!snapshot.hasData) {
-                return const Center(child: CircularProgressIndicator());
-              }
-
-              final data = snapshot.requireData;
-              return ListView.builder(
-                itemCount: data.size,
-
-                itemBuilder: (context, index) {
-                  final content = data.docs[index].data();
-                  return TextButton( child: Text(content.title), onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => ContentScreen(content: content))
-                    );
-                  });
+              stream: contents.getAll(),
+              builder: (context, snapshot) {
+                print(snapshot);
+                if (snapshot.hasError) {
+                  return Text("An error occured");
                 }
-              );
-            }
-          )
-      ),
+
+                if (!snapshot.hasData) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                final data = snapshot.requireData;
+                return ListView.builder(
+                    itemCount: data.size,
+                    itemBuilder: (context, index) {
+                      final content = data.docs[index].data();
+
+                      return TextButton(
+                          child: ListTile(
+                            leading: const Icon(Icons.book),
+                            title: Text(content.title),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    ContentScreen(content: content)));
+                          });
+                    });
+              })),
     );
   }
 }

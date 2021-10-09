@@ -25,11 +25,16 @@ class _ContentScreenState extends State<ContentScreen> {
                 itemBuilder: (context, index) {
                   final chapter = widget.content.chapters[index];
 
-                  return TextButton( child: Text(chapter.title), onPressed: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => ChapterScreen(chapter: chapter))
-                    );
-                  });
+                  return TextButton(
+                      child: ListTile(
+                        leading: const Icon(Icons.bookmark),
+                        title: Text(chapter.title),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) =>
+                                ChapterScreen(chapter: chapter)));
+                      });
                 }
             )
         )
