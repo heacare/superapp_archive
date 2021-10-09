@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:health/health.dart';
 
+import 'package:hea/data/user_repo.dart';
+import 'package:hea/models/user.dart';
 import 'package:hea/providers/auth.dart';
+import 'package:hea/screens/health_setup.dart';
 import 'package:hea/screens/home.dart';
+import 'package:hea/screens/onboarding.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({Key? key}) : super(key: key);
@@ -22,12 +27,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       await _auth.login(_email.text, _password.text);
+      await navigateSuccess();
     } on AuthenticationException catch (e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(e.message)));
     }
-
-    await navigateSuccess();
   }
 
   void signup() async {
@@ -35,19 +39,38 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       await _auth.signup(_email.text, _password.text);
+      await navigateSuccess();
     } on AuthenticationException catch (e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(e.message)));
     }
-
-    await navigateSuccess();
   }
 
   Future navigateSuccess() async {
-    // TODO check if user is onboarded first!
-    await Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => HomeScreen()),
-      (route) => false);
+    final userId = _auth.currentUser()!.uid;
+    final user = await UserRepo().get(userId);
+
+    if (user == null) {
+      var userJson = User(userId).toJson();
+
+      // Pull health data
+      List<HealthDataPoint> healthData = await Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const HealthSetupScreen())
+      );
+      userJson["healthData"] = healthData.map((e) => e.toJson()).toList();
+
+      // Onboarding
+      await Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => OnboardingScreen(userJson: userJson))
+      );
+    }
+    else {
+      await Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+          (route) => false
+      );
+    }
+
   }
 
   @override

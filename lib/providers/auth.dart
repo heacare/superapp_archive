@@ -45,4 +45,8 @@ class Authentication {
           message: "An unknown authentication error occurred in login! Please try again");
     }
   }
+
+  Future logout() async {
+    await firebaseAuth.signOut();
+  }
 }
