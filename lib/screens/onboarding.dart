@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:hea/widgets/firebase_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -27,7 +28,6 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
 
-  Gender? _gender;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   var currentTemplateId = onboardingStartId;
@@ -71,7 +71,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
   }
 
-  Form _fromTemplateInputs(List<OnboardingTemplateInput> inputs) {
+  Widget _fromTemplateInputs(List<OnboardingTemplateInput> inputs) {
 
     // Return a configured widget
     makeInputWidget(OnboardingTemplateInput input) {
@@ -102,7 +102,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       }
 
       getInitialValue() {
-        // TODO Assumes data units (kilogram/meters)
+        // Health API gives data in kg/m
         if (input.varName == "weight" || input.varName == "height") {
           for (var h in widget.userJson["healthData"]) {
             if (h["data_type"] == input.varName) {
@@ -115,26 +115,29 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       }
 
       if (input.type == "date") {
-        // TODO Fix style
-        return DateTimePicker(
-          type: DateTimePickerType.date,
-          firstDate: DateTime(1900),
-          lastDate: DateTime.now(),
-          dateLabelText: input.text,
-          onSaved: (String? value) {
-            // Use Timestamp objects for all datetimes
-            _updateUserField(input.varName, Timestamp.fromDate(DateTime.parse(value!)));
-          },
-          validator: getValidator,
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4.0),
+          child: DateTimePicker(
+            type: DateTimePickerType.date,
+            firstDate: DateTime(1900),
+            lastDate: DateTime.now(),
+            dateLabelText: input.text,
+            onSaved: (String? value) {
+              // Use Timestamp objects for all datetimes
+              _updateUserField(input.varName, Timestamp.fromDate(DateTime.parse(value!)));
+            },
+            validator: getValidator,
+          )
         );
       }
       else {
-        return TextFormField(
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4.0),
+          child: TextFormField(
             keyboardType: getTextInputType(),
-            // decoration: InputDecoration(
-            //     border: const OutlineInputBorder(),
-            //     labelText: input.text,
-            // ),
+            decoration: InputDecoration(
+                labelText: input.text,
+            ),
             onSaved: (String? value) {
               if (input.type == "number") {
                 _updateUserField(input.varName, num.parse(value!));
@@ -145,43 +148,48 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             },
             validator: getValidator,
             initialValue: getInitialValue(),
+          )
         );
       }
 
     }
 
-    final inputWidgets;
     if (currentTemplateId == "gender_0") {
       // TODO: Hardcoded options for gender
-      // TODO: Missing validator
-      inputWidgets = Gender.genderList.map(
-          (gender) => RadioListTile<Gender>(
-            title: Text(gender.toString()),
-            activeColor: Theme.of(context).colorScheme.primary,
-            value: gender,
-            onChanged: (Gender? value) {
-              setState(() => _gender = value);
-              widget.userJson["gender"] = value.toString();
-            },
-            groupValue: _gender,
-          )
+      return FormBuilderRadioGroup(
+        name: "gender",
+        // TODO: Fixes bug in library :')
+        focusNode: FocusNode(),
+        activeColor: Theme.of(context).colorScheme.primary,
+        orientation: OptionsOrientation.vertical,
+        validator: FormBuilderValidators.required(context),
+        onChanged: (String? value) {
+          widget.userJson["gender"] = value.toString();
+        },
+        options: Gender.genderList.map((gender) {
+          return FormBuilderFieldOption(
+            child: Text(gender.toString(), style: Theme.of(context).textTheme.headline2),
+            value: gender.toString()
+          );
+        })
+        .toList(growable: false)
       );
+
     }
     else {
-      inputWidgets = inputs.map(
-        (input) => makeInputWidget(input)
+      return Form(
+        key: _formKey,
+        child: Wrap(
+          children: inputs.map(
+            (input) => makeInputWidget(input)
+          ).toList(growable: false)
+        )
       );
     }
 
-    return Form(
-      key: _formKey,
-      child: Wrap(
-        children: List<Widget>.from(inputWidgets)
-      )
-    );
   }
 
-  Widget _fromTemplateOptions(List<OnboardingTemplateOption> options, Form inputForm) {
+  Widget _fromTemplateOptions(List<OnboardingTemplateOption> options, Widget inputForm) {
 
     final optionWidgets = options.map(
       (option) {
@@ -191,14 +199,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             child: Text(option.text),
             onPressed: () {
               // Update user fields
-              if (!_formKey.currentState!.validate()) {
-                return;
+              if (_formKey.currentState != null) {
+                if (!_formKey.currentState!.validate()) {
+                  // Invalid data
+                  return;
+                }
+
+                _formKey.currentState!
+                  ..save()
+                  ..reset();
               }
-
-              _formKey.currentState!
-                ..save()
-                ..reset();
-
+              
               // Check for additional logic
               if (customNextTemplate[currentTemplateId] != null) {
                 User user = User.fromJson(widget.userJson);
@@ -244,8 +255,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     final template = snapshot.data![currentTemplateId]!;
 
     // Build input widgets
-    Form inputForm = _fromTemplateInputs(template.inputs);
-    Widget optionWidget = _fromTemplateOptions(template.options, inputForm);
+    Widget inputWidget = _fromTemplateInputs(template.inputs);
+    Widget optionWidget = _fromTemplateOptions(template.options, inputWidget);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -277,7 +288,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ]
               ),
 
-              inputForm,
+              inputWidget,
 
               if (template.text != null)
                 MarkdownBody(

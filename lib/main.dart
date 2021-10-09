@@ -71,6 +71,7 @@ class _AppState extends State<App> {
       ),
       inputDecorationTheme: InputDecorationTheme(
         contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
+        floatingLabelStyle: const TextStyle(fontSize: 16.0),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16.0),
         ),
@@ -82,12 +83,17 @@ class _AppState extends State<App> {
         ),
         focusedBorder: const OutlineInputBorder(
           borderSide: BorderSide(
+            color: primaryColor,
+            width: 2.0
+          )
+        ),
+        errorBorder: const OutlineInputBorder(
+          borderSide: BorderSide(
             color: accentColor,
             width: 2.0
           )
         )
         // TODO Error looks funky
-        // TODO Copy/cut menu looks funky as hell
       ),
       textSelectionTheme: ThemeData.light().textSelectionTheme
     );

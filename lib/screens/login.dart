@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:health/health.dart';
 
@@ -150,7 +151,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
         TextFormField(
           controller: _email,
-          decoration: const InputDecoration(labelText: "Email")
+          decoration: const InputDecoration(labelText: "Email"),
+          validator: FormBuilderValidators.email(context),
         ),
 
         const SizedBox(height: 8.0),
