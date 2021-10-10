@@ -21,8 +21,6 @@ class OnboardProgressBarState extends State<OnboardProgressBar>
   late Animation<double> _animation;
   late Tween<double> _tween;
 
-  final _textKey = GlobalKey();
-
   nextStage() {
     _atStage++;
 
@@ -58,6 +56,45 @@ class OnboardProgressBarState extends State<OnboardProgressBar>
       return const SizedBox(height: 36.0);
     }
 
+    // TODO Should check if text is intersecting edge of screen, but just use a constant for now
+    const cutoffPercentage = 0.8;
+
+    // Inverted display is white text on left of progress bar
+    Widget getPercentageDisplay(bool inverted) {
+
+      final offset = Offset(_animation.value + (inverted ? -1 : 0), 0);
+      final color = inverted ? Colors.white : Theme.of(context).colorScheme.primary;
+
+      visible() {
+        return (_animation.value < cutoffPercentage) ^ inverted;
+      }
+
+      return AnimatedOpacity(
+        opacity: visible() ? 1.0 : 0.0,
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.fastOutSlowIn,
+        child: Align(
+          alignment: AlignmentGeometry.lerp(Alignment.centerLeft, Alignment.centerRight, _animation.value)!,
+          child: FractionalTranslation(
+            translation: offset,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              child: Text(
+                (_percentage * 100).toStringAsFixed(0) + "%",
+                style: TextStyle(
+                  height: 1.0,
+                  fontSize: 28.0,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: Theme.of(context).textTheme.headline1!.fontFamily,
+                  color: color
+                )
+              )
+            )
+          )
+        )
+      );
+    }
+
     return AnimatedBuilder(
       animation: _animation,
       builder: (BuildContext context, Widget? child) {
@@ -70,27 +107,8 @@ class OnboardProgressBarState extends State<OnboardProgressBar>
               minHeight: 36.0,
               value: _animation.value,
             ),
-            Align(
-              alignment: AlignmentGeometry.lerp(Alignment.centerLeft, Alignment.centerRight, _animation.value)!,
-              child: FractionalTranslation(
-                translation: Offset(_animation.value, 0),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                  child:
-                  Text(
-                      (_percentage * 100).toStringAsFixed(0) + "%",
-                      key: _textKey,
-                      style: TextStyle(
-                          height: 1.0,
-                          fontSize: 28.0,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: Theme.of(context).textTheme.headline1!.fontFamily,
-                          color: Theme.of(context).colorScheme.primary
-                      )
-                  )
-                )
-              )
-            )
+            getPercentageDisplay(true),
+            getPercentageDisplay(false)
           ]
         );
       },
