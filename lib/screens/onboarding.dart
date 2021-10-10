@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:hea/widgets/firebase_svg.dart';
+import 'package:hea/widgets/onboard_progress_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:hea/data/user_repo.dart';
@@ -29,6 +30,7 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<OnboardProgressBarState> _progressBarKey = GlobalKey<OnboardProgressBarState>();
 
   var currentTemplateId = onboardingStartId;
   late Future<OnboardingTemplateMap> templateMapFuture;
@@ -36,6 +38,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   _advanceNextTemplate(String nextTemplate) {
     if (currentTemplateId != onboardingLastId) {
       setState(() => currentTemplateId = nextTemplate);
+      _progressBarKey.currentState!.nextStage();
     }
     else {
       // Push to Firestore
@@ -252,59 +255,71 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
 
     // Retrieve specific OnboardTemplate object
-    final template = snapshot.data![currentTemplateId]!;
+    final templateMap = snapshot.data!;
+    final template = templateMap[currentTemplateId]!;
 
     // Build input widgets
     Widget inputWidget = _fromTemplateInputs(template.inputs);
     Widget optionWidget = _fromTemplateOptions(template.options, inputWidget);
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        // Optional image
-        ((template.imageId != null)
-          ? Expanded(child: FirebaseSvg(template.imageId!).load())
-          : const Spacer()
-        ),
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(36.0),
+        child: SafeArea(
+          // TODO Rough estimate for numStages using total size
+          child: OnboardProgressBar(key: _progressBarKey, numStages: templateMap.length)
+        )
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+          // Optional image
+          ((template.imageId != null)
+            ? Expanded(child: FirebaseSvg(template.imageId!).load())
+            : const Spacer()
+          ),
 
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Column(
+          Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Padding(
-                      child: Text(template.title, style: Theme.of(context).textTheme.headline1),
-                      padding: const EdgeInsets.symmetric(vertical: 24.0)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Padding(
+                        child: Text(template.title, style: Theme.of(context).textTheme.headline1),
+                        padding: const EdgeInsets.symmetric(vertical: 24.0)
+                      ),
+
+                      // Optional subtitle
+                      if (template.subtitle != null)
+                        Text(template.subtitle!, style: Theme.of(context).textTheme.headline2),
+                    ]
                   ),
 
-                  // Optional subtitle
-                  if (template.subtitle != null)
-                    Text(template.subtitle!, style: Theme.of(context).textTheme.headline2),
+                  inputWidget,
+
+                  if (template.text != null)
+                    MarkdownBody(
+                      data: template.text!,
+                      // Support opening links
+                      onTapLink: (text, href, title) => _launchUrl(href!),
+                    ),
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 32.0),
+                    child: optionWidget
+                  )
                 ]
-              ),
-
-              inputWidget,
-
-              if (template.text != null)
-                MarkdownBody(
-                  data: template.text!,
-                  // Support opening links
-                  onTapLink: (text, href, title) => _launchUrl(href!),
-                ),
-
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 32.0),
-                child: optionWidget
               )
-            ]
-          )
+            )
+          ],
         )
-      ],
+      )
     );
 
   }
@@ -317,24 +332,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(36.0),
-        child: SafeArea(
-          child: LinearProgressIndicator(
-            color: Theme.of(context).colorScheme.primary,
-            backgroundColor: Colors.transparent,
-            minHeight: 36.0,
-            value: 0.25,
-          )
-        )
-      ),
-      body: Center(
-        child: FutureBuilder<OnboardingTemplateMap>(
-          future: templateMapFuture,
-          builder: _templateBuilder
-        )
-      )
+    return FutureBuilder<OnboardingTemplateMap>(
+      future: templateMapFuture,
+      builder: _templateBuilder
     );
   }
 
