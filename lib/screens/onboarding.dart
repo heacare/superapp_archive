@@ -32,13 +32,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<OnboardProgressBarState> _progressBarKey = GlobalKey<OnboardProgressBarState>();
 
-  var currentTemplateId = onboardingStartId;
   late Future<OnboardingTemplateMap> templateMapFuture;
+
+  var currentTemplateId = onboardingStartId;
+  late OnboardingTemplate currentTemplate;
 
   _advanceNextTemplate(String nextTemplate) {
     if (currentTemplateId != onboardingLastId) {
       setState(() => currentTemplateId = nextTemplate);
-      _progressBarKey.currentState!.nextStage();
+
+      // Only advance progress bar if this template had input fields
+      if (currentTemplate.inputs.isNotEmpty || currentTemplate.options.length > 1) {
+        _progressBarKey.currentState!.nextStage();
+      }
     }
     else {
       // Push to Firestore
@@ -216,11 +222,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               // Check for additional logic
               if (customNextTemplate[currentTemplateId] != null) {
                 User user = User.fromJson(widget.userJson);
-                print(customNextTemplate[currentTemplateId]!(user));
+                final nextTemplateId = customNextTemplate[currentTemplateId]!(user);
 
-                _advanceNextTemplate(
-                  customNextTemplate[currentTemplateId]!(user)
-                );
+                _advanceNextTemplate(nextTemplateId);
               }
               else {
                 _advanceNextTemplate(option.nextTemplate);
@@ -256,18 +260,23 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
     // Retrieve specific OnboardTemplate object
     final templateMap = snapshot.data!;
-    final template = templateMap[currentTemplateId]!;
+    currentTemplate = templateMap[currentTemplateId]!;
+
+    // TODO Improve this
+    // Rough estimate based on how many require user input (ignoring branching)
+    final numStages = templateMap.values.where(
+      (template) => template.inputs.isNotEmpty || template.options.length > 1
+    ).length;
 
     // Build input widgets
-    Widget inputWidget = _fromTemplateInputs(template.inputs);
-    Widget optionWidget = _fromTemplateOptions(template.options, inputWidget);
+    Widget inputWidget = _fromTemplateInputs(currentTemplate.inputs);
+    Widget optionWidget = _fromTemplateOptions(currentTemplate.options, inputWidget);
 
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(36.0),
         child: SafeArea(
-          // TODO Rough estimate for numStages using total size
-          child: OnboardProgressBar(key: _progressBarKey, numStages: templateMap.length)
+          child: OnboardProgressBar(key: _progressBarKey, numStages: numStages)
         )
       ),
       body: Center(
@@ -276,8 +285,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
           // Optional image
-          ((template.imageId != null)
-            ? Expanded(child: FirebaseSvg(template.imageId!).load())
+          ((currentTemplate.imageId != null)
+            ? Expanded(child: FirebaseSvg(currentTemplate.imageId!).load())
             : const Spacer()
           ),
 
@@ -291,21 +300,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Padding(
-                        child: Text(template.title, style: Theme.of(context).textTheme.headline1),
+                        child: Text(currentTemplate.title, style: Theme.of(context).textTheme.headline1),
                         padding: const EdgeInsets.symmetric(vertical: 24.0)
                       ),
 
                       // Optional subtitle
-                      if (template.subtitle != null)
-                        Text(template.subtitle!, style: Theme.of(context).textTheme.headline2),
+                      if (currentTemplate.subtitle != null)
+                        Text(currentTemplate.subtitle!, style: Theme.of(context).textTheme.headline2),
                     ]
                   ),
 
                   inputWidget,
 
-                  if (template.text != null)
+                  if (currentTemplate.text != null)
                     MarkdownBody(
-                      data: template.text!,
+                      data: currentTemplate.text!,
                       // Support opening links
                       onTapLink: (text, href, title) => _launchUrl(href!),
                     ),
