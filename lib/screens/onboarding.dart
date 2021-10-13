@@ -3,25 +3,25 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:hea/widgets/error_display.dart';
+import 'package:hea/providers/auth.dart';
+import 'package:hea/screens/error.dart';
 import 'package:hea/widgets/firebase_svg.dart';
 import 'package:hea/widgets/onboard_progress_bar.dart';
+import 'package:health/health.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:hea/data/user_repo.dart';
 import 'package:hea/models/onboarding_custom.dart';
 import 'package:hea/models/onboarding_template.dart';
 import 'package:hea/models/user.dart';
+import 'health_setup.dart';
 import 'home.dart';
 
 const onboardingStartId = "onboard_start";
 const onboardingLastId = "birth_control_2";
 
 class OnboardingScreen extends StatefulWidget {
-  Map<String, dynamic> userJson;
-
-  // Pass a JSON representing User since we don't have reflection
-  OnboardingScreen({Key? key, required this.userJson}) :
+  const OnboardingScreen({Key? key,}) :
         super(key: key);
 
   @override
@@ -30,6 +30,9 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
 
+  // No reflections so we have to update through a map
+  late final Map<String, dynamic> userJson;
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<OnboardProgressBarState> _progressBarKey = GlobalKey<OnboardProgressBarState>();
 
@@ -37,6 +40,26 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   var currentTemplateId = onboardingStartId;
   late OnboardingTemplate currentTemplate;
+
+  @override
+  initState() {
+    super.initState();
+    templateMapFuture = OnboardingTemplate.fetchTemplates();
+
+    // Onboard user
+    final authUser = Authentication().currentUser()!;
+    userJson = User(authUser.uid).toJson();
+
+    // Pull health data
+    WidgetsBinding.instance!.addPostFrameCallback((_) =>
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const HealthSetupScreen())
+      ).then((value) {
+        List<HealthDataPoint> healthData = value;
+        userJson["healthData"] = healthData.map((e) => e.toJson()).toList();
+      })
+    );
+  }
 
   _advanceNextTemplate(String nextTemplate) {
     if (currentTemplateId != onboardingLastId) {
@@ -49,7 +72,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
     else {
       // Push to Firestore
-      UserRepo().insert(User.fromJson(widget.userJson));
+      UserRepo().insert(User.fromJson(userJson));
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
             content: Text("Welcome to Happily Ever After!")
@@ -71,13 +94,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       final baseName = varName.substring(0, idx);
       varName = varName.substring(idx+1);
 
-      if (widget.userJson[baseName] == null) {
-        widget.userJson[baseName] = {};
+      if (userJson[baseName] == null) {
+        userJson[baseName] = {};
       }
-      widget.userJson[baseName][varName] = value;
+      userJson[baseName][varName] = value;
     }
     else {
-      widget.userJson[varName] = value;
+      userJson[varName] = value;
     }
   }
 
@@ -114,7 +137,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       getInitialValue() {
         // Health API gives data in kg/m
         if (input.varName == "weight" || input.varName == "height") {
-          for (var h in widget.userJson["healthData"]) {
+          for (var h in userJson["healthData"]) {
             if (h["data_type"] == input.varName) {
               return (h["value"] as num).toStringAsFixed(2);
             }
@@ -221,7 +244,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               
               // Check for additional logic
               if (customNextTemplate[currentTemplateId] != null) {
-                User user = User.fromJson(widget.userJson);
+                User user = User.fromJson(userJson);
                 final nextTemplateId = customNextTemplate[currentTemplateId]!(user);
 
                 _advanceNextTemplate(nextTemplateId);
@@ -246,7 +269,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     if (snapshot.hasError) {
       // Error on fetching templates
       print("Error in fetching templates: ${snapshot.error}");
-      return const ErrorDisplay();
+      return const ErrorScreen();
     }
     else if (!snapshot.hasData) {
       // Loading screen
@@ -331,12 +354,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       )
     );
 
-  }
-
-  @override
-  initState() {
-    super.initState();
-    templateMapFuture = OnboardingTemplate.fetchTemplates();
   }
 
   @override

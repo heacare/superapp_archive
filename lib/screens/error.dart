@@ -3,9 +3,9 @@ import 'package:flutter_svg/svg.dart';
 
 const svgAssetName = "assets/svg/error.svg";
 
-class ErrorDisplay extends StatelessWidget {
+class ErrorScreen extends StatelessWidget {
 
-  const ErrorDisplay({Key? key}) :
+  const ErrorScreen({Key? key}) :
         super(key: key);
 
   @override

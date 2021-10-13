@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:health/health.dart';
 
 import 'package:hea/data/user_repo.dart';
-import 'package:hea/models/user.dart';
 import 'package:hea/providers/auth.dart';
-import 'package:hea/screens/health_setup.dart';
 import 'package:hea/screens/home.dart';
 import 'package:hea/screens/onboarding.dart';
 
@@ -63,20 +60,13 @@ class _LoginScreenState extends State<LoginScreen> {
     final user = await UserRepo().get(userId);
 
     if (user == null) {
-      var userJson = User(userId).toJson();
-
-      // Pull health data
-      List<HealthDataPoint> healthData = await Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const HealthSetupScreen())
-      );
-      userJson["healthData"] = healthData.map((e) => e.toJson()).toList();
-
-      // Onboarding
-      await Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => OnboardingScreen(userJson: userJson))
+      await Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => OnboardingScreen()),
+          (route) => false
       );
     }
     else {
+      // User already finished onboarding
       await Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => HomeScreen()),
           (route) => false

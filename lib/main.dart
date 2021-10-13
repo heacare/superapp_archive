@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:hea/providers/auth.dart';
+import 'package:hea/screens/error.dart';
 import 'package:hea/screens/home.dart';
 import 'package:hea/screens/login.dart';
+import 'package:hea/screens/onboarding.dart';
+
+import 'data/user_repo.dart';
 
 void main() {
   runApp(const App());
@@ -14,6 +18,12 @@ class App extends StatefulWidget {
 
   @override
   _AppState createState() => _AppState();
+}
+
+enum UserStatus {
+  signedOut,
+  registered,
+  onboarded,
 }
 
 class _AppState extends State<App> {
@@ -101,9 +111,24 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
+
+    final Future<UserStatus> hasUserData = _firebaseInit.then((value) async {
+      // Authentication user exists separately from user data, so we have to check for the case where
+      // the user signed up but uninstalled/reset the app before finishing onboarding
+      final authUser = Authentication().currentUser();
+      if (authUser == null) {
+        return UserStatus.signedOut;
+      }
+      else {
+        return (await UserRepo().get(authUser.uid) == null)
+            ? UserStatus.registered
+            : UserStatus.onboarded;
+      }
+    });
+
     return FutureBuilder(
-      future: _firebaseInit,
-      builder: (context, snapshot) {
+      future: hasUserData,
+      builder: (context, AsyncSnapshot<UserStatus> snapshot) {
         return MaterialApp(
           title: 'Happily Ever After',
           theme: _getThemeData(),
@@ -115,20 +140,32 @@ class _AppState extends State<App> {
     );
   }
 
-  Widget mainScreen(AsyncSnapshot<Object?> snapshot) {
+  Widget mainScreen(AsyncSnapshot<UserStatus> snapshot) {
     if (snapshot.hasError) {
-      return const Text("Firebase initialization failed!");
+      print("Encountered error: ${snapshot.error}");
+      return const ErrorScreen();
     }
 
     if (snapshot.connectionState != ConnectionState.done) {
       return const Text("Loading...");
     }
 
-    if (Authentication().currentUser() == null) {
-      // TODO this should be StageA first
-      return LoginScreen();
-    } else {
-      return HomeScreen();
+    if (snapshot.hasData) {
+      switch (snapshot.data!) {
+
+        case UserStatus.signedOut:
+          return LoginScreen();
+          break;
+        case UserStatus.registered:
+          return const OnboardingScreen();
+          break;
+        case UserStatus.onboarded:
+          return const HomeScreen();
+          break;
+      }
     }
+
+    // Something has gone horribly wrong somehow
+    return const ErrorScreen();
   }
 }
