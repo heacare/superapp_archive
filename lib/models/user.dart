@@ -72,15 +72,13 @@ class User {
   }
 }
 
+//
+//  Lookups for customNextTemplate in onboarding_custom.dart
+//  TODO: Required until logic is moved into Firebase
+//
+
 class Gender {
-  final String _value;
-  const Gender._internal(this._value);
-
-  @override
-  toString() => _value;
-
-  static const male = Gender._internal("Male");
-  static const female = Gender._internal("Female");
-
-  static const genderList = [male, female];
+  static const String male = "Male";
+  static const String female = "Female";
+  static const String others = "Others";
 }

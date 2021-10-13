@@ -3,6 +3,7 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:hea/widgets/error_display.dart';
 import 'package:hea/widgets/firebase_svg.dart';
 import 'package:hea/widgets/onboard_progress_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -14,7 +15,7 @@ import 'package:hea/models/user.dart';
 import 'home.dart';
 
 const onboardingStartId = "onboard_start";
-const onboardingLastId = "birth_control_1";
+const onboardingLastId = "birth_control_2";
 
 class OnboardingScreen extends StatefulWidget {
   Map<String, dynamic> userJson;
@@ -139,7 +140,30 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           )
         );
       }
+      else if (input.type == "radio") {
+        return FormBuilderRadioGroup(
+            name: input.varName,
+            decoration: InputDecoration(
+              labelText: input.text
+            ),
+            // TODO: Fixes bug in library :')
+            focusNode: FocusNode(),
+            activeColor: Theme.of(context).colorScheme.primary,
+            orientation: OptionsOrientation.vertical,
+            validator: FormBuilderValidators.required(context),
+            onChanged: (String? value) {
+              _updateUserField(input.varName, value);
+            },
+            options: input.choices.map((choice) {
+              return FormBuilderFieldOption(
+                child: Text(choice),
+                value: choice
+              );
+            }).toList(growable: false)
+        );
+      }
       else {
+        // Input types: number, text
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 4.0),
           child: TextFormField(
@@ -163,38 +187,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
     }
 
-    if (currentTemplateId == "gender_0") {
-      // TODO: Hardcoded options for gender
-      return FormBuilderRadioGroup(
-        name: "gender",
-        // TODO: Fixes bug in library :')
-        focusNode: FocusNode(),
-        activeColor: Theme.of(context).colorScheme.primary,
-        orientation: OptionsOrientation.vertical,
-        validator: FormBuilderValidators.required(context),
-        onChanged: (String? value) {
-          widget.userJson["gender"] = value.toString();
-        },
-        options: Gender.genderList.map((gender) {
-          return FormBuilderFieldOption(
-            child: Text(gender.toString(), style: Theme.of(context).textTheme.headline2),
-            value: gender.toString()
-          );
-        })
-        .toList(growable: false)
-      );
-
-    }
-    else {
-      return Form(
-        key: _formKey,
-        child: Wrap(
-          children: inputs.map(
-            (input) => makeInputWidget(input)
-          ).toList(growable: false)
-        )
-      );
-    }
+    return Form(
+      key: _formKey,
+      child: Wrap(
+        children: inputs.map(
+          (input) => makeInputWidget(input)
+        ).toList(growable: false)
+      )
+    );
 
   }
 
@@ -246,7 +246,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     if (snapshot.hasError) {
       // Error on fetching templates
       print("Error in fetching templates: ${snapshot.error}");
-      return Text("Oops, something broke", style: Theme.of(context).textTheme.headline1);
+      return const ErrorDisplay();
     }
     else if (!snapshot.hasData) {
       // Loading screen

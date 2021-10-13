@@ -62,13 +62,16 @@ class OnboardingTemplateInput {
   final String text;
   final String type;
   final String varName;
+  // For radio input types
+  final List<String> choices;
 
-  OnboardingTemplateInput(this.text, this.type, this.varName);
+  OnboardingTemplateInput(this.text, this.type, this.varName, this.choices);
 
   OnboardingTemplateInput.fromJson(Map<String, dynamic> json) :
       text = json["text"],
       type = json["type"],
-      varName = json["varName"];
+      varName = json["varName"],
+      choices = List<String>.from(json["choices"] ?? []);
 }
 
 class OnboardingTemplateOption {
