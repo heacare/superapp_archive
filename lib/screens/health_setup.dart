@@ -95,6 +95,17 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
   }
 
   Widget _contentNotFetched() {
+
+    final platform = Theme.of(context).platform;
+    late String buttonText;
+    if (platform == TargetPlatform.iOS) {
+      buttonText = "Sync with Apple Health";
+    }
+    else {
+      // Assume all other platforms will log in with Google
+      buttonText = "Sync with Google Fit";
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -111,7 +122,7 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Padding(
-                child: Text("Sync with Apple Health", style: Theme.of(context).textTheme.headline1),
+                child: Text(buttonText, style: Theme.of(context).textTheme.headline1),
                 padding: const EdgeInsets.symmetric(vertical: 16.0)
               ),
               Text(
@@ -120,7 +131,7 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
               ),
               Padding(
                 child: OutlinedButton(
-                  child: const Text("SYNC TO APPLE"),
+                  child: const Text("SYNC DATA"),
                   onPressed: fetchData,
                 ),
                 padding: const EdgeInsets.symmetric(vertical: 32.0)
