@@ -1,4 +1,5 @@
-  import 'package:flutter/material.dart';
+  import 'package:colorful_safe_area/colorful_safe_area.dart';
+import 'package:flutter/material.dart';
 
 import 'package:hea/screens/chapter.dart';
 import 'package:hea/models/content.dart';
@@ -65,7 +66,8 @@ class _ContentScreenState extends State<ContentScreen> {
     );
 
     return Scaffold(
-      body: SafeArea(
+      body: ColorfulSafeArea(
+        color: Theme.of(context).colorScheme.primary,
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [

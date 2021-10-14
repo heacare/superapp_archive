@@ -1,3 +1,4 @@
+import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -80,7 +81,8 @@ class _ContentsScreenState extends State<ContentsScreen> {
       });
 
     return Scaffold(
-      body: SafeArea(
+      body: ColorfulSafeArea(
+        color: Theme.of(context).colorScheme.primary,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

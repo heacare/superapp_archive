@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -295,61 +296,68 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     Widget inputWidget = _fromTemplateInputs(currentTemplate.inputs);
     Widget optionWidget = _fromTemplateOptions(currentTemplate.options, inputWidget);
 
+    final templateWidget = Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        // Optional image
+        ((currentTemplate.imageId != null)
+            ? Expanded(child: FirebaseSvg(currentTemplate.imageId!).load())
+            : const Spacer()
+        ),
+
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    child: Text(currentTemplate.title, style: Theme.of(context).textTheme.headline1),
+                    padding: const EdgeInsets.symmetric(vertical: 24.0)
+                  ),
+
+                  // Optional subtitle
+                  if (currentTemplate.subtitle != null)
+                    Text(currentTemplate.subtitle!, style: Theme.of(context).textTheme.headline2),
+                ]
+              ),
+
+              inputWidget,
+
+              if (currentTemplate.text != null)
+                MarkdownBody(
+                  data: currentTemplate.text!,
+                  // Support opening links
+                  onTapLink: (text, href, title) => _launchUrl(href!),
+                ),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 32.0),
+                child: optionWidget
+              )
+            ]
+          )
+        )
+      ],
+    );
+
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(36.0),
-        child: SafeArea(
+        preferredSize: const Size.fromHeight(OnboardProgressBar.height),
+        child: ColorfulSafeArea(
+          color: Theme.of(context).colorScheme.primary,
           child: OnboardProgressBar(key: _progressBarKey, numStages: numStages)
         )
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-          // Optional image
-          ((currentTemplate.imageId != null)
-            ? Expanded(child: FirebaseSvg(currentTemplate.imageId!).load())
-            : const Spacer()
-          ),
-
-          Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Padding(
-                        child: Text(currentTemplate.title, style: Theme.of(context).textTheme.headline1),
-                        padding: const EdgeInsets.symmetric(vertical: 24.0)
-                      ),
-
-                      // Optional subtitle
-                      if (currentTemplate.subtitle != null)
-                        Text(currentTemplate.subtitle!, style: Theme.of(context).textTheme.headline2),
-                    ]
-                  ),
-
-                  inputWidget,
-
-                  if (currentTemplate.text != null)
-                    MarkdownBody(
-                      data: currentTemplate.text!,
-                      // Support opening links
-                      onTapLink: (text, href, title) => _launchUrl(href!),
-                    ),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 32.0),
-                    child: optionWidget
-                  )
-                ]
-              )
-            )
-          ],
+      body: SingleChildScrollView(
+        physics: const ClampingScrollPhysics(),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height - OnboardProgressBar.height - MediaQuery.of(context).padding.top,
+          child: templateWidget
         )
       )
     );
