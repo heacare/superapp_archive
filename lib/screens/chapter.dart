@@ -1,4 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hea/models/content_card.dart';
+import 'package:hea/widgets/firebase_svg.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_markdown/flutter_markdown.dart';
 
@@ -16,7 +19,7 @@ class ChapterScreen extends StatefulWidget {
 
 class _ChapterScreenState extends State<ChapterScreen> {
   final markdownStyleSheet =
-      MarkdownStyleSheet(p: const TextStyle(fontSize: 24.0));
+      MarkdownStyleSheet(p: const TextStyle(fontSize: 18.0));
 
   final PageController _cards = PageController();
 
@@ -26,17 +29,32 @@ class _ChapterScreenState extends State<ChapterScreen> {
     super.dispose();
   }
 
-  Widget createCard(BuildContext context, String content) {
+  Widget createCard(BuildContext context, ContentCard card) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(8.0, 60.0, 8.0, 60.0),
+      padding: const EdgeInsets.fromLTRB(18.0, 40.0, 18.0, 40.0),
       child: Card(
           margin: const EdgeInsets.all(8.0),
           borderOnForeground: true,
           elevation: 8.0,
-          child: Markdown(
-              data: content.replaceAll("<br>", "\n\n"),
-              extensionSet: md.ExtensionSet.gitHubFlavored,
-              styleSheet: markdownStyleSheet)),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                      height: 200,
+                      child: FirebaseSvg("content/" + card.icon).load()),
+                  Flexible(
+                    child: MarkdownBody(
+                        data: card.text.replaceAll("<br>", "\n\n"),
+                        extensionSet: md.ExtensionSet.gitHubFlavored,
+                        styleSheet: markdownStyleSheet),
+                  ),
+                ],
+              ),
+            ),
+          )),
     );
   }
 
@@ -58,7 +76,10 @@ class _ChapterScreenState extends State<ChapterScreen> {
               ),
             ),
             SmoothPageIndicator(
-                controller: _cards, count: widget.chapter.content.length),
+                controller: _cards,
+                effect: SlideEffect(
+                    activeDotColor: Theme.of(context).colorScheme.secondary),
+                count: widget.chapter.content.length),
             Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: OutlinedButton(

@@ -1,7 +1,9 @@
+import 'content_card.dart';
+
 class Chapter {
   final String title;
   final String icon; // TODO url or data?
-  final List<String> content; // in Markdown format
+  final List<ContentCard> content; // in Markdown format
   final String callToAction;
 
   Chapter({required this.title, required this.icon, required this.content, required this.callToAction});
@@ -10,7 +12,7 @@ class Chapter {
       this(
         title: json["title"]! as String,
         icon: json["icon"]! as String,
-        content: (json["content"]! as List<dynamic>).map((e) => e as String).toList(),
+        content: (json["content"]! as List<dynamic>).map((e) => ContentCard.fromJson(e)).toList(),
         callToAction: json["callToAction"]! as String
       );
 
@@ -18,7 +20,7 @@ class Chapter {
     return {
       'title': title,
       'icon': icon,
-      'content': content,
+      'content': content.map((e) => e.toJson()).toList(),
       'callToAction': callToAction,
     };
   }
