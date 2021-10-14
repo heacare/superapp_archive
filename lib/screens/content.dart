@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:hea/screens/chapter.dart';
 import 'package:hea/models/content.dart';
+import 'package:hea/widgets/navigable_text.dart';
 
 class ContentScreen extends StatefulWidget {
   final Content content;
@@ -72,7 +73,10 @@ class _ContentScreenState extends State<ContentScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Padding(
-                child: Text(widget.content.title, style: Theme.of(context).textTheme.headline1),
+                child: NavigableText(
+                  onPressed: () => Navigator.of(context).pop(),
+                  text: widget.content.title
+                ),
                 padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0)
               ),
               Expanded(
