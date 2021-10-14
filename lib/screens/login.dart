@@ -6,6 +6,7 @@ import 'package:hea/data/user_repo.dart';
 import 'package:hea/providers/auth.dart';
 import 'package:hea/screens/home.dart';
 import 'package:hea/screens/onboarding.dart';
+import 'package:hea/widgets/navigable_text.dart';
 
 const svgAssetName = "assets/svg/login.svg";
 
@@ -118,23 +119,9 @@ class _LoginScreenState extends State<LoginScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Row(
-          children: [
-            IconButton(
-              icon: const BackButtonIcon(),
-              iconSize: 36.0,
-              color: Theme.of(context).colorScheme.primary,
-              padding: const EdgeInsets.all(0.0),
-              splashRadius: 24.0,
-              constraints: const BoxConstraints(),
-              onPressed: () => setState(() => _loginChoice = LoginChoice.unselected),
-            ),
-            const SizedBox(width: 16.0),
-            Text(
-                _loginChoice == LoginChoice.login ? "Login" : "Sign Up",
-                style: Theme.of(context).textTheme.headline1
-            ),
-          ]
+        NavigableText(
+          onPressed: () => setState(() => _loginChoice = LoginChoice.unselected),
+          text: _loginChoice == LoginChoice.login ? "Login" : "Sign Up",
         ),
 
         const SizedBox(height: 24.0),

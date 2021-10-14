@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 
 class OnboardProgressBar extends StatefulWidget {
   final int numStages;
+  static const height = 36.0;
 
   OnboardProgressBar({Key? key, required this.numStages}) :
     super(key: key);
@@ -53,7 +54,8 @@ class OnboardProgressBarState extends State<OnboardProgressBar>
   Widget build(BuildContext context) {
 
     if (_percentage == 0) {
-      return const SizedBox(height: 36.0);
+      // return const SizedBox(height: OnboardProgressBar.height);
+      return const SizedBox(height: 0.0);
     }
 
     // TODO Should check if text is intersecting edge of screen, but just use a constant for now
@@ -104,7 +106,7 @@ class OnboardProgressBarState extends State<OnboardProgressBar>
             LinearProgressIndicator(
               color: Theme.of(context).colorScheme.primary,
               backgroundColor: Colors.transparent,
-              minHeight: 36.0,
+              minHeight: OnboardProgressBar.height,
               value: _animation.value,
             ),
             getPercentageDisplay(true),
