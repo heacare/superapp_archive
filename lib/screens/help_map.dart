@@ -69,7 +69,7 @@ class _HelpMapScreenState extends State<HelpMapScreen> {
                     leading: AvatarIcon(icon: selectedHelper!.icon, radius: 20.0),
                     title: Text(selectedHelper!.name),
                     subtitle: Text(selectedHelper!.description),
-                    trailing: TextButton(child: Icon(Icons.close), onPressed: () {
+                    trailing: TextButton(child: const Icon(Icons.close), onPressed: () {
                       setState(() { selectedHelper = null; });
                     }),
                   ),
@@ -78,8 +78,8 @@ class _HelpMapScreenState extends State<HelpMapScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      TextButton.icon(onPressed: () {}, icon: Icon(Icons.add), label: const Text("Book a Session")),
-                      TextButton.icon(onPressed: () {}, icon: Icon(Icons.warning), label: const Text("Report")),
+                      TextButton.icon(onPressed: () {}, icon: const Icon(Icons.add), label: const Text("Book a Session")),
+                      TextButton.icon(onPressed: () {}, icon: const Icon(Icons.warning), label: const Text("Report")),
                     ],
                   )
                 ],
@@ -108,9 +108,8 @@ class _HelpMapScreenState extends State<HelpMapScreen> {
   Widget createMap(BuildContext context) {
     return FlutterMap(
       options: MapOptions(
-        bounds: LatLngBounds(
-            LatLng(1.1304753, 103.622035), LatLng(1.4504753, 104.0120359)),
-        boundsOptions: const FitBoundsOptions(padding: EdgeInsets.all(8.0)),
+        center: LatLng(1.308458419820971, 103.77342885504416),
+        zoom: 16.0
       ),
       layers: [
         TileLayerOptions(
