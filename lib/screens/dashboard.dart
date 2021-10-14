@@ -1,9 +1,60 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:hea/data/user_repo.dart';
+import 'package:hea/models/user.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Future<User?> userFuture = UserRepo().getCurrent();
+    return FutureBuilder(
+        future: userFuture,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return const Text("Error!");
+          }
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.data == null) {
+            return const Text("No user?!");
+          }
+          return DashboardPage.fromUser(snapshot.data as User);
+        });
+  }
+}
+
+class DashboardPage extends StatelessWidget {
+  final double expYears;
+  final double optYears;
+  final double socScore;
+
+  DashboardPage({
+    Key? key,
+    required this.expYears,
+    required this.optYears,
+    required this.socScore
+  }) : super(key: key);
+
+  // TODO: ideally this logic should be stored and retrieved from the backend
+  factory DashboardPage.fromUser(User user){
+    Random random = Random((user.height+user.age).round());
+    // Wow imagine only considering two genders in 2021, omg cancelled
+    double expYears = user.gender == "Male" ? 72.4 : 74.6
+        + (3.5 * random.nextDouble()) - 5;
+    double optYears = user.gender == "Male" ? 87 : 92
+        + (2.5 * random.nextDouble()) - 2;
+    double socScore = random.nextInt(21) + 5.0;
+    return DashboardPage(
+      expYears: expYears,
+      optYears: optYears,
+      socScore: socScore
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +68,7 @@ class DashboardScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            DeathClock(expYears: 72.4, optYears: 82),
+            DeathClock(expYears: expYears, optYears: optYears),
             Flexible(
                 child: Padding(
                   padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
@@ -25,15 +76,16 @@ class DashboardScreen extends StatelessWidget {
                     "Good morning, looks like you're on track for a great day!",
                     style: Theme.of(context).textTheme.bodyText2,
                     textAlign: TextAlign.center,
-              ),
-            )),
-            ScoreBoard(optYears: 82, socScore: 20),
+                  ),
+                )),
+            ScoreBoard(optYears: optYears, socScore: socScore),
           ],
         ),
       ),
     );
   }
 }
+
 
 class DeathClock extends StatelessWidget {
   final double expYears;
@@ -51,7 +103,7 @@ class DeathClock extends StatelessWidget {
     return Container(
       child: SfRadialGauge(
         enableLoadingAnimation: true,
-        animationDuration: 500,
+        animationDuration: 700,
         axes: [
           RadialAxis(
             minimum: min,
@@ -67,6 +119,7 @@ class DeathClock extends StatelessWidget {
             ),
             pointers: [
               RangePointer(
+                animationType: AnimationType.ease,
                 value: optYears,
                 color: Theme.of(context).colorScheme.primary,
                 width: gaugeWidth,
