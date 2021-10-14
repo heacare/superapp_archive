@@ -1,7 +1,7 @@
 class Chapter {
   final String title;
   final String icon; // TODO url or data?
-  final String content; // in Markdown format
+  final List<String> content; // in Markdown format
   final String callToAction;
 
   Chapter({required this.title, required this.icon, required this.content, required this.callToAction});
@@ -10,7 +10,7 @@ class Chapter {
       this(
         title: json["title"]! as String,
         icon: json["icon"]! as String,
-        content: json["content"]! as String,
+        content: (json["content"]! as List<dynamic>).map((e) => e as String).toList(),
         callToAction: json["callToAction"]! as String
       );
 
