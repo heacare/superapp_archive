@@ -60,10 +60,30 @@ class _HelpMapScreenState extends State<HelpMapScreen> {
         alignment: Alignment.bottomCenter,
         // TODO can refactor into it's own widget
         child: Card(
-            child: ListTile(
-              leading: AvatarIcon(icon: selectedHelper!.icon, radius: 20.0),
-              title: Text(selectedHelper!.name),
-                subtitle: Text(selectedHelper!.description),
+            child: SizedBox(
+              height: 150,
+              child: Column(
+                children: [
+                  ListTile(
+                    visualDensity: VisualDensity.comfortable,
+                    leading: AvatarIcon(icon: selectedHelper!.icon, radius: 20.0),
+                    title: Text(selectedHelper!.name),
+                    subtitle: Text(selectedHelper!.description),
+                    trailing: TextButton(child: Icon(Icons.close), onPressed: () {
+                      setState(() { selectedHelper = null; });
+                    }),
+                  ),
+                  const Divider(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      TextButton.icon(onPressed: () {}, icon: Icon(Icons.add), label: const Text("Book a Session")),
+                      TextButton.icon(onPressed: () {}, icon: Icon(Icons.warning), label: const Text("Report")),
+                    ],
+                  )
+                ],
+              )
             )
           ),
         );
