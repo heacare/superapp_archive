@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hea/screens/help_map.dart';
 
 import 'package:hea/screens/profile.dart';
 import 'package:hea/providers/auth.dart';
@@ -42,6 +43,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (index == 1) {
       return ContentsScreen();
+    }
+
+    if (index == 2) {
+      return HelpMapScreen();
     }
 
     if (index == 3) {
