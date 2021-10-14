@@ -4,6 +4,7 @@ import 'package:hea/models/user.dart';
 
 import 'package:hea/providers/auth.dart';
 import 'package:hea/screens/login.dart';
+import 'package:hea/widgets/avatar_icon.dart';
 
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({Key? key}) : super(key: key);
@@ -11,8 +12,6 @@ class ProfileScreen extends StatefulWidget {
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
-
-const USER_ICON_DEFAULT = "https://kbowlingclub.com/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png";
 
 class _ProfileScreenState extends State<ProfileScreen> {
   Future<User?> userFuture = UserRepo().getCurrent();
@@ -49,7 +48,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final weight = user.weight.toString() + "kg";
     final country = user.country;
     final gender = user.gender;
-    final icon = user.icon.isNotEmpty ? user.icon : USER_ICON_DEFAULT;
+    final icon = user.icon;
 
     return Scaffold(
         appBar: AppBar(
@@ -65,12 +64,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       Padding(
                           padding: const EdgeInsets.all(16.0),
-                          child: CircleAvatar(
-                              radius: 100,
-                              child: // TODO use CachedNetworkImage
-                                  ClipOval(
-                                      child:
-                                          Image(image: NetworkImage(icon))))),
+                          child: AvatarIcon(icon: icon, radius: 100)),
                       Text(name,
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 24.0)),

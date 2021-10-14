@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:hea/models/helper.dart';
+import 'package:hea/widgets/avatar_icon.dart';
 import 'package:hea/providers/helper_provider.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -59,8 +60,13 @@ class _HelpMapScreenState extends State<HelpMapScreen> {
         alignment: Alignment.bottomCenter,
         // TODO can refactor into it's own widget
         child: Card(
-
-        ));
+            child: ListTile(
+              leading: AvatarIcon(icon: selectedHelper!.icon, radius: 20.0),
+              title: Text(selectedHelper!.name),
+                subtitle: Text(selectedHelper!.description),
+            )
+          ),
+        );
   }
 
   Marker createMarker(Helper helper, HelpType type) {
