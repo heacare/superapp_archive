@@ -39,11 +39,19 @@ class _ContentScreenState extends State<ContentScreen> {
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(chapter.title, style: Theme.of(context).textTheme.headline2!.copyWith(fontWeight: FontWeight.bold)),
+                        Flexible(
+                          child: Text(
+                            chapter.title,
+                            style: Theme.of(context).textTheme.headline2!.copyWith(fontWeight: FontWeight.bold, height: 1.0),
+                            softWrap: true,
+                          ),
+                        ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
+                            const SizedBox(width: 16.0),
                             Icon(Icons.access_time_outlined, color: Colors.grey[600], size: 18.0),
                             const SizedBox(width: 4.0),
                             // TODO Pull from chapter model

@@ -53,8 +53,15 @@ class _ContentsScreenState extends State<ContentsScreen> {
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(content.title, style: Theme.of(context).textTheme.headline2!.copyWith(fontWeight: FontWeight.bold)),
+                              Flexible(
+                                child: Text(
+                                  content.title,
+                                  style: Theme.of(context).textTheme.headline2!.copyWith(fontWeight: FontWeight.bold)
+                                )
+                              ),
+                              const SizedBox(width: 16.0),
                               Container(
                                 child: const Padding(
                                   child: Text("+5 years", style: TextStyle(color: Colors.white, fontSize: 16.0, fontWeight: FontWeight.bold, height: 1.0)),
