@@ -151,17 +151,16 @@ class _AppState extends State<App> {
     }
 
     if (snapshot.hasData) {
-      switch (snapshot.data!) {
+      switch (snapshot.requireData) {
 
         case UserStatus.signedOut:
           return LoginScreen();
-          break;
+
         case UserStatus.registered:
           return const OnboardingScreen();
-          break;
+
         case UserStatus.onboarded:
           return const HomeScreen();
-          break;
       }
     }
 

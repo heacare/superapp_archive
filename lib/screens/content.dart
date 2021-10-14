@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+  import 'package:flutter/material.dart';
 
 import 'package:hea/screens/chapter.dart';
 import 'package:hea/models/content.dart';
@@ -16,9 +16,6 @@ class _ContentScreenState extends State<ContentScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.content.title),
-        ),
         body: Center(
             child:  ListView.builder(
                 itemCount: widget.content.chapters.length,
@@ -35,7 +32,7 @@ class _ContentScreenState extends State<ContentScreen> {
                             builder: (context) =>
                                 ChapterScreen(chapter: chapter)));
                       });
-                }
+                },
             )
         )
     );

@@ -282,7 +282,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
 
     // Retrieve specific OnboardTemplate object
-    final templateMap = snapshot.data!;
+    final templateMap = snapshot.requireData;
     currentTemplate = templateMap[currentTemplateId]!;
 
     // TODO Improve this
