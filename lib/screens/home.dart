@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hea/screens/dashboard.dart';
 import 'package:hea/screens/help_map.dart';
 
 import 'package:hea/screens/profile.dart';
@@ -40,6 +41,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // TODO
   Widget pageFor(num index) {
+
+    if (index == 0) {
+      return DashboardScreen();
+    }
 
     if (index == 1) {
       return ContentsScreen();
