@@ -62,25 +62,37 @@ class DashboardPage extends StatelessWidget {
       appBar: AppBar(
         title: Text("Dashboard"),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            DeathClock(expYears: expYears, optYears: optYears),
-            Flexible(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-                  child: Text(
-                    "Good morning, looks like you're on track for a great day!",
-                    style: Theme.of(context).textTheme.bodyText2,
-                    textAlign: TextAlign.center,
+      body: LayoutBuilder(
+        builder: (context, constraint) {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraint.maxHeight),
+                child: IntrinsicHeight(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      DeathClock(expYears: expYears, optYears: optYears),
+                      Flexible(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 40),
+                          child: Text(
+                            "Good morning, looks like you're on track for a great day!",
+                            style: Theme.of(context).textTheme.bodyText2,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                      ScoreBoard(optYears: optYears, socScore: socScore),
+                    ],
                   ),
-                )),
-            ScoreBoard(optYears: optYears, socScore: socScore),
-          ],
-        ),
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -100,7 +112,8 @@ class DeathClock extends StatelessWidget {
   Widget build(BuildContext context) {
     const gaugeWidth = 0.15;
 
-    return Container(
+    return Expanded(
+      flex: 4,
       child: SfRadialGauge(
         enableLoadingAnimation: true,
         animationDuration: 700,
@@ -136,15 +149,17 @@ class DeathClock extends StatelessWidget {
             ],
             annotations: [
               GaugeAnnotation(
-                  verticalAlignment: GaugeAlignment.center,
-                  horizontalAlignment: GaugeAlignment.center,
-                  axisValue: max/2,
-                  positionFactor: 0.85,
+                horizontalAlignment: GaugeAlignment.center,
+                verticalAlignment: GaugeAlignment.center,
+                angle: 90,
                   widget: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      SizedBox(height: 30,),
                       Text(
                         expYears.toStringAsFixed(1),
+                        textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.headline1?.copyWith(
                           fontWeight: FontWeight.normal,
                           fontSize: 70,
@@ -218,31 +233,34 @@ class ScoreCard extends StatelessWidget {
 class ScoreBoard extends StatelessWidget {
   final double optYears;
   final double socScore;
-  final double iconSize = 24;
 
   const ScoreBoard({Key? key, required this.optYears, required this.socScore})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return IntrinsicHeight(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          ScoreCard(
-            icon: Icons.favorite,
-            value: optYears,
-            label: "optimal years",
-            color: Theme.of(context).colorScheme.primary,
-          ),
-          VerticalDivider(color: Colors.red),
-          ScoreCard(
-            icon: Icons.psychology,
-            value: socScore,
-            label: "social score",
-            color: Colors.deepOrange,
-          )
-        ],
+    return Expanded(
+      flex: 1,
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ScoreCard(
+              icon: Icons.favorite,
+              value: optYears,
+              label: "optimal years",
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            VerticalDivider(color: Colors.red),
+            ScoreCard(
+              icon: Icons.psychology,
+              value: socScore,
+              label: "social score",
+              color: Colors.deepOrange,
+            )
+          ],
+        ),
       ),
     );
   }
