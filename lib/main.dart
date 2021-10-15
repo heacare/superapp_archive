@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -33,7 +34,7 @@ class _AppState extends State<App> {
   ThemeData _getThemeData() {
 
     const primaryColor = Color(0xFFCC3363);
-    const accentColor = Color(0xFF62C370);
+    const accentColor = Color(0xFF52BF5A);
     const textColor = Color(0xFF191919);
 
     // Stolen from https://medium.com/@filipvk/creating-a-custom-color-swatch-in-flutter-554bcdcb27f3
@@ -70,6 +71,8 @@ class _AppState extends State<App> {
       textTheme: const TextTheme(
         headline1: TextStyle(fontSize: 48.0, fontWeight: FontWeight.bold, height: 1.1, color: primaryColor),
         headline2: TextStyle(fontSize: 20.0, fontWeight: FontWeight.normal, height: 1.4, color: textColor),
+        bodyText1: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, height: 1.2, color: textColor),
+        bodyText2: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, height: 1.2, color: textColor),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: TextButton.styleFrom(
