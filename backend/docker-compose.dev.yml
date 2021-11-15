@@ -6,9 +6,25 @@ services:
             context: .
             target: development
         command: npm run start:debug
+        environment:
+            - POSTGRES_USER=root
+            - POSTGRES_PASSWORD=thisisasupersecurepassword
         ports:
             - 3000:3000
             - 9229:9229
         volumes:
             - .:/usr/src/app
             - /usr/src/app/node_modules
+
+    db:
+        image: postgres
+        restart: always
+        environment:
+            - POSTGRES_USER=root
+            - POSTGRES_PASSWORD=thisisasupersecurepassword
+
+    adminer:
+        image: adminer
+        restart: always
+        ports:
+        - 5433:8080

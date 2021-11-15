@@ -6,7 +6,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'db',
-      port: 1001, // TODO find postgres port
+      port: 5432,
+      // TODO check if inited
+      username: process.env.POSTGRES_USER,
+      password: process.env.POSTGRES_PASSWORD,
       entities: ['../../../dist/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
