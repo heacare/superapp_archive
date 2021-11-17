@@ -8,6 +8,6 @@ export class AuthController {
 
   @Post('verify')
   async verify(@Body() auth: AuthDto) {
-    throw new Error('TODO');
+    await this.authSvc.verified(auth);
   }
 }

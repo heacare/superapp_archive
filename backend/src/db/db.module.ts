@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from 'src/api/user/user.entity';
 
 @Module({
   imports: [
@@ -10,7 +11,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       // TODO check if inited
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
-      entities: ['../../../dist/**/*.entity{.ts,.js}'],
+      entities: ['dist/**/*.entity{ .ts,.js}'],
       synchronize: true,
     }),
   ],
