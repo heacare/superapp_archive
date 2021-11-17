@@ -8,7 +8,6 @@ import { User } from 'src/api/user/user.entity';
       type: 'postgres',
       host: 'db',
       port: 5432,
-      // TODO check if inited
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       entities: ['dist/**/*.entity{ .ts,.js}'],
