@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DbModule } from '../../src/db/db.module';
 import { AuthController } from './auth/auth.controller';
 import { AuthService } from './auth/auth.service';
 import { ContentController } from './content/content.controller';
@@ -9,21 +8,19 @@ import { User } from './user/user.entity';
 import { UserService } from './user/user.service';
 import { FirebaseAdminModule } from '@tfarras/nestjs-firebase-admin';
 import * as firebaseAdmin from 'firebase-admin';
-import * as serviceAccount from '../../firebase.config.json';
-import { ServiceAccount } from 'firebase-admin';
+import { resolve } from 'path';
+
+export const FirebaseAppModule = FirebaseAdminModule.forRootAsync({
+  useFactory: () => {
+    const credential = firebaseAdmin.credential.cert(
+      resolve(__dirname, '../../firebase.config.json'),
+    );
+    return { credential, projectId: 'happily-ever-after-4b2fe' };
+  },
+});
 
 @Module({
-  imports: [
-    DbModule,
-    TypeOrmModule.forFeature([User]),
-    FirebaseAdminModule.forRootAsync({
-      useFactory: () => ({
-        credential: firebaseAdmin.credential.cert(
-          serviceAccount as ServiceAccount,
-        ),
-      }),
-    }),
-  ],
+  imports: [TypeOrmModule.forFeature([User]), FirebaseAppModule],
   controllers: [ContentController, UserController, AuthController],
   providers: [UserService, AuthService],
 })

@@ -1,6 +1,5 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { UserService } from '../user/user.service';
-import { AuthDto } from './auth.dto';
 import {
   FIREBASE_ADMIN_INJECT,
   FirebaseAdminSDK,
@@ -9,6 +8,8 @@ import { User } from '../user/user.entity';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     @Inject(FIREBASE_ADMIN_INJECT) private firebaseAdmin: FirebaseAdminSDK,
     private users: UserService,
@@ -19,8 +20,7 @@ export class AuthService {
       const userObj = await this.firebaseAdmin.auth().verifyIdToken(token);
       return userObj.uid;
     } catch (e) {
-      // TODO remove this blasphemy
-      console.error(e);
+      this.logger.error(e, token);
       return undefined;
     }
   }

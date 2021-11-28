@@ -1,5 +1,7 @@
+import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
-import { ApiModule } from '../api.module';
+import { FirebaseAppModule } from '../api.module';
+import { UserService } from '../user/user.service';
 import { AuthService } from './auth.service';
 
 describe('AuthService', () => {
@@ -7,7 +9,14 @@ describe('AuthService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [ApiModule],
+      imports: [FirebaseAppModule],
+      providers: [
+        AuthService,
+        {
+          provide: UserService,
+          useValue: createMock(),
+        },
+      ],
     }).compile();
 
     service = module.get<AuthService>(AuthService);
