@@ -11,7 +11,16 @@ export class UserService {
     return await this.users.findOne(id);
   }
 
+  async findOrCreate(authId: string): Promise<User> {
+    try {
+      return await this.users.findOne({ authId });
+    } catch (e) {
+      // TODO filter by type of e
+      return await this.users.save(User.uninit(authId));
+    }
+  }
+
   async create(authId: string): Promise<User> {
-    return await this.users.save({ authId });
+    return await this.users.save(User.uninit(authId));
   }
 }

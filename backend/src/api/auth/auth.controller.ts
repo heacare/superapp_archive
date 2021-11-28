@@ -8,6 +8,6 @@ export class AuthController {
 
   @Post('verify')
   async verify(@Body() auth: AuthDto) {
-    await this.authSvc.verified(auth);
+    await this.authSvc.verify(auth.firebaseUid);
   }
 }

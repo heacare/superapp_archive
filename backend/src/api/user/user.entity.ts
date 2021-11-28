@@ -2,8 +2,11 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 // TODO narrow down string types
 
-// add more whenever we add questions and we should
+// Add more labels whenever we add questions so that we should
 // force the user to answer questions
+//
+// Our DTOs will be of the form { level: 'filledv1', ...fields },
+// where each field uses 'class-validator' for validation and checking existence.
 export type RespondedLevel = 'uninit' | 'filledv1';
 
 export interface HealthData {
@@ -27,8 +30,11 @@ export class User implements OnboardingResponses {
   authId: string;
 
   @Column()
-  level: RespondedLevel = 'uninit';
+  level: RespondedLevel;
 
+  // We will rarely be reading from HealthData
+  // directly, thus this is a jsonb data for
+  // efficiency rather than it's own table
   @Column({ type: 'jsonb' })
   healthData: HealthData[];
 
@@ -39,5 +45,13 @@ export class User implements OnboardingResponses {
   maritalStatus?: string;
 
   @Column()
-  gender: string;
+  gender?: string;
+
+  static uninit(authId: string): User {
+    const user = new User();
+    user.authId = authId;
+    user.level = 'uninit';
+    user.healthData = [];
+    return user;
+  }
 }
