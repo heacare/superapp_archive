@@ -26,5 +26,5 @@ COPY . .
 
 COPY --from=development /usr/src/app/dist ./dist
 
-# TODO maybe this should be `npm run start:prod`
+# make this `npm run start:prod` for production
 CMD ["node", "dist/main"]

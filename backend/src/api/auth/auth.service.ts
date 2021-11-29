@@ -31,7 +31,6 @@ export class AuthService {
     const authId = await this.getAuthId(token);
     if (authId === undefined) return undefined;
     const user = await this.users.findOrCreate(authId);
-    // TODO cache token---user in redis
     return user;
   }
 
