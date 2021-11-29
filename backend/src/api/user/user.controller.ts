@@ -5,7 +5,9 @@ import { User } from './user.entity';
 import { UserService } from './user.service';
 
 @Controller('/api/user')
+// TODO make all rounds require guard, except for 1.
 @UseGuards(ApiAuthGuard)
+// TODO make bearer auth the default authentication.
 @ApiBearerAuth()
 export class UserController {
   constructor(private users: UserService) {}

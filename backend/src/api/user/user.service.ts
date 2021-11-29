@@ -16,8 +16,4 @@ export class UserService {
     if (user !== undefined) return user;
     return await this.users.save(User.uninit(authId));
   }
-
-  async create(authId: string): Promise<User> {
-    return await this.users.save(User.uninit(authId));
-  }
 }
