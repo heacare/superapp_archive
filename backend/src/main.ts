@@ -8,8 +8,9 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('HEA Backend')
-    .setDescription("API for HEA's backend")
+    .setDescription('See /api/auth/verify for authentication')
     .setVersion('0.5')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

@@ -1,7 +1,7 @@
-export interface AuthRequestDto {
+export class AuthRequestDto {
   firebaseToken: string;
 }
 
-export interface AuthResponseDto {
+export class AuthResponseDto {
   jwt: string;
 }

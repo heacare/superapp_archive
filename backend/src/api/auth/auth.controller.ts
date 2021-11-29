@@ -6,6 +6,10 @@ import { AuthService } from './auth.service';
 export class AuthController {
   constructor(private authSvc: AuthService) {}
 
+  /*
+   * Given a [Firebase TokenId](https://firebase.google.com/docs/auth/admin/verify-id-tokens#android), verify the token and return
+   * another a JWT to be used for future API calls to protected endpoints (in Bearer authentication).
+   */
   @Post('verify')
   async verify(
     @Body() auth: AuthRequestDto,
