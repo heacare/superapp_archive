@@ -9,6 +9,7 @@ services:
         environment:
             - POSTGRES_USER=root
             - POSTGRES_PASSWORD=thisisasupersecurepassword
+            - JWT_SECRET=thisisasupersecurejwtsecret
         ports:
             - 3000:3000
             - 9229:9229

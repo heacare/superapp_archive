@@ -1,4 +1,5 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { User } from './user.entity';
 import { UserService } from './user.service';
 
@@ -6,10 +7,10 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private users: UserService) {}
 
-  // TODO pass auth token
-  // TODO make this a UserInfoDto
   @Get('info')
-  async getInfo(): Promise<User> {
-    return await this.users.findOne(1337);
+  @UseGuards(AuthGuard('authv1'))
+  async getInfo(@Req() req): Promise<User> {
+    // TODO case this to proper interface
+    return await this.users.findOne(req.user.id);
   }
 }

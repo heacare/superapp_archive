@@ -5,6 +5,7 @@ import {
   FirebaseAdminSDK,
 } from '@tfarras/nestjs-firebase-admin';
 import { User } from '../user/user.entity';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
@@ -13,6 +14,7 @@ export class AuthService {
   constructor(
     @Inject(FIREBASE_ADMIN_INJECT) private firebaseAdmin: FirebaseAdminSDK,
     private users: UserService,
+    private jwt: JwtService,
   ) {}
 
   async getAuthId(token: string): Promise<string | undefined> {
@@ -25,7 +27,7 @@ export class AuthService {
     }
   }
 
-  async getOrCreateUser(token: string): Promise<User | undefined> {
+  async verifyRetrieveUser(token: string): Promise<User | undefined> {
     const authId = await this.getAuthId(token);
     if (authId === undefined) return undefined;
     const user = await this.users.findOrCreate(authId);
@@ -33,7 +35,11 @@ export class AuthService {
     return user;
   }
 
-  async verify(token: string): Promise<boolean> {
-    return (await this.getOrCreateUser(token)) !== undefined;
+  async verify(token: string): Promise<string | undefined> {
+    const user = await this.verifyRetrieveUser(token);
+    if (user === undefined) {
+      return undefined;
+    }
+    return await this.jwt.signAsync({ sub: user.id });
   }
 }

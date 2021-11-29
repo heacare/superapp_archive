@@ -12,12 +12,9 @@ export class UserService {
   }
 
   async findOrCreate(authId: string): Promise<User> {
-    try {
-      return await this.users.findOne({ authId });
-    } catch (e) {
-      // TODO filter by type of e
-      return await this.users.save(User.uninit(authId));
-    }
+    const user = await this.users.findOne({ authId });
+    if (user !== undefined) return user;
+    return await this.users.save(User.uninit(authId));
   }
 
   async create(authId: string): Promise<User> {

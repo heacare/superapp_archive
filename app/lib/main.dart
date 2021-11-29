@@ -119,10 +119,13 @@ class _AppState extends State<App> {
       // Authentication user exists separately from user data, so we have to check for the case where
       // the user signed up but uninstalled/reset the app before finishing onboarding
       final authUser = Authentication().currentUser();
+
       if (authUser == null) {
         return UserStatus.signedOut;
       }
       else {
+        authUser.getIdToken().then((token) => print(token));
+
         return (await UserRepo().get(authUser.uid) == null)
             ? UserStatus.registered
             : UserStatus.onboarded;

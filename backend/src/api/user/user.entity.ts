@@ -38,13 +38,13 @@ export class User implements OnboardingResponses {
   @Column({ type: 'jsonb' })
   healthData: HealthData[];
 
-  @Column()
+  @Column({ nullable: true })
   alcoholFreq?: string;
 
-  @Column()
+  @Column({ nullable: true })
   maritalStatus?: string;
 
-  @Column()
+  @Column({ nullable: true })
   gender?: string;
 
   static uninit(authId: string): User {

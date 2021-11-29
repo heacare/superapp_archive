@@ -9,8 +9,11 @@ import { UserService } from './user/user.service';
 import { FirebaseAdminModule } from '@tfarras/nestjs-firebase-admin';
 import * as firebaseAdmin from 'firebase-admin';
 import { resolve } from 'path';
+import { JwtModule } from '@nestjs/jwt';
+import { ApiAuthStrategy } from './auth/auth.strategy';
+import { PassportModule } from '@nestjs/passport';
 
-export const FirebaseAppModule = FirebaseAdminModule.forRootAsync({
+export const ApiFirebaseModule = FirebaseAdminModule.forRootAsync({
   useFactory: () => {
     const credential = firebaseAdmin.credential.cert(
       resolve(__dirname, '../../firebase.config.json'),
@@ -19,9 +22,18 @@ export const FirebaseAppModule = FirebaseAdminModule.forRootAsync({
   },
 });
 
+export const ApiJwtModule = JwtModule.register({
+  secret: process.env.JWT_SECRET,
+});
+
 @Module({
-  imports: [TypeOrmModule.forFeature([User]), FirebaseAppModule],
+  imports: [
+    TypeOrmModule.forFeature([User]),
+    ApiFirebaseModule,
+    PassportModule,
+    ApiJwtModule,
+  ],
   controllers: [ContentController, UserController, AuthController],
-  providers: [UserService, AuthService],
+  providers: [UserService, AuthService, ApiAuthStrategy],
 })
 export class ApiModule {}
