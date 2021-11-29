@@ -15,6 +15,7 @@ export class UserController {
   @Get('info')
   async getInfo(@Req() req): Promise<User> {
     // TODO case this to proper interface
+    // TODO catch proper exception and return 400/404
     return await this.users.findOne(req.user.id);
   }
 }
