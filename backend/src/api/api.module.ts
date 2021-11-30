@@ -3,6 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthController } from './auth/auth.controller';
 import { AuthService } from './auth/auth.service';
 import { ContentController } from './content/content.controller';
+import { Chapter } from './content/content.entity';
+import { ContentService } from './content/content.service';
 import { UserController } from './user/user.controller';
 import { User } from './user/user.entity';
 import { UserService } from './user/user.service';
@@ -29,11 +31,12 @@ export const ApiJwtModule = JwtModule.register({
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([Chapter]),
     ApiFirebaseModule,
     PassportModule,
     ApiJwtModule,
   ],
   controllers: [ContentController, UserController, AuthController],
-  providers: [UserService, AuthService, ApiAuthStrategy],
+  providers: [ContentService, UserService, AuthService, ApiAuthStrategy],
 })
 export class ApiModule {}
