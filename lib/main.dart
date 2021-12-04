@@ -97,8 +97,9 @@ class _AppState extends State<App> {
                 borderRadius: BorderRadius.circular(15.0)),
             padding: const EdgeInsets.all(0.0),
             textStyle: const TextStyle(
+                letterSpacing: 1.0,
                 fontSize: 20.0,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
                 height: 1.5,
                 color: primaryTextColor),
           ),
