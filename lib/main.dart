@@ -33,8 +33,12 @@ class _AppState extends State<App> {
 
   ThemeData _getThemeData() {
 
-    const primaryColor = Color(0xFFCC3363);
-    const accentColor = Color(0xFF52BF5A);
+    const primaryColor = Color(0xFFFF5576);
+    const accentColor = Color(0xFFFF7FAA);
+
+    const primaryTextColor = Color(0xFF000000);
+    const secondaryTextColor = Color(0xFF707070);
+
     const textColor = Color(0xFF191919);
 
     // Stolen from https://medium.com/@filipvk/creating-a-custom-color-swatch-in-flutter-554bcdcb27f3
@@ -67,19 +71,26 @@ class _AppState extends State<App> {
 
     return ThemeData(
       colorScheme: colorScheme,
-      fontFamily: "BreeSerif",
+      fontFamily: "Poppins",
       textTheme: const TextTheme(
-        headline1: TextStyle(fontSize: 48.0, fontWeight: FontWeight.bold, height: 1.1, color: primaryColor),
+        headline1: TextStyle(fontSize: 32.0, fontWeight: FontWeight.bold, height: 1.1, color: primaryTextColor),
         headline2: TextStyle(fontSize: 20.0, fontWeight: FontWeight.normal, height: 1.4, color: textColor),
         bodyText1: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, height: 1.2, color: textColor),
         bodyText2: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, height: 1.2, color: textColor),
       ),
+      elevatedButtonTheme: ElevatedButtonThemeData (
+        style: TextButton.styleFrom(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+          padding: const EdgeInsets.all(0.0),
+        ),
+      ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: TextButton.styleFrom(
           padding: const EdgeInsets.all(12.0),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
           primary: Colors.white,
-          backgroundColor: primaryColor,
-          textStyle: const TextStyle(fontFamily: "BreeSerif", fontSize: 24.0, fontWeight: FontWeight.bold, height: 1)
+          backgroundColor: Colors.transparent,
+          textStyle: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, height: 1.5, color: primaryTextColor),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(

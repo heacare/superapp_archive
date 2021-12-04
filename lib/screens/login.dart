@@ -7,6 +7,7 @@ import 'package:hea/providers/auth.dart';
 import 'package:hea/screens/home.dart';
 import 'package:hea/screens/onboarding.dart';
 import 'package:hea/widgets/navigable_text.dart';
+import 'package:hea/widgets/gradient_button.dart';
 
 const svgAssetName = "assets/svg/login.svg";
 
@@ -84,7 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
-              child: Text("Welcome!", style: Theme.of(context).textTheme.headline1),
+              child: Text("Say hello to longevity!", style: Theme.of(context).textTheme.headline1),
               padding: const EdgeInsets.symmetric(vertical: 16.0)
           ),
           Text(
@@ -96,18 +97,18 @@ class _LoginScreenState extends State<LoginScreen> {
 
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 4.0),
-            child: OutlinedButton(
-              child: const Text("LOGIN"),
-              onPressed: () => setState(() => _loginChoice = LoginChoice.login)
-            )
+            child: GradientButton (
+              text: "LOGIN",
+              onPressed: () => setState(() => _loginChoice = LoginChoice.login),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 4.0),
             child: OutlinedButton(
-              child: const Text("SIGNUP"),
+              child: const Text("JOIN US"),
               onPressed: () => setState(() => _loginChoice = LoginChoice.signUp),
               style: TextButton.styleFrom(
-                primary: Theme.of(context).colorScheme.primary,
+                primary: Colors.black,
                 backgroundColor: Colors.grey[100]
               ),
             )
