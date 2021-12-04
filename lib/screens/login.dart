@@ -165,43 +165,27 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    return Column (
+      mainAxisAlignment: MainAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
 
-    return Scaffold(
-      body: SingleChildScrollView(
-        // TODO Scroll to end when textfields have focus (I've tried and it doesn't want to work)
-        physics: const ClampingScrollPhysics(),
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: Form(
-            key: _formKey,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 37.0, vertical: 37.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
+        Expanded(
+          child: Container (
+            color: Colors.grey[200],
+          ),
+        ),
 
-                  Expanded(
-                    child: Container (
-                      color: Colors.grey[200],
-                    ),
-                  ),
-
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        _credsOrText(),
-                      ],
-                    )
-                  ),
-                ],
-              )
-            )
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              _credsOrText(),
+            ],
           )
-        )
-      ),
+        ),
+      ],
     );
   }
 }

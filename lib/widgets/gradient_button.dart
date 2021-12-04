@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-const USER_ICON_DEFAULT = "https://kbowlingclub.com/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png";
-
 class GradientButton extends StatelessWidget {
   GradientButton({Key? key, required this.text, this.onPressed}) : super(key: key);
 
