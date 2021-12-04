@@ -113,13 +113,13 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
 
   fonts:
-    - family: BreeSerif
+    - family: Poppins
       fonts:
-        - asset: assets/fonts/BreeSerif-Lt.otf
-        - asset: assets/fonts/BreeSerif-Lt_Italic.otf
+        - asset: assets/fonts/Poppins-Regular.ttf
+        - asset: assets/fonts/Poppins-Italic.ttf
           style: italic
-        - asset: assets/fonts/BreeSerif-Sb.otf
+        - asset: assets/fonts/Poppins-Bold.ttf
           weight: 700
-        - asset: assets/fonts/BreeSerif-Sb_Italic.otf
+        - asset: assets/fonts/Poppins-BoldItalic.ttf
           weight: 700
           style: italic
