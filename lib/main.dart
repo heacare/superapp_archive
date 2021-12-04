@@ -94,14 +94,16 @@ class _AppState extends State<App> {
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
-        floatingLabelStyle: const TextStyle(fontSize: 16.0),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
+        floatingLabelBehavior: FloatingLabelBehavior.never,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16.0),
+          borderRadius: BorderRadius.circular(10.0),
         ),
+        fillColor: Color(0xFFE5E5E5),
+        filled: true,
         enabledBorder: const OutlineInputBorder(
           borderSide: BorderSide(
-            color: Colors.grey,
+            color: Colors.transparent,
             width: 2.0
           )
         ),

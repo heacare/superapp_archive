@@ -23,9 +23,11 @@ class NavigableText extends StatelessWidget {
           onPressed: onPressed,
         ),
         const SizedBox(width: 16.0),
-        Text(
+        Expanded (
+          child: Text(
             text,
-            style: Theme.of(context).textTheme.headline1
+            style: Theme.of(context).textTheme.headline1,
+          ),
         ),
       ]
     );

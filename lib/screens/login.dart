@@ -122,7 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
       children: [
         NavigableText(
           onPressed: () => setState(() => _loginChoice = LoginChoice.unselected),
-          text: _loginChoice == LoginChoice.login ? "Login" : "Sign Up",
+          text: _loginChoice == LoginChoice.login ? "Welcome back to HEA" : "Let's make you superhuman",
         ),
 
         const SizedBox(height: 24.0),
@@ -143,8 +143,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
         const SizedBox(height: 36.0),
 
-        OutlinedButton(
-          child: const Text("LET'S GO"),
+        GradientButton(
+          text: "LET'S GO",
           onPressed: () {
             _loginChoice == LoginChoice.login ? login() : signup();
           },
