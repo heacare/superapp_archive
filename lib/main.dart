@@ -82,6 +82,7 @@ class _AppState extends State<App> {
         style: TextButton.styleFrom(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
           padding: const EdgeInsets.all(0.0),
+          textStyle: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, height: 1.5, color: primaryTextColor),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(

@@ -104,12 +104,15 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 4.0),
-            child: OutlinedButton(
-              child: const Text("JOIN US"),
-              onPressed: () => setState(() => _loginChoice = LoginChoice.signUp),
-              style: TextButton.styleFrom(
-                primary: Colors.black,
-                backgroundColor: Colors.grey[100]
+            child: SizedBox (
+              height: 50.0,
+              child: ElevatedButton(
+                child: const Text("JOIN US"),
+                onPressed: () => setState(() => _loginChoice = LoginChoice.signUp),
+                style: TextButton.styleFrom(
+                  primary: Colors.black,
+                  backgroundColor: Colors.grey[100]
+                ),
               ),
             )
           ),
