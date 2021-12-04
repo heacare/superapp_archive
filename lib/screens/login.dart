@@ -46,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void signup() async {
-    if (!_formKey.currentState!.validate()) { return; }
+    // if (!_formKey.currentState!.validate()) { return; }
 
     try {
       await _auth.signup(_email.text, _password.text);

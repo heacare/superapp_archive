@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:health/health.dart';
 
+import 'package:hea/widgets/gradient_button.dart';
+
 const svgAssetName = "assets/svg/health_sync.svg";
 
 class HealthSetupScreen extends StatefulWidget {
@@ -95,25 +97,17 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
   }
 
   Widget _contentNotFetched() {
-
     final platform = Theme.of(context).platform;
-    late String buttonText;
-    if (platform == TargetPlatform.iOS) {
-      buttonText = "Sync with Apple Health";
-    }
-    else {
-      // Assume all other platforms will log in with Google
-      buttonText = "Sync with Google Fit";
-    }
+    String providerName = platform == TargetPlatform.iOS ? "Apple Health" : "Google Fit"; // Assume all other platforms will log in with Google
+    String buttonText = "Sync with " + providerName;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SvgPicture.asset(svgAssetName)
-          )
+          child: Container (
+            color: Colors.grey[200],
+          ),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -126,12 +120,12 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
                 padding: const EdgeInsets.symmetric(vertical: 16.0)
               ),
               Text(
-                "Let’s get some data from you so we can accurately make predictions and offer advice.",
+                "I use" + providerName + " to personalise your recommendations and help you live longer!",
                 style: Theme.of(context).textTheme.headline2
               ),
               Padding(
-                child: OutlinedButton(
-                  child: const Text("SYNC DATA"),
+                child: GradientButton(
+                  text: "SYNC DATA",
                   onPressed: fetchData,
                 ),
                 padding: const EdgeInsets.symmetric(vertical: 32.0)
