@@ -175,33 +175,27 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Form(
             key: _formKey,
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24.0),
+              padding: const EdgeInsets.symmetric(horizontal: 37.0, vertical: 37.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
 
-                  // TODO Lots of whitespace for image but changing flex ratio causes overfill on smaller devices
                   Expanded(
-                    child: Transform.translate(
-                      child: SvgPicture.asset(svgAssetName),
-                      offset: Offset(-MediaQuery.of(context).size.width / 6, 0.0)
-                    )
+                    child: Container (
+                      color: Colors.grey[200],
+                    ),
                   ),
 
                   Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          _credsOrText(),
-                        ],
-                      )
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        _credsOrText(),
+                      ],
                     )
                   ),
-
                 ],
               )
             )
