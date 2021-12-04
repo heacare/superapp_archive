@@ -19,11 +19,7 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-enum LoginChoice {
-  unselected,
-  login,
-  signUp
-}
+enum LoginChoice { unselected, login, signUp }
 
 class _LoginScreenState extends State<LoginScreen> {
   final _auth = Authentication();
@@ -35,7 +31,9 @@ class _LoginScreenState extends State<LoginScreen> {
   var _loginChoice = LoginChoice.unselected;
 
   void login() async {
-    if (!_formKey.currentState!.validate()) { return; }
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
 
     try {
       await _auth.login(_email.text, _password.text);
@@ -65,133 +63,103 @@ class _LoginScreenState extends State<LoginScreen> {
     if (user == null) {
       await Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => OnboardingScreen()),
-          (route) => false
-      );
-    }
-    else {
+          (route) => false);
+    } else {
       // User already finished onboarding
       await Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => HomeScreen()),
-          (route) => false
-      );
+          (route) => false);
     }
-
   }
 
   Widget _credsOrText() {
-
     if (_loginChoice == LoginChoice.unselected) {
       // Show welcome text
       return Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Padding(
-              child: Text("Say hello to longevity!", style: Theme.of(context).textTheme.headline1),
-              padding: const EdgeInsets.symmetric(vertical: 16.0)
-          ),
-          Text(
-              "We provide proactive, preventive & personalised healthcare to keep you at the apex of your health.",
-              style: Theme.of(context).textTheme.headline2
-          ),
-
-          const SizedBox(height: 24.0),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0),
-            child: GradientButton (
-              text: "LOGIN",
-              onPressed: () => setState(() => _loginChoice = LoginChoice.login),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0),
-            child: SizedBox (
-              height: 50.0,
-              child: ElevatedButton(
-                child: const Text("JOIN US"),
-                onPressed: () => setState(() => _loginChoice = LoginChoice.signUp),
-                style: TextButton.styleFrom(
-                  primary: Colors.black,
-                  backgroundColor: Colors.grey[100]
-                ),
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Expanded(
+                child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+                  color: Colors.grey[200]),
+            )),
+            const SizedBox(height: 24.0),
+            Padding(
+                child: Text("Say hello to longevity!",
+                    style: Theme.of(context).textTheme.headline1),
+                padding: const EdgeInsets.symmetric(vertical: 16.0)),
+            Text(
+                "We provide proactive, preventive & personalised healthcare to keep you at the apex of your health.",
+                style: Theme.of(context).textTheme.headline2),
+            const SizedBox(height: 24.0),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              child: GradientButton(
+                text: "LOGIN",
+                onPressed: () =>
+                    setState(() => _loginChoice = LoginChoice.login),
               ),
-            )
-          ),
-        ]
-      );
+            ),
+            Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: SizedBox(
+                  height: 50.0,
+                  child: ElevatedButton(
+                    child: const Text("JOIN US"),
+                    onPressed: () =>
+                        setState(() => _loginChoice = LoginChoice.signUp),
+                    style: TextButton.styleFrom(
+                        primary: Colors.black,
+                        backgroundColor: Colors.grey[100]),
+                  ),
+                )),
+          ]);
     }
 
-    return SafeAreaContainer (
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          NavigableText(
-            onPressed: () => setState(() => _loginChoice = LoginChoice.unselected),
-            text: _loginChoice == LoginChoice.login ? "Welcome back to HEA" : "Let's make you superhuman",
-          ),
-
-          const SizedBox(height: 24.0),
-
-          TextFormField(
-            controller: _email,
-            decoration: const InputDecoration(labelText: "Email"),
-            validator: FormBuilderValidators.email(context),
-          ),
-
-          const SizedBox(height: 8.0),
-
-          TextFormField(
-            controller: _password,
-            decoration: const InputDecoration(labelText: "Password"),
-            obscureText: true
-          ),
-
-          const SizedBox(height: 36.0),
-
-          GradientButton(
-            text: "LET'S GO",
-            onPressed: () {
-              _loginChoice == LoginChoice.login ? login() : signup();
-            },
-          ),
-        ]
-      )
-    );
-
+    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      NavigableText(
+        onPressed: () => setState(() => _loginChoice = LoginChoice.unselected),
+        text: _loginChoice == LoginChoice.login
+            ? "Welcome back to HEA"
+            : "Let's make you superhuman",
+      ),
+      const SizedBox(height: 24.0),
+      TextFormField(
+        controller: _email,
+        decoration: const InputDecoration(labelText: "Email"),
+        validator: FormBuilderValidators.email(context),
+      ),
+      const SizedBox(height: 8.0),
+      TextFormField(
+          controller: _password,
+          decoration: const InputDecoration(labelText: "Password"),
+          obscureText: true),
+      const SizedBox(height: 36.0),
+      GradientButton(
+        text: "LET'S GO",
+        onPressed: () {
+          _loginChoice == LoginChoice.login ? login() : signup();
+        },
+      ),
+    ]);
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     precachePicture(
-      ExactAssetPicture(SvgPicture.svgStringDecoder, svgAssetName),
-      context
-    );
+        ExactAssetPicture(SvgPicture.svgStringDecoder, svgAssetName), context);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column (
-      mainAxisAlignment: MainAxisAlignment.end,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-
-        Expanded(
-          child: Container (
-            color: Colors.grey[200],
-          ),
-        ),
-
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              _credsOrText(),
-            ],
-          )
-        ),
-      ],
+    return Scaffold(
+      // Enabling the safe area
+      body: SafeArea(
+          child: Container(
+              padding: const EdgeInsets.all(30.0), child: _credsOrText())),
     );
   }
 }
