@@ -74,7 +74,7 @@ class _AppState extends State<App> {
       fontFamily: "Poppins",
       textTheme: const TextTheme(
         headline1: TextStyle(fontSize: 32.0, fontWeight: FontWeight.bold, height: 1.1, color: primaryTextColor),
-        headline2: TextStyle(fontSize: 20.0, fontWeight: FontWeight.normal, height: 1.4, color: textColor),
+        headline2: TextStyle(fontSize: 20.0, fontWeight: FontWeight.normal, height: 1.3, color: secondaryTextColor),
         bodyText1: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, height: 1.2, color: textColor),
         bodyText2: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, height: 1.2, color: textColor),
       ),

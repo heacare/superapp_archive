@@ -89,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
               padding: const EdgeInsets.symmetric(vertical: 16.0)
           ),
           Text(
-              "We’re glad you decided to join us, in building a happier, healthier you.",
+              "We provide proactive, preventive & personalised healthcare to keep you at the apex of your health.",
               style: Theme.of(context).textTheme.headline2
           ),
 
