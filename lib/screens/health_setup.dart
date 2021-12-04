@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:health/health.dart';
 
 import 'package:hea/widgets/gradient_button.dart';
+import 'package:hea/widgets/safearea_container.dart';
 
 const svgAssetName = "assets/svg/health_sync.svg";
 
@@ -101,17 +102,16 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
     String providerName = platform == TargetPlatform.iOS ? "Apple Health" : "Google Fit"; // Assume all other platforms will log in with Google
     String buttonText = "Sync with " + providerName;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Expanded(
-          child: Container (
-            color: Colors.grey[200],
+    return SafeAreaContainer (
+      child: Column (
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: Container (
+              color: Colors.grey[200],
+            ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: Column(
+          Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -120,7 +120,7 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
                 padding: const EdgeInsets.symmetric(vertical: 16.0)
               ),
               Text(
-                "I use" + providerName + " to personalise your recommendations and help you live longer!",
+                "I use " + providerName + " to personalise your recommendations and help you live longer!",
                 style: Theme.of(context).textTheme.headline2
               ),
               Padding(
@@ -132,8 +132,8 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
               )
             ],
           )
-        )
-      ]
+        ]
+      )
     );
   }
 

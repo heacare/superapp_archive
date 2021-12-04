@@ -8,6 +8,7 @@ import 'package:hea/screens/home.dart';
 import 'package:hea/screens/onboarding.dart';
 import 'package:hea/widgets/navigable_text.dart';
 import 'package:hea/widgets/gradient_button.dart';
+import 'package:hea/widgets/safearea_container.dart';
 
 const svgAssetName = "assets/svg/login.svg";
 
@@ -120,39 +121,41 @@ class _LoginScreenState extends State<LoginScreen> {
       );
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        NavigableText(
-          onPressed: () => setState(() => _loginChoice = LoginChoice.unselected),
-          text: _loginChoice == LoginChoice.login ? "Welcome back to HEA" : "Let's make you superhuman",
-        ),
+    return SafeAreaContainer (
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          NavigableText(
+            onPressed: () => setState(() => _loginChoice = LoginChoice.unselected),
+            text: _loginChoice == LoginChoice.login ? "Welcome back to HEA" : "Let's make you superhuman",
+          ),
 
-        const SizedBox(height: 24.0),
+          const SizedBox(height: 24.0),
 
-        TextFormField(
-          controller: _email,
-          decoration: const InputDecoration(labelText: "Email"),
-          validator: FormBuilderValidators.email(context),
-        ),
+          TextFormField(
+            controller: _email,
+            decoration: const InputDecoration(labelText: "Email"),
+            validator: FormBuilderValidators.email(context),
+          ),
 
-        const SizedBox(height: 8.0),
+          const SizedBox(height: 8.0),
 
-        TextFormField(
-          controller: _password,
-          decoration: const InputDecoration(labelText: "Password"),
-          obscureText: true
-        ),
+          TextFormField(
+            controller: _password,
+            decoration: const InputDecoration(labelText: "Password"),
+            obscureText: true
+          ),
 
-        const SizedBox(height: 36.0),
+          const SizedBox(height: 36.0),
 
-        GradientButton(
-          text: "LET'S GO",
-          onPressed: () {
-            _loginChoice == LoginChoice.login ? login() : signup();
-          },
-        ),
-      ]
+          GradientButton(
+            text: "LET'S GO",
+            onPressed: () {
+              _loginChoice == LoginChoice.login ? login() : signup();
+            },
+          ),
+        ]
+      )
     );
 
   }
