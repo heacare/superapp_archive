@@ -4,6 +4,7 @@ import 'package:health/health.dart';
 
 import 'package:hea/widgets/gradient_button.dart';
 import 'package:hea/widgets/safearea_container.dart';
+import 'package:hea/screens/onboarding.dart';
 
 const svgAssetName = "assets/svg/health_sync.svg";
 
@@ -38,6 +39,15 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
     ];
 
     setState(() => _state = AppState.FETCHING_DATA);
+
+    Navigator.of(context, rootNavigator: true).pop(OnboardingStepReturn(
+        nextStep: OnboardingStep.starter,
+        returnData: <String, dynamic>{
+          "healthData": _healthDataList.map((e) => e.toJson()).toList(),
+        },
+      ));
+
+    return;
 
     // OAuth request authorization to data
     bool accessWasGranted = await health.requestAuthorization(types);
