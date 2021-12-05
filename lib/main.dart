@@ -168,7 +168,7 @@ class _AppState extends State<App> {
 
   Widget mainScreen(AsyncSnapshot<UserStatus> snapshot) {
     // Shorting this for testing
-    // return const HomeScreen();
+    return const HomeScreen();
     if (snapshot.hasError) {
       print("Encountered error: ${snapshot.error}");
       return const ErrorScreen();
