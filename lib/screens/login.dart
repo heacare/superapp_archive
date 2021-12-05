@@ -31,14 +31,18 @@ class _LoginScreenState extends State<LoginScreen> {
   var _loginChoice = LoginChoice.unselected;
 
   void login() async {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
+    // if (!_formKey.currentState!.validate()) {
+    //   return;
+    // }
+
+    print(_email.text + ", " + _password.text);
 
     try {
       await _auth.login(_email.text, _password.text);
       await navigateSuccess();
     } on AuthenticationException catch (e) {
+      print(e);
+
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(e.message)));
     }
