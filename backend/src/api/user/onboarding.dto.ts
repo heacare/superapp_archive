@@ -2,6 +2,7 @@
 
 import {
   IsDate,
+  IsDateString,
   IsInt,
   IsISO31661Alpha2,
   IsNotEmpty,
@@ -57,11 +58,10 @@ export class Smoker {
 
 export type SmokingInfo = NonSmoker | Smoker;
 
-export class OnboardingV1 {
+export class Onboarding {
   @IsNotEmpty()
   name: string;
   gender: Gender;
-  @IsDate()
   birthday: Date;
   @Min(0.3)
   @Max(3.0)
@@ -76,10 +76,6 @@ export class OnboardingV1 {
   alcoholFreq: AlcoholFrequency;
   outlook: Outlook;
   maritalStatus: MaritalStatus;
-  familyHistory: string | undefined;
-  birthControl: string | undefined;
+  familyHistory: string | null;
+  birthControl: string | null;
 }
-
-class Empty {}
-
-export type Onboarding = OnboardingV1 & Empty;

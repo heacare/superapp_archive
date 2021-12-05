@@ -1,6 +1,11 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-
-// TODO narrow down string types
+import {
+  AlcoholFrequency,
+  Gender,
+  MaritalStatus,
+  Outlook,
+  SmokingPacks,
+} from './onboarding.dto';
 
 // Add more labels whenever we add questions so that we should
 // force the user to answer questions
@@ -15,14 +20,52 @@ export interface HealthData {
   unit: string;
 }
 
-export interface OnboardingResponses {
-  alcoholFreq?: string;
-  maritalStatus?: string;
-  gender?: string;
+class Onboarding {
+  @Column({ nullable: true })
+  name?: string;
+
+  @Column({ nullable: true })
+  gender?: Gender;
+
+  @Column({ nullable: true, type: 'date' }) // date only!
+  birthday?: Date;
+
+  @Column({ nullable: true })
+  height?: number;
+
+  @Column({ nullable: true })
+  weight?: number;
+
+  @Column({ nullable: true })
+  country?: string;
+
+  @Column({ nullable: true })
+  isSmoker?: boolean;
+
+  @Column({ nullable: true })
+  smokingPacksPerDay?: SmokingPacks;
+
+  @Column({ nullable: true })
+  smokingYears?: number;
+
+  @Column({ nullable: true })
+  alcoholFreq?: AlcoholFrequency;
+
+  @Column({ nullable: true })
+  outlook?: Outlook;
+
+  @Column({ nullable: true })
+  maritalStatus?: MaritalStatus;
+
+  @Column({ nullable: true })
+  familyHistory?: string | undefined;
+
+  @Column({ nullable: true })
+  birthControl?: string | undefined;
 }
 
 @Entity()
-export class User implements OnboardingResponses {
+export class User extends Onboarding {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -37,15 +80,6 @@ export class User implements OnboardingResponses {
   // efficiency rather than it's own table
   @Column({ type: 'jsonb' })
   healthData: HealthData[];
-
-  @Column({ nullable: true })
-  alcoholFreq?: string;
-
-  @Column({ nullable: true })
-  maritalStatus?: string;
-
-  @Column({ nullable: true })
-  gender?: string;
 
   static uninit(authId: string): User {
     const user = new User();
