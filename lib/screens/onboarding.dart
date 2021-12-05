@@ -15,10 +15,10 @@ import 'package:hea/data/user_repo.dart';
 import 'package:hea/models/onboarding_custom.dart';
 import 'package:hea/models/onboarding_template.dart';
 import 'package:hea/models/user.dart';
-import 'health_setup.dart';
 import 'home.dart';
 
 import 'package:hea/screens/onboarding/start.dart';
+import 'package:hea/screens/onboarding/health_setup.dart';
 
 const onboardingStartId = "onboard_start";
 const onboardingLastId = "birth_control_2";
