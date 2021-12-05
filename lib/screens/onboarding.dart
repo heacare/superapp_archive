@@ -19,6 +19,7 @@ import 'home.dart';
 
 import 'package:hea/screens/onboarding/start.dart';
 import 'package:hea/screens/onboarding/health_setup.dart';
+import 'package:hea/screens/onboarding/basic_info.dart';
 
 const onboardingStartId = "onboard_start";
 const onboardingLastId = "birth_control_2";
@@ -26,6 +27,7 @@ const onboardingLastId = "birth_control_2";
 enum OnboardingStep {
   health_sync,
   starter,
+  basic_info,
 
   end,
 }
@@ -72,6 +74,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         break;
       case OnboardingStep.starter:
         nextScreen = OnboardingStartScreen();
+        break;
+      case OnboardingStep.basic_info:
+        nextScreen = OnboardingBasicInfoScreen();
         break;
       case OnboardingStep.end:
       default:
