@@ -20,6 +20,7 @@ export class UserController {
     return await this.users.findOne(req.user.id);
   }
 
+  // TODO easier access to req.user.id
   @Post('onboard')
   async processOnboarding(@Req() req, @Body() onboarding: Onboarding) {
     await this.users.update(req.user.id, onboarding);
