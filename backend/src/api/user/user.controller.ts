@@ -21,7 +21,7 @@ export class UserController {
   }
 
   @Post('onboard')
-  async processOnboarding(@Body() onboarding: Onboarding) {
-    // TODO
+  async processOnboarding(@Req() req, @Body() onboarding: Onboarding) {
+    await this.users.update(req.user.id, onboarding);
   }
 }

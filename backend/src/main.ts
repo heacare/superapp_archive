@@ -22,7 +22,14 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   await configSwagger(app);
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      skipMissingProperties: false,
+      skipUndefinedProperties: false,
+      enableDebugMessages: true,
+      whitelist: true,
+    }),
+  );
 
   await app.listen(3000);
 }

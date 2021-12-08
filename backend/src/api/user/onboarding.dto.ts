@@ -1,81 +1,125 @@
 // TODO actually fill these with valid values from the Notion
 
+import { Type } from 'class-transformer';
 import {
-  IsDate,
   IsDateString,
+  IsString,
+  IsEnum,
   IsInt,
   IsISO31661Alpha2,
   IsNotEmpty,
+  IsNotEmptyObject,
+  IsObject,
   Max,
   Min,
   ValidateNested,
+  IsOptional,
 } from 'class-validator';
 
 export enum AlcoholFrequency {
-  NotAtAll,
-  OnceAMonth,
-  OnceAWeek,
-  FewTimesAWeek,
-  Everday,
+  NotAtAll = 'NotAtAll',
+  OnceAMonth = 'OnceAMonth',
+  OnceAWeek = 'OnceAWeek',
+  FewTimesAWeek = 'FewTimesAWeek',
+  Everday = 'Everyday',
 }
 
 export enum Outlook {
-  Positive,
-  Negative,
-  Soulless,
+  Positive = 'Positive',
+  Negative = 'Negative',
+  Soulless = 'Soulless',
 }
 
 export enum MaritalStatus {
-  Single,
-  Married,
-  Widowed,
-  Divorced,
+  Single = 'Single',
+  Married = 'Married',
+  Widowed = 'Widowed',
+  Divorced = 'Divorced',
 }
 
 export enum Gender {
-  Male,
-  Female,
-  Others,
+  Male = 'Male',
+  Female = 'Female',
+  Others = 'Others',
 }
 
 export enum SmokingPacks {
-  LessOnePack,
-  OneToTwoPacks,
-  ThreeToFivePacks,
-  FivePacks,
+  LessOnePack = 'LessOnePack',
+  OneToTwoPacks = 'OneToTwoPacks',
+  ThreeToFivePacks = 'ThreeToFivePacks',
+  FivePacks = 'FivePacks',
 }
 
-export class NonSmoker {
+abstract class SmokingInfo {
+  isSmoker: boolean;
+}
+
+export class NonSmoker extends SmokingInfo {
   isSmoker: false;
 }
 
-export class Smoker {
+export class Smoker extends SmokingInfo {
   isSmoker: true;
+  @IsEnum(SmokingPacks)
   packsPerDay: SmokingPacks;
   @IsInt()
   yearsSmoking: number;
 }
 
-export type SmokingInfo = NonSmoker | Smoker;
-
-export class Onboarding {
+export class OnboardingV1 {
   @IsNotEmpty()
+  @IsString()
   name: string;
+
+  @IsEnum(Gender)
   gender: Gender;
+
+  @IsDateString()
   birthday: Date;
+
   @Min(0.3)
   @Max(3.0)
   height: number;
+
   @Min(3.0)
   @Max(200.0)
   weight: number;
+
   @IsISO31661Alpha2()
   country: string;
+
+  @IsNotEmptyObject()
+  @IsObject()
   @ValidateNested()
-  smoking: SmokingInfo;
+  @Type(() => SmokingInfo, {
+    discriminator: {
+      property: 'isSmoker',
+      subTypes: [
+        { value: NonSmoker, name: false as any },
+        { value: Smoker, name: true as any },
+      ],
+    },
+    keepDiscriminatorProperty: true,
+  })
+  smoking: Smoker | NonSmoker;
+
+  @IsEnum(AlcoholFrequency)
   alcoholFreq: AlcoholFrequency;
+
+  @IsEnum(Outlook)
   outlook: Outlook;
+
+  @IsEnum(MaritalStatus)
   maritalStatus: MaritalStatus;
+
+  @IsString()
+  @IsOptional()
   familyHistory: string | null;
+
+  @IsString()
+  @IsOptional()
   birthControl: string | null;
 }
+
+// use IntersectionType(OnboardingV1, OnboardingV2) when we create new onboarding levels
+export class Onboarding extends OnboardingV1 {}

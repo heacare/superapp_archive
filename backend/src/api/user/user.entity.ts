@@ -20,52 +20,8 @@ export interface HealthData {
   unit: string;
 }
 
-class Onboarding {
-  @Column({ nullable: true })
-  name?: string;
-
-  @Column({ nullable: true })
-  gender?: Gender;
-
-  @Column({ nullable: true, type: 'date' }) // date only!
-  birthday?: Date;
-
-  @Column({ nullable: true })
-  height?: number;
-
-  @Column({ nullable: true })
-  weight?: number;
-
-  @Column({ nullable: true })
-  country?: string;
-
-  @Column({ nullable: true })
-  isSmoker?: boolean;
-
-  @Column({ nullable: true })
-  smokingPacksPerDay?: SmokingPacks;
-
-  @Column({ nullable: true })
-  smokingYears?: number;
-
-  @Column({ nullable: true })
-  alcoholFreq?: AlcoholFrequency;
-
-  @Column({ nullable: true })
-  outlook?: Outlook;
-
-  @Column({ nullable: true })
-  maritalStatus?: MaritalStatus;
-
-  @Column({ nullable: true })
-  familyHistory?: string | undefined;
-
-  @Column({ nullable: true })
-  birthControl?: string | undefined;
-}
-
 @Entity()
-export class User extends Onboarding {
+export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -80,6 +36,48 @@ export class User extends Onboarding {
   // efficiency rather than it's own table
   @Column({ type: 'jsonb' })
   healthData: HealthData[];
+
+  @Column({ nullable: true })
+  name?: string;
+
+  @Column({ nullable: true, type: 'enum', enum: Gender })
+  gender?: Gender;
+
+  @Column({ nullable: true, type: 'date' }) // date only!
+  birthday?: Date;
+
+  @Column({ nullable: true, type: 'real' })
+  height?: number;
+
+  @Column({ nullable: true, type: 'real' })
+  weight?: number;
+
+  @Column({ nullable: true })
+  country?: string;
+
+  @Column({ nullable: true })
+  isSmoker?: boolean;
+
+  @Column({ nullable: true, type: 'enum', enum: SmokingPacks })
+  smokingPacksPerDay?: SmokingPacks;
+
+  @Column({ nullable: true, type: 'int' })
+  smokingYears?: number;
+
+  @Column({ nullable: true, type: 'enum', enum: AlcoholFrequency })
+  alcoholFreq?: AlcoholFrequency;
+
+  @Column({ nullable: true, type: 'enum', enum: Outlook })
+  outlook?: Outlook;
+
+  @Column({ nullable: true, type: 'enum', enum: MaritalStatus })
+  maritalStatus?: MaritalStatus;
+
+  @Column({ nullable: true })
+  familyHistory?: string | undefined;
+
+  @Column({ nullable: true })
+  birthControl?: string | undefined;
 
   static uninit(authId: string): User {
     const user = new User();
