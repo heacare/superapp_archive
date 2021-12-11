@@ -1,5 +1,6 @@
 // TODO actually fill these with valid values from the Notion
 
+import { ApiExtraModels, ApiProperty, getSchemaPath } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
   IsDateString,
@@ -54,18 +55,16 @@ abstract class SmokingInfo {
   isSmoker: boolean;
 }
 
-export class NonSmoker extends SmokingInfo {
-  isSmoker: false;
-}
+export class NonSmoker extends SmokingInfo {}
 
 export class Smoker extends SmokingInfo {
-  isSmoker: true;
   @IsEnum(SmokingPacks)
   packsPerDay: SmokingPacks;
   @IsInt()
   yearsSmoking: number;
 }
 
+@ApiExtraModels(Smoker, NonSmoker)
 export class OnboardingV1 {
   @IsNotEmpty()
   @IsString()
@@ -101,7 +100,13 @@ export class OnboardingV1 {
     },
     keepDiscriminatorProperty: true,
   })
-  smoking: Smoker | NonSmoker;
+  @ApiProperty({
+    oneOf: [
+      { $ref: getSchemaPath(NonSmoker) },
+      { $ref: getSchemaPath(Smoker) },
+    ],
+  })
+  smoking: NonSmoker | Smoker;
 
   @IsEnum(AlcoholFrequency)
   alcoholFreq: AlcoholFrequency;
