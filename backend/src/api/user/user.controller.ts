@@ -23,6 +23,7 @@ export class UserController {
   // TODO easier access to req.user.id
   @Post('onboard')
   async processOnboarding(@Req() req, @Body() onboarding: Onboarding) {
+    console.log(onboarding);
     await this.users.update(req.user.id, onboarding);
   }
 }

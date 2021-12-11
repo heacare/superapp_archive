@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Onboarding, Smoker } from './onboarding.dto';
+import { Onboarding, SmokerInfo } from './onboarding.dto';
 import { User } from './user.entity';
 
 @Injectable()
@@ -25,10 +25,10 @@ export class UserService {
       smokingYears: null,
     };
 
-    if (onboarding.smoking instanceof Smoker) {
-      smokingInfo.isSmoker = onboarding.smoking.isSmoker;
+    if (onboarding.smoking !== null) {
+      smokingInfo.isSmoker = true;
       smokingInfo.smokingPacksPerDay = onboarding.smoking.packsPerDay;
-      smokingInfo.smokingYears = onboarding.smoking.yearsSmoking;
+      smokingInfo.smokingYears = onboarding.smoking.years;
     }
 
     this.users.update(id, {

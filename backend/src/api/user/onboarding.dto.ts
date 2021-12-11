@@ -1,6 +1,6 @@
 // TODO actually fill these with valid values from the Notion
 
-import { ApiExtraModels, ApiProperty, getSchemaPath } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
   IsDateString,
@@ -9,13 +9,12 @@ import {
   IsInt,
   IsISO31661Alpha2,
   IsNotEmpty,
-  IsNotEmptyObject,
   IsObject,
   Max,
   Min,
   ValidateNested,
-  IsOptional,
 } from 'class-validator';
+import { IsNullable } from 'src/validation';
 
 export enum AlcoholFrequency {
   NotAtAll = 'NotAtAll',
@@ -51,20 +50,14 @@ export enum SmokingPacks {
   FivePacks = 'FivePacks',
 }
 
-abstract class SmokingInfo {
-  isSmoker: boolean;
-}
-
-export class NonSmoker extends SmokingInfo {}
-
-export class Smoker extends SmokingInfo {
+export class SmokerInfo {
   @IsEnum(SmokingPacks)
   packsPerDay: SmokingPacks;
   @IsInt()
-  yearsSmoking: number;
+  @Min(0)
+  years: number;
 }
 
-@ApiExtraModels(Smoker, NonSmoker)
 export class OnboardingV1 {
   @IsNotEmpty()
   @IsString()
@@ -73,6 +66,9 @@ export class OnboardingV1 {
   @IsEnum(Gender)
   gender: Gender;
 
+  /*
+   * Birthday, but only the Date part is considered
+   */
   @IsDateString()
   birthday: Date;
 
@@ -84,29 +80,17 @@ export class OnboardingV1 {
   @Max(200.0)
   weight: number;
 
+  /*
+   * ISO31661 2-letter alphabetical country code
+   */
   @IsISO31661Alpha2()
   country: string;
 
-  @IsNotEmptyObject()
   @IsObject()
+  @IsNullable()
   @ValidateNested()
-  @Type(() => SmokingInfo, {
-    discriminator: {
-      property: 'isSmoker',
-      subTypes: [
-        { value: NonSmoker, name: false as any },
-        { value: Smoker, name: true as any },
-      ],
-    },
-    keepDiscriminatorProperty: true,
-  })
-  @ApiProperty({
-    oneOf: [
-      { $ref: getSchemaPath(NonSmoker) },
-      { $ref: getSchemaPath(Smoker) },
-    ],
-  })
-  smoking: NonSmoker | Smoker;
+  @Type(() => SmokerInfo)
+  smoking: SmokerInfo | null;
 
   @IsEnum(AlcoholFrequency)
   alcoholFreq: AlcoholFrequency;
@@ -118,11 +102,11 @@ export class OnboardingV1 {
   maritalStatus: MaritalStatus;
 
   @IsString()
-  @IsOptional()
+  @IsNullable()
   familyHistory: string | null;
 
   @IsString()
-  @IsOptional()
+  @IsNullable()
   birthControl: string | null;
 }
 
