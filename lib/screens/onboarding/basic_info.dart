@@ -188,7 +188,7 @@ class OnboardingBasicInfoScreenState extends State<OnboardingBasicInfoScreen> {
                          try {
                            Map<String, dynamic> res = _validateEntries();
                            Navigator.of(context, rootNavigator: true).pop(OnboardingStepReturn(
-                               nextStep: OnboardingStep.basic_info,
+                               nextStep: OnboardingStep.smoking,
                                returnData: res,
                              ));
                          } on String catch (e) {

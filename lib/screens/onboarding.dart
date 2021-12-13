@@ -7,11 +7,13 @@ import 'package:hea/screens/home.dart';
 import 'package:hea/screens/onboarding/start.dart';
 import 'package:hea/screens/onboarding/health_setup.dart';
 import 'package:hea/screens/onboarding/basic_info.dart';
+import 'package:hea/screens/onboarding/smoking.dart';
 
 enum OnboardingStep {
   health_sync,
   starter,
   basic_info,
+  smoking,
 
   end,
 }
@@ -58,6 +60,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         break;
       case OnboardingStep.basic_info:
         nextScreen = OnboardingBasicInfoScreen();
+        break;
+      case OnboardingStep.smoking:
+        nextScreen = OnboardingSmokingScreen();
         break;
       case OnboardingStep.end:
       default:
