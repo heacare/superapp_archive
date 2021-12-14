@@ -116,7 +116,7 @@ class OnboardingSmokingScreenState extends State<OnboardingSmokingScreen> {
                   try {
                     Map<String, dynamic> res = _validateEntries();
                     Navigator.of(context, rootNavigator: true).pop(OnboardingStepReturn(
-                        nextStep: OnboardingStep.smoking,
+                        nextStep: OnboardingStep.drinking,
                         returnData: res,
                       ));
                   } on String catch (e) {
