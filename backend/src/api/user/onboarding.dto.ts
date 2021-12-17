@@ -58,7 +58,7 @@ export class SmokerInfo {
   years: number;
 }
 
-export class OnboardingV1 {
+export class OnboardingDtoV1 {
   @IsNotEmpty()
   @IsString()
   name: string;
@@ -111,4 +111,4 @@ export class OnboardingV1 {
 }
 
 // use IntersectionType(OnboardingV1, OnboardingV2) when we create new onboarding levels
-export class Onboarding extends OnboardingV1 {}
+export class OnboardingDto extends OnboardingDtoV1 {}
