@@ -1,31 +1,23 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:colorful_safe_area/colorful_safe_area.dart';
-import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:hea/providers/auth.dart';
-import 'package:hea/screens/error.dart';
-import 'package:hea/widgets/firebase_svg.dart';
-import 'package:hea/widgets/onboard_progress_bar.dart';
-import 'package:health/health.dart';
-import 'package:url_launcher/url_launcher.dart';
-
 import 'package:hea/data/user_repo.dart';
-import 'package:hea/models/onboarding_custom.dart';
-import 'package:hea/models/onboarding_template.dart';
 import 'package:hea/models/user.dart';
-import 'health_setup.dart';
-import 'home.dart';
 
+import 'package:hea/screens/home.dart';
 import 'package:hea/screens/onboarding/start.dart';
-
-const onboardingStartId = "onboard_start";
-const onboardingLastId = "birth_control_2";
+import 'package:hea/screens/onboarding/health_setup.dart';
+import 'package:hea/screens/onboarding/basic_info.dart';
+import 'package:hea/screens/onboarding/smoking.dart';
+import 'package:hea/screens/onboarding/drinking.dart';
+import 'package:hea/screens/onboarding/followup.dart';
 
 enum OnboardingStep {
   health_sync,
   starter,
+  basic_info,
+  smoking,
+  drinking,
+  followups,
 
   end,
 }
@@ -51,9 +43,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   // No reflections so we have to update through a map
   late final Map<String, dynamic> userJson;
 
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final GlobalKey<OnboardProgressBarState> _progressBarKey = GlobalKey<OnboardProgressBarState>();
-
   @override
   initState() {
     super.initState();
@@ -72,6 +61,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         break;
       case OnboardingStep.starter:
         nextScreen = OnboardingStartScreen();
+        break;
+      case OnboardingStep.basic_info:
+        nextScreen = OnboardingBasicInfoScreen();
+        break;
+      case OnboardingStep.smoking:
+        nextScreen = OnboardingSmokingScreen();
+        break;
+      case OnboardingStep.drinking:
+        nextScreen = OnboardingDrinkingScreen();
+        break;
+      case OnboardingStep.followups:
+        nextScreen = OnboardingFollowupScreen();
         break;
       case OnboardingStep.end:
       default:
@@ -109,19 +110,5 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Widget build(BuildContext context) {
     _reroute();
     return Container();
-    // return FutureBuilder<OnboardingTemplateMap>(
-    //   future: templateMapFuture,
-    //   builder: _templateBuilder
-    // );
-  }
-
-  _launchUrl(String url) async {
-    if (await canLaunch(url)) {
-      // Try to open web view within the app
-      await launch(url, forceWebView: true, forceSafariVC: true);
-    }
-    else {
-      throw "Failed to open $url";
-    }
   }
 }

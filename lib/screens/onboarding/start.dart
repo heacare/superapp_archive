@@ -36,7 +36,7 @@ class OnboardingStartScreen extends StatelessWidget {
                      child: GradientButton(
                        text: "LET'S GO",
                        onPressed: () => Navigator.of(context, rootNavigator: true).pop(OnboardingStepReturn(
-                           nextStep: OnboardingStep.starter,
+                           nextStep: OnboardingStep.basic_info,
                            returnData: <String, dynamic>{},
                          )),
                      ),

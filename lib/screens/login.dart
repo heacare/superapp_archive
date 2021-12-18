@@ -31,11 +31,9 @@ class _LoginScreenState extends State<LoginScreen> {
   var _loginChoice = LoginChoice.unselected;
 
   void login() async {
-    // if (!_formKey.currentState!.validate()) {
-    //   return;
-    // }
-
-    print(_email.text + ", " + _password.text);
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
 
     try {
       await _auth.login(_email.text, _password.text);
@@ -49,7 +47,9 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void signup() async {
-    // if (!_formKey.currentState!.validate()) { return; }
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
 
     try {
       await _auth.signup(_email.text, _password.text);
@@ -122,32 +122,34 @@ class _LoginScreenState extends State<LoginScreen> {
           ]);
     }
 
-    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-      NavigableText(
-        onPressed: () => setState(() => _loginChoice = LoginChoice.unselected),
-        text: _loginChoice == LoginChoice.login
-            ? "Welcome back to HEA"
-            : "Let's make you superhuman",
-      ),
-      const SizedBox(height: 24.0),
-      TextFormField(
-        controller: _email,
-        decoration: const InputDecoration(labelText: "Email"),
-        validator: FormBuilderValidators.email(context),
-      ),
-      const SizedBox(height: 8.0),
-      TextFormField(
-          controller: _password,
-          decoration: const InputDecoration(labelText: "Password"),
-          obscureText: true),
-      const SizedBox(height: 36.0),
-      GradientButton(
-        text: "LET'S GO",
-        onPressed: () {
-          _loginChoice == LoginChoice.login ? login() : signup();
-        },
-      ),
-    ]);
+    return Form (
+      key: _formKey,
+      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        NavigableText(
+          onPressed: () => setState(() => _loginChoice = LoginChoice.unselected),
+          text: _loginChoice == LoginChoice.login
+              ? "Welcome back to HEA"
+              : "Let's make you superhuman",
+        ),
+        const SizedBox(height: 24.0),
+        TextFormField(
+          controller: _email,
+          decoration: const InputDecoration(labelText: "Email"),
+          validator: FormBuilderValidators.email(context),
+        ),
+        const SizedBox(height: 8.0),
+        TextFormField(
+            controller: _password,
+            decoration: const InputDecoration(labelText: "Password"),
+            obscureText: true),
+        const SizedBox(height: 36.0),
+        GradientButton(
+          text: "LET'S GO",
+          onPressed: () {
+            _loginChoice == LoginChoice.login ? login() : signup();
+          },
+        ),
+    ]));
   }
 
   @override
