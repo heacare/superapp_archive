@@ -33,35 +33,59 @@ class DashboardPage extends StatelessWidget {
   final double optYears;
   final double socScore;
 
-  DashboardPage({
-    Key? key,
-    required this.expYears,
-    required this.optYears,
-    required this.socScore
-  }) : super(key: key);
+  DashboardPage(
+      {Key? key,
+      required this.expYears,
+      required this.optYears,
+      required this.socScore})
+      : super(key: key);
 
   // TODO: ideally this logic should be stored and retrieved from the backend
-  factory DashboardPage.fromUser(User user){
-    Random random = Random((user.height+user.age).round());
+  factory DashboardPage.fromUser(User user) {
+    Random random = Random((user.height + user.age).round());
     // Wow imagine only considering two genders in 2021, omg cancelled
-    double expYears = user.gender == "Male" ? 72.4 : 74.6
-        + (3.5 * random.nextDouble()) - 5;
-    double optYears = user.gender == "Male" ? 87 : 92
-        + (2.5 * random.nextDouble()) - 2;
+    double expYears =
+        user.gender == "Male" ? 72.4 : 74.6 + (3.5 * random.nextDouble()) - 5;
+    double optYears =
+        user.gender == "Male" ? 87 : 92 + (2.5 * random.nextDouble()) - 2;
     double socScore = random.nextInt(21) + 5.0;
     return DashboardPage(
-      expYears: expYears,
-      optYears: optYears,
-      socScore: socScore
-    );
+        expYears: expYears, optYears: optYears, socScore: socScore);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Dashboard"),
-      ),
+      appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(150),
+          child: SafeArea(
+              child: Container(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
+                  child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Expanded(
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                              Text("Dashboard",
+                                  style: Theme.of(context).textTheme.headline1),
+                              Text("Good morning, Dan",
+                                  style: Theme.of(context).textTheme.headline3),
+                            ])),
+                        Container(
+                            height: 60.0,
+                            width: 60.0,
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20.0)),
+                                image: DecorationImage(
+                                    image: NetworkImage(
+                                        "https://images.unsplash.com/photo-1579202673506-ca3ce28943ef"),
+                                    fit: BoxFit.cover))),
+                      ])))),
       body: LayoutBuilder(
         builder: (context, constraint) {
           return Padding(
@@ -77,7 +101,8 @@ class DashboardPage extends StatelessWidget {
                       DeathClock(expYears: expYears, optYears: optYears),
                       Flexible(
                         child: Padding(
-                          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 40),
+                          padding:
+                              EdgeInsets.symmetric(vertical: 5, horizontal: 40),
                           child: Text(
                             "Good morning, looks like you're on track for a great day!",
                             style: Theme.of(context).textTheme.bodyText2,
@@ -97,7 +122,6 @@ class DashboardPage extends StatelessWidget {
     );
   }
 }
-
 
 class DeathClock extends StatelessWidget {
   final double expYears;
@@ -149,33 +173,33 @@ class DeathClock extends StatelessWidget {
             ],
             annotations: [
               GaugeAnnotation(
-                horizontalAlignment: GaugeAlignment.center,
-                verticalAlignment: GaugeAlignment.center,
-                angle: 90,
+                  horizontalAlignment: GaugeAlignment.center,
+                  verticalAlignment: GaugeAlignment.center,
+                  angle: 90,
                   widget: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(height: 30,),
+                      SizedBox(
+                        height: 30,
+                      ),
                       Text(
                         expYears.toStringAsFixed(1),
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.headline1?.copyWith(
-                          fontWeight: FontWeight.normal,
-                          fontSize: 70,
-                          color: Theme.of(context).colorScheme.secondary
-                        ),
+                            fontWeight: FontWeight.normal,
+                            fontSize: 70,
+                            color: Theme.of(context).colorScheme.secondary),
                       ),
                       Text(
                         "years",
                         style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                          fontWeight: FontWeight.normal,
-                          fontSize: 20,
-                          color: Theme.of(context).colorScheme.secondary
-                        ),
+                            fontWeight: FontWeight.normal,
+                            fontSize: 20,
+                            color: Theme.of(context).colorScheme.secondary),
                       ),
-                  ],
-                ))
+                    ],
+                  ))
             ],
           )
         ],
@@ -190,11 +214,13 @@ class ScoreCard extends StatelessWidget {
   final String label;
   final Color color;
 
-  ScoreCard({Key? key,
-    required this.icon,
-    required this.value,
-    required this.label,
-    required this.color}) : super(key: key);
+  ScoreCard(
+      {Key? key,
+      required this.icon,
+      required this.value,
+      required this.label,
+      required this.color})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -211,12 +237,12 @@ class ScoreCard extends StatelessWidget {
                 color: color,
               ),
               Text(
-                  value.toStringAsFixed(0),
-                  style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                    color: color,
-                    fontSize: size,
-                    fontWeight: FontWeight.normal,
-                ),
+                value.toStringAsFixed(0),
+                style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                      color: color,
+                      fontSize: size,
+                      fontWeight: FontWeight.normal,
+                    ),
               ),
             ],
           ),

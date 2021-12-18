@@ -78,17 +78,22 @@ class _AppState extends State<App> {
           headline2: TextStyle(
               fontSize: 20.0,
               fontWeight: FontWeight.normal,
-              height: 1.3,
+              height: 1.2,
+              color: secondaryTextColor),
+          headline3: TextStyle(
+              fontSize: 18.0,
+              fontWeight: FontWeight.normal,
+              height: 1.2,
               color: secondaryTextColor),
           bodyText1: TextStyle(
               fontSize: 18.0,
               fontWeight: FontWeight.bold,
-              height: 1.2,
+              height: 1.4,
               color: textColor),
           bodyText2: TextStyle(
               fontSize: 16.0,
               fontWeight: FontWeight.bold,
-              height: 1.2,
+              height: 1.4,
               color: textColor),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
@@ -167,8 +172,6 @@ class _AppState extends State<App> {
   }
 
   Widget mainScreen(AsyncSnapshot<UserStatus> snapshot) {
-    // Shorting this for testing
-    // return const HomeScreen();
     if (snapshot.hasError) {
       print("Encountered error: ${snapshot.error}");
       return const ErrorScreen();
