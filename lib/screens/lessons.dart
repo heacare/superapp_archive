@@ -1,29 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:hea/screens/content.dart';
+import 'package:hea/screens/lesson.dart';
+import 'package:hea/models/content.dart';
+import 'package:hea/models/chapter.dart';
 
-class SubmoduleScreen extends StatefulWidget {
-  SubmoduleScreen(
+class LessonsScreen extends StatefulWidget {
+  LessonsScreen(
       {Key? key,
       required this.title,
       required this.gradient1,
       required this.gradient2,
-      required this.icon})
+      required this.icon,
+      required this.content})
       : super(key: key);
 
   final String title;
   final Color gradient1;
   final Color gradient2;
   final IconData icon;
+  final Content content;
 
   @override
-  State<SubmoduleScreen> createState() => _SubmoduleScreenState();
+  State<LessonsScreen> createState() => _LessonsScreenState();
 }
 
-class _SubmoduleScreenState extends State<SubmoduleScreen> {
+class _LessonsScreenState extends State<LessonsScreen> {
   @override
   Widget build(BuildContext context) {
+    final lessonListView = ListView.separated(
+        separatorBuilder: (BuildContext context, int index) {
+          return const SizedBox(height: 8.0);
+        },
+        padding: const EdgeInsets.all(16.0),
+        itemCount: widget.content.chapters.length,
+        itemBuilder: (context, index) {
+          final chapter = widget.content.chapters[index];
+          return LessonListItem(
+              title: chapter.title,
+              description: "12 sections • 15min",
+              leading: Container(),
+              gradient1: widget.gradient1,
+              gradient2: widget.gradient2,
+              chapter: chapter);
+        });
     return Scaffold(
         body: Stack(children: <Widget>[
       Container(
@@ -86,34 +106,36 @@ class _SubmoduleScreenState extends State<SubmoduleScreen> {
               )
             ],
           ),
-          child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 30.0),
-              child: Column(children: <Widget>[
-                SubmoduleListItem(
-                    title: "Socials 101",
-                    description: "12 sections • 15min",
-                    leading: Container()),
-              ]))),
+          child: lessonListView),
     ]));
   }
 }
 
-class SubmoduleListItem extends StatelessWidget {
+class LessonListItem extends StatelessWidget {
   final String title;
   final String description;
   final Widget leading;
+  final Chapter chapter;
 
-  SubmoduleListItem(
+  final Color gradient1;
+  final Color gradient2;
+
+  LessonListItem(
       {Key? key,
       required this.title,
       required this.description,
-      required this.leading})
+      required this.leading,
+      required this.gradient1,
+      required this.gradient2,
+      required this.chapter})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: () {},
+        onTap: () => Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => LessonScreen(
+                chapter: chapter, gradient1: gradient1, gradient2: gradient2))),
         child: Container(
             padding:
                 const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
@@ -142,7 +164,7 @@ class SubmoduleListItem extends StatelessWidget {
                             .bodyText2
                             ?.copyWith(color: Color(0xFF707070)))
                   ])),
-              FaIcon(FontAwesomeIcons.arrowRight,
+              const FaIcon(FontAwesomeIcons.arrowRight,
                   color: Color(0xFF868686), size: 18.0),
             ])));
   }

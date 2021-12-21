@@ -91,8 +91,8 @@ class _AppState extends State<App> {
             bodyText1: TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.w400,
-                letterSpacing: 0.5,
-                height: 1.4,
+                letterSpacing: 0.0,
+                height: 1.6,
                 color: primaryTextColor),
             bodyText2: TextStyle(
                 fontSize: 14.0,

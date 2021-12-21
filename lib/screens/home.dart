@@ -5,7 +5,7 @@ import 'package:hea/screens/help_map.dart';
 import 'package:hea/screens/profile.dart';
 import 'package:hea/providers/auth.dart';
 
-import 'package:hea/screens/contents.dart';
+import 'package:hea/screens/modules.dart';
 
 import 'package:hea/widgets/fancy_bottom_bar.dart';
 
@@ -43,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     if (index == 1) {
-      return ContentsScreen();
+      return ModulesScreen();
     }
 
     if (index == 2) {
