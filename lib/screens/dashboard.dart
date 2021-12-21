@@ -157,21 +157,22 @@ class UpcomingEvent extends StatelessWidget {
             child: Center(
                 child:
                     FaIcon(FontAwesomeIcons.solidHeart, color: Colors.white))),
-        Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
+        Expanded(
+            child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
               Text("Health Checkup",
                   style: Theme.of(context)
                       .textTheme
                       .headline3
                       ?.copyWith(color: Colors.white)),
-              Text("Dan Green",
+              Text("Dan Green • Tuesday, 3PM",
                   style: Theme.of(context)
                       .textTheme
                       .bodyText2
                       ?.copyWith(color: Colors.white))
-            ]),
+            ])),
       ]),
     );
   }

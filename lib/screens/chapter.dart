@@ -11,7 +11,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 class ChapterScreen extends StatefulWidget {
   final Chapter chapter;
 
-  const ChapterScreen({required this.chapter});
+  const ChapterScreen({Key? key, required this.chapter}) : super(key: key);
 
   @override
   State<ChapterScreen> createState() => _ChapterScreenState();

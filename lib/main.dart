@@ -34,10 +34,8 @@ class _AppState extends State<App> {
     const primaryColor = Color(0xFFFF5576);
     const accentColor = Color(0xFFFF7FAA);
 
-    const primaryTextColor = Color(0xFF000000);
+    const primaryTextColor = Color(0xFF414141);
     const secondaryTextColor = Color(0xFF707070);
-
-    const textColor = Color(0xFF191919);
 
     // Stolen from https://medium.com/@filipvk/creating-a-custom-color-swatch-in-flutter-554bcdcb27f3
     MaterialColor createMaterialColor(int argb) {
@@ -70,39 +68,44 @@ class _AppState extends State<App> {
         colorScheme: colorScheme,
         fontFamily: "Poppins",
         textTheme: const TextTheme(
-          headline1: TextStyle(
-              fontSize: 32.0,
-              fontWeight: FontWeight.bold,
-              height: 1.1,
-              color: primaryTextColor),
-          headline2: TextStyle(
-              fontSize: 21.0,
+            headline1: TextStyle(
+                fontSize: 32.0,
+                fontWeight: FontWeight.bold,
+                height: 1.1,
+                color: primaryTextColor),
+            headline2: TextStyle(
+                fontSize: 21.0,
+                fontWeight: FontWeight.w600,
+                height: 1.2,
+                color: primaryTextColor),
+            headline3: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.w600,
+                height: 1.2,
+                color: primaryTextColor),
+            headline4: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.w400,
+                height: 1.2,
+                color: secondaryTextColor),
+            bodyText1: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.w400,
+                letterSpacing: 0.5,
+                height: 1.4,
+                color: primaryTextColor),
+            bodyText2: TextStyle(
+                fontSize: 14.0,
+                fontWeight: FontWeight.w400,
+                letterSpacing: 0.25,
+                height: 1.4,
+                color: primaryTextColor),
+            overline: TextStyle(
+              fontSize: 12.0,
               fontWeight: FontWeight.w600,
-              height: 1.2,
-              color: secondaryTextColor),
-          headline3: TextStyle(
-              fontSize: 18.0,
-              fontWeight: FontWeight.w600,
-              height: 1.2,
-              color: secondaryTextColor),
-          headline4: TextStyle(
-              fontSize: 18.0,
-              fontWeight: FontWeight.w400,
-              height: 1.2,
-              color: secondaryTextColor),
-          bodyText1: TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.w400,
-              letterSpacing: 0.5,
-              height: 1.4,
-              color: textColor),
-          bodyText2: TextStyle(
-              fontSize: 14.0,
-              fontWeight: FontWeight.w400,
-              letterSpacing: 0.25,
-              height: 1.4,
-              color: textColor),
-        ),
+              letterSpacing: 1.5,
+              color: primaryTextColor,
+            )),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: TextButton.styleFrom(
             shape: RoundedRectangleBorder(
