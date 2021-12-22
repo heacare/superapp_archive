@@ -1,20 +1,16 @@
-import { Injectable, Module, OnApplicationBootstrap } from '@nestjs/common';
-import { Connection } from 'typeorm';
+import { MigrationInterface, QueryRunner } from 'typeorm';
 import { Unit, Lesson, Page } from '../../api/content/content.entity';
 
 import * as data from './data.json';
 
-@Injectable()
-export default class ContentSeederService implements OnApplicationBootstrap {
-  constructor(private readonly connection: Connection) {}
+/*
+ *  Template generated with `npx typeorm migration:create --name ContentSeed`
+ */
 
-  onApplicationBootstrap() {
-    // TODO check for previous seed
-    console.log('Seeding DB...');
-    this.seed();
-  }
+export class ContentSeed1640166201279 implements MigrationInterface {
+  public async up({ connection }: QueryRunner): Promise<void> {
+    console.log('Seeding content...');
 
-  private async seed(): Promise<any> {
     let unitNum = 0;
     let lessonNum = 0;
     let pageNum = 0;
@@ -41,12 +37,11 @@ export default class ContentSeederService implements OnApplicationBootstrap {
         ),
     );
 
-    this.connection.getRepository(Unit).create(units);
-    await this.connection.getRepository(Unit).save(units);
+    connection.getRepository(Unit).create(units);
+    await connection.getRepository(Unit).save(units);
+  }
+
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    // No need to implement
   }
 }
-
-@Module({
-  providers: [ContentSeederService],
-})
-export class DbSeedModule {}
