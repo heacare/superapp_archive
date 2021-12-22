@@ -1,0 +1,28 @@
+export class MedicalTagDto {
+  name: string;
+  description: string;
+  proficiency: number;
+}
+
+export class AvailabilitySlotDto {
+  start: Date;
+  end: Date;
+}
+
+export class NearbyHealerDto {
+  id: number;
+  name: string;
+  description: string;
+  tags: MedicalTagDto[];
+  availability: AvailabilitySlotDto[];
+  // TODO location?
+}
+
+export class NearbyHealersDto {
+  healers: NearbyHealerDto[];
+}
+
+export class BookingDto {
+  healerId: number;
+  slot: AvailabilitySlotDto;
+}

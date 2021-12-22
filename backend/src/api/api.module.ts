@@ -15,6 +15,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { ApiAuthStrategy } from './auth/auth.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { FirebaseService } from './auth/firebase.service';
+import { HealerController } from './healer/healer.controller';
+import { Healer } from './healer/healer.entity';
 
 export const ApiFirebaseModule = FirebaseAdminModule.forRootAsync({
   useFactory: () => {
@@ -31,13 +33,17 @@ export const ApiJwtModule = JwtModule.register({
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
-    TypeOrmModule.forFeature([Chapter]),
+    TypeOrmModule.forFeature([User, Chapter, Healer]),
     ApiFirebaseModule,
     PassportModule,
     ApiJwtModule,
   ],
-  controllers: [ContentController, UserController, AuthController],
+  controllers: [
+    ContentController,
+    UserController,
+    AuthController,
+    HealerController,
+  ],
   providers: [
     ContentService,
     UserService,
