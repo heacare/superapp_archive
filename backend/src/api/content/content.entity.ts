@@ -7,12 +7,12 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Chapter {
+export class Module {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ unique: true })
-  chapterNum: number;
+  moduleNum: number;
 
   @Column()
   icon: string;
@@ -20,17 +20,17 @@ export class Chapter {
   @Column()
   title: string;
 
-  @OneToMany(() => Subchapter, (subchapter) => subchapter.chapter)
-  subchapters: Subchapter[];
+  @OneToMany(() => Lesson, (lesson) => lesson.module)
+  lessons: Lesson[];
 }
 
 @Entity()
-export class Subchapter {
+export class Lesson {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ unique: true })
-  subchapterNum: number;
+  lessonNum: number;
 
   @Column()
   icon: string;
@@ -41,10 +41,10 @@ export class Subchapter {
   @Column()
   callToAction: string;
 
-  @ManyToOne(() => Chapter, (chapter) => chapter.subchapters)
-  chapter: Chapter;
+  @ManyToOne(() => Module, (module) => module.lessons)
+  module: Module;
 
-  @OneToMany(() => Page, (page) => page.subchapter)
+  @OneToMany(() => Page, (page) => page.lesson)
   pages: Page[];
 }
 
@@ -62,6 +62,6 @@ export class Page {
   @Column()
   text: string;
 
-  @ManyToOne(() => Subchapter, (subchapter) => subchapter.pages)
-  subchapter: Subchapter;
+  @ManyToOne(() => Lesson, (lesson) => lesson.pages)
+  lesson: Lesson;
 }
