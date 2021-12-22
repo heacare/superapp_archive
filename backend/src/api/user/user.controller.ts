@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { ApiAuthGuard } from '../auth/auth.guard';
-import { Onboarding } from './onboarding.dto';
+import { OnboardingDto } from './onboarding.dto';
 import { User } from './user.entity';
 import { UserService } from './user.service';
 
@@ -22,7 +22,7 @@ export class UserController {
 
   // TODO easier access to req.user.id
   @Post('onboard')
-  async processOnboarding(@Req() req, @Body() onboarding: Onboarding) {
+  async processOnboarding(@Req() req, @Body() onboarding: OnboardingDto) {
     await this.users.update(req.user.id, onboarding);
   }
 }

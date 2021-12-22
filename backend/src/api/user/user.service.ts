@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Onboarding, Smoker } from './onboarding.dto';
+import { OnboardingDto } from './onboarding.dto';
 import { User } from './user.entity';
 
 @Injectable()
@@ -18,17 +18,17 @@ export class UserService {
     return await this.users.save(User.uninit(authId));
   }
 
-  async update(id: number, onboarding: Onboarding) {
+  async update(id: number, onboarding: OnboardingDto) {
     const smokingInfo: Partial<User> = {
       isSmoker: false,
       smokingPacksPerDay: null,
       smokingYears: null,
     };
 
-    if (onboarding.smoking instanceof Smoker) {
-      smokingInfo.isSmoker = onboarding.smoking.isSmoker;
+    if (onboarding.smoking !== null) {
+      smokingInfo.isSmoker = true;
       smokingInfo.smokingPacksPerDay = onboarding.smoking.packsPerDay;
-      smokingInfo.smokingYears = onboarding.smoking.yearsSmoking;
+      smokingInfo.smokingYears = onboarding.smoking.years;
     }
 
     this.users.update(id, {

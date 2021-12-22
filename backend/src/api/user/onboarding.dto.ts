@@ -8,13 +8,12 @@ import {
   IsInt,
   IsISO31661Alpha2,
   IsNotEmpty,
-  IsNotEmptyObject,
   IsObject,
   Max,
   Min,
   ValidateNested,
-  IsOptional,
 } from 'class-validator';
+import { IsNullable } from 'src/validation';
 
 export enum AlcoholFrequency {
   NotAtAll = 'NotAtAll',
@@ -50,23 +49,15 @@ export enum SmokingPacks {
   FivePacks = 'FivePacks',
 }
 
-abstract class SmokingInfo {
-  isSmoker: boolean;
-}
-
-export class NonSmoker extends SmokingInfo {
-  isSmoker: false;
-}
-
-export class Smoker extends SmokingInfo {
-  isSmoker: true;
+export class SmokerInfo {
   @IsEnum(SmokingPacks)
   packsPerDay: SmokingPacks;
   @IsInt()
-  yearsSmoking: number;
+  @Min(0)
+  years: number;
 }
 
-export class OnboardingV1 {
+export class OnboardingDtoV1 {
   @IsNotEmpty()
   @IsString()
   name: string;
@@ -74,6 +65,9 @@ export class OnboardingV1 {
   @IsEnum(Gender)
   gender: Gender;
 
+  /*
+   * Birthday, but only the Date part is considered
+   */
   @IsDateString()
   birthday: Date;
 
@@ -85,23 +79,17 @@ export class OnboardingV1 {
   @Max(200.0)
   weight: number;
 
+  /*
+   * ISO31661 2-letter alphabetical country code
+   */
   @IsISO31661Alpha2()
   country: string;
 
-  @IsNotEmptyObject()
   @IsObject()
+  @IsNullable()
   @ValidateNested()
-  @Type(() => SmokingInfo, {
-    discriminator: {
-      property: 'isSmoker',
-      subTypes: [
-        { value: NonSmoker, name: false as any },
-        { value: Smoker, name: true as any },
-      ],
-    },
-    keepDiscriminatorProperty: true,
-  })
-  smoking: Smoker | NonSmoker;
+  @Type(() => SmokerInfo)
+  smoking: SmokerInfo | null;
 
   @IsEnum(AlcoholFrequency)
   alcoholFreq: AlcoholFrequency;
@@ -113,13 +101,13 @@ export class OnboardingV1 {
   maritalStatus: MaritalStatus;
 
   @IsString()
-  @IsOptional()
+  @IsNullable()
   familyHistory: string | null;
 
   @IsString()
-  @IsOptional()
+  @IsNullable()
   birthControl: string | null;
 }
 
 // use IntersectionType(OnboardingV1, OnboardingV2) when we create new onboarding levels
-export class Onboarding extends OnboardingV1 {}
+export class OnboardingDto extends OnboardingDtoV1 {}
