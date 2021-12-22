@@ -1,4 +1,4 @@
-export class MedicalTagDto {
+export class MedicalProficiencyDto {
   name: string;
   description: string;
   proficiency: number;
@@ -13,9 +13,9 @@ export class NearbyHealerDto {
   id: number;
   name: string;
   description: string;
-  tags: MedicalTagDto[];
+  proficiency: MedicalProficiencyDto[];
   availability: AvailabilitySlotDto[];
-  rocation_lat: number;
+  location_lat: number;
   location_lng: number;
 }
 
