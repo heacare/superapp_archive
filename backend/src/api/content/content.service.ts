@@ -8,6 +8,11 @@ export class ContentService {
   constructor(@InjectRepository(Unit) private units: Repository<Unit>) {}
 
   async getAll(): Promise<Unit[]> {
-    return this.units.find();
+    return this.units
+      .createQueryBuilder()
+      .innerJoinAndSelect('Unit.lessons', 'Lesson')
+      .innerJoinAndSelect('Lesson.pages', 'Page')
+      .orderBy({ 'Page.pageNum': 'ASC' })
+      .getMany();
   }
 }
