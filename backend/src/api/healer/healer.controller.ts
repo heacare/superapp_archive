@@ -21,7 +21,9 @@ export class HealerController {
     @Query() location_lat: number,
     @Query() location_lng: number,
   ): Promise<NearbyHealersDto> {
-    const healers = (await this.healers.getAll()).map((h) => {
+    const healers = (
+      await this.healers.getNearby(location_lat, location_lng, 50.0)
+    ).map((h) => {
       const healer = new NearbyHealerDto();
       healer.name = h.name;
       healer.description = h.description;

@@ -31,18 +31,6 @@ export class Healer {
 }
 
 @Entity()
-export class MedicalProficiency {
-  @ManyToOne(() => Healer, (healer) => healer.proficiencies, { primary: true })
-  healer: Healer;
-
-  @ManyToOne(() => MedicalTag, (tag) => tag.proficiencies, { primary: true })
-  tag: MedicalTag;
-
-  @Column('int')
-  proficiency: number;
-}
-
-@Entity()
 export class MedicalTag {
   @PrimaryGeneratedColumn()
   id: number;
@@ -55,6 +43,18 @@ export class MedicalTag {
 
   @OneToMany(() => MedicalProficiency, (prof) => prof.tag)
   proficiencies: MedicalProficiency[];
+}
+
+@Entity()
+export class MedicalProficiency {
+  @ManyToOne(() => Healer, (healer) => healer.proficiencies, { primary: true })
+  healer: Healer;
+
+  @ManyToOne(() => MedicalTag, (tag) => tag.proficiencies, { primary: true })
+  tag: MedicalTag;
+
+  @Column('int')
+  proficiency: number;
 }
 
 export class Slot {

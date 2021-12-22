@@ -17,6 +17,7 @@ import { PassportModule } from '@nestjs/passport';
 import { FirebaseService } from './auth/firebase.service';
 import { HealerController } from './healer/healer.controller';
 import { Healer } from './healer/healer.entity';
+import { HealerService } from './healer/healer.service';
 
 export const ApiFirebaseModule = FirebaseAdminModule.forRootAsync({
   useFactory: () => {
@@ -47,6 +48,7 @@ export const ApiJwtModule = JwtModule.register({
   providers: [
     ContentService,
     UserService,
+    HealerService,
     AuthService,
     FirebaseService,
     ApiAuthStrategy,

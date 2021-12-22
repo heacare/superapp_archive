@@ -15,7 +15,8 @@ export class NearbyHealerDto {
   description: string;
   tags: MedicalTagDto[];
   availability: AvailabilitySlotDto[];
-  // TODO location?
+  rocation_lat: number;
+  location_lng: number;
 }
 
 export class NearbyHealersDto {
