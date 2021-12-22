@@ -1,9 +1,12 @@
 import {
   Column,
+  ChildEntity,
   Entity,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  TableInheritance,
+  AfterLoad,
 } from 'typeorm';
 
 @Entity()
@@ -26,12 +29,7 @@ export class Unit {
   })
   lessons: Lesson[];
 
-  constructor(
-    moduleNum: number,
-    icon: string,
-    title: string,
-    lessons?: Lesson[],
-  ) {
+  constructor(moduleNum: number, icon: string, title: string, lessons?: Lesson[]) {
     this.moduleNum = moduleNum;
     this.icon = icon;
     this.title = title;
@@ -58,7 +56,10 @@ export class Lesson {
   @ManyToOne(() => Unit, (unit) => unit.lessons)
   unit: Unit;
 
-  @OneToMany(() => Page, (page) => page.lesson, { cascade: true, eager: true })
+  @OneToMany(() => Page, (page) => page.lesson, {
+    cascade: true,
+    eager: true,
+  })
   pages: Page[];
 
   constructor(lessonNum: number, icon: string, title: string, pages?: Page[]) {
@@ -72,6 +73,7 @@ export class Lesson {
 }
 
 @Entity()
+@TableInheritance({ column: { type: 'varchar', name: 'pageType' } })
 export class Page {
   @PrimaryGeneratedColumn()
   id: number;
@@ -96,5 +98,48 @@ export class Page {
     this.icon = icon;
     this.title = title;
     this.text = text;
+  }
+}
+
+@ChildEntity()
+export class TextPage extends Page {
+  constructor(pageNum: number, icon: string, title: string, text: string) {
+    super(pageNum, icon, title, text);
+  }
+}
+
+@ChildEntity()
+export class QuizPage extends Page {
+  @OneToMany(() => QuizOption, (quizOption) => quizOption.quiz, {
+    eager: true,
+    cascade: true,
+  })
+  quizOptions: QuizOption[];
+
+  constructor(pageNum: number, icon: string, title: string, text: string, quizOptions?: QuizOption[]) {
+    super(pageNum, icon, title, text);
+    if (quizOptions) {
+      this.quizOptions = quizOptions;
+    }
+  }
+}
+
+@Entity()
+export class QuizOption {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  text: string;
+
+  @Column()
+  isAnswer: boolean;
+
+  @ManyToOne(() => QuizPage, (quiz) => quiz.quizOptions)
+  quiz: QuizPage;
+
+  constructor(text: string, isAnswer: boolean) {
+    this.text = text;
+    this.isAnswer = isAnswer;
   }
 }

@@ -1,5 +1,5 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { Unit, Lesson, Page } from '../../api/content/content.entity';
+import { Unit, Lesson, TextPage, QuizPage, QuizOption } from '../../api/content/content.entity';
 
 import * as data from './data.json';
 
@@ -28,10 +28,21 @@ export class ContentSeed1640166201279 implements MigrationInterface {
                 lessonNum++,
                 lesson.icon,
                 lesson.title,
-                lesson.pages.map(
-                  (page) =>
-                    new Page(pageNum++, page.icon, page.title, page.text),
-                ),
+                lesson.pages.map((page) => {
+                  if ('quizOptions' in page) {
+                    return new QuizPage(
+                      pageNum++,
+                      page.icon,
+                      page.title,
+                      page.text,
+                      page.quizOptions.map(
+                        (quizOption) => new QuizOption(quizOption.text, quizOption.isAnswer ?? false),
+                      ),
+                    );
+                  } else {
+                    return new TextPage(pageNum++, page.icon, page.title, page.text);
+                  }
+                }),
               ),
           ),
         ),

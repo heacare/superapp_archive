@@ -3,10 +3,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ContentController } from './content.controller';
 import { Unit } from './content.entity';
 import { ContentService } from './content.service';
-import { QuizModule } from './quiz/quiz.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Unit]), QuizModule],
+  imports: [TypeOrmModule.forFeature([Unit])],
   controllers: [ContentController],
   providers: [ContentService],
 })
