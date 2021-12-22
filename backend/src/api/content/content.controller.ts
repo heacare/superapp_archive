@@ -1,7 +1,7 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { ApiAuthGuard } from '../auth/auth.guard';
-import { Lesson } from './content.entity';
+import { Unit } from './content.entity';
 import { ContentService } from './content.service';
 import { Quiz } from './quiz/quiz.entity';
 import { QuizService } from './quiz/quiz.service';
@@ -19,7 +19,7 @@ export class ContentController {
   }
 
   @Get()
-  async getAll(): Promise<Lesson[]> {
+  async getAll(): Promise<Unit[]> {
     return await this.content.getAll();
   }
 }

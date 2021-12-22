@@ -1,15 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Lesson } from './content.entity';
+import { Unit } from './content.entity';
 
 @Injectable()
 export class ContentService {
-  constructor(
-    @InjectRepository(Lesson) private lessons: Repository<Lesson>,
-  ) {}
+  constructor(@InjectRepository(Unit) private units: Repository<Unit>) {}
 
-  async getAll(): Promise<Lesson[]> {
-    return this.lessons.find();
+  async getAll(): Promise<Unit[]> {
+    return this.units.find();
   }
 }

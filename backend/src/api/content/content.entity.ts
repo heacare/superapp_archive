@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Module {
+export class Unit {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -20,7 +20,7 @@ export class Module {
   @Column()
   title: string;
 
-  @OneToMany(() => Lesson, (lesson) => lesson.module)
+  @OneToMany(() => Lesson, (lesson) => lesson.unit)
   lessons: Lesson[];
 }
 
@@ -41,8 +41,8 @@ export class Lesson {
   @Column()
   callToAction: string;
 
-  @ManyToOne(() => Module, (module) => module.lessons)
-  module: Module;
+  @ManyToOne(() => Unit, (unit) => unit.lessons)
+  unit: Unit;
 
   @OneToMany(() => Page, (page) => page.lesson)
   pages: Page[];
