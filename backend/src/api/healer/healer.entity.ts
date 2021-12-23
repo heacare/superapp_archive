@@ -5,6 +5,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Session } from '../session/session.entity';
 
 @Entity()
 export class Healer {
@@ -28,6 +29,9 @@ export class Healer {
 
   @OneToMany(() => MedicalProficiency, (prof) => prof.healer)
   proficiencies: MedicalProficiency[];
+
+  @OneToMany(() => Session, (sess) => sess.healer)
+  sessions: Session[];
 }
 
 @Entity()
