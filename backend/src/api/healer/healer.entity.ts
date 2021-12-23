@@ -1,4 +1,5 @@
 import { Point } from 'geojson';
+import { IPostgresInterval } from 'postgres-interval';
 import {
   Column,
   Entity,
@@ -78,14 +79,13 @@ export class Slot {
   @Column()
   isHouseVisit: boolean;
 
-  @Column()
-  start: Date;
-
-  @Column()
-  end: Date;
+  @Column('interval')
+  duration: IPostgresInterval;
 
   /**
-   * RFC5545 RRULE
+   * RFC5545 RRULE;
+   * Must contain DTSTART. Use the `rrule` library to generate this.
+   * @example 'DTSTART:20120201T093000Z\nRRULE:FREQ=WEEKLY;UNTIL=20250130T230000Z;BYDAY=MO';
    */
   @Column()
   rrule: string;

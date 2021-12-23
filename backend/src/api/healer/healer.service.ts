@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { rrulestr } from 'rrule';
+import { RRuleSet, rrulestr } from 'rrule';
 import { isWithinRadius } from '../../util/geo';
 import { Repository } from 'typeorm';
 import { LocationDto } from '../common/common.dto';
@@ -81,15 +81,12 @@ export class HealerService {
   availabilitySlotsBetween(slots: Slot[], start: Date, end: Date) {
     return slots.flatMap((slot) => {
       const rrule = rrulestr(slot.rrule);
-      rrule.options.dtstart = slot.start;
 
-      return rrule.between(start, end, true).map((d) => {
+      return rrule.between(start, end, true).map((start) => {
         const adto = new AvailabilitySlotDto();
-        adto.start = d;
-        const duration = DateTime.fromJSDate(slot.end).diff(
-          DateTime.fromJSDate(slot.start),
-        );
-        adto.end = DateTime.fromJSDate(d).plus(duration).toJSDate();
+        adto.start = start;
+        const duration = Duration.fromISO(slot.duration.toISOString());
+        adto.end = DateTime.fromJSDate(start).plus(duration).toJSDate();
         adto.isHouseVisit = slot.isHouseVisit;
         return adto;
       });

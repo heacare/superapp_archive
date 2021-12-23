@@ -1,3 +1,4 @@
+import * as parse from 'postgres-interval';
 import {
   Healer,
   MedicalProficiency,
@@ -86,6 +87,7 @@ export class ContentSeed1640166201279 implements MigrationInterface {
 
     const slot1 = new Slot();
     slot1.isHouseVisit = false;
+    slot1.duration = parse('02:00:00');
     slot1.rrule =
       'DTSTART:20120201T093000Z\nRRULE:FREQ=WEEKLY;UNTIL=20250130T230000Z;BYDAY=MO';
 
