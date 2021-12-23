@@ -33,6 +33,9 @@ export class Healer {
   @OneToMany(() => MedicalProficiency, (prof) => prof.healer)
   proficiencies: MedicalProficiency[];
 
+  @OneToMany(() => Slot, (slot) => slot.healer)
+  slots: Slot[];
+
   @OneToMany(() => Session, (sess) => sess.healer)
   sessions: Session[];
 }
@@ -64,24 +67,18 @@ export class MedicalProficiency {
   proficiency: number;
 }
 
+@Entity()
 export class Slot {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Healer, (healer) => healer.proficiencies, { primary: true })
+  @ManyToOne(() => Healer, (healer) => healer.slots)
   healer: Healer;
-
-  @Column()
-  start: Date;
-
-  @Column()
-  end: Date;
 
   @Column()
   isHouseVisit: boolean;
 
   // RFC5545 RRULE
-  // TODO check if can alr put date here :)
   @Column()
   rrule: string;
 }

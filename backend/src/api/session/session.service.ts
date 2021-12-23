@@ -10,14 +10,17 @@ export class SessionService {
     @InjectRepository(Session) private session: Repository<Session>,
   ) {}
 
-  async listSessions(user: number): Promise<UserSessionDto[]> {
-    return null;
+  async listSessions(id: number): Promise<UserSessionDto[]> {
+    this.session.find({
+      where: { user: id },
+    });
+    throw new Error('Method not implemented.');
   }
 
   // TODO make sure that only ppl who recently saw this
   // healer can book for this healer
-  book(user: number, booking: BookingDto): Promise<void> {
+  book(id: number, booking: BookingDto): Promise<void> {
     // TODO validate this booking's slot
-    return;
+    throw new Error('Method not implemented.');
   }
 }

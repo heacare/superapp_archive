@@ -19,6 +19,8 @@ import { HealerController } from './healer/healer.controller';
 import { Healer } from './healer/healer.entity';
 import { HealerService } from './healer/healer.service';
 import { SessionController } from './session/session.controller';
+import { SessionService } from './session/session.service';
+import { Session } from './session/session.entity';
 
 export const ApiFirebaseModule = FirebaseAdminModule.forRootAsync({
   useFactory: () => {
@@ -35,7 +37,7 @@ export const ApiJwtModule = JwtModule.register({
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, Healer]),
+    TypeOrmModule.forFeature([User, Healer, Session]),
     ContentModule,
     ApiFirebaseModule,
     PassportModule,
@@ -50,6 +52,7 @@ export const ApiJwtModule = JwtModule.register({
   providers: [
     UserService,
     HealerService,
+    SessionService,
     AuthService,
     FirebaseService,
     ApiAuthStrategy,
