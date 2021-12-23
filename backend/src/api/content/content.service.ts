@@ -9,10 +9,15 @@ export class ContentService {
 
   async getAll(): Promise<Unit[]> {
     return this.units
-      .createQueryBuilder()
-      .innerJoinAndSelect('Unit.lessons', 'Lesson')
-      .innerJoinAndSelect('Lesson.pages', 'Page')
-      .orderBy({ 'Page.pageNum': 'ASC' })
+      .createQueryBuilder('unit')
+      .innerJoinAndSelect('unit.lessons', 'lesson')
+      .innerJoinAndSelect('lesson.pages', 'page')
+      .leftJoinAndSelect('page.quizOptions', 'quiz_option')
+      .orderBy({
+        'unit.unitNum': 'ASC',
+        'lesson.lessonNum': 'ASC',
+        'page.pageNum': 'ASC',
+      })
       .getMany();
   }
 }

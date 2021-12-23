@@ -1,13 +1,4 @@
-import {
-  Column,
-  ChildEntity,
-  Entity,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  TableInheritance,
-  AfterLoad,
-} from 'typeorm';
+import { Column, ChildEntity, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, TableInheritance } from 'typeorm';
 
 @Entity()
 export class Unit {
@@ -15,7 +6,7 @@ export class Unit {
   id: number;
 
   @Column({ unique: true })
-  moduleNum: number;
+  unitNum: number;
 
   @Column()
   icon: string;
@@ -25,12 +16,11 @@ export class Unit {
 
   @OneToMany(() => Lesson, (lesson) => lesson.unit, {
     cascade: true,
-    eager: true,
   })
   lessons: Lesson[];
 
-  constructor(moduleNum: number, icon: string, title: string, lessons?: Lesson[]) {
-    this.moduleNum = moduleNum;
+  constructor(unitNum: number, icon: string, title: string, lessons?: Lesson[]) {
+    this.unitNum = unitNum;
     this.icon = icon;
     this.title = title;
     if (lessons) {
@@ -58,7 +48,6 @@ export class Lesson {
 
   @OneToMany(() => Page, (page) => page.lesson, {
     cascade: true,
-    eager: true,
   })
   pages: Page[];
 
@@ -111,7 +100,6 @@ export class TextPage extends Page {
 @ChildEntity()
 export class QuizPage extends Page {
   @OneToMany(() => QuizOption, (quizOption) => quizOption.quiz, {
-    eager: true,
     cascade: true,
   })
   quizOptions: QuizOption[];
