@@ -11,27 +11,27 @@ export class ContentSeed1640166201279 implements MigrationInterface {
   public async up({ connection }: QueryRunner): Promise<void> {
     console.log('Seeding content...');
 
-    let unitNum = 0;
-    let lessonNum = 0;
-    let pageNum = 0;
+    let unitOrder = 0;
+    let lessonOrder = 0;
+    let pageOrder = 0;
 
     // Parse JSON
     let units = data.units.map(
       (unit) =>
         new Unit(
-          unitNum++,
+          unitOrder++,
           unit.icon,
           unit.title,
           unit.lessons.map(
             (lesson) =>
               new Lesson(
-                lessonNum++,
+                lessonOrder++,
                 lesson.icon,
                 lesson.title,
                 lesson.pages.map((page) => {
                   if ('quizOptions' in page) {
                     return new QuizPage(
-                      pageNum++,
+                      pageOrder++,
                       page.icon,
                       page.title,
                       page.text,
@@ -40,7 +40,7 @@ export class ContentSeed1640166201279 implements MigrationInterface {
                       ),
                     );
                   } else {
-                    return new TextPage(pageNum++, page.icon, page.title, page.text);
+                    return new TextPage(pageOrder++, page.icon, page.title, page.text);
                   }
                 }),
               ),

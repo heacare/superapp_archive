@@ -12,14 +12,14 @@ export class ContentService {
   ) {}
 
   async getUnits(): Promise<Unit[]> {
-    return this.units.find({ order: { unitNum: 'ASC' } });
+    return this.units.find({ order: { unitOrder: 'ASC' } });
   }
 
   async getLessons(unitId: string): Promise<Lesson[]> {
     return this.lessons
       .createQueryBuilder('lesson')
       .where('lesson.unitId = :unitId', { unitId: unitId })
-      .orderBy({ 'lesson.lessonNum': 'ASC' })
+      .orderBy({ 'lesson.lessonOrder': 'ASC' })
       .getMany();
   }
 
@@ -29,7 +29,7 @@ export class ContentService {
       .where('page.lessonId = :lessonId', { lessonId: lessonId })
       .leftJoinAndSelect('page.quizOptions', 'quiz_option')
       .orderBy({
-        'page.pageNum': 'ASC',
+        'page.pageOrder': 'ASC',
       })
       .getMany();
   }
@@ -41,9 +41,9 @@ export class ContentService {
       .innerJoinAndSelect('lesson.pages', 'page')
       .leftJoinAndSelect('page.quizOptions', 'quiz_option')
       .orderBy({
-        'unit.unitNum': 'ASC',
-        'lesson.lessonNum': 'ASC',
-        'page.pageNum': 'ASC',
+        'unit.unitOrder': 'ASC',
+        'lesson.lessonOrder': 'ASC',
+        'page.pageOrder': 'ASC',
       })
       .getMany();
   }

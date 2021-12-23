@@ -6,7 +6,7 @@ export class Unit {
   id: number;
 
   @Column({ unique: true })
-  unitNum: number;
+  unitOrder: number;
 
   @Column()
   icon: string;
@@ -19,8 +19,8 @@ export class Unit {
   })
   lessons: Lesson[];
 
-  constructor(unitNum: number, icon: string, title: string, lessons?: Lesson[]) {
-    this.unitNum = unitNum;
+  constructor(unitOrder: number, icon: string, title: string, lessons?: Lesson[]) {
+    this.unitOrder = unitOrder;
     this.icon = icon;
     this.title = title;
     if (lessons) {
@@ -35,7 +35,7 @@ export class Lesson {
   id: number;
 
   @Column({ unique: true })
-  lessonNum: number;
+  lessonOrder: number;
 
   @Column()
   icon: string;
@@ -51,8 +51,8 @@ export class Lesson {
   })
   pages: Page[];
 
-  constructor(lessonNum: number, icon: string, title: string, pages?: Page[]) {
-    this.lessonNum = lessonNum;
+  constructor(lessonOrder: number, icon: string, title: string, pages?: Page[]) {
+    this.lessonOrder = lessonOrder;
     this.icon = icon;
     this.title = title;
     if (pages) {
@@ -68,7 +68,7 @@ export class Page {
   id: number;
 
   @Column({ unique: true })
-  pageNum: number;
+  pageOrder: number;
 
   @Column()
   icon: string;
@@ -82,8 +82,8 @@ export class Page {
   @ManyToOne(() => Lesson, (lesson) => lesson.pages)
   lesson: Lesson;
 
-  constructor(pageNum: number, icon: string, title: string, text: string) {
-    this.pageNum = pageNum;
+  constructor(pageOrder: number, icon: string, title: string, text: string) {
+    this.pageOrder = pageOrder;
     this.icon = icon;
     this.title = title;
     this.text = text;
@@ -92,8 +92,8 @@ export class Page {
 
 @ChildEntity()
 export class TextPage extends Page {
-  constructor(pageNum: number, icon: string, title: string, text: string) {
-    super(pageNum, icon, title, text);
+  constructor(pageOrder: number, icon: string, title: string, text: string) {
+    super(pageOrder, icon, title, text);
   }
 }
 
@@ -104,8 +104,8 @@ export class QuizPage extends Page {
   })
   quizOptions: QuizOption[];
 
-  constructor(pageNum: number, icon: string, title: string, text: string, quizOptions?: QuizOption[]) {
-    super(pageNum, icon, title, text);
+  constructor(pageOrder: number, icon: string, title: string, text: string, quizOptions?: QuizOption[]) {
+    super(pageOrder, icon, title, text);
     if (quizOptions) {
       this.quizOptions = quizOptions;
     }
