@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { rrulestr } from 'rrule';
+import { isWithinRadius } from '../../util/geo';
 import { Repository } from 'typeorm';
 import { LocationDto } from '../common/common.dto';
 import {
@@ -17,12 +18,19 @@ export class HealerService {
 
   async getNearby(
     location: LocationDto,
-    radius: number,
+    radius: number, // in m
   ): Promise<NearbyHealersDto> {
-    // TODO use location and radius
-    const nearbyHealers = await this.healers.find({
-      relations: ['slots', 'proficiencies', 'proficiencies.tag'],
-    });
+    const userLocation = location.toPoint();
+    const nearbyHealers = await this.healers
+      .createQueryBuilder('healer')
+      .where(isWithinRadius('location', 'userLocation', 'radius'), {
+        userLocation: JSON.stringify(userLocation),
+        radius,
+      })
+      .leftJoinAndSelect('healer.slots', 'slots')
+      .leftJoinAndSelect('healer.proficiencies', 'prof')
+      .leftJoinAndSelect('prof.tag', 'tag')
+      .getMany();
 
     const nearbyHealerDTOs = nearbyHealers.map((h) => {
       const hdto = new NearbyHealerDto();

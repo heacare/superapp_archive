@@ -13,13 +13,8 @@ export class HealerController {
   @ApiBearerAuth()
   @Get('nearby')
   // TODO use geolocation type for query parameter?
-  async nearby(
-    @Query('lat') lat: number,
-    @Query('lng') lng: number,
-  ): Promise<NearbyHealersDto> {
-    const location = new LocationDto(lat, lng);
-
-    return await this.healers.getNearby(location, 50.0);
+  async nearby(@Query() location: LocationDto): Promise<NearbyHealersDto> {
+    return await this.healers.getNearby(location, 5000.0);
   }
 
   @UseGuards(ApiAuthGuard)

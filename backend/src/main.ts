@@ -28,6 +28,7 @@ async function bootstrap() {
       skipUndefinedProperties: false,
       enableDebugMessages: true,
       whitelist: true,
+      transform: true,
     }),
   );
 

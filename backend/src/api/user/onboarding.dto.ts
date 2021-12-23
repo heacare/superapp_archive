@@ -13,7 +13,7 @@ import {
   Min,
   ValidateNested,
 } from 'class-validator';
-import { IsNullable } from 'src/validation';
+import { IsNullable } from '../../util/validation';
 
 export enum AlcoholFrequency {
   NotAtAll = 'NotAtAll',

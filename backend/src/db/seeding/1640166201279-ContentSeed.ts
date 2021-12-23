@@ -87,7 +87,7 @@ export class ContentSeed1640166201279 implements MigrationInterface {
     const slot1 = new Slot();
     slot1.isHouseVisit = false;
     slot1.rrule =
-      'DTSTART:20120201T093000Z\nRRULE:FREQ=WEEKLY;INTERVAL=5;UNTIL=20250130T230000Z;BYDAY=MO,FR';
+      'DTSTART:20120201T093000Z\nRRULE:FREQ=WEEKLY;UNTIL=20250130T230000Z;BYDAY=MO';
 
     const dan = new Healer();
     dan.name = 'Dan Green';
