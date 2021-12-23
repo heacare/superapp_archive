@@ -7,7 +7,7 @@ import {
 export class UserSessionHealerDto {
   name: string;
   description: string;
-  proficiency: MedicalProficiencyDto[];
+  proficiencies: MedicalProficiencyDto[];
 }
 
 export class UserSessionDto {

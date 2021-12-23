@@ -75,6 +75,11 @@ export class ContentSeed1640166201279 implements MigrationInterface {
     const sleep = new MedicalTag();
     sleep.name = 'Sleep';
     sleep.description = 'Crucial for health!';
+
+    const tags = [sleep];
+    connection.getRepository(MedicalTag).create(tags);
+    await connection.getRepository(MedicalTag).save(tags);
+
     const sleepProf = new MedicalProficiency();
     sleepProf.tag = sleep;
     sleepProf.proficiency = 8;

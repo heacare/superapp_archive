@@ -30,13 +30,13 @@ export class Healer {
   })
   location: Point;
 
-  @OneToMany(() => MedicalProficiency, (prof) => prof.healer)
+  @OneToMany(() => MedicalProficiency, (prof) => prof.healer, { cascade: true })
   proficiencies: MedicalProficiency[];
 
-  @OneToMany(() => Slot, (slot) => slot.healer)
+  @OneToMany(() => Slot, (slot) => slot.healer, { cascade: true })
   slots: Slot[];
 
-  @OneToMany(() => Session, (sess) => sess.healer)
+  @OneToMany(() => Session, (sess) => sess.healer, { cascade: true })
   sessions: Session[];
 }
 
@@ -51,7 +51,7 @@ export class MedicalTag {
   @Column()
   description: string;
 
-  @OneToMany(() => MedicalProficiency, (prof) => prof.tag)
+  @OneToMany(() => MedicalProficiency, (prof) => prof.tag, { cascade: true })
   proficiencies: MedicalProficiency[];
 }
 

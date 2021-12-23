@@ -17,9 +17,7 @@ export class HealerController {
     @Query('lat') lat: number,
     @Query('lng') lng: number,
   ): Promise<NearbyHealersDto> {
-    const location = new LocationDto();
-    location.lat = lat;
-    location.lng = lng;
+    const location = new LocationDto(lat, lng);
 
     return await this.healers.getNearby(location, 50.0);
   }
