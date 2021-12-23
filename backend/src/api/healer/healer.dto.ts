@@ -9,13 +9,14 @@ export class MedicalProficiencyDto {
 export class AvailabilitySlotDto {
   start: Date;
   end: Date;
+  isHouseVisit: boolean;
 }
 
 export class NearbyHealerDto {
   id: number;
   name: string;
   description: string;
-  proficiency: MedicalProficiencyDto[];
+  proficiencies: MedicalProficiencyDto[];
   availability: AvailabilitySlotDto[];
   location: LocationDto;
 }
