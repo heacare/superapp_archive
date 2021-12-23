@@ -1,5 +1,11 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { Unit, Lesson, TextPage, QuizPage, QuizOption } from '../../api/content/content.entity';
+import {
+  Unit,
+  Lesson,
+  TextPage,
+  QuizPage,
+  QuizOption,
+} from '../../api/content/content.entity';
 
 import * as data from './data.json';
 
@@ -16,7 +22,7 @@ export class ContentSeed1640166201279 implements MigrationInterface {
     let pageNum = 0;
 
     // Parse JSON
-    let units = data.units.map(
+    const units = data.units.map(
       (unit) =>
         new Unit(
           unitNum++,
@@ -36,11 +42,20 @@ export class ContentSeed1640166201279 implements MigrationInterface {
                       page.title,
                       page.text,
                       page.quizOptions.map(
-                        (quizOption) => new QuizOption(quizOption.text, quizOption.isAnswer ?? false),
+                        (quizOption) =>
+                          new QuizOption(
+                            quizOption.text,
+                            quizOption.isAnswer ?? false,
+                          ),
                       ),
                     );
                   } else {
-                    return new TextPage(pageNum++, page.icon, page.title, page.text);
+                    return new TextPage(
+                      pageNum++,
+                      page.icon,
+                      page.title,
+                      page.text,
+                    );
                   }
                 }),
               ),

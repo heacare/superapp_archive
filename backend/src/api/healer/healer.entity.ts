@@ -1,6 +1,8 @@
+import { Point } from 'geojson';
 import {
   Column,
   Entity,
+  Index,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -18,14 +20,15 @@ export class Healer {
   @Column()
   description: string;
 
-  // TODO use Spatial Columns https://stackoverflow.com/questions/65041545/how-can-i-use-longitude-and-latitude-with-typeorm-and-postgres
-  // TODO Query using https://github.com/typeorm/typeorm/blob/master/docs/entities.md#spatial-columns
-
-  @Column()
-  location_lat: number;
-
-  @Column()
-  location_lng: number;
+  // Spatial Columns : https://stackoverflow.com/questions/65041545/how-can-i-use-longitude-and-latitude-with-typeorm-and-postgres
+  // Spatial Query   : https://github.com/typeorm/typeorm/blob/master/docs/entities.md#spatial-columns
+  @Index({ spatial: true })
+  @Column({
+    type: 'geography',
+    spatialFeatureType: 'Point',
+    srid: 4326,
+  })
+  location: Point;
 
   @OneToMany(() => MedicalProficiency, (prof) => prof.healer)
   proficiencies: MedicalProficiency[];

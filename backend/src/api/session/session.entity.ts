@@ -1,4 +1,11 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Point } from 'geojson';
+import {
+  Column,
+  Entity,
+  Index,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Healer } from '../healer/healer.entity';
 import { User } from '../user/user.entity';
 
@@ -13,8 +20,13 @@ export class Session {
   @ManyToOne(() => User, (user) => user.sessions)
   user: User;
 
-  @Column()
-  where: string; // TODO geoloc type
+  @Index({ spatial: true })
+  @Column({
+    type: 'geography',
+    spatialFeatureType: 'Point',
+    srid: 4326,
+  })
+  location: Point;
 
   @Column()
   isHouseVisit: boolean;
