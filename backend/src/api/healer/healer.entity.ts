@@ -78,7 +78,15 @@ export class Slot {
   @Column()
   isHouseVisit: boolean;
 
-  // RFC5545 RRULE
+  @Column()
+  start: Date;
+
+  @Column()
+  end: Date;
+
+  /**
+   * RFC5545 RRULE
+   */
   @Column()
   rrule: string;
 }

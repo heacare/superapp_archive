@@ -11,6 +11,7 @@ import {
   NearbyHealersDto,
 } from './healer.dto';
 import { Healer, Slot } from './healer.entity';
+import { DateTime, Duration } from 'luxon';
 
 @Injectable()
 export class HealerService {
@@ -47,11 +48,14 @@ export class HealerService {
       });
 
       // TODO dumb method use date lib
-      const start = new Date();
-      const end = new Date(start);
-      end.setDate(start.getDate() + 7);
+      const start = DateTime.now();
+      const end = start.plus({ week: 1 });
 
-      hdto.availability = this.availabilitySlotsBetween(h.slots, start, end);
+      hdto.availability = this.availabilitySlotsBetween(
+        h.slots,
+        start.toJSDate(),
+        end.toJSDate(),
+      );
       return hdto;
     });
 
@@ -63,6 +67,7 @@ export class HealerService {
   // TODO make sure that only ppl who recently saw this
   // healer can access their availability
   async availability(
+    id: number,
     healerId: number,
     start: Date,
     end: Date,
@@ -76,12 +81,15 @@ export class HealerService {
   availabilitySlotsBetween(slots: Slot[], start: Date, end: Date) {
     return slots.flatMap((slot) => {
       const rrule = rrulestr(slot.rrule);
+      rrule.options.dtstart = slot.start;
+
       return rrule.between(start, end, true).map((d) => {
         const adto = new AvailabilitySlotDto();
         adto.start = d;
-        // TODO dumb method use date lib
-        adto.end = new Date(d);
-        adto.end.setHours(adto.end.getHours() + 2); // TODO have a duration field
+        const duration = DateTime.fromJSDate(slot.end).diff(
+          DateTime.fromJSDate(slot.start),
+        );
+        adto.end = DateTime.fromJSDate(d).plus(duration).toJSDate();
         adto.isHouseVisit = slot.isHouseVisit;
         return adto;
       });

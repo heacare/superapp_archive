@@ -12,7 +12,6 @@ export class HealerController {
   @UseGuards(ApiAuthGuard)
   @ApiBearerAuth()
   @Get('nearby')
-  // TODO use geolocation type for query parameter?
   async nearby(@Query() location: LocationDto): Promise<NearbyHealersDto> {
     return await this.healers.getNearby(location, 5000.0);
   }
@@ -26,6 +25,6 @@ export class HealerController {
     @Query('start') start: Date,
     @Query('end') end: Date,
   ): Promise<AvailabilitySlotDto[]> {
-    return await this.healers.availability(healerId, start, end);
+    return await this.healers.availability(req.user.id, healerId, start, end);
   }
 }
