@@ -1,3 +1,4 @@
+import { ApiHideProperty } from '@nestjs/swagger';
 import { Column, ChildEntity, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, TableInheritance } from 'typeorm';
 
 @Entity()
@@ -43,6 +44,7 @@ export class Lesson {
   @Column()
   title: string;
 
+  @ApiHideProperty()
   @ManyToOne(() => Unit, (unit) => unit.lessons)
   unit: Unit;
 
@@ -79,6 +81,7 @@ export class Page {
   @Column()
   text: string;
 
+  @ApiHideProperty()
   @ManyToOne(() => Lesson, (lesson) => lesson.pages)
   lesson: Lesson;
 
