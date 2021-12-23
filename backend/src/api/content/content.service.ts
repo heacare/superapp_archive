@@ -1,11 +1,38 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Unit } from './content.entity';
+import { Unit, Lesson, Page } from './content.entity';
 
 @Injectable()
 export class ContentService {
-  constructor(@InjectRepository(Unit) private units: Repository<Unit>) {}
+  constructor(
+    @InjectRepository(Unit) private units: Repository<Unit>,
+    @InjectRepository(Lesson) private lessons: Repository<Lesson>,
+    @InjectRepository(Page) private pages: Repository<Page>,
+  ) {}
+
+  async getUnits(): Promise<Unit[]> {
+    return this.units.find({ order: { unitNum: 'ASC' } });
+  }
+
+  async getLessons(unitId: string): Promise<Lesson[]> {
+    return this.lessons
+      .createQueryBuilder('lesson')
+      .where('lesson.unitId = :unitId', { unitId: unitId })
+      .orderBy({ 'lesson.lessonNum': 'ASC' })
+      .getMany();
+  }
+
+  async getPages(lessonId: string): Promise<Page[]> {
+    return this.pages
+      .createQueryBuilder('page')
+      .where('page.lessonId = :lessonId', { lessonId: lessonId })
+      .leftJoinAndSelect('page.quizOptions', 'quiz_option')
+      .orderBy({
+        'page.pageNum': 'ASC',
+      })
+      .getMany();
+  }
 
   async getAll(): Promise<Unit[]> {
     return this.units
