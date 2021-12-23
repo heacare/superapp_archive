@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { AuthUser } from '../auth/auth.strategy';
 import { OnboardingDto } from './onboarding.dto';
 import { User } from './user.entity';
 
@@ -8,8 +9,8 @@ import { User } from './user.entity';
 export class UserService {
   constructor(@InjectRepository(User) private users: Repository<User>) {}
 
-  async findOne(id: number): Promise<User> {
-    return await this.users.findOneOrFail(id);
+  async findOne(user: AuthUser): Promise<User> {
+    return await this.users.findOneOrFail(user.id);
   }
 
   async findOrCreate(authId: string): Promise<User> {
@@ -18,7 +19,7 @@ export class UserService {
     return await this.users.save(User.uninit(authId));
   }
 
-  async update(id: number, onboarding: OnboardingDto) {
+  async update(user: AuthUser, onboarding: OnboardingDto) {
     const smokingInfo: Partial<User> = {
       isSmoker: false,
       smokingPacksPerDay: null,
@@ -31,7 +32,7 @@ export class UserService {
       smokingInfo.smokingYears = onboarding.smoking.years;
     }
 
-    this.users.update(id, {
+    this.users.update(user.id, {
       alcoholFreq: onboarding.alcoholFreq,
       name: onboarding.name,
       gender: onboarding.gender,

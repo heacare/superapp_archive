@@ -1,12 +1,10 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth } from '@nestjs/swagger';
-import { ApiAuthGuard } from '../auth/auth.guard';
+import { Controller, Get } from '@nestjs/common';
+import { RequiresAuth } from '../auth/requiresAuthUser.decorator';
 import { Unit } from './content.entity';
 import { ContentService } from './content.service';
 
+@RequiresAuth()
 @Controller('/api/content')
-@UseGuards(ApiAuthGuard)
-@ApiBearerAuth()
 export class ContentController {
   constructor(private content: ContentService) {}
 
