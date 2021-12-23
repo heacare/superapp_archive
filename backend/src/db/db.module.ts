@@ -12,6 +12,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       entities: ['dist/**/*.entity{ .ts,.js}'],
       // TODO: !! Remove this in prod !!
       synchronize: true,
+      // For content seeding
+      migrations: ['dist/db/seeding/*{.ts,.js}'],
+      migrationsRun: true,
     }),
   ],
 })
