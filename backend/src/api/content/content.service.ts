@@ -1,15 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Chapter } from './content.entity';
+import { Unit } from './content.entity';
 
 @Injectable()
 export class ContentService {
-  constructor(
-    @InjectRepository(Chapter) private chapters: Repository<Chapter>,
-  ) {}
+  constructor(@InjectRepository(Unit) private units: Repository<Unit>) {}
 
-  async getAll(): Promise<Chapter[]> {
-    return this.chapters.find();
+  async getAll(): Promise<Unit[]> {
+    return this.units
+      .createQueryBuilder()
+      .innerJoinAndSelect('Unit.lessons', 'Lesson')
+      .innerJoinAndSelect('Lesson.pages', 'Page')
+      .orderBy({ 'Page.pageNum': 'ASC' })
+      .getMany();
   }
 }
