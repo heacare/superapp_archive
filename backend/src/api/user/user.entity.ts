@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Session } from '../session/session.entity';
 import {
   AlcoholFrequency,
   Gender,
@@ -78,6 +79,9 @@ export class User {
 
   @Column({ nullable: true })
   birthControl?: string | undefined;
+
+  @OneToMany(() => Session, (sess) => sess.user)
+  sessions: Session[];
 
   static uninit(authId: string): User {
     const user = new User();
