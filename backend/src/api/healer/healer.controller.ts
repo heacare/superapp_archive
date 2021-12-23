@@ -18,12 +18,12 @@ export class HealerController {
   @Get('nearby')
   // TODO use geolocation type
   async nearby(
-    @Query() location_lat: number,
-    @Query() location_lng: number,
+    @Query('lat') lat: number,
+    @Query('lng') lng: number,
   ): Promise<NearbyHealersDto> {
     const location = new LocationDto();
-    location.lat = location_lat;
-    location.lng = location_lng;
+    location.lat = lat;
+    location.lng = lng;
 
     const healers = (await this.healers.getNearby(location, 50.0)).map((h) => {
       const healer = new NearbyHealerDto();
@@ -44,9 +44,9 @@ export class HealerController {
   // TODO make sure that only ppl who recently saw this
   // healer can access their availability
   availability(
-    @Query() healerId: number,
-    @Query() start: Date,
-    @Query() end: Date,
+    @Query('healerId') healerId: number,
+    @Query('start') start: Date,
+    @Query('end') end: Date,
   ): Promise<AvailabilitySlotDto[]> {
     throw new Error('unimplemented');
   }

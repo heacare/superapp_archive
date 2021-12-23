@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { ApiAuthGuard } from '../auth/auth.guard';
 import { BookingDto, UserSessionDto } from './session.dto';
@@ -7,8 +7,8 @@ import { BookingDto, UserSessionDto } from './session.dto';
 @ApiBearerAuth()
 @Controller('/api/session')
 export class SessionController {
-  @Get()
-  async getForUser(): Promise<UserSessionDto[]> {
+  @Get('list')
+  async getForUser(@Req() req): Promise<UserSessionDto[]> {
     return null;
   }
 
