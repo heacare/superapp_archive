@@ -1,20 +1,17 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth } from '@nestjs/swagger';
-import { ApiAuthGuard } from '../auth/auth.guard';
+import { Controller, Get, Param } from '@nestjs/common';
 import { Unit, Lesson, Page } from './content.entity';
+import { RequiresAuth } from '../auth/requiresAuthUser.decorator';
 import { ContentService } from './content.service';
 
+@RequiresAuth()
 @Controller('/api/content')
-@UseGuards(ApiAuthGuard)
-@ApiBearerAuth()
 export class ContentController {
   constructor(private content: ContentService) {}
 
-  /*
+  /**
    *   Note: Module is synonymous with Unit, just that
    *         nestjs is unhappy if we call things Module
    */
-
   @Get('/modules')
   async getUnits(): Promise<Unit[]> {
     return await this.content.getUnits();

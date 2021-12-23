@@ -14,7 +14,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       synchronize: true,
       // For content seeding
       migrations: ['dist/db/seeding/*{.ts,.js}'],
-      migrationsRun: true,
+      migrationsTransactionMode: 'each',
     }),
   ],
 })

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { rrulestr } from 'rrule';
+import { RRuleSet, rrulestr } from 'rrule';
 import { isWithinRadius } from '../../util/geo';
 import { Repository } from 'typeorm';
 import { LocationDto } from '../common/common.dto';
@@ -11,14 +11,21 @@ import {
   NearbyHealersDto,
 } from './healer.dto';
 import { Healer, Slot } from './healer.entity';
+import { DateTime, Duration } from 'luxon';
+import { AuthUser } from '../auth/auth.strategy';
 
 @Injectable()
 export class HealerService {
   constructor(@InjectRepository(Healer) private healers: Repository<Healer>) {}
 
+  /**
+   * Get nearby healers from a user's location, within a certain radius (in metres).
+   * @param location Location of a user
+   * @param radius Radius in metres
+   */
   async getNearby(
     location: LocationDto,
-    radius: number, // in m
+    radius: number,
   ): Promise<NearbyHealersDto> {
     const userLocation = location.toPoint();
     const nearbyHealers = await this.healers
@@ -46,12 +53,14 @@ export class HealerService {
         return prof;
       });
 
-      // TODO dumb method use date lib
-      const start = new Date();
-      const end = new Date(start);
-      end.setDate(start.getDate() + 7);
+      const start = DateTime.now();
+      const end = start.plus({ week: 1 });
 
-      hdto.availability = this.availabilitySlotsBetween(h.slots, start, end);
+      hdto.availability = this.availabilitySlotsBetween(
+        h.slots,
+        start.toJSDate(),
+        end.toJSDate(),
+      );
       return hdto;
     });
 
@@ -63,6 +72,7 @@ export class HealerService {
   // TODO make sure that only ppl who recently saw this
   // healer can access their availability
   async availability(
+    user: AuthUser,
     healerId: number,
     start: Date,
     end: Date,
@@ -76,12 +86,12 @@ export class HealerService {
   availabilitySlotsBetween(slots: Slot[], start: Date, end: Date) {
     return slots.flatMap((slot) => {
       const rrule = rrulestr(slot.rrule);
-      return rrule.between(start, end, true).map((d) => {
+
+      return rrule.between(start, end, true).map((start) => {
         const adto = new AvailabilitySlotDto();
-        adto.start = d;
-        // TODO dumb method use date lib
-        adto.end = new Date(d);
-        adto.end.setHours(adto.end.getHours() + 2); // TODO have a duration field
+        adto.start = start;
+        const duration = Duration.fromISO(slot.duration.toISOString());
+        adto.end = DateTime.fromJSDate(start).plus(duration).toJSDate();
         adto.isHouseVisit = slot.isHouseVisit;
         return adto;
       });

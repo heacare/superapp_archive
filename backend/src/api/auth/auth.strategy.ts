@@ -15,6 +15,14 @@ export class ApiAuthStrategy extends PassportStrategy(Strategy, 'api') {
   // consider getting the actual database object then cache
   // it, rather than just a object with id
   async validate(payload: any) {
-    return { id: payload.sub };
+    return new AuthUser(payload.sub);
+  }
+}
+
+export class AuthUser {
+  id: number;
+
+  constructor(id: number) {
+    this.id = id;
   }
 }
