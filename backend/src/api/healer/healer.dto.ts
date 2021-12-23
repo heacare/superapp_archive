@@ -1,3 +1,5 @@
+import { LocationDto } from '../common/common.dto';
+
 export class MedicalProficiencyDto {
   name: string;
   description: string;
@@ -15,15 +17,9 @@ export class NearbyHealerDto {
   description: string;
   proficiency: MedicalProficiencyDto[];
   availability: AvailabilitySlotDto[];
-  location_lat: number;
-  location_lng: number;
+  location: LocationDto;
 }
 
 export class NearbyHealersDto {
   healers: NearbyHealerDto[];
-}
-
-export class BookingDto {
-  healerId: number;
-  slot: AvailabilitySlotDto;
 }

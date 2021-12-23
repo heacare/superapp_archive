@@ -1,4 +1,8 @@
-import { MedicalProficiencyDto } from '../healer/healer.dto';
+import { LocationDto } from '../common/common.dto';
+import {
+  AvailabilitySlotDto,
+  MedicalProficiencyDto,
+} from '../healer/healer.dto';
 
 export class UserSessionHealerDto {
   name: string;
@@ -8,9 +12,14 @@ export class UserSessionHealerDto {
 
 export class UserSessionDto {
   id: number;
-  healer: UserSessionHealerDto; // TODO
-  where: string; // TODO
+  healer: UserSessionHealerDto;
+  location: LocationDto;
   isHouseVisit: boolean;
   start: Date;
   end: Date;
+}
+
+export class BookingDto {
+  healerId: number;
+  slot: AvailabilitySlotDto;
 }

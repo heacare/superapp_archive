@@ -1,9 +1,9 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { ApiAuthGuard } from '../auth/auth.guard';
+import { LocationDto } from '../common/common.dto';
 import {
   AvailabilitySlotDto,
-  BookingDto,
   NearbyHealerDto,
   NearbyHealersDto,
 } from './healer.dto';
@@ -21,9 +21,11 @@ export class HealerController {
     @Query() location_lat: number,
     @Query() location_lng: number,
   ): Promise<NearbyHealersDto> {
-    const healers = (
-      await this.healers.getNearby(location_lat, location_lng, 50.0)
-    ).map((h) => {
+    const location = new LocationDto();
+    location.lat = location_lat;
+    location.lng = location_lng;
+
+    const healers = (await this.healers.getNearby(location, 50.0)).map((h) => {
       const healer = new NearbyHealerDto();
       healer.name = h.name;
       healer.description = h.description;
@@ -46,16 +48,6 @@ export class HealerController {
     @Query() start: Date,
     @Query() end: Date,
   ): Promise<AvailabilitySlotDto[]> {
-    throw new Error('unimplemented');
-  }
-
-  @UseGuards(ApiAuthGuard)
-  @ApiBearerAuth()
-  @Post('book')
-  // TODO make sure that only ppl who recently saw this
-  // healer can book for this healer
-  book(@Body() booking: BookingDto): Promise<void> {
-    // TODO validate this booking's slot
     throw new Error('unimplemented');
   }
 }
