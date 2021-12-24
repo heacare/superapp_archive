@@ -14,13 +14,4 @@ class UserRepo {
     return users.docs.isEmpty ? null : users.docs[0].data();
   }
 
-  Future<User?> getCurrent() async {
-    final authUser = Authentication().currentUser();
-    if (authUser == null) return null;
-    return await get(authUser.uid);
-  }
-
-  void insert(User user) async {
-    await collection.add(user);
-  }
 }

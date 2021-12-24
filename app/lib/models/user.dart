@@ -1,19 +1,20 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:hea/services/service_locator.dart';
+import 'package:hea/services/user_service.dart';
 import 'package:health/health.dart';
 
-class User {
-  final String id;
-  final String gender;
-  final String name;
-  final Timestamp birthday;
-  final num height;
-  final num weight;
-  final String country;
-  final String icon;
-  final Map<String, dynamic> onboardingResponses;
-  final List<HealthDataPoint> healthData;
+class User extends ChangeNotifier {
+  String id;
+  String gender;
+  String name;
+  Timestamp birthday;
+  num height;
+  num weight;
+  String country;
+  String icon;
+  Map<String, dynamic> onboardingResponses;
+  List<HealthDataPoint> healthData;
 
   num get bmi {
     return weight / (height * height);
@@ -30,13 +31,25 @@ class User {
     return age;
   }
 
-  User(this.id) :
+  User([this.id = ""]) :
     gender = "",
     name = "",
     birthday = Timestamp.fromDate(DateTime.now()),
     height = 0,
     weight = 0,
     country = "",
+    icon = "",
+    onboardingResponses = {},
+    healthData = [];
+
+  User.placeholder() :
+    id = "",
+    gender = Gender.male,
+    name = "Test User",
+    birthday = Timestamp.fromDate(DateTime.now()),
+    height = 200,
+    weight = 100,
+    country = "SG",
     icon = "",
     onboardingResponses = {},
     healthData = [];

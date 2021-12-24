@@ -7,10 +7,12 @@ import 'package:hea/screens/error.dart';
 import 'package:hea/screens/home.dart';
 import 'package:hea/screens/login.dart';
 import 'package:hea/screens/onboarding.dart';
+import 'package:hea/services/service_locator.dart';
 
 import 'data/user_repo.dart';
 
 void main() {
+  setupServiceLocator();
   runApp(const App());
 }
 

@@ -6,6 +6,8 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:hea/providers/auth.dart';
 import 'package:hea/screens/error.dart';
+import 'package:hea/services/service_locator.dart';
+import 'package:hea/services/user_service.dart';
 import 'package:hea/widgets/firebase_svg.dart';
 import 'package:hea/widgets/onboard_progress_bar.dart';
 import 'package:health/health.dart';
@@ -72,8 +74,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       }
     }
     else {
-      // Push to Firestore
-      UserRepo().insert(User.fromJson(userJson));
+      // Push to database
+      // TODO: Test this
+      serviceLocator<UserService>().updateUser(User.fromJson(userJson));
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
             content: Text("Welcome to Happily Ever After!")

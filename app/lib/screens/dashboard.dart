@@ -3,6 +3,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:hea/data/user_repo.dart';
 import 'package:hea/models/user.dart';
+import 'package:hea/services/service_locator.dart';
+import 'package:hea/services/user_service.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class DashboardScreen extends StatelessWidget {
@@ -10,21 +13,17 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future<User?> userFuture = UserRepo().getCurrent();
-    return FutureBuilder(
-        future: userFuture,
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return const Text("Error!");
-          }
-          if (snapshot.connectionState != ConnectionState.done) {
+    // TODO: Pull ProfileScreen provider out
+    return FutureProvider<User?>(
+        initialData: null,
+        create: (context) => serviceLocator<UserService>().getCurrentUser(),
+        child: Consumer<User?>(builder: (context, user, _) {
+          if (user == null) {
             return const Center(child: CircularProgressIndicator());
           }
-          if (snapshot.data == null) {
-            return const Text("No user?!");
-          }
-          return DashboardPage.fromUser(snapshot.data as User);
-        });
+          return DashboardPage.fromUser(user);
+        })
+    );
   }
 }
 
