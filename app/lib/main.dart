@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-import 'package:hea/providers/auth.dart';
 import 'package:hea/screens/error.dart';
 import 'package:hea/screens/home.dart';
 import 'package:hea/screens/login.dart';
 import 'package:hea/screens/onboarding.dart';
+import 'package:hea/services/auth_service.dart';
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/services/user_service.dart';
 
@@ -119,13 +119,13 @@ class _AppState extends State<App> {
     final Future<UserStatus> hasUserData = _firebaseInit.then((value) async {
       // Authentication user exists separately from user data, so we have to check for the case where
       // the user signed up but uninstalled/reset the app before finishing onboarding
-      final authUser = Authentication().currentUser();
+      final authService = serviceLocator<AuthService>();
 
-      if (authUser == null) {
+      if (authService.currentUser() == null) {
         return UserStatus.signedOut;
       }
       else {
-        authUser.getIdToken().then((token) => print(token));
+        authService.currentUserToken()?.then((token) => print(token));
 
         return await serviceLocator<UserService>().isCurrentUserOnboarded()
             ? UserStatus.onboarded

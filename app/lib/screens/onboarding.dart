@@ -4,7 +4,7 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:hea/providers/auth.dart';
+import 'package:hea/services/auth_service.dart';
 import 'package:hea/screens/error.dart';
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/services/user_service.dart';
@@ -49,7 +49,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     templateMapFuture = OnboardingTemplate.fetchTemplates();
 
     // Onboard user
-    final authUser = Authentication().currentUser()!;
+    final authUser = serviceLocator<AuthService>().currentUser()!;
     userJson = User(authUser.uid).toJson();
 
     // Pull health data

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hea/models/user.dart';
 
-import 'package:hea/providers/auth.dart';
 import 'package:hea/screens/login.dart';
+import 'package:hea/services/api_manager.dart';
+import 'package:hea/services/auth_service.dart';
+import 'package:hea/services/service_locator.dart';
 import 'package:hea/widgets/avatar_icon.dart';
 import 'package:provider/provider.dart';
 
@@ -16,7 +18,8 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
 
   Future logout() async {
-    await Authentication().logout();
+    await serviceLocator<AuthService>().logout();
+
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) {
       return LoginScreen();
@@ -25,6 +28,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    serviceLocator<ApiManager>().get("/");
     return Consumer<User?>(
         builder: (context, user, _) {
           if (user == null) {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'package:hea/providers/auth.dart';
+import 'package:hea/services/auth_service.dart';
 import 'package:hea/screens/home.dart';
 import 'package:hea/screens/onboarding.dart';
 import 'package:hea/services/service_locator.dart';
@@ -25,7 +25,7 @@ enum LoginChoice {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _auth = Authentication();
+  final _auth = serviceLocator<AuthService>();
 
   final _formKey = GlobalKey<FormState>();
   final _email = TextEditingController();
@@ -39,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       await _auth.login(_email.text, _password.text);
       await navigateSuccess();
-    } on AuthenticationException catch (e) {
+    } on AuthServiceException catch (e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(e.message)));
     }
@@ -51,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       await _auth.signup(_email.text, _password.text);
       await navigateSuccess();
-    } on AuthenticationException catch (e) {
+    } on AuthServiceException catch (e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(e.message)));
     }

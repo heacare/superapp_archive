@@ -6,12 +6,9 @@ import 'package:hea/screens/dashboard.dart';
 import 'package:hea/screens/error.dart';
 import 'package:hea/screens/help_map.dart';
 import 'package:hea/screens/profile.dart';
-import 'package:hea/providers/auth.dart';
 import 'package:hea/screens/contents.dart';
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/services/user_service.dart';
-
-final auth = Authentication();
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -68,14 +65,6 @@ class _HomeScreenState extends State<HomeScreen> {
         initialData: null,
         create: (context) => serviceLocator<UserService>().getCurrentUser(),
         child: child
-    );
-
-    // Dead code
-    return Scaffold(
-      appBar: AppBar(title: Text("Page "+index.toString())),
-      body: Center(
-          child: Text("Page " + index.toString())
-      )
     );
   }
 }

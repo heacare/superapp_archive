@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:hea/models/user.dart';
 
 enum RespondedLevel {
@@ -15,6 +14,7 @@ abstract class UserService {
   bool updateUser(User user);
 }
 
+// For testing
 class UserServiceMock implements UserService {
   @override
   Future<User> getCurrentUser() {

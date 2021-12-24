@@ -1,16 +1,19 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-class AuthenticationException implements Exception {
+class AuthServiceException implements Exception {
   final String message;
-  AuthenticationException({required this.message});
+  AuthServiceException({required this.message});
 }
 
-// Ideally this should be a Singleton injected using DI
-class Authentication {
+class AuthService {
   final firebaseAuth = FirebaseAuth.instance;
 
   User? currentUser() {
     return firebaseAuth.currentUser;
+  }
+
+  Future<String>? currentUserToken() {
+    return firebaseAuth.currentUser?.getIdToken();
   }
 
   Future signup(String email, String password) async {
@@ -19,12 +22,12 @@ class Authentication {
           email: email, password: password);
     } on FirebaseAuthException catch(e) {
       if (e.code == 'weak-password') {
-        throw AuthenticationException(message: "Password is weak");
+        throw AuthServiceException(message: "Password is weak");
       } else if (e.code == 'email-already-in-use') {
-        throw AuthenticationException(
+        throw AuthServiceException(
             message: "Email is already in use - did you mean to login instead?");
       }
-      throw AuthenticationException(
+      throw AuthServiceException(
           message: "Unknown authentication error occurred in signup! Please try again");
     }
   }
@@ -35,13 +38,13 @@ class Authentication {
           email: email, password: password);
     } on FirebaseAuthException catch(e) {
       if (e.code == 'user-not-found') {
-        throw AuthenticationException(
+        throw AuthServiceException(
             message: "Username not found - did you mean to signup instead?");
       } else if (e.code == 'wrong-password') {
-        throw AuthenticationException(
+        throw AuthServiceException(
             message: "Wrong password - is it really hunter2?");
       }
-      throw AuthenticationException(
+      throw AuthServiceException(
           message: "An unknown authentication error occurred in login! Please try again");
     }
   }
