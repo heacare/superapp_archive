@@ -16,11 +16,10 @@ export class LocationDto {
   }
 
   toPoint(): Point {
-    if (typeof this.lng !== 'number' || typeof this.lat !== 'number')
-      throw new Error('Invalid Point');
+    if (typeof this.lng !== 'number' || typeof this.lat !== 'number') throw new Error('Invalid Point');
     return {
       type: 'Point',
-      coordinates: [this.lng, this.lat],
+      coordinates: [this.lat, this.lng],
     };
   }
 
