@@ -8,11 +8,7 @@ import { FirebaseService } from './firebase.service';
 export class AuthService {
   private readonly logger = new Logger(AuthService.name);
 
-  constructor(
-    private firebaseSvc: FirebaseService,
-    private users: UserService,
-    private jwt: JwtService,
-  ) {}
+  constructor(private firebaseSvc: FirebaseService, private users: UserService, private jwt: JwtService) {}
 
   async verifyRetrieveUser(token: string): Promise<User | undefined> {
     const authId = await this.firebaseSvc.getAuthId(token);

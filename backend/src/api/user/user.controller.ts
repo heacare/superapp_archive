@@ -1,9 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { AuthUser } from '../auth/auth.strategy';
-import {
-  RequiresAuth,
-  RequiresAuthUser,
-} from '../auth/requiresAuthUser.decorator';
+import { RequiresAuth, RequiresAuthUser } from '../auth/requiresAuthUser.decorator';
 import { OnboardingDto } from './onboarding.dto';
 import { User } from './user.entity';
 import { UserService } from './user.service';
@@ -22,10 +19,7 @@ export class UserController {
 
   // TODO easier access to req.user.id
   @Post('onboard')
-  async processOnboarding(
-    @RequiresAuthUser() user: AuthUser,
-    @Body() onboarding: OnboardingDto,
-  ) {
+  async processOnboarding(@RequiresAuthUser() user: AuthUser, @Body() onboarding: OnboardingDto) {
     await this.users.update(user, onboarding);
   }
 }

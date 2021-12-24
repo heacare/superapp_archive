@@ -1,8 +1,5 @@
 import { LocationDto } from '../common/common.dto';
-import {
-  AvailabilitySlotDto,
-  MedicalProficiencyDto,
-} from '../healer/healer.dto';
+import { AvailabilitySlotDto, MedicalProficiencyDto } from '../healer/healer.dto';
 
 export class UserSessionHealerDto {
   name: string;

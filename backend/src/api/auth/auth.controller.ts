@@ -15,9 +15,7 @@ export class AuthController {
    * another a JWT to be used for future API calls to protected endpoints (in Bearer authentication).
    */
   @Post('verify')
-  async verify(
-    @Body() auth: AuthRequestDto,
-  ): Promise<AuthResponseDto | undefined> {
+  async verify(@Body() auth: AuthRequestDto): Promise<AuthResponseDto | undefined> {
     const jwt = await this.authSvc.verify(auth.firebaseToken);
     if (jwt === undefined) {
       return undefined;

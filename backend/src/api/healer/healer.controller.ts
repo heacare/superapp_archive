@@ -1,9 +1,6 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { AuthUser } from '../auth/auth.strategy';
-import {
-  RequiresAuth,
-  RequiresAuthUser,
-} from '../auth/requiresAuthUser.decorator';
+import { RequiresAuth, RequiresAuthUser } from '../auth/requiresAuthUser.decorator';
 import { LocationDto } from '../common/common.dto';
 import { AvailabilitySlotDto, NearbyHealersDto } from './healer.dto';
 import { HealerService } from './healer.service';

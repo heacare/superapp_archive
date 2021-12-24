@@ -24,9 +24,7 @@ import { Session } from './session/session.entity';
 
 export const ApiFirebaseModule = FirebaseAdminModule.forRootAsync({
   useFactory: () => {
-    const credential = firebaseAdmin.credential.cert(
-      resolve(__dirname, '../../firebase.config.json'),
-    );
+    const credential = firebaseAdmin.credential.cert(resolve(__dirname, '../../firebase.config.json'));
     return { credential, projectId: 'happily-ever-after-4b2fe' };
   },
 });
@@ -43,19 +41,7 @@ export const ApiJwtModule = JwtModule.register({
     PassportModule,
     ApiJwtModule,
   ],
-  controllers: [
-    UserController,
-    AuthController,
-    HealerController,
-    SessionController,
-  ],
-  providers: [
-    UserService,
-    HealerService,
-    SessionService,
-    AuthService,
-    FirebaseService,
-    ApiAuthStrategy,
-  ],
+  controllers: [UserController, AuthController, HealerController, SessionController],
+  providers: [UserService, HealerService, SessionService, AuthService, FirebaseService, ApiAuthStrategy],
 })
 export class ApiModule {}
