@@ -1,10 +1,5 @@
 import * as parse from 'postgres-interval';
-import {
-  Healer,
-  MedicalProficiency,
-  MedicalTag,
-  Slot,
-} from 'src/api/healer/healer.entity';
+import { Healer, MedicalProficiency, MedicalTag, Slot } from 'src/api/healer/healer.entity';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { Unit, Lesson, TextPage, QuizPage, QuizOption } from '../../api/content/content.entity';
 
@@ -73,8 +68,7 @@ export class ContentSeed1640166201279 implements MigrationInterface {
     const slot1 = new Slot();
     slot1.isHouseVisit = false;
     slot1.duration = parse('02:00:00');
-    slot1.rrule =
-      'DTSTART:20120201T093000Z\nRRULE:FREQ=WEEKLY;UNTIL=20250130T230000Z;BYDAY=MO';
+    slot1.rrule = 'DTSTART:20120201T093000Z\nRRULE:FREQ=WEEKLY;UNTIL=20250130T230000Z;BYDAY=MO';
 
     const dan = new Healer();
     dan.name = 'Dan Green';

@@ -1,12 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Session } from '../session/session.entity';
-import {
-  AlcoholFrequency,
-  Gender,
-  MaritalStatus,
-  Outlook,
-  SmokingPacks,
-} from './onboarding.dto';
+import { AlcoholFrequency, Gender, MaritalStatus, Outlook, SmokingPacks } from './onboarding.dto';
 
 // Add more labels whenever we add questions so that we should
 // force the user to answer questions
