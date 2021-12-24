@@ -46,7 +46,7 @@ async function generate() {
   const document = await configSwagger(app);
 
   // writes most recent OpenAPI document to file system
-  writeFileSync('./WHATTHEFUCKINFUCKINGJK.json', JSON.stringify(document));
+  writeFileSync('./openapi.json', JSON.stringify(document));
   process.exit(0);
 }
 
