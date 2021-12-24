@@ -19,7 +19,7 @@ export class LocationDto {
     if (typeof this.lng !== 'number' || typeof this.lat !== 'number') throw new Error('Invalid Point');
     return {
       type: 'Point',
-      coordinates: [this.lng, this.lat],
+      coordinates: [this.lat, this.lng],
     };
   }
 
