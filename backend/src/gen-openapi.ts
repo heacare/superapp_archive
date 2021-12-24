@@ -8,6 +8,7 @@ import { ApiModule } from './api/api.module';
 import { configSwagger } from './main';
 
 // TODO move to config module
+// TOOD ALSO MOVE THIS TO AUTHMODULE so that we can override module (see below)
 process.env.JWT_SECRET = 'nothingisasecret';
 
 // FIXME BIG HACK
