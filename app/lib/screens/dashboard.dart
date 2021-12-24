@@ -13,16 +13,13 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Pull ProfileScreen provider out
-    return FutureProvider<User?>(
-        initialData: null,
-        create: (context) => serviceLocator<UserService>().getCurrentUser(),
-        child: Consumer<User?>(builder: (context, user, _) {
-          if (user == null) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          return DashboardPage.fromUser(user);
-        })
+    return Consumer<User?>(
+      builder: (context, user, _) {
+        if (user == null) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        return DashboardPage.fromUser(user);
+      }
     );
   }
 }

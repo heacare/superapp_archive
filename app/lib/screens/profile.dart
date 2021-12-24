@@ -28,16 +28,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Pull DashboardScreen provider out
-    return FutureProvider<User?>(
-        initialData: null,
-        create: (context) => serviceLocator<UserService>().getCurrentUser(),
-        child: Consumer<User?>(builder: (context, user, _) {
+    return Consumer<User?>(
+        builder: (context, user, _) {
           if (user == null) {
             return const Center(child: CircularProgressIndicator());
           }
           return loaded(user);
-        })
+        }
     );
   }
 
