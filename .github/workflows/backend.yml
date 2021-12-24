@@ -59,15 +59,13 @@ jobs:
       
       - name: Generate OpenAPI Definitions
         run: npm run ci-gen-openapi
-      
-      - name: DEbug
-        run: ls
 
       - name: Upload OpenAPI Definitions
         uses: actions/upload-artifact@v2
         with:
           name: openapi.json
-          path: openapi.json
+          path: backend/openapi.json
+          if-no-files-found: error
 
   test:
     runs-on: ubuntu-latest
