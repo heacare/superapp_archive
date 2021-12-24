@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'package:hea/models/user.dart';
 import 'package:hea/screens/dashboard.dart';
 import 'package:hea/screens/error.dart';
 import 'package:hea/screens/help_map.dart';
-
 import 'package:hea/screens/profile.dart';
 import 'package:hea/providers/auth.dart';
-
 import 'package:hea/screens/contents.dart';
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/services/user_service.dart';
-import 'package:provider/provider.dart';
 
 final auth = Authentication();
 

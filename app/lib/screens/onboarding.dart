@@ -13,7 +13,6 @@ import 'package:hea/widgets/onboard_progress_bar.dart';
 import 'package:health/health.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:hea/data/user_repo.dart';
 import 'package:hea/models/onboarding_custom.dart';
 import 'package:hea/models/onboarding_template.dart';
 import 'package:hea/models/user.dart';

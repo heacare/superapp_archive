@@ -1,10 +1,6 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:hea/data/user_repo.dart';
 import 'package:hea/models/user.dart';
-import 'package:hea/services/service_locator.dart';
-import 'package:hea/services/user_service.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 

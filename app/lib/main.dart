@@ -8,8 +8,7 @@ import 'package:hea/screens/home.dart';
 import 'package:hea/screens/login.dart';
 import 'package:hea/screens/onboarding.dart';
 import 'package:hea/services/service_locator.dart';
-
-import 'data/user_repo.dart';
+import 'package:hea/services/user_service.dart';
 
 void main() {
   setupServiceLocator();
@@ -128,9 +127,9 @@ class _AppState extends State<App> {
       else {
         authUser.getIdToken().then((token) => print(token));
 
-        return (await UserRepo().get(authUser.uid) == null)
-            ? UserStatus.registered
-            : UserStatus.onboarded;
+        return await serviceLocator<UserService>().isCurrentUserOnboarded()
+            ? UserStatus.onboarded
+            : UserStatus.registered;
       }
     });
 

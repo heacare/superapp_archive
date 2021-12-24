@@ -2,8 +2,16 @@ import 'dart:developer';
 
 import 'package:hea/models/user.dart';
 
+enum RespondedLevel {
+  uninit,
+  filledv1
+}
+// If user's responded level does not correspond to this, user is not fully onboarded
+const onboardedRespondedLevel = RespondedLevel.filledv1;
+
 abstract class UserService {
   Future<User> getCurrentUser();
+  Future<bool> isCurrentUserOnboarded();
   bool updateUser(User user);
 }
 
@@ -12,6 +20,11 @@ class UserServiceMock implements UserService {
   Future<User> getCurrentUser() {
     log("Getting placeholder user");
     return Future.delayed(const Duration(milliseconds: 500), () => User.placeholder());
+  }
+
+  @override
+  Future<bool> isCurrentUserOnboarded() {
+    return Future.delayed(const Duration(milliseconds: 500), () => true);
   }
 
   @override
@@ -25,6 +38,12 @@ class UserServiceImpl implements UserService {
   @override
   Future<User> getCurrentUser() {
     // TODO: implement getUserData
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> isCurrentUserOnboarded() {
+    // TODO: implement getCurrentUserRespondedLevel
     throw UnimplementedError();
   }
 

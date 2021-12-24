@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hea/data/user_repo.dart';
 import 'package:hea/models/user.dart';
 
 import 'package:hea/providers/auth.dart';
 import 'package:hea/screens/login.dart';
-import 'package:hea/services/service_locator.dart';
-import 'package:hea/services/user_service.dart';
 import 'package:hea/widgets/avatar_icon.dart';
 import 'package:provider/provider.dart';
 
