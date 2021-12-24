@@ -1,13 +1,3 @@
-<<<<<<< HEAD
-import * as parse from 'postgres-interval';
-import {
-  Healer,
-  MedicalProficiency,
-  MedicalTag,
-  Slot,
-} from 'src/api/healer/healer.entity';
-=======
->>>>>>> 249bdee (Separated healer seeding + fixed lat/lng bug)
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { Unit, Lesson, TextPage, QuizPage, QuizOption } from '../../api/content/content.entity';
 

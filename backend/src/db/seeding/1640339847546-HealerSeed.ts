@@ -1,8 +1,9 @@
+import * as parse from 'postgres-interval';
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { Healer, MedicalProficiency, MedicalTag, Slot } from 'src/api/healer/healer.entity';
 
 /*
- *  Template generated with `npx typeorm migration:create --name ContentSeed`
+ *  Template generated with `npx typeorm migration:create --name HealerSeed`
  */
 
 export class HealerSeed1640339847546 implements MigrationInterface {
@@ -23,6 +24,7 @@ export class HealerSeed1640339847546 implements MigrationInterface {
 
     const slot1 = new Slot();
     slot1.isHouseVisit = false;
+    slot1.duration = parse('02:00:00');
     slot1.rrule = 'DTSTART:20120201T093000Z\nRRULE:FREQ=WEEKLY;UNTIL=20250130T230000Z;BYDAY=MO';
 
     const dan = new Healer();
