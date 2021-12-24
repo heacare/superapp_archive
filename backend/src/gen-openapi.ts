@@ -47,6 +47,7 @@ async function generate() {
 
   // writes most recent OpenAPI document to file system
   writeFileSync('./openapi.json', JSON.stringify(document));
+  console.log('File written!');
   process.exit(0);
 }
 
