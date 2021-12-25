@@ -20,7 +20,7 @@ export enum AlcoholFrequency {
   OnceAMonth = 'OnceAMonth',
   OnceAWeek = 'OnceAWeek',
   FewTimesAWeek = 'FewTimesAWeek',
-  Everday = 'Everyday',
+  Everyday = 'Everyday',
 }
 
 export enum Outlook {

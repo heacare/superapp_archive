@@ -9,12 +9,6 @@ import { AlcoholFrequency, Gender, MaritalStatus, Outlook, SmokingPacks } from '
 // where each field uses 'class-validator' for validation and checking existence.
 export type RespondedLevel = 'uninit' | 'filledv1';
 
-export interface HealthData {
-  data_type: string;
-  value: number | string;
-  unit: string;
-}
-
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -30,7 +24,11 @@ export class User {
   // directly, thus this is a jsonb data for
   // efficiency rather than it's own table
   @Column({ type: 'jsonb' })
-  healthData: HealthData[];
+  healthData: any;
+
+  // TODO support uploading of icon
+  @Column({ nullable: true })
+  icon?: string;
 
   @Column({ nullable: true })
   name?: string;

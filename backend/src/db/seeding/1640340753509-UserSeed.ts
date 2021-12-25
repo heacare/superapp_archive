@@ -18,6 +18,7 @@ export class UserSeed1640340753509 implements MigrationInterface {
     user.authId = AUTH_UID;
     user.level = 'filledv1';
     user.healthData = [{ data_type: 'Health Data Type', value: 'Value', unit: 'Unit' }];
+    user.icon = null; // default icon
 
     // Onboarding data
     user.name = 'Test User';
