@@ -20,7 +20,7 @@ export function RequiresAuth() {
     UseGuards(ApiAuthGuard),
     ApiBearerAuth(),
     ApiUnauthorizedResponse({
-      description: 'Unauthorized. Refer to /api/auth/verify for authentication.',
+      description: 'Unauthorized. Refer to /api/auth/verify for authentication. Body is empty unless token is expired (refer to example).',
       schema: {
         example: {
           err: UnauthErrCause.TOKEN_EXPIRED_ERROR,
