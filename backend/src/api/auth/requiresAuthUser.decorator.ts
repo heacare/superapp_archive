@@ -21,6 +21,11 @@ export function RequiresAuth() {
     ApiBearerAuth(),
     ApiUnauthorizedResponse({
       description: 'Unauthorized. Refer to /api/auth/verify for authentication.',
+      schema: {
+        example: {
+          err: UnauthErrCause.TOKEN_EXPIRED_ERROR,
+        },
+      },
     }),
   );
 }
