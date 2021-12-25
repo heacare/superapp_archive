@@ -1,6 +1,6 @@
 import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
-import { validate, validateOrReject } from 'class-validator';
+import { validate } from 'class-validator';
 import { OnboardingDto } from './onboarding.dto';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';

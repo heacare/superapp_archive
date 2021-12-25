@@ -52,6 +52,7 @@ export class ContentSeed1640166201279 implements MigrationInterface {
     await connection.getRepository(Unit).save(units);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async down(queryRunner: QueryRunner): Promise<void> {
     // No need to implement
   }

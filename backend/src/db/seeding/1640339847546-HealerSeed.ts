@@ -39,6 +39,7 @@ export class HealerSeed1640339847546 implements MigrationInterface {
     await connection.getRepository(Healer).save(healers);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async down(queryRunner: QueryRunner): Promise<void> {
     // No need to implement
   }

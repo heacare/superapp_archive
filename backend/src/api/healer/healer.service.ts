@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { RRuleSet, rrulestr } from 'rrule';
+import { rrulestr } from 'rrule';
 import { isWithinRadius } from '../../util/geo';
 import { Repository } from 'typeorm';
 import { LocationDto } from '../common/common.dto';

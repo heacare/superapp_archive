@@ -1,6 +1,5 @@
 import { applyDecorators, createParamDecorator, ExecutionContext, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiResponse, ApiUnauthorizedResponse, getSchemaPath } from '@nestjs/swagger';
-import { IsEnum } from 'class-validator';
+import { ApiBearerAuth, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { ApiAuthGuard } from './auth.guard';
 
 export enum UnauthErrCause {
@@ -20,7 +19,8 @@ export function RequiresAuth() {
     UseGuards(ApiAuthGuard),
     ApiBearerAuth(),
     ApiUnauthorizedResponse({
-      description: 'Unauthorized. Refer to /api/auth/verify for authentication. Body is empty unless token is expired (refer to example).',
+      description:
+        'Unauthorized. Refer to /api/auth/verify for authentication. Body is empty unless token is expired (refer to example).',
       schema: {
         example: {
           err: UnauthErrCause.TOKEN_EXPIRED_ERROR,

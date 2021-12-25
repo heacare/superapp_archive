@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { AuthUser } from '../auth/auth.strategy';
 import { LocationDto } from '../common/common.dto';
 import { MedicalProficiencyDto } from '../healer/healer.dto';
-import { Healer, MedicalProficiency } from '../healer/healer.entity';
+import { Healer } from '../healer/healer.entity';
 import { BookingDto, UserSessionDto, UserSessionHealerDto } from './session.dto';
 import { Session } from './session.entity';
 

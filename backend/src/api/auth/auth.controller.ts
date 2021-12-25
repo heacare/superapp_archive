@@ -1,8 +1,7 @@
 import { Body, Controller, HttpCode, Post } from '@nestjs/common';
-import { ApiExtraModels, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { AuthRequestDto, AuthResponseDto } from './auth.dto';
 import { AuthService } from './auth.service';
-import { UnauthorizedResponseDto } from './requiresAuthUser.decorator';
 
 @Controller('/api/auth')
 export class AuthController {

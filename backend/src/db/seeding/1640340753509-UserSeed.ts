@@ -40,6 +40,7 @@ export class UserSeed1640340753509 implements MigrationInterface {
     await connection.getRepository(User).save(user);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public async down(queryRunner: QueryRunner): Promise<void> {
     // No need to implement
   }
