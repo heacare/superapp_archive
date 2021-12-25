@@ -8,7 +8,7 @@ import 'package:hea/screens/dashboard.dart';
 import 'package:hea/screens/error.dart';
 import 'package:hea/screens/help_map.dart';
 import 'package:hea/screens/profile.dart';
-import 'package:hea/screens/contents.dart';
+import 'package:hea/screens/content/module.dart';
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/services/user_service.dart';
 
@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child = const DashboardScreen();
     }
     else if (index == 1) {
-      child = const ContentsScreen();
+      child = const ModulesScreen();
     }
     else if (index == 2) {
       child = HelpMapScreen();

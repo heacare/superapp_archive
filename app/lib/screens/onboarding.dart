@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:date_time_picker/date_time_picker.dart';
@@ -74,8 +76,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
     else {
       // Push to database
-      // TODO: Test this
+      // TODO: Handle failure from API
+      // TODO: updateUser should store the User instance and pass it to the consumer - right now homescreen is calling getCurrentUser() which will fail since the DB is not guaranteed to have saved the user
       serviceLocator<UserService>().updateUser(User.fromJson(userJson));
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
             content: Text("Welcome to Happily Ever After!")
@@ -160,7 +164,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             dateLabelText: input.text,
             onSaved: (String? value) {
               // Use Timestamp objects for all datetimes
-              _updateUserField(input.varName, Timestamp.fromDate(DateTime.parse(value!)));
+              _updateUserField(input.varName, value!);
             },
             validator: getValidator,
           )

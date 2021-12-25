@@ -1,11 +1,9 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:hea/main.dart';
 import 'package:hea/models/user.dart';
 import 'package:hea/services/api_manager.dart';
 import 'package:hea/services/service_locator.dart';
-
-import 'api_manager.dart' as api_manager;
+import 'api_endpoint.dart';
 
 // If user's responded level does not correspond to this, user is not fully onboarded
 const onboardedRespondedLevel = "filledv1";
@@ -13,7 +11,7 @@ const onboardedRespondedLevel = "filledv1";
 abstract class UserService {
   Future<User> getCurrentUser();
   Future<bool> isCurrentUserOnboarded();
-  Future<bool> updateUser(User user);
+  Future updateUser(User user);
 }
 
 class UserServiceImpl implements UserService {
@@ -21,7 +19,7 @@ class UserServiceImpl implements UserService {
 
   @override
   Future<User> getCurrentUser() async {
-    final resp = await api.get(api_manager.userInfoEndpoint);
+    final resp = await api.get(ApiEndpoint.userInfo);
     if (resp.statusCode == 200) {
       return User.fromJson(jsonDecode(resp.body));
     } else {
@@ -32,7 +30,7 @@ class UserServiceImpl implements UserService {
 
   @override
   Future<bool> isCurrentUserOnboarded() async {
-    final resp = await api.get(api_manager.userInfoEndpoint);
+    final resp = await api.get(ApiEndpoint.userInfo);
     if (resp.statusCode == 200) {
       final json = jsonDecode(resp.body) as Map<String, dynamic>;
       return (json["level"] ?? "") == onboardedRespondedLevel;
@@ -44,9 +42,11 @@ class UserServiceImpl implements UserService {
 
   // TODO: Test with new onboarding
   @override
-  Future<bool> updateUser(User user) async {
-    final resp = await api.post(api_manager.userOnboardEndpoint, user.toJson());
-    return resp.statusCode == 201;
+  Future updateUser(User user) async {
+    final resp = await api.post(ApiEndpoint.userOnboard, user.toJson());
+    if (resp.statusCode != 201) {
+      throw ApiManagerException(message: "Failure in updateUser: ${resp.statusCode} - ${resp.body}");
+    }
   }
 }
 
@@ -65,8 +65,8 @@ class UserServiceMock implements UserService {
   }
 
   @override
-  Future<bool> updateUser(User user) {
+  Future updateUser(User user) {
     log("Update user data: $user");
-    return Future.delayed(const Duration(milliseconds: 500), () => true);
+    return Future.delayed(const Duration(milliseconds: 500));
   }
 }

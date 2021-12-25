@@ -1,23 +1,26 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:hea/models/content_card.dart';
-import 'package:hea/widgets/firebase_svg.dart';
-import 'package:markdown/markdown.dart' as md;
+import 'dart:developer';
+import 'package:flutter/cupertino.dart' hide Page;
+import 'package:flutter/material.dart' hide Page;
 import 'package:flutter_markdown/flutter_markdown.dart';
-
-import 'package:hea/models/chapter.dart';
+import 'package:provider/provider.dart';
+import 'package:markdown/markdown.dart' as md;
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:hea/services/content_service.dart';
+import 'package:hea/services/service_locator.dart';
+import 'package:hea/models/content/page.dart';
+import 'package:hea/widgets/firebase_svg.dart';
+import 'package:hea/models/content/lesson.dart';
 
-class ChapterScreen extends StatefulWidget {
-  final Chapter chapter;
+class PagesScreen extends StatefulWidget {
+  final Lesson lesson;
 
-  const ChapterScreen({required this.chapter});
+  const PagesScreen({Key? key, required this.lesson}) : super(key: key);
 
   @override
-  State<ChapterScreen> createState() => _ChapterScreenState();
+  State<PagesScreen> createState() => _PagesScreenState();
 }
 
-class _ChapterScreenState extends State<ChapterScreen> {
+class _PagesScreenState extends State<PagesScreen> {
   final markdownStyleSheet =
       MarkdownStyleSheet(p: const TextStyle(fontSize: 18.0));
 
@@ -29,7 +32,7 @@ class _ChapterScreenState extends State<ChapterScreen> {
     super.dispose();
   }
 
-  Widget createCard(BuildContext context, ContentCard card) {
+  Widget createCard(BuildContext context, Page card) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(18.0, 40.0, 18.0, 40.0),
       child: Card(
@@ -58,11 +61,10 @@ class _ChapterScreenState extends State<ChapterScreen> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget loaded(BuildContext context, List<Page> pages) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(widget.chapter.title),
+          title: Text(widget.lesson.title),
         ),
         body: Center(
             child: Column(
@@ -70,27 +72,41 @@ class _ChapterScreenState extends State<ChapterScreen> {
             Flexible(
               child: PageView(
                 controller: _cards,
-                children: widget.chapter.content
-                    .map((e) => createCard(context, e))
-                    .toList(),
+                children: pages.map((e) => createCard(context, e)).toList(),
               ),
             ),
             SmoothPageIndicator(
                 controller: _cards,
                 effect: SlideEffect(
                     activeDotColor: Theme.of(context).colorScheme.secondary),
-                count: widget.chapter.content.length),
+                count: pages.length),
             Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: OutlinedButton(
-                    child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(widget.chapter.callToAction,
-                            style: const TextStyle(fontSize: 18.0))),
+                    child: const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text("Call to action",
+                            style: TextStyle(fontSize: 18.0))),
                     onPressed: () {
                       throw "Unimplemented";
                     }))
           ],
         )));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureProvider<List<Page>>(
+      initialData: const [],
+      create: (_) =>
+          serviceLocator<ContentService>().getPages(widget.lesson.id),
+      child: Consumer<List<Page>>(
+          builder: (context, pages, _) => loaded(context, pages)),
+      catchError: (context, error) {
+        log("$error");
+        log("${StackTrace.current}");
+        return [];
+      },
+    );
   }
 }

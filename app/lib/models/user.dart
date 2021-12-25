@@ -17,6 +17,8 @@ class User extends ChangeNotifier {
 
   // Onboarding responses
   bool isSmoker = false;
+
+  // TODO Smoking is broken for old onboarding
   SmokingPacks? smokingPacksPerDay;
   num? smokingYears;
   AlcoholFrequency alcoholFreq = AlcoholFrequency.NotAtAll;
@@ -68,35 +70,45 @@ class User extends ChangeNotifier {
         // TODO: Incompatible type with backend entity
         healthData = [],
         isSmoker = data["isSmoker"]! as bool,
-        smokingPacksPerDay =
-            toOnboardingType(data["smokingPacksPerDay"]!, SmokingPacks.values),
-        smokingYears = data["smokingYears"]!,
         alcoholFreq =
             toOnboardingType(data["alcoholFreq"]!, AlcoholFrequency.values),
         outlook = toOnboardingType(data["outlook"]!, Outlook.values),
         maritalStatus =
             toOnboardingType(data["maritalStatus"]!, MaritalStatus.values),
         familyHistory = data["familyHistory"]!,
-        birthControl = data["birthControl"];
+        birthControl = data["birthControl"]! {
+    // Only guaranteed to be non-null for a smoker
+    if (isSmoker) {
+      smokingPacksPerDay =
+          toOnboardingType(data["smokingPacksPerDay"]!, SmokingPacks.values);
+      smokingYears = data["smokingYears"]!;
+    }
+  }
 
   Map<String, dynamic> toJson() {
-    print(birthday);
-    return {
+    var json = {
+      'authId': authId,
       'name': name,
       // TODO: Missing icon field in backend entity
       // 'icon': icon,
       'gender': describeEnum(gender),
-      'birthday': birthday,
+      'birthday': birthday.toDate().toIso8601String(),
       'height': height,
       'weight': weight,
       'country': country,
       'healthData': healthData.map((e) => e.toJson()).toList(),
-      'smoking': {'packsPerDay': smokingPacksPerDay, "years": smokingYears},
+      'isSmoker': isSmoker,
+      'smoking': null,
       'alcoholFreq': describeEnum(alcoholFreq),
       'outlook': describeEnum(outlook),
       'maritalStatus': describeEnum(maritalStatus),
       'familyHistory': familyHistory,
       'birthControl': birthControl
     };
+    if (isSmoker) {
+      json.update('smoking', (_) => {'packsPerDay': smokingPacksPerDay, "years": smokingYears});
+    }
+
+    return json;
   }
 }
