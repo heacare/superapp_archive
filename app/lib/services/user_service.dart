@@ -12,10 +12,8 @@ const onboardedRespondedLevel = "filledv1";
 
 abstract class UserService {
   Future<User> getCurrentUser();
-
   Future<bool> isCurrentUserOnboarded();
-
-  bool updateUser(User user);
+  Future<bool> updateUser(User user);
 }
 
 class UserServiceImpl implements UserService {
@@ -44,10 +42,11 @@ class UserServiceImpl implements UserService {
     }
   }
 
+  // TODO: Test with new onboarding
   @override
-  bool updateUser(User user) {
-    // TODO: implement submitOnboardData
-    throw UnimplementedError();
+  Future<bool> updateUser(User user) async {
+    final resp = await api.post(api_manager.userOnboardEndpoint, user.toJson());
+    return resp.statusCode == 201;
   }
 }
 
@@ -66,8 +65,8 @@ class UserServiceMock implements UserService {
   }
 
   @override
-  bool updateUser(User user) {
+  Future<bool> updateUser(User user) {
     log("Update user data: $user");
-    return true;
+    return Future.delayed(const Duration(milliseconds: 500), () => true);
   }
 }

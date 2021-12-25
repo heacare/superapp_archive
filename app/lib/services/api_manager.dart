@@ -12,6 +12,7 @@ const apiBaseUrl = "10.0.2.2:3000";
 // Endpoints
 const jwtTokenEndpoint = "/api/auth/verify";
 const userInfoEndpoint = "/api/user/info";
+const userOnboardEndpoint = "/api/user/onboard";
 
 class ApiManagerException implements Exception {
   final String message;
@@ -23,7 +24,7 @@ class ApiManagerException implements Exception {
 class ApiManager {
   String? _jwtToken;
 
-  Future<http.Response> post(String endpoint, Map<String, String> body) async {
+  Future<http.Response> post(String endpoint, Map<String, dynamic> body) async {
     if (_jwtToken == null) await _fetchJwtToken();
 
     return http.post(_buildUri(endpoint), body: jsonEncode(body), headers: {

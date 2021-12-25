@@ -6,13 +6,13 @@ import 'onboarding_types.dart';
 
 class User extends ChangeNotifier {
   String authId = "";
+  String icon = ""; // TODO: Missing icon field in backend entity
   String name = "";
   Gender gender = Gender.Male;
   Timestamp birthday = Timestamp.now();
   num height = 0;
   num weight = 0;
   String country = "";
-  String icon = ""; // TODO: Missing icon field in backend entity
   List<HealthDataPoint> healthData = [];
 
   // Onboarding responses
@@ -57,14 +57,14 @@ class User extends ChangeNotifier {
 
   User.fromJson(Map<String, dynamic> data)
       : authId = data["authId"]! as String,
+        // TODO: Missing icon field in backend entity
+        icon = "",
         name = data["name"]! as String,
         gender = toOnboardingType(data["gender"]!, Gender.values),
         birthday = Timestamp.fromDate(DateTime.parse(data["birthday"]!)),
         height = data["height"]!,
         weight = data["weight"]!,
         country = data["country"]! as String,
-        // TODO: Missing icon field in backend entity
-        icon = "",
         // TODO: Incompatible type with backend entity
         healthData = [],
         isSmoker = data["isSmoker"]! as bool,
@@ -80,16 +80,23 @@ class User extends ChangeNotifier {
         birthControl = data["birthControl"];
 
   Map<String, dynamic> toJson() {
+    print(birthday);
     return {
-      'id': authId,
-      'gender': gender,
       'name': name,
+      // TODO: Missing icon field in backend entity
+      // 'icon': icon,
+      'gender': describeEnum(gender),
       'birthday': birthday,
       'height': height,
       'weight': weight,
       'country': country,
-      'icon': icon,
-      'healthData': healthData.map((e) => e.toJson()).toList()
+      'healthData': healthData.map((e) => e.toJson()).toList(),
+      'smoking': {'packsPerDay': smokingPacksPerDay, "years": smokingYears},
+      'alcoholFreq': describeEnum(alcoholFreq),
+      'outlook': describeEnum(outlook),
+      'maritalStatus': describeEnum(maritalStatus),
+      'familyHistory': familyHistory,
+      'birthControl': birthControl
     };
   }
 }
