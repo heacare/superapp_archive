@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -64,7 +66,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return FutureProvider<User?>(
         initialData: null,
         create: (context) => serviceLocator<UserService>().getCurrentUser(),
-        child: child
+        child: child,
+        catchError: (context, error) {
+          log("$error");
+          log("${StackTrace.current}");
+          return null;
+        },
     );
   }
 }

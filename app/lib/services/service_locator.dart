@@ -10,6 +10,5 @@ void setupServiceLocator() {
   serviceLocator.registerLazySingleton<AuthService>(() => AuthService());
 
   serviceLocator.registerSingleton<ApiManager>(ApiManager());
-  // TODO: Switch to UserServiceImpl
-  serviceLocator.registerSingleton<UserService>(UserServiceMock());
+  serviceLocator.registerSingleton<UserService>(UserServiceImpl());
 }

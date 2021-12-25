@@ -11,17 +11,20 @@ const apiBaseUrl = "10.0.2.2:3000";
 
 // Endpoints
 const jwtTokenEndpoint = "/api/auth/verify";
+const userInfoEndpoint = "/api/user/info";
 
 class ApiManagerException implements Exception {
   final String message;
-  ApiManagerException({required this.message});
+  ApiManagerException({required this.message}) {
+    log(message);
+  }
 }
 
 class ApiManager {
   String? _jwtToken;
 
-  post(String endpoint, Map<String, String> body) async {
-    if (_jwtToken == null) _fetchJwtToken();
+  Future<http.Response> post(String endpoint, Map<String, String> body) async {
+    if (_jwtToken == null) await _fetchJwtToken();
 
     return http.post(_buildUri(endpoint), body: jsonEncode(body), headers: {
       'accept': "application/json",
@@ -30,13 +33,12 @@ class ApiManager {
     });
   }
 
-  get(String endpoint) async {
-    if (_jwtToken == null) _fetchJwtToken();
+  Future<http.Response> get(String endpoint) async {
+    if (_jwtToken == null) await _fetchJwtToken();
 
     return http.get(_buildUri(endpoint), headers: {
       'accept': "application/json",
-      'Authorization': 'Bearer $_jwtToken',
-      'Content-Type': 'application/json; charset=UTF-8'
+      'Authorization': 'Bearer $_jwtToken'
     });
   }
 

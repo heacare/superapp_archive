@@ -1,20 +1,29 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:hea/services/service_locator.dart';
-import 'package:hea/services/user_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:health/health.dart';
+import 'onboarding_types.dart';
 
 class User extends ChangeNotifier {
-  String id;
-  String gender;
-  String name;
-  Timestamp birthday;
-  num height;
-  num weight;
-  String country;
-  String icon;
-  Map<String, dynamic> onboardingResponses;
-  List<HealthDataPoint> healthData;
+  String authId = "";
+  String name = "";
+  Gender gender = Gender.Male;
+  Timestamp birthday = Timestamp.now();
+  num height = 0;
+  num weight = 0;
+  String country = "";
+  String icon = ""; // TODO: Missing icon field in backend entity
+  List<HealthDataPoint> healthData = [];
+
+  // Onboarding responses
+  bool isSmoker = false;
+  SmokingPacks? smokingPacksPerDay;
+  num? smokingYears;
+  AlcoholFrequency alcoholFreq = AlcoholFrequency.NotAtAll;
+  Outlook outlook = Outlook.Positive;
+  MaritalStatus maritalStatus = MaritalStatus.Single;
+  String familyHistory = "";
+  String birthControl = "";
 
   num get bmi {
     return weight / (height * height);
@@ -24,54 +33,55 @@ class User extends ChangeNotifier {
     DateTime now = DateTime.now();
     DateTime birthdayDt = birthday.toDate();
     int age = now.year - birthdayDt.year;
-    if (now.month < birthdayDt.month || (now.month == birthdayDt.month && now.day < birthdayDt.day)) {
+    if (now.month < birthdayDt.month ||
+        (now.month == birthdayDt.month && now.day < birthdayDt.day)) {
       age--;
     }
 
     return age;
   }
 
-  User([this.id = ""]) :
-    gender = "",
-    name = "",
-    birthday = Timestamp.fromDate(DateTime.now()),
-    height = 0,
-    weight = 0,
-    country = "",
-    icon = "",
-    onboardingResponses = {},
-    healthData = [];
+  User([this.authId = ""]);
 
-  User.placeholder() :
-    id = "",
-    gender = Gender.male,
-    name = "Test User",
-    birthday = Timestamp.fromDate(DateTime.now()),
-    height = 200,
-    weight = 100,
-    country = "SG",
-    icon = "",
-    onboardingResponses = {},
-    healthData = [];
+  User.placeholder()
+      : authId = "",
+        name = "Test User",
+        height = 2,
+        weight = 100,
+        country = "SG",
+        isSmoker = true,
+        smokingPacksPerDay = SmokingPacks.FivePacks,
+        smokingYears = 10,
+        familyHistory = "Family History",
+        birthControl = "Birth Control";
 
-  User.fromJson(Map<String, dynamic> data) :
-    id = data["id"]! as String,
-    gender = data["gender"]! as String,
-    name = data["name"]! as String,
-    birthday = data["birthday"]! as Timestamp,
-    height = data["height"]! as num,
-    weight = data["weight"]! as num,
-    country = data["country"]! as String,
-    icon = data["icon"]! as String,
-    onboardingResponses = data["onboardingResponses"]! as Map<String, dynamic>,
-    healthData =
-      List<Map<String, dynamic>>.from(data["healthData"]!).map(
-        (e) => HealthDataPoint.fromJson(e)
-      ).toList();
+  User.fromJson(Map<String, dynamic> data)
+      : authId = data["authId"]! as String,
+        name = data["name"]! as String,
+        gender = toOnboardingType(data["gender"]!, Gender.values),
+        birthday = Timestamp.fromDate(DateTime.parse(data["birthday"]!)),
+        height = data["height"]!,
+        weight = data["weight"]!,
+        country = data["country"]! as String,
+        // TODO: Missing icon field in backend entity
+        icon = "",
+        // TODO: Incompatible type with backend entity
+        healthData = [],
+        isSmoker = data["isSmoker"]! as bool,
+        smokingPacksPerDay =
+            toOnboardingType(data["smokingPacksPerDay"]!, SmokingPacks.values),
+        smokingYears = data["smokingYears"]!,
+        alcoholFreq =
+            toOnboardingType(data["alcoholFreq"]!, AlcoholFrequency.values),
+        outlook = toOnboardingType(data["outlook"]!, Outlook.values),
+        maritalStatus =
+            toOnboardingType(data["maritalStatus"]!, MaritalStatus.values),
+        familyHistory = data["familyHistory"]!,
+        birthControl = data["birthControl"];
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
+      'id': authId,
       'gender': gender,
       'name': name,
       'birthday': birthday,
@@ -79,19 +89,7 @@ class User extends ChangeNotifier {
       'weight': weight,
       'country': country,
       'icon': icon,
-      'onboardingResponses': onboardingResponses,
       'healthData': healthData.map((e) => e.toJson()).toList()
     };
   }
-}
-
-//
-//  Lookups for customNextTemplate in onboarding_custom.dart
-//  TODO: Required until logic is moved into Firebase
-//
-
-class Gender {
-  static const String male = "Male";
-  static const String female = "Female";
-  static const String others = "Others";
 }

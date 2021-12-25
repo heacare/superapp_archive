@@ -1,9 +1,10 @@
 import 'package:hea/models/user.dart';
+import 'onboarding_types.dart';
 
 // Conditional logic for advancing some templates
 Map<String, Function(User)> customNextTemplate = {
   "smoking_1": (user) {
-    if (user.gender == Gender.female) {
+    if (user.gender == Gender.Female) {
       if (user.age > 30) {
         return "smoking_3";
       }
