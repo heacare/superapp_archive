@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { User } from '../user/user.entity';
 import { JwtService } from '@nestjs/jwt';
@@ -10,18 +10,14 @@ export class AuthService {
 
   constructor(private firebaseSvc: FirebaseService, private users: UserService, private jwt: JwtService) {}
 
-  async verifyRetrieveUser(token: string): Promise<User | undefined> {
+  async verifyRetrieveUser(token: string): Promise<User> {
     const authId = await this.firebaseSvc.getAuthId(token);
-    if (authId === undefined) return undefined;
     const user = await this.users.findOrCreate(authId);
     return user;
   }
 
-  async verify(token: string): Promise<string | undefined> {
+  async verify(token: string): Promise<string> {
     const user = await this.verifyRetrieveUser(token);
-    if (user === undefined) {
-      return undefined;
-    }
     return await this.jwt.signAsync({ sub: user.id });
   }
 }

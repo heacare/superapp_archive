@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { FIREBASE_ADMIN_INJECT, FirebaseAdminSDK } from '@tfarras/nestjs-firebase-admin';
 
 @Injectable()
@@ -7,13 +7,13 @@ export class FirebaseService {
 
   constructor(@Inject(FIREBASE_ADMIN_INJECT) private firebaseAdmin: FirebaseAdminSDK) {}
 
-  async getAuthId(token: string): Promise<string | undefined> {
+  async getAuthId(token: string): Promise<string> {
     try {
       const userObj = await this.firebaseAdmin.auth().verifyIdToken(token);
       return userObj.uid;
     } catch (e) {
       this.logger.error(e, token);
-      return undefined;
+      throw new UnauthorizedException();
     }
   }
 }
