@@ -65,7 +65,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
-  _advanceNextTemplate(String nextTemplate) {
+  _advanceNextTemplate(String nextTemplate) async {
     if (currentTemplateId != onboardingLastId) {
       setState(() => currentTemplateId = nextTemplate);
 
@@ -77,8 +77,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     else {
       // Push to database
       // TODO: Handle failure from API
-      // TODO: updateUser should store the User instance and pass it to the consumer - right now homescreen is calling getCurrentUser() which will fail since the DB is not guaranteed to have saved the user
-      serviceLocator<UserService>().updateUser(User.fromJson(userJson));
+      // TODO: Ideally should lift User all the way up so we don't have to call getCurrentUser() after updateUser() and just work with the User object from onboarding
+      await serviceLocator<UserService>().updateUser(User.fromJson(userJson));
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
