@@ -8,8 +8,8 @@ class Lesson {
   final String callToAction;
 
   Lesson.fromJson(Map<String, dynamic> json)
-      : id = int.parse(json["id"]!),
-        lessonOrder = int.parse(json["unitOrder"]),
+      : id = json["id"]!,
+        lessonOrder = json["lessonOrder"]!,
         icon = json["icon"]!,
         title = json["title"]!,
         callToAction = "Remove this";

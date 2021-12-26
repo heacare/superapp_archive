@@ -19,8 +19,8 @@ class ContentServiceImpl implements ContentService {
   Future<List<Module>> getModules() async {
     final resp = await api.get(ApiEndpoint.contentModule);
     if (resp.statusCode == 200) {
-      final moduleList = jsonDecode(resp.body) as List<Map<String, dynamic>>;
-      return moduleList.map((e) => Module.fromJson(e)).toList();
+      final moduleList = jsonDecode(resp.body);
+      return moduleList.map<Module>((e) => Module.fromJson(e)).toList();
     } else {
       throw ApiManagerException(
           message: "Failure in getModules: ${resp.statusCode}");
@@ -28,14 +28,26 @@ class ContentServiceImpl implements ContentService {
   }
 
   @override
-  Future<List<Lesson>> getLessons(int moduleId) {
-    // TODO: implement getLessons
-    throw UnimplementedError();
+  Future<List<Lesson>> getLessons(int moduleId) async {
+    final resp = await api.get(ApiEndpoint.contentLesson + "/" + moduleId.toString());
+    if (resp.statusCode == 200) {
+      final lessonList = jsonDecode(resp.body);
+      return lessonList.map<Lesson>((e) => Lesson.fromJson(e)).toList();
+    } else {
+      throw ApiManagerException(
+          message: "Failure in getLessons: ${resp.statusCode}");
+    }
   }
 
   @override
-  Future<List<Page>> getPages(int lessonId) {
-    // TODO: implement getPages
-    throw UnimplementedError();
+  Future<List<Page>> getPages(int lessonId) async {
+    final resp = await api.get(ApiEndpoint.contentPage + "/" + lessonId.toString());
+    if (resp.statusCode == 200) {
+      final pageList = jsonDecode(resp.body);
+      return pageList.map<Page>((e) => Page.fromJson(e)).toList();
+    } else {
+      throw ApiManagerException(
+          message: "Failure in getPages: ${resp.statusCode}");
+    }
   }
 }

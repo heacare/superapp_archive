@@ -5,9 +5,8 @@ class Module {
   final String title;
 
   Module.fromJson(Map<String, dynamic> json)
-      : id = int.parse(json["id"]),
-        // TODO Need to rename on backend
-        moduleOrder = int.parse(json["unitOrder"]),
+      : id = json["id"]!,
+        moduleOrder = json["moduleOrder"]!,
         icon = json["icon"]!,
         title = json["title"]!;
 }

@@ -6,8 +6,8 @@ class Page {
   final String icon;
 
   Page.fromJson(Map<String, dynamic> json)
-      : id = int.parse(json["id"]!),
-        pageOrder = int.parse(json["pageOrder"]),
+      : id = json["id"]!,
+        pageOrder = json["pageOrder"]!,
         title = json["title"]!,
         text = json["text"]!,
         icon = json["icon"]!;
