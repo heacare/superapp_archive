@@ -1,9 +1,15 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 import 'package:hea/screens/lesson.dart';
-import 'package:hea/models/content.dart';
-import 'package:hea/models/chapter.dart';
+import 'package:hea/models/content/module.dart';
+import 'package:hea/models/content/lesson.dart';
+
+import 'package:hea/services/content_service.dart';
+import 'package:hea/services/service_locator.dart';
 
 class LessonsScreen extends StatefulWidget {
   LessonsScreen(
@@ -12,14 +18,14 @@ class LessonsScreen extends StatefulWidget {
       required this.gradient1,
       required this.gradient2,
       required this.icon,
-      required this.content})
+      required this.module})
       : super(key: key);
 
   final String title;
   final Color gradient1;
   final Color gradient2;
   final IconData icon;
-  final Content content;
+  final Module module;
 
   @override
   State<LessonsScreen> createState() => _LessonsScreenState();
@@ -28,22 +34,34 @@ class LessonsScreen extends StatefulWidget {
 class _LessonsScreenState extends State<LessonsScreen> {
   @override
   Widget build(BuildContext context) {
-    final lessonListView = ListView.separated(
-        separatorBuilder: (BuildContext context, int index) {
-          return const SizedBox(height: 8.0);
-        },
-        padding: const EdgeInsets.all(16.0),
-        itemCount: widget.content.chapters.length,
-        itemBuilder: (context, index) {
-          final chapter = widget.content.chapters[index];
-          return LessonListItem(
-              title: chapter.title,
-              description: "12 sections • 15min",
-              leading: Container(),
-              gradient1: widget.gradient1,
-              gradient2: widget.gradient2,
-              chapter: chapter);
+    final lessonListView = FutureProvider<List<Lesson>>(
+        initialData: const [],
+        create: (_) =>
+            serviceLocator<ContentService>().getLessons(widget.module.id),
+        child: Consumer<List<Lesson>>(builder: (context, lessons, _) {
+          return ListView.separated(
+              separatorBuilder: (BuildContext context, int index) {
+                return const SizedBox(height: 8.0);
+              },
+              padding: const EdgeInsets.all(16.0),
+              itemCount: lessons.length,
+              itemBuilder: (context, index) {
+                final lesson = lessons[index];
+                return LessonListItem(
+                    title: lesson.title,
+                    description: "12 sections • 15min",
+                    leading: Container(),
+                    gradient1: widget.gradient1,
+                    gradient2: widget.gradient2,
+                    lesson: lesson);
+              });
+        }),
+        catchError: (context, error) {
+          log("$error");
+          log("${StackTrace.current}");
+          return [];
         });
+
     return Scaffold(
         body: Stack(children: <Widget>[
       Container(
@@ -115,7 +133,7 @@ class LessonListItem extends StatelessWidget {
   final String title;
   final String description;
   final Widget leading;
-  final Chapter chapter;
+  final Lesson lesson;
 
   final Color gradient1;
   final Color gradient2;
@@ -127,7 +145,7 @@ class LessonListItem extends StatelessWidget {
       required this.leading,
       required this.gradient1,
       required this.gradient2,
-      required this.chapter})
+      required this.lesson})
       : super(key: key);
 
   @override
@@ -135,7 +153,7 @@ class LessonListItem extends StatelessWidget {
     return GestureDetector(
         onTap: () => Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => LessonScreen(
-                chapter: chapter, gradient1: gradient1, gradient2: gradient2))),
+                lesson: lesson, gradient1: gradient1, gradient2: gradient2))),
         child: Container(
             padding:
                 const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),

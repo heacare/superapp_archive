@@ -14,8 +14,6 @@ import 'package:hea/screens/modules.dart';
 
 import 'package:hea/widgets/fancy_bottom_bar.dart';
 
-final auth = Authentication();
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -44,34 +42,29 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // TODO
   Widget pageFor(num index) {
-
     Widget child;
     if (index == 0) {
       child = const DashboardScreen();
-    }
-    else if (index == 1) {
+    } else if (index == 1) {
       child = const ModulesScreen();
-    }
-    else if (index == 2) {
+    } else if (index == 2) {
       child = HelpMapScreen();
-    }
-    else if (index == 3) {
+    } else if (index == 3) {
       child = ProfileScreen();
-    }
-    else {
+    } else {
       // Should never hit this unless something goes horribly wrong
       child = const ErrorScreen();
     }
 
     return FutureProvider<User?>(
-        initialData: null,
-        create: (context) => serviceLocator<UserService>().getCurrentUser(),
-        child: child,
-        catchError: (context, error) {
-          log("$error");
-          log("${StackTrace.current}");
-          return null;
-        },
+      initialData: null,
+      create: (context) => serviceLocator<UserService>().getCurrentUser(),
+      child: child,
+      catchError: (context, error) {
+        log("$error");
+        log("${StackTrace.current}");
+        return null;
+      },
     );
   }
 }

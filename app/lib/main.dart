@@ -29,7 +29,6 @@ enum UserStatus {
 }
 
 class _AppState extends State<App> {
-
   final Future<FirebaseApp> _firebaseInit = Firebase.initializeApp();
 
   ThemeData _getThemeData() {
@@ -156,7 +155,6 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-
     final Future<UserStatus> hasUserData = _firebaseInit.then((value) async {
       // Authentication user exists separately from user data, so we have to check for the case where
       // the user signed up but uninstalled/reset the app before finishing onboarding
@@ -164,8 +162,7 @@ class _AppState extends State<App> {
 
       if (authService.currentUser() == null) {
         return UserStatus.signedOut;
-      }
-      else {
+      } else {
         authService.currentUserToken()?.then((token) => print(token));
 
         return await serviceLocator<UserService>().isCurrentUserOnboarded()
@@ -178,12 +175,11 @@ class _AppState extends State<App> {
       future: hasUserData,
       builder: (context, AsyncSnapshot<UserStatus> snapshot) {
         return MaterialApp(
-          title: 'Happily Ever After',
-          theme: _getThemeData(),
-          // TODO design a loading page and a 'error' page
-          // Match Firebase initialization result
-          home: mainScreen(snapshot)
-        );
+            title: 'Happily Ever After',
+            theme: _getThemeData(),
+            // TODO design a loading page and a 'error' page
+            // Match Firebase initialization result
+            home: mainScreen(snapshot));
       },
     );
   }
@@ -200,7 +196,6 @@ class _AppState extends State<App> {
 
     if (snapshot.hasData) {
       switch (snapshot.requireData) {
-
         case UserStatus.signedOut:
           return LoginScreen();
 

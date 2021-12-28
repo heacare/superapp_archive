@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:health/health.dart';
@@ -9,7 +8,7 @@ class User extends ChangeNotifier {
   String icon = ""; // TODO: Missing icon field in backend entity
   String name = "";
   Gender gender = Gender.Male;
-  Timestamp birthday = Timestamp.now();
+  DateTime birthday = DateTime.now();
   num height = 0;
   num weight = 0;
   String country = "";
@@ -33,10 +32,9 @@ class User extends ChangeNotifier {
 
   num get age {
     DateTime now = DateTime.now();
-    DateTime birthdayDt = birthday.toDate();
-    int age = now.year - birthdayDt.year;
-    if (now.month < birthdayDt.month ||
-        (now.month == birthdayDt.month && now.day < birthdayDt.day)) {
+    int age = now.year - birthday.year;
+    if (now.month < birthday.month ||
+        (now.month == birthday.month && now.day < birthday.day)) {
       age--;
     }
 
@@ -63,7 +61,7 @@ class User extends ChangeNotifier {
         icon = "",
         name = data["name"]! as String,
         gender = toOnboardingType(data["gender"]!, Gender.values),
-        birthday = Timestamp.fromDate(DateTime.parse(data["birthday"]!)),
+        birthday = DateTime.parse(data["birthday"]!),
         height = data["height"]!,
         weight = data["weight"]!,
         country = data["country"]! as String,
@@ -92,7 +90,7 @@ class User extends ChangeNotifier {
       // TODO: Missing icon field in backend entity
       // 'icon': icon,
       'gender': describeEnum(gender),
-      'birthday': birthday.toDate().toIso8601String(),
+      'birthday': birthday.toIso8601String(),
       'height': height,
       'weight': weight,
       'country': country,
@@ -106,7 +104,8 @@ class User extends ChangeNotifier {
       'birthControl': birthControl
     };
     if (isSmoker) {
-      json.update('smoking', (_) => {'packsPerDay': smokingPacksPerDay, "years": smokingYears});
+      json.update('smoking',
+          (_) => {'packsPerDay': smokingPacksPerDay, "years": smokingYears});
     }
 
     return json;
