@@ -33,10 +33,11 @@ class _AppState extends State<App> {
   final Future<FirebaseApp> _firebaseInit = Firebase.initializeApp();
 
   ThemeData _getThemeData() {
+    const primaryColor = Color(0xFFFF5576);
+    const accentColor = Color(0xFFFF7FAA);
 
-    const primaryColor = Color(0xFFCC3363);
-    const accentColor = Color(0xFF52BF5A);
-    const textColor = Color(0xFF191919);
+    const primaryTextColor = Color(0xFF414141);
+    const secondaryTextColor = Color(0xFF707070);
 
     // Stolen from https://medium.com/@filipvk/creating-a-custom-color-swatch-in-flutter-554bcdcb27f3
     MaterialColor createMaterialColor(int argb) {
@@ -63,54 +64,94 @@ class _AppState extends State<App> {
 
     final colorScheme = ColorScheme.fromSwatch(
         primarySwatch: createMaterialColor(primaryColor.value),
-        accentColor: createMaterialColor(accentColor.value)
-    );
+        accentColor: createMaterialColor(accentColor.value));
 
     return ThemeData(
-      colorScheme: colorScheme,
-      fontFamily: "BreeSerif",
-      textTheme: const TextTheme(
-        headline1: TextStyle(fontSize: 48.0, fontWeight: FontWeight.bold, height: 1.1, color: primaryColor),
-        headline2: TextStyle(fontSize: 20.0, fontWeight: FontWeight.normal, height: 1.4, color: textColor),
-        bodyText1: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold, height: 1.2, color: textColor),
-        bodyText2: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, height: 1.2, color: textColor),
-      ),
-      outlinedButtonTheme: OutlinedButtonThemeData(
-        style: TextButton.styleFrom(
-          padding: const EdgeInsets.all(12.0),
-          primary: Colors.white,
-          backgroundColor: primaryColor,
-          textStyle: const TextStyle(fontFamily: "BreeSerif", fontSize: 24.0, fontWeight: FontWeight.bold, height: 1)
+        colorScheme: colorScheme,
+        fontFamily: "Poppins",
+        textTheme: const TextTheme(
+            headline1: TextStyle(
+                fontSize: 32.0,
+                fontWeight: FontWeight.bold,
+                height: 1.1,
+                color: primaryTextColor),
+            headline2: TextStyle(
+                fontSize: 21.0,
+                fontWeight: FontWeight.w600,
+                height: 1.2,
+                color: primaryTextColor),
+            headline3: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.w600,
+                height: 1.2,
+                color: primaryTextColor),
+            headline4: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.w400,
+                height: 1.2,
+                color: secondaryTextColor),
+            bodyText1: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.w400,
+                letterSpacing: 0.0,
+                height: 1.6,
+                color: primaryTextColor),
+            bodyText2: TextStyle(
+                fontSize: 14.0,
+                fontWeight: FontWeight.w400,
+                letterSpacing: 0.25,
+                height: 1.4,
+                color: primaryTextColor),
+            overline: TextStyle(
+              fontSize: 12.0,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 1.5,
+              color: primaryTextColor,
+            )),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: TextButton.styleFrom(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0)),
+            padding: const EdgeInsets.all(0.0),
+            textStyle: const TextStyle(
+                letterSpacing: 1.0,
+                fontSize: 20.0,
+                fontWeight: FontWeight.w600,
+                height: 1.5,
+                color: primaryTextColor),
+          ),
         ),
-      ),
-      inputDecorationTheme: InputDecorationTheme(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
-        floatingLabelStyle: const TextStyle(fontSize: 16.0),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16.0),
+        outlinedButtonTheme: OutlinedButtonThemeData(
+          style: TextButton.styleFrom(
+            padding: const EdgeInsets.all(12.0),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0)),
+            primary: Colors.white,
+            backgroundColor: Colors.transparent,
+            textStyle: const TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+                height: 1.5,
+                color: primaryTextColor),
+          ),
         ),
-        enabledBorder: const OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.grey,
-            width: 2.0
-          )
-        ),
-        focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(
-            color: primaryColor,
-            width: 2.0
-          )
-        ),
-        errorBorder: const OutlineInputBorder(
-          borderSide: BorderSide(
-            color: accentColor,
-            width: 2.0
-          )
-        )
-        // TODO Error looks funky
-      ),
-      textSelectionTheme: ThemeData.light().textSelectionTheme
-    );
+        inputDecorationTheme: InputDecorationTheme(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
+            floatingLabelBehavior: FloatingLabelBehavior.never,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            fillColor: Color(0xFFE5E5E5),
+            filled: true,
+            enabledBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.transparent, width: 2.0)),
+            focusedBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: primaryColor, width: 2.0)),
+            errorBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: accentColor, width: 2.0))
+            // TODO Error looks funky
+            ),
+        textSelectionTheme: ThemeData.light().textSelectionTheme);
   }
 
   @override

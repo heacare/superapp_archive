@@ -16,7 +16,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-
   Future logout() async {
     await serviceLocator<AuthService>().logout();
 

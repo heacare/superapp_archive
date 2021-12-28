@@ -8,9 +8,13 @@ import 'package:hea/screens/dashboard.dart';
 import 'package:hea/screens/error.dart';
 import 'package:hea/screens/help_map.dart';
 import 'package:hea/screens/profile.dart';
-import 'package:hea/screens/content/module.dart';
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/services/user_service.dart';
+import 'package:hea/screens/modules.dart';
+
+import 'package:hea/widgets/fancy_bottom_bar.dart';
+
+final auth = Authentication();
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -20,26 +24,22 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   var index = 0;
 
   @override
   Widget build(BuildContext context) {
-    final bottomNavBg = Theme.of(context).colorScheme.primary;
-
     return Scaffold(
-      body: pageFor(index),
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: const Icon(Icons.home), label: "Home", backgroundColor: bottomNavBg),
-          BottomNavigationBarItem(icon: const Icon(Icons.book), label: "Content", backgroundColor: bottomNavBg),
-          BottomNavigationBarItem(icon: const Icon(Icons.healing), label: "Health", backgroundColor: bottomNavBg),
-          BottomNavigationBarItem(icon: const Icon(Icons.verified_user), label: "Profile", backgroundColor: bottomNavBg),
-        ],
-        currentIndex: index,
-        onTap: (i) { setState(() { index = i; }); }
-      ),
-    );
+        body: pageFor(index),
+        bottomNavigationBar: FancyBottomNav(
+            icons: const <IconData>[
+              Icons.home,
+              Icons.map,
+              Icons.book,
+              Icons.person
+            ],
+            clicked: (i) => setState(() {
+                  index = i;
+                })));
   }
 
   // TODO
