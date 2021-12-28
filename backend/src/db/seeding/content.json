@@ -1,0 +1,205 @@
+{
+  "units": [
+    {
+      "icon": "",
+      "title": "Mental Hygiene",
+      "lessons": [
+        {
+          "icon": "",
+          "title": "Mental Hygiene 101",
+          "pages": [
+            {
+              "icon": "",
+              "title": "Overview",
+              "text": "Dental hygiene transformed the developed world in a single generation. Those who remember growing up in Singapore or parts of Europe will remember how bad dental health used to be as recently as the 1990s.\n\nThe preventive approach to dental care and physical health is now scientifically accepted as the most effective way to take care of your teeth and body. This understanding is only now being extended to the mental space, as your mind is less visible than your body or your teeth.\n\nMental hygiene begins with the individual and mental health experts agree on the need to adopt a series of habits for emotional self-care.\nContinue on to HEA's tips and habits on good mental hygiene."
+            },
+            {
+              "icon": "",
+              "title": "Cover your basic needs",
+              "text": "The first thing we need to do to feel good is to satisfy our basic needs, such as eating well and sleeping properly. These are key to psychological well-being and we should not let them slip.\n\nYou would want to address these issues in parallel over at the following HEA sections - [sleep](), [nutrition](), [exercise]()."
+            },
+            {
+              "icon": "",
+              "title": "Is the following statement true or false?",
+              "text": "Forming good habits on emotional self-care offers the best pay-off in developing and maintaining good mental health",
+              "quizOptions": [
+                {
+                  "text": "True, this is supported by scientific consensus",
+                  "isAnswer": true
+                },
+                {
+                  "text": "False, this is not supported by scientific consensus"
+                },
+                {
+                  "text": "Nobody really knows, it is hugely mysterious"
+                }
+              ]
+            },
+            {
+              "icon": "",
+              "title": "Look after your self-esteem and learn to trust intelligently",
+              "text": "To enjoy good mental hygiene it's important that we accept ourselves as we are. Having low self-esteem is not a mental health problem in itself, but they are closely linked. If lots of things affect your self-esteem for a long time, this might lead to mental health problems such as depression or anxiety.\n\nAs well as having faith in ourselves, it's also important to be able to trust others intelligently.\n\nIt is undeniable that there are many people who are not ready to handle an unlimited amount of trust. It is also true that there are many people who are reliably trustworthy. Learn to assess who is capable of handling trust, and take a step-by-step approach to incrementally increase the amount of trust you give to a person. That way, you learn who you can trust, and how much you can trust each person.\n\nEveryone is capable of trusting and being trusted. The trick is finding who to trust, when to trust, and how much. If you are good with trust, you will eventually learn to attract good trustworthy people in the long run."
+            },
+            {
+              "icon": "",
+              "title": "Manage your emotions and learn self-control",
+              "text": "Emotional intelligence is where cognition and emotion meets. It facilitates our capacity for resilience, motivation, empathy, reasoning, stress management, communication, and our ability to read and navigate the full range of social situations and conflicts.\n\nThis is not about blocking out feelings or allowing emotions to control us, but rather about knowing how to identify and interpret them and regulate their intensity in order to respond appropriately. That is why it is fundamentally important to emotional intelligence."
+            },
+            {
+              "icon": "",
+              "title": "Is the following statement true or false?",
+              "text": "Low self-esteem and a chronic mistrust of people are important factors in good mental health.",
+              "quizOptions": [
+                {
+                  "text": "True, good self esteem and the ability to trust is linked to good mental health"
+                },
+                {
+                  "text": "False, neither are significant factors in good mental health",
+                  "isAnswer": true
+                },
+                {
+                  "text": "Nobody really knows, it is hugely mysterious"
+                }
+              ]
+            },
+            {
+              "icon": "",
+              "title": "Manage expectations and set concrete objectives",
+              "text": "Maintaining motivation and healthy perseverance is fundamental to self improvement, which is why we need to set achievable goals so we do not become disheartened. We don't have to abandon our dreams, but we do need to manage expectations and reality."
+            },
+            {
+              "icon": "",
+              "title": "Think positively and be on the lookout for negative emotions",
+              "text": "Sometimes, we're bound to be plagued by doubt and fears, but we can always counter them and limit their extent through positive thinking. It is ok to experience negative emotions. If you are mindful when that happens, it is easier to take a break and reset yourself to a more positive mode."
+            },
+            {
+              "icon": "",
+              "title": "Feed your social health and find support in others",
+              "text": "As human beings we are sociable by nature and we need to interact with others to have fun and share our concerns. In fact, social health is such an important component that most healthcare systems overlook that we have dedicated an entire HEA pillar to helping you build up your social health (link) to become the best that it can be."
+            },
+            {
+              "icon": "",
+              "title": "Which of these are correct?",
+              "text": "Why is emotional intelligence important?",
+              "quizOptions": [
+                {
+                  "text": "Emotional intelligence helps us read and navigate the full range of social situations and conflicts",
+                  "isAnswer": true
+                },
+                {
+                  "text": "Emotional intelligence helps us manipulate people to get what we want"
+                },
+                {
+                  "text": "Nobody really knows, it is gosh darn mysterious"
+                }
+              ]
+            },
+            {
+              "icon": "",
+              "title": "Mindful approach to relaxation and resilience",
+              "text": "Stress is a very useful natural bodily reaction to cope with adverse situations. But it can be very harmful to health when things settle down and we must learn to switch off.\n\nThrough techniques as mindfulness you can actually proactively address many of the mental wellness issues we have shared so far. \n\nThanks for completing the introductory module on mental health. You have unlocked a 30 day mindfulness challenge [here](https://hr.ubc.ca/health-and-wellbeing/mental-health/mindfulness-meditation/30-day-online-mindfulness-challenge)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "icon": "",
+      "title": "Social Health",
+      "lessons": [
+        {
+          "icon": "",
+          "title": "Social Health 101",
+          "pages": [
+            {
+              "icon": "",
+              "title": "Overview",
+              "text": "Social health is a positive dimension of health which is included in the constitutional definition of health by the World Health Organisation.\n\nAs we grow, social ties start building their place in our lives. We become a part of different communities around us. These positive relations become a valuable support system for each of us. Being socially healthy leads to an increased degree of happiness including sense of belonging and concern for others. The conclusive scientific evidence is that socially healthy people also live longer and better lives."
+            },
+            {
+              "icon": "",
+              "title": "Get connected",
+              "text": "Scientists established that our links to others can have powerful effects on our health. Whether with family, friends, neighbors, romantic partners, or others, social connections can influence our biology and well-being. Look for ways to get involved with others.\n\nTo find new social connections:\n- Join a group focused on a favorite hobby, such as reading, hiking, painting, or wood carving.\n- Learn something new. Take a cooking, writing, art, music, or computer class.\n- Take a class in yoga, tai chi, or another new physical activity.\n- Join a choral group, theater troupe, band, or orchestra.\n- Help with gardening at a community garden or park.\n- Volunteer at a school, library, hospital, or place of worship.\n- Participate in neighborhood events, like a park clean-up through your local recreation center or community association.\n- Get active in your community. Helping others can reduce feelings of loneliness\n- Travel to different places and meet new people."
+            },
+            {
+              "icon": "",
+              "title": "Take care of yourself while caring for others",
+              "text": "Many of us will end up becoming a caregiver at some point in our lives. The stress and strain of caregiving can take a toll on your health. It’s important to find ways to care for your health while caring for others. Depending on your circumstances, some self-care strategies may be more difficult to carry out than others. Choose ones that work for you.\n\nTo take care of yourself while caring for others:\n- Get organised. Make to-do lists, and set a daily routine.\n- Ask for help. Make a list of ways others can help. For instance, someone might sit with the person while you do errands.\n- Try to take breaks each day. Finding respite care can help you create time for yourself or to spend with friends.\n- Keep up with your hobbies and interests when you can. Even if it is for 15 or 30 minutes a day, it is important that you keep cultivating these interests.\n- Join a caregiver's support group. Meeting other caregivers may give you a chance to exchange stories and ideas.\n- Eat healthy foods, and exercise as often as you can.\n- Build your skills. Some hospitals offer classes on how to care for someone with an injury or illness. To find these classes, ask your doctor or relevant local government agency."
+            },
+            {
+              "icon": "",
+              "title": "Is the following statement true or false?",
+              "text": "Is it important to find ways to care for your health while caring for others?",
+              "quizOptions": [
+                {
+                  "text": "True. There are several ways to do self-care - including scheduling regular breaks, asking for help, joining support groups, and keeping up with personal interests",
+                  "isAnswer": true
+                },
+                {
+                  "text": "False. When caring for others, it is not important to care for yourself"
+                },
+                {
+                  "text": "Nobody really knows, it is freakishly mysterious"
+                }
+              ]
+            },
+            {
+              "icon": "",
+              "title": "Get active together",
+              "text": "Where you live, work, or go to school can have a big impact on how much you move and even how much you weigh. Being active with others in your community can have a positive effect on your health habits and create opportunities to connect. You can help your community create ways to encourage more physical activity.\n\nTo help make a more active community:\n- Start a walking group with friends, neighbors, or co-workers.\n- Make the streets safer for walking by driving the speed limit and yielding to people who walk.\n- Participate in local planning efforts to develop walking paths, sidewalks, and bike paths.\n- Work with parents and schools to encourage kids to safely walk or ride bikes to school.\n- Join local interest groups in your communities to get active and make new friends.\n- Try different activities to find the ones you really enjoy, and have fun while being active!"
+            },
+            {
+              "icon": "",
+              "title": "Is the following statement true or false?",
+              "text": "Does being active in your community have a positive effect on your health habits?",
+              "quizOptions": [
+                {
+                  "text": "True. There are many local interest groups and activities that I can join to create opportunities to have a healthier and more connected social life",
+                  "isAnswer": true
+                },
+                {
+                  "text": "False. The more active I am in my community, the worse my health will become"
+                },
+                {
+                  "text": "Nobody really knows, it is stupendously mysterious"
+                }
+              ]
+            },
+            {
+              "icon": "",
+              "title": "Be a role model to children and young people",
+              "text": "Kids look up to their parents and other key adult role models such as grandparents, uncles and aunts. Raising kids is both rewarding and challenging. Being sensitive, responsive, consistent, and available to your kids can help you build positive, healthy relationships with them. The strong emotional bonds that result help children learn how to manage their own feelings and behaviors and develop self-confidence.\n\nKids look up to their parents and other key adult role models such as grandparents, uncles and aunts. Raising kids is both rewarding and challenging. Being sensitive, responsive, consistent, and available to your kids can help you build positive, healthy relationships with them. The strong emotional bonds that result help children learn how to manage their own feelings and behaviors and develop self-confidence.\n\nTo build strong relationships with your kids:\n- Catch kids showing good behavior and offer specific praise.\n- Give children meaningful jobs at home and positive recognition afterward. Help them improve their skills one step at a time.\n- Use kind words, tones, and gestures when giving instructions or making requests.\n- Spend some time every day in warm, positive, loving interaction with your kids. Look for opportunities to spend time as a family, like taking after-dinner walks or reading books together.\n- Brainstorm solutions to problems at home or school together. Be available for advice and support, especially for teens.\n- Set limits for yourself on mobile device use and other distractions. For instance, check your phone after your child goes to bed.\n- Ask about your child’s concerns, worries, goals, and ideas.\n- Participate in activities that your child enjoys. Help out with and attend their events, games, activities, and performances."
+            },
+            {
+              "icon": "",
+              "title": "Build healthy relationships",
+              "text": "Strong, healthy relationships are important throughout your life. They can impact your mental and physical well-being. As a child you learn the social skills you need to form and maintain relationships with others. But at any age you can learn ways to improve your relationships. It's important to know what a healthy relationship looks like and how to keep your connections supportive.\n\nTo build healthy relationships:\n- Be mindful how other people influence you.\n- Share your feelings honestly.\n- Ask for what you need from others.\n- Listen to others without judgement or blame. Be caring and empathetic.\n- Disagree with others respectfully. Conflicts should not turn into personal attacks.\n- Avoid being overly critical, angry outbursts, and violent behavior.\n- Expect others to treat you with respect and honesty in return.\n- Compromise. Try to come to agreements that work for everyone.\n- Protect yourself from violent and abusive people. Set boundaries with others. Decide what you are and aren't willing to do. It's okay to say no.\n- Learn the differences between healthy, unhealthy, and abusive ways of relating to others."
+            },
+            {
+              "icon": "",
+              "title": "Shape the health habits of your loved ones",
+              "text": "The fact that you have gotten this far into our social health module, tells us you are probably better informed about health habits than the vast majority of adults and children out there. We would now like you to put this knowledge to good use, and apply them to influence the health habits of your loved ones. With your help, your loved ones can learn to develop healthy habits that last throughout their expanded lives.\n\nTo help loved ones form healthy habits:\n- Be a role model. Eat healthy family meals together. Walk or ride bikes instead of watching TV or surfing the Web.\n- Make healthy choices easy. Put nutritious food where it’s easy to see. Keep balls and other sports gear handy.\n- Focus on fun. Play in the park, or walk through the zoo or on a nature trail. Cook a healthy meal together.\n- Limit screen time. Don’t put a TV in your child’s bedroom. Avoid snacks and meals in front of the TV.\n- Check with caregivers or schools. Make sure they offer healthy foods, active playtime, and limited TV or video games.\n- Change a little at a time. If you drink whole milk, switch to 2% milk for a while, then try even lower fat milks.\n- If you drive everywhere, try walking to a nearby friend’s house, then later try walking a little farther."
+            },
+            {
+              "icon": "",
+              "title": "Which of these is correct?",
+              "text": "Is it important to shape the health habits of my loved ones?",
+              "quizOptions": [
+                {
+                  "text": "Yes. It helps me put my new knowledge into practice, and gives me the chance to have new meaningful channels of communication and connections with my loved ones",
+                  "isAnswer": true
+                },
+                {
+                  "text": "No. We live in a world of self interest. They won't appreciate it even if I tried"
+                },
+                {
+                  "text": "Nobody really knows, it is frightfully mysterious"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

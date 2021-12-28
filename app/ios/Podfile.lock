@@ -74,7 +74,7 @@ PODS:
     - GoogleUtilities/Logger
   - GTMSessionFetcher/Core (1.7.0)
   - health (1.0.4):
-    - Flutter
+  - Flutter
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
     - nanopb/encode (= 2.30908.0)
@@ -156,5 +156,4 @@ SPEC CHECKSUMS:
   url_launcher: b6e016d912f04be9f5bf6e8e82dc599b7ba59649
 
 PODFILE CHECKSUM: 1c0f39fe1bf32cc9804170717e707c640a1603ef
-
 COCOAPODS: 1.11.2

@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'package:hea/data/user_repo.dart';
-import 'package:hea/providers/auth.dart';
+import 'package:hea/services/auth_service.dart';
 import 'package:hea/screens/home.dart';
 import 'package:hea/screens/onboarding.dart';
+import 'package:hea/services/service_locator.dart';
+import 'package:hea/services/user_service.dart';
 import 'package:hea/widgets/navigable_text.dart';
 import 'package:hea/widgets/gradient_button.dart';
 import 'package:hea/widgets/safearea_container.dart';
@@ -19,10 +20,8 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-enum LoginChoice { unselected, login, signUp }
-
 class _LoginScreenState extends State<LoginScreen> {
-  final _auth = Authentication();
+  final _auth = serviceLocator<AuthService>();
 
   final _formKey = GlobalKey<FormState>();
   final _email = TextEditingController();
@@ -31,48 +30,44 @@ class _LoginScreenState extends State<LoginScreen> {
   var _loginChoice = LoginChoice.unselected;
 
   void login() async {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
+    if (!_formKey.currentState!.validate()) { return; }
 
     try {
       await _auth.login(_email.text, _password.text);
       await navigateSuccess();
-    } on AuthenticationException catch (e) {
-      print(e);
-
+    } on AuthServiceException catch (e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(e.message)));
     }
   }
 
   void signup() async {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
+    if (!_formKey.currentState!.validate()) { return; }
 
     try {
       await _auth.signup(_email.text, _password.text);
       await navigateSuccess();
-    } on AuthenticationException catch (e) {
+    } on AuthServiceException catch (e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(e.message)));
     }
   }
 
   Future navigateSuccess() async {
-    final userId = _auth.currentUser()!.uid;
-    final user = await UserRepo().get(userId);
+    final userOnboarded = await serviceLocator<UserService>().isCurrentUserOnboarded();
 
-    if (user == null) {
+    if (!userOnboarded) {
       await Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => OnboardingScreen()),
-          (route) => false);
-    } else {
+          (route) => false
+      );
+    }
+    else {
       // User already finished onboarding
       await Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => HomeScreen()),
-          (route) => false);
+          (route) => false
+      );
     }
   }
 

@@ -1,3 +1,9 @@
+import 'dart:developer';
+import 'package:hea/services/auth_service.dart';
+import 'package:hea/screens/error.dart';
+import 'package:hea/services/service_locator.dart';
+import 'package:hea/services/user_service.dart';
+
 import 'package:flutter/material.dart';
 import 'package:hea/providers/auth.dart';
 import 'package:hea/data/user_repo.dart';
@@ -42,15 +48,25 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   // No reflections so we have to update through a map
   late final Map<String, dynamic> userJson;
-
+  
   @override
   initState() {
     super.initState();
     currentStep = OnboardingStep.health_sync;
 
-    // Onboard user
-    final authUser = Authentication().currentUser()!;
+     // Onboard user
+    final authUser = serviceLocator<AuthService>().currentUser()!;
     userJson = User(authUser.uid).toJson();
+
+    // Pull health data
+    WidgetsBinding.instance!.addPostFrameCallback((_) =>
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const HealthSetupScreen())
+      ).then((value) {
+        List<HealthDataPoint> healthData = value;
+        userJson["healthData"] = healthData.map((e) => e.toJson()).toList();
+      })
+    );
   }
 
   void _reroute() {
@@ -104,7 +120,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         _reroute();
       })
     );
-  }
+ }
 
   @override
   Widget build(BuildContext context) {

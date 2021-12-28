@@ -1,10 +1,15 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:hea/models/user.dart';
 import 'package:hea/screens/dashboard.dart';
+import 'package:hea/screens/error.dart';
 import 'package:hea/screens/help_map.dart';
-
 import 'package:hea/screens/profile.dart';
-import 'package:hea/providers/auth.dart';
-
+import 'package:hea/services/service_locator.dart';
+import 'package:hea/services/user_service.dart';
 import 'package:hea/screens/modules.dart';
 
 import 'package:hea/widgets/fancy_bottom_bar.dart';
@@ -37,24 +42,36 @@ class _HomeScreenState extends State<HomeScreen> {
                 })));
   }
 
+  // TODO
   Widget pageFor(num index) {
+
+    Widget child;
     if (index == 0) {
-      return DashboardScreen();
+      child = const DashboardScreen();
+    }
+    else if (index == 1) {
+      child = const ModulesScreen();
+    }
+    else if (index == 2) {
+      child = HelpMapScreen();
+    }
+    else if (index == 3) {
+      child = ProfileScreen();
+    }
+    else {
+      // Should never hit this unless something goes horribly wrong
+      child = const ErrorScreen();
     }
 
-    if (index == 1) {
-      return ModulesScreen();
-    }
-
-    if (index == 2) {
-      return HelpMapScreen();
-    }
-
-    if (index == 3) {
-      return ProfileScreen();
-    }
-    return Scaffold(
-        appBar: AppBar(title: Text("Page " + index.toString())),
-        body: Center(child: Text("Page " + index.toString())));
+    return FutureProvider<User?>(
+        initialData: null,
+        create: (context) => serviceLocator<UserService>().getCurrentUser(),
+        child: child,
+        catchError: (context, error) {
+          log("$error");
+          log("${StackTrace.current}");
+          return null;
+        },
+    );
   }
 }

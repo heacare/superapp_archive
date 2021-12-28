@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:hea/data/user_repo.dart';
 import 'package:hea/models/user.dart';
 
-import 'package:hea/providers/auth.dart';
 import 'package:hea/screens/login.dart';
+import 'package:hea/services/api_manager.dart';
+import 'package:hea/services/auth_service.dart';
+import 'package:hea/services/service_locator.dart';
 import 'package:hea/widgets/avatar_icon.dart';
+import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({Key? key}) : super(key: key);
@@ -14,35 +16,29 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  Future<User?> userFuture = UserRepo().getCurrent();
-
   Future logout() async {
-    await Authentication().logout();
+    await serviceLocator<AuthService>().logout();
+
     Navigator.of(context).pushAndRemoveUntil(
-        new MaterialPageRoute(builder: (context) {
+        MaterialPageRoute(builder: (context) {
       return LoginScreen();
     }), (route) => false);
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: userFuture,
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return const Text("Error!");
-          }
-          if (snapshot.connectionState != ConnectionState.done) {
+    serviceLocator<ApiManager>().get("/");
+    return Consumer<User?>(
+        builder: (context, user, _) {
+          if (user == null) {
             return const Center(child: CircularProgressIndicator());
           }
-          if (snapshot.data == null) {
-            return const Text("No user?!");
-          }
-          return loaded(context, snapshot.data as User);
-        });
+          return loaded(user);
+        }
+    );
   }
 
-  Widget loaded(BuildContext context, User user) {
+  Widget loaded(User user) {
     final name = user.name;
     final height = user.height.toString() + "m";
     final weight = user.weight.toString() + "kg";

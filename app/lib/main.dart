@@ -2,15 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-import 'package:hea/providers/auth.dart';
 import 'package:hea/screens/error.dart';
 import 'package:hea/screens/home.dart';
 import 'package:hea/screens/login.dart';
 import 'package:hea/screens/onboarding.dart';
-
-import 'data/user_repo.dart';
+import 'package:hea/services/auth_service.dart';
+import 'package:hea/services/service_locator.dart';
+import 'package:hea/services/user_service.dart';
 
 void main() {
+  setupServiceLocator();
   runApp(const App());
 }
 
@@ -28,6 +29,7 @@ enum UserStatus {
 }
 
 class _AppState extends State<App> {
+
   final Future<FirebaseApp> _firebaseInit = Firebase.initializeApp();
 
   ThemeData _getThemeData() {
@@ -154,16 +156,21 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
+
     final Future<UserStatus> hasUserData = _firebaseInit.then((value) async {
       // Authentication user exists separately from user data, so we have to check for the case where
       // the user signed up but uninstalled/reset the app before finishing onboarding
-      final authUser = Authentication().currentUser();
-      if (authUser == null) {
+      final authService = serviceLocator<AuthService>();
+
+      if (authService.currentUser() == null) {
         return UserStatus.signedOut;
-      } else {
-        return (await UserRepo().get(authUser.uid) == null)
-            ? UserStatus.registered
-            : UserStatus.onboarded;
+      }
+      else {
+        authService.currentUserToken()?.then((token) => print(token));
+
+        return await serviceLocator<UserService>().isCurrentUserOnboarded()
+            ? UserStatus.onboarded
+            : UserStatus.registered;
       }
     });
 
@@ -175,7 +182,7 @@ class _AppState extends State<App> {
           theme: _getThemeData(),
           // TODO design a loading page and a 'error' page
           // Match Firebase initialization result
-          home: mainScreen(snapshot),
+          home: mainScreen(snapshot)
         );
       },
     );
@@ -193,6 +200,7 @@ class _AppState extends State<App> {
 
     if (snapshot.hasData) {
       switch (snapshot.requireData) {
+
         case UserStatus.signedOut:
           return LoginScreen();
 
