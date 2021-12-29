@@ -1,4 +1,7 @@
 import 'dart:developer';
+import 'package:health/health.dart';
+import 'package:get_it/get_it.dart';
+
 import 'package:hea/services/auth_service.dart';
 import 'package:hea/screens/error.dart';
 import 'package:hea/services/service_locator.dart';
@@ -6,7 +9,6 @@ import 'package:hea/services/user_service.dart';
 
 import 'package:flutter/material.dart';
 import 'package:hea/providers/auth.dart';
-import 'package:hea/data/user_repo.dart';
 import 'package:hea/models/user.dart';
 
 import 'package:hea/screens/home.dart';
@@ -16,6 +18,8 @@ import 'package:hea/screens/onboarding/basic_info.dart';
 import 'package:hea/screens/onboarding/smoking.dart';
 import 'package:hea/screens/onboarding/drinking.dart';
 import 'package:hea/screens/onboarding/followup.dart';
+
+final getIt = GetIt.instance;
 
 enum OnboardingStep {
   health_sync,
@@ -48,7 +52,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   // No reflections so we have to update through a map
   late final Map<String, dynamic> userJson;
-  
+
   @override
   initState() {
     super.initState();
@@ -93,7 +97,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       case OnboardingStep.end:
       default:
         // Push to Firestore
-        UserRepo().insert(User.fromJson(userJson));
+        // UserRepo().insert(User.fromJson(userJson));
+        getIt<UserService>().updateUser(User.fromJson(userJson));
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
               content: Text("Welcome to Happily Ever After!")

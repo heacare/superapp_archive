@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'package:hea/data/user_repo.dart';
 import 'package:hea/providers/auth.dart';
 import 'package:hea/screens/home.dart';
 import 'package:hea/screens/onboarding.dart';

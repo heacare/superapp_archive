@@ -13,6 +13,8 @@ import 'package:hea/widgets/safearea_container.dart';
 
 const svgAssetName = "assets/svg/login.svg";
 
+enum LoginChoice { unselected, login, signUp }
+
 class LoginScreen extends StatefulWidget {
   LoginScreen({Key? key}) : super(key: key);
 
