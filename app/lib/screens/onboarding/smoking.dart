@@ -9,6 +9,14 @@ import 'package:hea/widgets/navigable_text.dart';
 import 'package:hea/widgets/gradient_button.dart';
 import 'package:hea/widgets/safearea_container.dart';
 import 'package:hea/widgets/switch_button.dart';
+import 'package:hea/widgets/select_list.dart';
+
+final List<SelectListItem> choices = [
+  SelectListItem(text: "Less than a pack", value: "LessOnePack"),
+  SelectListItem(text: "One to two packs", value: "OneToTwoPacks"),
+  SelectListItem(text: "Three to five packs", value: "ThreeToFivePacks"),
+  SelectListItem(text: "More than five packs", value: "FivePacks"),
+];
 
 class OnboardingSmokingScreen extends StatefulWidget {
   OnboardingSmokingScreen({Key? key}) : super(key: key);
@@ -22,25 +30,19 @@ class OnboardingSmokingScreenState extends State<OnboardingSmokingScreen> {
 
   bool smokes = false;
   bool past_smokes = false;
-  final _packs = TextEditingController(text: "1");
+  String packs = choices[0].value;
 
   _validateEntries() {
-    if (smokes || past_smokes) {
-      if (_packs.text == '') {
-        throw 'Please enter the packs you smoke(d) a day!';
-      }
-    }
-
     Map<String, dynamic> res = <String, dynamic> {
-      "smokes": smokes,
+      "isSmoker": smokes,
     };
 
     if (past_smokes) {
-      res["past_smokes"] = past_smokes;
+      res["smokingYears"] = past_smokes;
     }
 
     if (smokes || past_smokes) {
-      res["smoke_packs"] = _packs.text;
+      res["smokingPacksPerDay"] = packs;
     }
 
     return res;
@@ -84,17 +86,22 @@ class OnboardingSmokingScreenState extends State<OnboardingSmokingScreen> {
           child: Text("Have many packs a day?",
             style: Theme.of(context).textTheme.headline2),
           padding: const EdgeInsets.symmetric(vertical: 16.0)),
-        TextFormField(
-          controller: _packs,
-          validator: FormBuilderValidators.numeric(context),
-          keyboardType: TextInputType.number
-        )
+        SelectList(
+          items: choices,
+          onChange: (String c) {
+            setState(() { packs = c; });
+          },
+        ),
       ]);
     }
 
     return Form (
       key: _formKey,
-      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: children)
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.max,
+        children: children,
+      ),
     );
   }
 
@@ -104,29 +111,39 @@ class OnboardingSmokingScreenState extends State<OnboardingSmokingScreen> {
       // Enabling the safe area
       body: SafeArea(
         child: Container(
-          padding: const EdgeInsets.all(30.0),
-          child: Column( children: [
-            _buildForm(),
-            Expanded ( child: Align (
-              alignment: Alignment.bottomCenter,
-              child: GradientButton (
-                text: "CONTINUE",
-                onPressed: () {
-                  try {
-                    Map<String, dynamic> res = _validateEntries();
-                    Navigator.of(context, rootNavigator: true).pop(OnboardingStepReturn(
-                        nextStep: OnboardingStep.drinking,
-                        returnData: res,
-                      ));
-                  } on String catch (e) {
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(SnackBar(content: Text(e)));
-                  }
-                },
-              ),
-            )),
-          ]),
-        ),
+          padding: const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 0.0),
+          child: CustomScrollView(
+          slivers: [
+            SliverList (
+              delegate: SliverChildListDelegate([
+                _buildForm(),
+              ])
+            ),
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 30.0),
+                child: Align (
+                alignment: Alignment.bottomCenter,
+                child: GradientButton (
+                  text: "CONTINUE",
+                  onPressed: () {
+                    try {
+                      Map<String, dynamic> res = _validateEntries();
+                      Navigator.of(context, rootNavigator: true).pop(OnboardingStepReturn(
+                          nextStep: OnboardingStep.drinking,
+                          returnData: res,
+                        ));
+                    } on String catch (e) {
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(content: Text(e)));
+                    }
+                  },
+                ),
+              ))
+            )
+          ]
+        ))
       ),
     );
   }

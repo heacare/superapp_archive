@@ -2,9 +2,11 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:country_picker/country_picker.dart';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hea/widgets/gradient_button.dart';
 import 'package:hea/screens/onboarding.dart';
+import 'package:hea/models/onboarding_types.dart';
 
 class OnboardingBasicInfoScreen extends StatefulWidget {
   OnboardingBasicInfoScreen({Key? key}) : super(key: key);
@@ -21,8 +23,10 @@ class OnboardingBasicInfoScreenState extends State<OnboardingBasicInfoScreen> {
   final _weight = TextEditingController();
 
   String birthdate = '';
-  String gender = 'male';
-  String country = 'Singapore';
+  String gender = describeEnum(Gender.values[0]);
+
+  String country = 'SG';
+  String countryName = 'Singapore';
 
   _validateEntries() {
     if (!_formKey.currentState!.validate()) {
@@ -41,16 +45,30 @@ class OnboardingBasicInfoScreenState extends State<OnboardingBasicInfoScreen> {
       throw 'Enter your height please!';
     }
 
+    num height = 0;
+    try {
+      height = num.parse(_height.text);
+    } catch(e) {
+      throw 'Height must be a number!';
+    }
+
     if (_weight.text == '') {
       throw 'Enter your weight please!';
     }
 
+    num weight = 0;
+    try {
+      weight = num.parse(_weight.text);
+    } catch(e) {
+      throw 'Weight must be a number!';
+    }
+
     return <String, dynamic> {
       "name": _name.text,
-      "height": _height.text,
-      "weight": _weight.text,
+      "height": height / 100,
+      "weight": weight,
       "gender": gender,
-      "birthdate": birthdate,
+      "birthday": birthdate,
       "country": country,
     };
   }
@@ -60,7 +78,7 @@ class OnboardingBasicInfoScreenState extends State<OnboardingBasicInfoScreen> {
     return Scaffold(
       // Enabling the safe area
       body: SafeArea(
-          child: Container(
+          child: SingleChildScrollView( child: Container(
               padding: const EdgeInsets.all(30.0),
               child:  Form (
                 key: _formKey,
@@ -106,21 +124,15 @@ class OnboardingBasicInfoScreenState extends State<OnboardingBasicInfoScreen> {
                          ),
                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
                          child: DropdownButton<String> (
-                           value: gender,
+                           value: describeEnum(Gender.values[0]),
                            isExpanded: true,
                            underline: Container(),
-                           items: <DropdownMenuItem<String>> [
-                             DropdownMenuItem<String> (
-                               value: 'male',
-                               child: Text('Male'),
+                           items: Gender.values
+                             .map((gender) => DropdownMenuItem<String> (
+                               value: describeEnum(gender),
+                               child: Text(describeEnum(gender)),
                                enabled: true,
-                             ),
-                             DropdownMenuItem<String> (
-                               value: 'female',
-                               child: Text('Female'),
-                               enabled: true,
-                             ),
-                           ],
+                           )).toList(),
                            onChanged: (val) => setState(() { gender = val != null ? val : ''; }),
                          )
                        )
@@ -168,12 +180,15 @@ class OnboardingBasicInfoScreenState extends State<OnboardingBasicInfoScreen> {
                      SizedBox(
                        height: 50.0,
                        child: ElevatedButton(
-                         child: Text(country),
-                         onPressed: () =>showCountryPicker(
+                         child: Text(countryName),
+                         onPressed: () => showCountryPicker(
                            context: context,
                            showPhoneCode: false, // optional. Shows phone code before the country name.
                            onSelect: (Country c) {
-                             setState(() { country = c.name; });
+                             setState(() {
+                               country = c.countryCode;
+                               countryName = c.name;
+                            });
                            },
                          ),
                          style: TextButton.styleFrom(
@@ -200,7 +215,7 @@ class OnboardingBasicInfoScreenState extends State<OnboardingBasicInfoScreen> {
                    ],
                 )
               )
-            )),
+            ))),
     );
   }
 }

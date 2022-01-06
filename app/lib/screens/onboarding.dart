@@ -96,9 +96,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         break;
       case OnboardingStep.end:
       default:
-        // Push to Firestore
-        // UserRepo().insert(User.fromJson(userJson));
+        // Update through user service
         getIt<UserService>().updateUser(User.fromJson(userJson));
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
               content: Text("Welcome to Happily Ever After!")

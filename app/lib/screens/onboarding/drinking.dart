@@ -11,11 +11,11 @@ import 'package:hea/widgets/safearea_container.dart';
 import 'package:hea/widgets/select_list.dart';
 
 final List<SelectListItem> choices = [
-  SelectListItem(text: "I never drink", value: "never"),
-  SelectListItem(text: "Few times a year", value: "few"),
-  SelectListItem(text: "Once a month", value: "once-month"),
-  SelectListItem(text: "Once a week", value: "once-week"),
-  SelectListItem(text: "Multiple times a week", value: "multiple-week"),
+  SelectListItem(text: "I never drink", value: "NotAtAll"),
+  SelectListItem(text: "Once a month", value: "OnceAMonth"),
+  SelectListItem(text: "Few times a week", value: "FewTimesAWeek"),
+  SelectListItem(text: "Once a week", value: "OnceAWeek"),
+  SelectListItem(text: "Everyday", value: "Everyday"),
 ];
 
 class OnboardingDrinkingScreen extends StatefulWidget {
@@ -57,11 +57,11 @@ class OnboardingDrinkingScreenState extends State<OnboardingDrinkingScreen> {
                   onPressed: () {
                     try {
                       Map<String, dynamic> res = <String, dynamic> {
-                        "drinking": choice,
+                        "alcoholFreq": choice,
                       };
 
                       Navigator.of(context, rootNavigator: true).pop(OnboardingStepReturn(
-                          nextStep: OnboardingStep.drinking,
+                          nextStep: OnboardingStep.followups,
                           returnData: res,
                         ));
                     } on String catch (e) {
