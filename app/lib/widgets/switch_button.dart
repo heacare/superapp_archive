@@ -44,7 +44,7 @@ class SwitchButtonState extends State<SwitchButton> {
       bColor = selectedColor;
     }
 
-    BoxDecoration selectedDecoration = BoxDecoration (
+    BoxDecoration selectedDecoration = BoxDecoration(
       gradient: LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
@@ -58,14 +58,14 @@ class SwitchButtonState extends State<SwitchButton> {
       ),
     );
 
-    return Container (
+    return Container(
       width: width,
       height: height,
-      decoration: BoxDecoration (
+      decoration: BoxDecoration(
         color: Colors.grey[200],
         borderRadius: BorderRadius.all(Radius.circular(15.0)),
       ),
-      child: Stack (
+      child: Stack(
         children: [
           AnimatedAlign(
             alignment: Alignment(xAlign, 0),
@@ -93,7 +93,8 @@ class SwitchButtonState extends State<SwitchButton> {
                   'YES',
                   style: TextStyle(
                     color: aColor,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -116,7 +117,8 @@ class SwitchButtonState extends State<SwitchButton> {
                   'NO',
                   style: TextStyle(
                     color: bColor,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),

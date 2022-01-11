@@ -32,52 +32,49 @@ class IconGradientButton extends StatelessWidget {
     final iconColour = iconColor ?? Theme.of(context).colorScheme.primary;
 
     return ElevatedButton(
-            onPressed: this.onPressed,
-            child: Ink(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [a, b],
-                ),
-                borderRadius: const BorderRadius.all(Radius.circular(15.0)),
+        onPressed: this.onPressed,
+        child: Ink(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [a, b],
               ),
-              child: Padding( padding: const EdgeInsets.all(16.0), child: Row (
+              borderRadius: const BorderRadius.all(Radius.circular(15.0)),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
                 children: [
                   SizedBox(
                     width: 50.0,
                     height: 50.0,
-                    child: Ink (
+                    child: Ink(
                       decoration: BoxDecoration(
                         color: iconColour,
-                        borderRadius: const BorderRadius.all(Radius.circular(11.0)),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(11.0)),
                       ),
                       child: Center(child: icon!),
                     ),
                   ),
-                  Padding( padding: const EdgeInsets.only(left: 11.0), child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.w600,
-                          height: 1,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Text(
-                        text,
-                        style: TextStyle(
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.normal,
-                          height: 1,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  )),
+                  Padding(
+                      padding: const EdgeInsets.only(left: 11.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(title,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline3
+                                  ?.copyWith(color: Color(0xFFFFFFFF))),
+                          Text(text,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2
+                                  ?.copyWith(color: Color(0xFFFFFFFF)))
+                        ],
+                      )),
                 ],
               ),
             )));

@@ -41,11 +41,11 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
     setState(() => _state = AppState.FETCHING_DATA);
 
     Navigator.of(context, rootNavigator: true).pop(OnboardingStepReturn(
-        nextStep: OnboardingStep.starter,
-        returnData: <String, dynamic>{
-          "healthData": _healthDataList.map((e) => e.toJson()).toList(),
-        },
-      ));
+      nextStep: OnboardingStep.starter,
+      returnData: <String, dynamic>{
+        "healthData": _healthDataList.map((e) => e.toJson()).toList(),
+      },
+    ));
 
     return;
 
@@ -63,7 +63,8 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
       // Fetch data from 1st Jan 2000 till current date
       DateTime startDate = DateTime(2000);
       DateTime endDate = DateTime.now();
-      List<HealthDataPoint> healthData = await health.getHealthDataFromTypes(startDate, endDate, types);
+      List<HealthDataPoint> healthData =
+          await health.getHealthDataFromTypes(startDate, endDate, types);
 
       _healthDataList.addAll(healthData);
 
@@ -77,7 +78,6 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
     } catch (e) {
       print("Caught exception in getHealthDataFromTypes: $e");
     }
-
   }
 
   Widget _contentFetchingData() {
@@ -109,58 +109,49 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
 
   Widget _contentNotFetched() {
     final platform = Theme.of(context).platform;
-    String providerName = platform == TargetPlatform.iOS ? "Apple Health" : "Google Fit"; // Assume all other platforms will log in with Google
+    String providerName = platform == TargetPlatform.iOS
+        ? "Apple Health"
+        : "Google Fit"; // Assume all other platforms will log in with Google
     String buttonText = "Sync with " + providerName;
 
-    return SafeAreaContainer (
-      child: Column (
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: Container (
-              color: Colors.grey[200],
-            ),
+    return SafeAreaContainer(
+        child:
+            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      Expanded(
+          child: Container(
+        decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+            color: Colors.grey[200]),
+      )),
+      const SizedBox(height: 30.0),
+      Text(buttonText, style: Theme.of(context).textTheme.headline1),
+      const SizedBox(height: 10.0),
+      Text(
+          "I use " +
+              providerName +
+              " to personalise your recommendations and help you live longer!",
+          style: Theme.of(context).textTheme.headline2?.copyWith(
+              fontWeight: FontWeight.w400,
+              height: 1.4,
+              color: Color(0xFF707070))),
+      Padding(
+          child: GradientButton(
+            text: "SYNC DATA",
+            onPressed: fetchData,
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Padding(
-                child: Text(buttonText, style: Theme.of(context).textTheme.headline1),
-                padding: const EdgeInsets.symmetric(vertical: 16.0)
-              ),
-              Text(
-                "I use " + providerName + " to personalise your recommendations and help you live longer!",
-                style: Theme.of(context).textTheme.headline2
-              ),
-              Padding(
-                child: GradientButton(
-                  text: "SYNC DATA",
-                  onPressed: fetchData,
-                ),
-                padding: const EdgeInsets.symmetric(vertical: 32.0)
-              )
-            ],
-          )
-        ]
-      )
-    );
+          padding: const EdgeInsets.only(top: 30.0))
+    ]));
   }
 
   Widget _authorizationNotGranted() {
-    return Column(
-      children: [
-        const Text('''
+    return Column(children: [
+      const Text('''
           Authorization not given.
           For Android please check your OAUTH2 client ID is correct in Google Developer Console.
           For iOS check your permissions in Apple Health.
         '''),
-        ElevatedButton(
-          child: const Text("Try again"),
-          onPressed: fetchData
-        )
-      ]
-    );
+      ElevatedButton(child: const Text("Try again"), onPressed: fetchData)
+    ]);
   }
 
   Widget _content() {
@@ -178,9 +169,8 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: _content(),
-      )
-    );
+        body: Center(
+      child: _content(),
+    ));
   }
 }

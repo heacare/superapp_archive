@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
 class GradientButton extends StatelessWidget {
-  GradientButton({Key? key, required this.text, this.onPressed, this.firstColor, this.secondColor})
+  GradientButton(
+      {Key? key,
+      required this.text,
+      this.onPressed,
+      this.firstColor,
+      this.secondColor})
       : super(key: key);
 
   String? text;
@@ -19,8 +24,8 @@ class GradientButton extends StatelessWidget {
 
     return SizedBox(
         height: 50.0,
-        child: ElevatedButton(
-            onPressed: this.onPressed,
+        child: GestureDetector(
+            onTap: this.onPressed,
             child: Ink(
               decoration: BoxDecoration(
                 gradient: LinearGradient(

@@ -13,24 +13,29 @@ class OnboardingFollowupScreen extends StatelessWidget {
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.all(30.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Padding(
                 child: Text("Would you like to tell me more?",
-                  style: Theme.of(context).textTheme.headline1),
+                    style: Theme.of(context).textTheme.headline1),
                 padding: const EdgeInsets.symmetric(vertical: 16.0)),
-              Text("Based on your answers, I think these follow ups are good for me to get to know you better!",
-                style: Theme.of(context).textTheme.headline2),
-              Expanded( child: Column (
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  IconGradientButton (
+            Text(
+                "Based on your answers, I think these follow ups are good for me to get to know you better!",
+                style: Theme.of(context).textTheme.headline2?.copyWith(
+                    fontWeight: FontWeight.w400,
+                    height: 1.4,
+                    color: Color(0xFF707070))),
+            Expanded(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                  IconGradientButton(
                     title: "Sleep & Recovery",
                     text: "Survey review of sleep health",
-                    icon: FaIcon(FontAwesomeIcons.solidMoon, color: Colors.white),
+                    icon:
+                        FaIcon(FontAwesomeIcons.solidMoon, color: Colors.white),
                     iconColor: Color(0x0C000000),
                     firstColor: Color(0xFF00ABE9),
                     secondColor: Color(0xFF7FDDFF),
@@ -39,10 +44,11 @@ class OnboardingFollowupScreen extends StatelessWidget {
                     },
                   ),
                   const SizedBox(height: 9.0),
-                  IconGradientButton (
+                  IconGradientButton(
                     title: "Psychosocial Health",
                     text: "Survey review of mental health",
-                    icon: FaIcon(FontAwesomeIcons.peopleArrows, color: Colors.white),
+                    icon: FaIcon(FontAwesomeIcons.peopleArrows,
+                        color: Colors.white),
                     iconColor: Color(0x0C000000),
                     firstColor: Color(0xFFFFC498),
                     secondColor: Color(0xFFFF7A60),
@@ -56,19 +62,19 @@ class OnboardingFollowupScreen extends StatelessWidget {
                     child: ElevatedButton(
                       child: const Text("SKIP"),
                       onPressed: () {
-                        Navigator.of(context, rootNavigator: true).pop(OnboardingStepReturn(
-                            nextStep: OnboardingStep.end,
-                            returnData: <String, dynamic>{},
-                          ));
+                        Navigator.of(context, rootNavigator: true)
+                            .pop(OnboardingStepReturn(
+                          nextStep: OnboardingStep.end,
+                          returnData: <String, dynamic>{},
+                        ));
                       },
                       style: TextButton.styleFrom(
-                          primary: Colors.black,
+                          primary: Color(0xFF414141),
                           backgroundColor: Colors.grey[200],
                           elevation: 0.0),
                     ),
                   )
-                ]
-              )),
+                ])),
           ]),
         ),
       ),

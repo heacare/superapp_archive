@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -138,9 +137,9 @@ class _AppState extends State<App> {
             contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
             floatingLabelBehavior: FloatingLabelBehavior.never,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
+              borderRadius: BorderRadius.circular(50.0),
             ),
-            fillColor: Color(0xFFE5E5E5),
+            fillColor: const Color(0xFFF5F5F5),
             filled: true,
             enabledBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.transparent, width: 2.0)),

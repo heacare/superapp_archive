@@ -22,7 +22,8 @@ class OnboardingDrinkingScreen extends StatefulWidget {
   OnboardingDrinkingScreen({Key? key}) : super(key: key);
 
   @override
-  State<OnboardingDrinkingScreen> createState() => OnboardingDrinkingScreenState();
+  State<OnboardingDrinkingScreen> createState() =>
+      OnboardingDrinkingScreenState();
 }
 
 class OnboardingDrinkingScreenState extends State<OnboardingDrinkingScreen> {
@@ -36,42 +37,44 @@ class OnboardingDrinkingScreenState extends State<OnboardingDrinkingScreen> {
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.all(30.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-            Text("Do you drink?",
-              style: Theme.of(context).textTheme.headline1),
-            Expanded( child: Column (
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                SelectList(
-                  items: choices,
-                  onChange: (String c) {
-                    setState(() { choice = c; });
-                  },
-                ),
-                GradientButton (
-                  text: "CONTINUE",
-                  onPressed: () {
-                    try {
-                      Map<String, dynamic> res = <String, dynamic> {
-                        "alcoholFreq": choice,
-                      };
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text("Do you drink?", style: Theme.of(context).textTheme.headline1),
+            Expanded(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                  SelectList(
+                    items: choices,
+                    onChange: (String c) {
+                      setState(() {
+                        choice = c;
+                      });
+                    },
+                  ),
+                  SizedBox(height: 24.0),
+                  GradientButton(
+                    text: "CONTINUE",
+                    onPressed: () {
+                      try {
+                        Map<String, dynamic> res = <String, dynamic>{
+                          "alcoholFreq": choice,
+                        };
 
-                      Navigator.of(context, rootNavigator: true).pop(OnboardingStepReturn(
+                        Navigator.of(context, rootNavigator: true)
+                            .pop(OnboardingStepReturn(
                           nextStep: OnboardingStep.followups,
                           returnData: res,
                         ));
-                    } on String catch (e) {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(SnackBar(content: Text(e)));
-                    }
-                  },
-                ),
-              ]
-            )),
+                      } on String catch (e) {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(SnackBar(content: Text(e)));
+                      }
+                    },
+                  ),
+                ])),
           ]),
         ),
       ),

@@ -6,7 +6,6 @@ import 'package:hea/services/auth_service.dart';
 import 'package:hea/screens/error.dart';
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/services/user_service.dart';
-
 import 'package:flutter/material.dart';
 import 'package:hea/providers/auth.dart';
 import 'package:hea/models/user.dart';
@@ -28,20 +27,22 @@ enum OnboardingStep {
   smoking,
   drinking,
   followups,
-
   end,
 }
 
 class OnboardingStepReturn {
-  OnboardingStepReturn({@required this.nextStep = OnboardingStep.end, @required this.returnData = const <String, dynamic>{}});
+  OnboardingStepReturn(
+      {@required this.nextStep = OnboardingStep.end,
+      @required this.returnData = const <String, dynamic>{}});
 
   OnboardingStep nextStep;
   Map<String, dynamic> returnData;
 }
 
 class OnboardingScreen extends StatefulWidget {
-  const OnboardingScreen({Key? key,}) :
-        super(key: key);
+  const OnboardingScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();
@@ -58,19 +59,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     super.initState();
     currentStep = OnboardingStep.health_sync;
 
-     // Onboard user
+    // Onboard user
     final authUser = serviceLocator<AuthService>().currentUser()!;
     userJson = User(authUser.uid).toJson();
 
     // Pull health data
-    WidgetsBinding.instance!.addPostFrameCallback((_) =>
-      Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const HealthSetupScreen())
-      ).then((value) {
-        List<HealthDataPoint> healthData = value;
-        userJson["healthData"] = healthData.map((e) => e.toJson()).toList();
-      })
-    );
+    WidgetsBinding.instance!.addPostFrameCallback((_) => Navigator.of(context)
+            .push(MaterialPageRoute(
+                builder: (context) => const HealthSetupScreen()))
+            .then((value) {
+          List<HealthDataPoint> healthData = value;
+          userJson["healthData"] = healthData.map((e) => e.toJson()).toList();
+        }));
   }
 
   void _reroute() {
@@ -100,32 +100,26 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         getIt<UserService>().updateUser(User.fromJson(userJson));
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text("Welcome to Happily Ever After!")
-          )
-        );
+            const SnackBar(content: Text("Welcome to Happily Ever After!")));
 
         // Return to home screen
         Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
-          (route) => false
-        );
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+            (route) => false);
 
         return;
-      break;
+        break;
     }
 
-    WidgetsBinding.instance!.addPostFrameCallback((_) =>
-      Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => nextScreen)
-      ).then((value) {
-        OnboardingStepReturn res = value;
-        userJson.addAll(res.returnData);
-        currentStep = res.nextStep;
-        _reroute();
-      })
-    );
- }
+    WidgetsBinding.instance!.addPostFrameCallback((_) => Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => nextScreen))
+            .then((value) {
+          OnboardingStepReturn res = value;
+          userJson.addAll(res.returnData);
+          currentStep = res.nextStep;
+          _reroute();
+        }));
+  }
 
   @override
   Widget build(BuildContext context) {

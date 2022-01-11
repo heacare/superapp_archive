@@ -7,7 +7,7 @@ import 'api_endpoint.dart';
 
 // TODO Change to prod backend
 // Android emulator routes to localhost on 10.0.2.2
-const apiBaseUrl = "10.0.2.2:3000";
+const apiBaseUrl = "0.0.0.0:3000";
 
 class ApiManagerException implements Exception {
   final String message;
@@ -58,8 +58,7 @@ class ApiManager {
       }
       _jwtToken = jsonDecode(response.body)["jwt"];
       log("JWT Token: $_jwtToken");
-    }
-    else {
+    } else {
       throw ApiManagerException(message: "Failed to obtain JWT token");
     }
   }
