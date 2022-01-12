@@ -82,13 +82,14 @@ class LocationService {
 
   Future<void> _getLocationUpdates(BuildContext context,
       LocationData locationData, Function callUpdateData) async {
+    debugPrint("GetLocationUpdates");
     location.onLocationChanged.listen((value) {
       final distance = calculateDistance(value.latitude, value.longitude,
           locationData.latitude, locationData.longitude);
-      Provider.of<MapProvider>(context, listen: false).updateCurrentLocation(
-          LatLng(value.latitude!.toDouble(), value.longitude!.toDouble()));
       locationData = value;
       if (distance > 0.5) {
+        Provider.of<MapProvider>(context, listen: false).updateCurrentLocation(
+            LatLng(value.latitude!.toDouble(), value.longitude!.toDouble()));
         callUpdateData();
       }
     });
