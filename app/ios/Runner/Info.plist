@@ -27,10 +27,23 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+
+  <!-- Health stuff -->
 	<key>NSHealthShareUsageDescription</key>
 	<string>We will sync your data with the Apple Health app to give you better insights</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>We will sync your data with the Apple Health app to give you better insights</string>
+
+  <!-- Permission options for the `location` group -->
+  <key>NSLocationWhenInUseUsageDescription</key>
+  <string>Need location when in use</string>
+  <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+  <string>Always and when in use!</string>
+  <key>NSLocationUsageDescription</key>
+  <string>Older devices need location.</string>
+  <key>NSLocationAlwaysUsageDescription</key>
+  <string>Can I have location always?</string>
+
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

@@ -32,7 +32,9 @@ class _LoginScreenState extends State<LoginScreen> {
   var _loginChoice = LoginChoice.unselected;
 
   void login() async {
-    if (!_formKey.currentState!.validate()) { return; }
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
 
     try {
       await _auth.login(_email.text, _password.text);
@@ -44,7 +46,9 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void signup() async {
-    if (!_formKey.currentState!.validate()) { return; }
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
 
     try {
       await _auth.signup(_email.text, _password.text);
@@ -56,20 +60,18 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future navigateSuccess() async {
-    final userOnboarded = await serviceLocator<UserService>().isCurrentUserOnboarded();
+    final userOnboarded =
+        await serviceLocator<UserService>().isCurrentUserOnboarded();
 
     if (!userOnboarded) {
       await Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => OnboardingScreen()),
-          (route) => false
-      );
-    }
-    else {
+          (route) => false);
+    } else {
       // User already finished onboarding
       await Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => HomeScreen()),
-          (route) => false
-      );
+          (route) => false);
     }
   }
 
@@ -93,60 +95,78 @@ class _LoginScreenState extends State<LoginScreen> {
                 padding: const EdgeInsets.symmetric(vertical: 16.0)),
             Text(
                 "We provide proactive, preventive & personalised healthcare to keep you at the apex of your health.",
-                style: Theme.of(context).textTheme.headline2),
+                style: Theme.of(context).textTheme.headline2?.copyWith(
+                    fontWeight: FontWeight.w400,
+                    height: 1.4,
+                    color: Color(0xFF707070))),
             const SizedBox(height: 24.0),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
               child: GradientButton(
                 text: "LOGIN",
                 onPressed: () =>
                     setState(() => _loginChoice = LoginChoice.login),
               ),
             ),
-            Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4.0),
-                child: SizedBox(
-                  height: 50.0,
-                  child: ElevatedButton(
-                    child: const Text("JOIN US"),
-                    onPressed: () =>
+            SizedBox(
+                height: 50.0,
+                child: GestureDetector(
+                    onTap: () =>
                         setState(() => _loginChoice = LoginChoice.signUp),
-                    style: TextButton.styleFrom(
-                        primary: Colors.black,
-                        backgroundColor: Colors.grey[100]),
-                  ),
-                )),
+                    child: Ink(
+                      decoration: BoxDecoration(
+                        color: Color(0xFFF4F4F4),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(15.0)),
+                      ),
+                      child: Container(
+                        constraints: const BoxConstraints(
+                            minWidth: 88.0, minHeight: 36.0),
+                        alignment: Alignment.center,
+                        child: Text("JOIN US",
+                            style: const TextStyle(
+                                fontFamily: "Poppins",
+                                letterSpacing: 1.0,
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.w600,
+                                height: 1.5,
+                                color: Color(0xFF414141)),
+                            textAlign: TextAlign.center),
+                      ),
+                    ))),
           ]);
     }
 
-    return Form (
-      key: _formKey,
-      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        NavigableText(
-          onPressed: () => setState(() => _loginChoice = LoginChoice.unselected),
-          text: _loginChoice == LoginChoice.login
-              ? "Welcome back to HEA"
-              : "Let's make you superhuman",
-        ),
-        const SizedBox(height: 24.0),
-        TextFormField(
-          controller: _email,
-          decoration: const InputDecoration(labelText: "Email"),
-          validator: FormBuilderValidators.email(context),
-        ),
-        const SizedBox(height: 8.0),
-        TextFormField(
-            controller: _password,
-            decoration: const InputDecoration(labelText: "Password"),
-            obscureText: true),
-        const SizedBox(height: 36.0),
-        GradientButton(
-          text: "LET'S GO",
-          onPressed: () {
-            _loginChoice == LoginChoice.login ? login() : signup();
-          },
-        ),
-    ]));
+    return Form(
+        key: _formKey,
+        child:
+            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          NavigableText(
+            onPressed: () =>
+                setState(() => _loginChoice = LoginChoice.unselected),
+            text: _loginChoice == LoginChoice.login
+                ? "Welcome back to HEA"
+                : "Let's make you superhuman",
+          ),
+          const SizedBox(height: 24.0),
+          TextFormField(
+            controller: _email,
+            decoration: const InputDecoration(labelText: "Email"),
+            validator: FormBuilderValidators.email(context),
+          ),
+          const SizedBox(height: 8.0),
+          TextFormField(
+              controller: _password,
+              decoration: const InputDecoration(labelText: "Password"),
+              obscureText: true),
+          const SizedBox(height: 36.0),
+          GradientButton(
+            text: "LET'S GO",
+            onPressed: () {
+              _loginChoice == LoginChoice.login ? login() : signup();
+            },
+          ),
+        ]));
   }
 
   @override
