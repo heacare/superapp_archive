@@ -17,11 +17,17 @@ class HealerServiceImpl implements HealerService {
 
   @override
   Future<List<Healer>> getNearby(LatLng location) async {
-    final resp = await api.get(ApiEndpoint.healerNearby);
+    Map<String, String> queryParams = {
+      'lat': location.latitude.toString(),
+      'lng': location.longitude.toString()
+    };
+
+    final resp =
+        await api.get(ApiEndpoint.healerNearby, queryParams: queryParams);
     if (resp.statusCode == 200) {
-      return jsonDecode(resp.body)
-          .map((healer) => Healer.fromJson(healer))
-          .toList();
+      List rawHealers = jsonDecode(resp.body)["healers"];
+      return rawHealers.map((healer) => Healer.fromJson(healer)).toList()
+          as List<Healer>;
     } else {
       throw ApiManagerException(
           message: "Failure in getNearbyHealer: ${resp.statusCode}");

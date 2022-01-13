@@ -6,17 +6,24 @@ class Healer {
   num id;
   String name;
   String description;
-  List<Proficiency> proficiencies;
-  List<Availability> availabilities;
+  List<Proficiency> proficiencies = [];
+  List<Availability> availabilities = [];
   LatLng? location;
 
   Healer.fromJson(Map<String, dynamic> data)
       : id = data["id"]!,
         name = data["name"]! as String,
-        description = data["description"]! as String,
-        proficiencies = data["proficiencies"]!
-        .map((Map<String, dynamic> proficiency) => Proficiency.fromJson(proficiency)).toList(),
-        availabilities = data["availabilities"]!.map((Map<String, dynamic> availability) => Availability.fromJson(availability)).toList();
+        description = data["description"]! as String {
+    List rawProficiencies = data["proficiencies"]!;
+    proficiencies = rawProficiencies
+        .map((proficiency) => Proficiency.fromJson(proficiency))
+        .toList();
+
+    List rawAvailabilities = data["availability"]!;
+    availabilities = rawAvailabilities
+        .map((availability) => Availability.fromJson(availability))
+        .toList();
+  }
 }
 
 class Proficiency {
@@ -24,7 +31,10 @@ class Proficiency {
   String description;
   num proficiency;
 
-  Proficiency({required this.name, required this.description, required this.proficiency});
+  Proficiency(
+      {required this.name,
+      required this.description,
+      required this.proficiency});
 
   Proficiency.fromJson(Map<String, dynamic> data)
       : name = data["name"]! as String,
@@ -39,6 +49,8 @@ class Availability {
   Availability({required this.range, required this.isHouseVisit});
 
   Availability.fromJson(Map<String, dynamic> data)
-      : range = DateTimeRange(start: DateTime.parse(data["start"]!), end: DateTime.parse(data["end"]!)),
+      : range = DateTimeRange(
+            start: DateTime.parse(data["start"]!),
+            end: DateTime.parse(data["end"]!)),
         isHouseVisit = data["isHouseVisit"]! as bool;
 }

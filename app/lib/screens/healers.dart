@@ -1,8 +1,11 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:hea/providers/map.dart';
@@ -26,6 +29,7 @@ class _HealersScreenState extends State<HealersScreen> {
   String _mapStyle = "";
   GlobalKey? _keyGoogleMap = GlobalKey();
   List<Healer> _nearestHealers = [];
+  late BitmapDescriptor _marker;
 
   @override
   void initState() {
@@ -37,13 +41,27 @@ class _HealersScreenState extends State<HealersScreen> {
     });
 
     _getUserLocation(context);
+    _bitmapDescriptorFromSvgAsset(context, "assets/svg/marker.svg", 65)
+        .then((value) => _marker = value);
+  }
+
+  Future<BitmapDescriptor> _bitmapDescriptorFromSvgAsset(
+      BuildContext context, String assetName, int width) async {
+    var svgString = await DefaultAssetBundle.of(context).loadString(assetName);
+    var svgDrawableRoot = await svg.fromSvgString(svgString, "");
+    var picture = svgDrawableRoot.toPicture(
+        size: Size(width.toDouble(), width.toDouble()));
+    var image = await picture.toImage(width, width);
+    var bytes = await image.toByteData(format: ui.ImageByteFormat.png);
+    return BitmapDescriptor.fromBytes(bytes!.buffer.asUint8List());
   }
 
   void _getHealerList() async {
     LatLng loc =
         Provider.of<MapProvider>(context, listen: false).currentLatLng!;
-    setState(() async {
-      _nearestHealers = await serviceLocator<HealerService>().getNearby(loc);
+    List<Healer> healers = await serviceLocator<HealerService>().getNearby(loc);
+    setState(() {
+      _nearestHealers = healers;
     });
   }
 
@@ -85,22 +103,60 @@ class _HealersScreenState extends State<HealersScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: GoogleMap(
-        myLocationEnabled: true,
-        mapToolbarEnabled: true,
-        initialCameraPosition: _getLocationTarget(),
-        onMapCreated: (GoogleMapController controller) {
-          _mapController = controller;
-          _mapController.setMapStyle(_mapStyle);
-        },
-        onCameraMove: (CameraPosition position) {
-          debugPrint(position.toString());
-          Provider.of<MapProvider>(context, listen: false)
-              .updateCurrentLocation(
-                  LatLng(position.target.latitude, position.target.longitude));
-        },
+    return Stack(children: <Widget>[
+      Scaffold(
+        body: GoogleMap(
+          myLocationEnabled: true,
+          mapToolbarEnabled: true,
+          initialCameraPosition: _getLocationTarget(),
+          onMapCreated: (GoogleMapController controller) {
+            _mapController = controller;
+            _mapController.setMapStyle(_mapStyle);
+          },
+          onCameraMove: (CameraPosition position) {
+            debugPrint(position.toString());
+            Provider.of<MapProvider>(context, listen: false)
+                .updateCurrentLocation(LatLng(
+                    position.target.latitude, position.target.longitude));
+          },
+        ),
       ),
-    );
+      PreferredSize(
+          preferredSize: const Size.fromHeight(150),
+          child: Container(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.center,
+                      end: Alignment.bottomCenter,
+                      colors: [Color(0xB4FFFFFF), Color(0x00FFFFFF)])),
+              child: SafeArea(
+                  child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                    Expanded(
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                          Text("Check-ins",
+                              style: Theme.of(context).textTheme.headline1),
+                          Text(
+                              "Feel indestructible by checking in with our experts",
+                              style: Theme.of(context).textTheme.headline4),
+                        ])),
+                    Container(
+                        height: 60.0,
+                        width: 60.0,
+                        decoration: const BoxDecoration(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20.0)),
+                            image: DecorationImage(
+                                image: NetworkImage(
+                                    "https://images.unsplash.com/photo-1579202673506-ca3ce28943ef"),
+                                fit: BoxFit.cover))),
+                  ])))),
+    ]);
   }
 }

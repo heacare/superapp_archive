@@ -7,7 +7,7 @@ import 'api_endpoint.dart';
 
 // TODO Change to prod backend
 // Android emulator routes to localhost on 10.0.2.2
-const apiBaseUrl = "10.0.2.2:3000";
+const apiBaseUrl = "0.0.0.0:3000";
 
 class ApiManagerException implements Exception {
   final String message;
@@ -29,10 +29,11 @@ class ApiManager {
     });
   }
 
-  Future<http.Response> get(String endpoint) async {
+  Future<http.Response> get(String endpoint,
+      {Map<String, String>? queryParams}) async {
     if (_jwtToken == null) await _fetchJwtToken();
 
-    return http.get(_buildUri(endpoint), headers: {
+    return http.get(_buildUri(endpoint, queryParams: queryParams), headers: {
       'accept': "application/json",
       'Authorization': 'Bearer $_jwtToken'
     });
@@ -63,8 +64,8 @@ class ApiManager {
     }
   }
 
-  Uri _buildUri(String endpoint) {
+  Uri _buildUri(String endpoint, {Map<String, String>? queryParams}) {
     // TODO: HTTPS?
-    return Uri.http(apiBaseUrl, endpoint);
+    return Uri.http(apiBaseUrl, endpoint, queryParams);
   }
 }
