@@ -147,7 +147,7 @@ class OnboardingBasicInfoScreenState extends State<OnboardingBasicInfoScreen> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 20.0),
                                   child: DropdownButton<String>(
-                                    value: describeEnum(Gender.values[0]),
+                                    value: gender,
                                     isExpanded: true,
                                     underline: Container(),
                                     items: Gender.values
