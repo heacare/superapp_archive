@@ -6,6 +6,7 @@ import 'package:hea/screens/lessons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hea/services/content_service.dart';
 import 'package:hea/services/service_locator.dart';
+import 'package:hea/widgets/avatar_icon.dart';
 import 'package:provider/provider.dart';
 
 class ModulesScreen extends StatefulWidget {
@@ -22,6 +23,9 @@ class _ModulesScreenState extends State<ModulesScreen> {
       initialData: const [],
       create: (_) => serviceLocator<ContentService>().getModules(),
       child: Consumer<List<Module>>(builder: (context, modules, _) {
+        if (modules.length != 2) {
+          return const Center(child: CircularProgressIndicator());
+        }
         return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -73,16 +77,7 @@ class _ModulesScreenState extends State<ModulesScreen> {
                                     style:
                                         Theme.of(context).textTheme.headline4),
                               ])),
-                          Container(
-                              height: 60.0,
-                              width: 60.0,
-                              decoration: const BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20.0)),
-                                  image: DecorationImage(
-                                      image: NetworkImage(
-                                          "https://images.unsplash.com/photo-1579202673506-ca3ce28943ef"),
-                                      fit: BoxFit.cover))),
+                          AvatarIcon(),
                         ])))),
         body: Container(
             padding:

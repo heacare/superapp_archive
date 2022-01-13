@@ -4,20 +4,19 @@ import 'package:hea/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hea/widgets/avatar_icon.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<User?>(
-      builder: (context, user, _) {
-        if (user == null) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        return DashboardPage.fromUser(user);
+    return Consumer<User?>(builder: (context, user, _) {
+      if (user == null) {
+        return const Center(child: CircularProgressIndicator());
       }
-    );
+      return DashboardPage.fromUser(user);
+    });
   }
 }
 
@@ -66,20 +65,11 @@ class DashboardPage extends StatelessWidget {
                                 Text("Dashboard",
                                     style:
                                         Theme.of(context).textTheme.headline1),
-                                Text("Good morning, Dan",
+                                Text("Good morning",
                                     style:
                                         Theme.of(context).textTheme.headline4),
                               ])),
-                          Container(
-                              height: 60.0,
-                              width: 60.0,
-                              decoration: const BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20.0)),
-                                  image: DecorationImage(
-                                      image: NetworkImage(
-                                          "https://images.unsplash.com/photo-1579202673506-ca3ce28943ef"),
-                                      fit: BoxFit.cover))),
+                          AvatarIcon(),
                         ])))),
         body: Container(
           padding: const EdgeInsets.all(30.0),

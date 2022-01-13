@@ -14,6 +14,7 @@ import 'package:hea/utils/permission.dart';
 import 'package:hea/utils/reusable_methods.dart';
 import 'package:hea/services/location_service.dart';
 import 'package:hea/models/healer.dart';
+import 'package:hea/widgets/avatar_icon.dart';
 
 import 'package:hea/services/healer_service.dart';
 import 'package:hea/services/service_locator.dart';
@@ -117,9 +118,10 @@ class _HealersScreenState extends State<HealersScreen> {
     return Stack(children: <Widget>[
       Scaffold(
         body: GoogleMap(
-          myLocationEnabled: true,
-          mapToolbarEnabled: true,
           markers: _markers,
+          myLocationEnabled: true,
+          mapToolbarEnabled: false,
+          myLocationButtonEnabled: false,
           initialCameraPosition: _getLocationTarget(),
           onMapCreated: (GoogleMapController controller) {
             _mapController = controller;
@@ -138,7 +140,7 @@ class _HealersScreenState extends State<HealersScreen> {
           child: Container(
               padding:
                   const EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   gradient: LinearGradient(
                       begin: Alignment.center,
                       end: Alignment.bottomCenter,
@@ -158,17 +160,46 @@ class _HealersScreenState extends State<HealersScreen> {
                               "Feel indestructible by checking in with our experts",
                               style: Theme.of(context).textTheme.headline4),
                         ])),
-                    Container(
-                        height: 60.0,
-                        width: 60.0,
-                        decoration: const BoxDecoration(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
-                            image: DecorationImage(
-                                image: NetworkImage(
-                                    "https://images.unsplash.com/photo-1579202673506-ca3ce28943ef"),
-                                fit: BoxFit.cover))),
+                    AvatarIcon(),
                   ])))),
+      Positioned.fill(
+          child: Align(alignment: Alignment.bottomCenter, child: HealerCard())),
     ]);
+  }
+}
+
+class HealerCard extends StatelessWidget {
+  // Healer healer;
+
+  HealerCard({Key? key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: const BorderRadius.all(Radius.circular(15.0)),
+        ),
+        padding: EdgeInsets.all(20.0),
+        margin: EdgeInsets.all(20.0),
+        child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+          Row(children: <Widget>[
+            AvatarIcon(),
+            SizedBox(width: 15.0),
+            Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text("Sleep Clinic",
+                      style: Theme.of(context).textTheme.headline2),
+                  Text("Dan Green",
+                      style: Theme.of(context).textTheme.bodyText1),
+                ])
+          ]),
+          SizedBox(height: 15.0),
+          Text(
+              "Hello, I’m Dan! I’ve been a sleep specialist since 2015, and have a pHD in sleep research from NUS.",
+              style: Theme.of(context).textTheme.bodyText2),
+        ]));
   }
 }
