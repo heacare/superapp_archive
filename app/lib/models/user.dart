@@ -105,7 +105,7 @@ class User extends ChangeNotifier {
     };
     if (isSmoker) {
       json.update('smoking',
-          (_) => {'packsPerDay': smokingPacksPerDay, "years": smokingYears});
+          (_) => {'packsPerDay': describeEnum(smokingPacksPerDay!), "years": smokingYears});
     }
 
     return json;

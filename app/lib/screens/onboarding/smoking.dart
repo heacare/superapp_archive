@@ -1,7 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import 'package:hea/models/onboarding_types.dart';
 import 'package:hea/providers/auth.dart';
 import 'package:hea/screens/home.dart';
 import 'package:hea/screens/onboarding.dart';
@@ -11,12 +13,19 @@ import 'package:hea/widgets/safearea_container.dart';
 import 'package:hea/widgets/switch_button.dart';
 import 'package:hea/widgets/select_list.dart';
 
-final List<SelectListItem> choices = [
-  SelectListItem(text: "Less than a pack", value: "LessOnePack"),
-  SelectListItem(text: "One to two packs", value: "OneToTwoPacks"),
-  SelectListItem(text: "Three to five packs", value: "ThreeToFivePacks"),
-  SelectListItem(text: "More than five packs", value: "FivePacks"),
+final List<SelectListItem<SmokingPacks>> choices = [
+  SelectListItem(text: "Less than a pack", value: SmokingPacks.LessOnePack),
+  SelectListItem(text: "One to two packs", value: SmokingPacks.OneToTwoPacks),
+  SelectListItem(text: "Three to five packs", value: SmokingPacks.ThreeToFivePacks),
+  SelectListItem(text: "More than five packs", value: SmokingPacks.FivePacks),
 ];
+
+// final List<SelectListItem> choices = [
+//   SelectListItem(text: "Less than a pack", value: "LessOnePack"),
+//   SelectListItem(text: "One to two packs", value: "OneToTwoPacks"),
+//   SelectListItem(text: "Three to five packs", value: "ThreeToFivePacks"),
+//   SelectListItem(text: "More than five packs", value: "FivePacks"),
+// ];
 
 class OnboardingSmokingScreen extends StatefulWidget {
   OnboardingSmokingScreen({Key? key}) : super(key: key);
@@ -28,14 +37,15 @@ class OnboardingSmokingScreen extends StatefulWidget {
 
 class OnboardingSmokingScreenState extends State<OnboardingSmokingScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _smokeYears = TextEditingController();
 
   bool smokes = false;
   bool past_smokes = false;
-  String packs = choices[0].value;
+  SmokingPacks packs = choices[0].value;
 
   _validateEntries() {
     Map<String, dynamic> res = <String, dynamic>{
-      "isSmoker": smokes,
+      "isSmoker": smokes || past_smokes,
     };
 
     if (past_smokes) {
@@ -43,7 +53,20 @@ class OnboardingSmokingScreenState extends State<OnboardingSmokingScreen> {
     }
 
     if (smokes || past_smokes) {
-      res["smokingPacksPerDay"] = packs;
+      res["smokingPacksPerDay"] = describeEnum(packs);
+
+      if (_smokeYears.text == "") {
+        throw 'Please enter the number of years you\'ve smoked!';
+      }
+
+      num smokeYears = 0;
+      try {
+        smokeYears = num.parse(_smokeYears.text);
+      } catch (e) {
+        throw 'Smoking years must be a number!';
+      }
+
+      res["smokingYears"] = smokeYears;
     }
 
     return res;
@@ -99,12 +122,29 @@ class OnboardingSmokingScreenState extends State<OnboardingSmokingScreen> {
             padding: const EdgeInsets.symmetric(vertical: 16.0)),
         SelectList(
           items: choices,
-          onChange: (String c) {
+          onChange: (SmokingPacks c) {
             setState(() {
               packs = c;
             });
           },
         ),
+        const SizedBox(height: 24.0),
+        Padding(
+            child: Text("For how long?",
+                style: Theme.of(context).textTheme.headline2?.copyWith(
+                    fontWeight: FontWeight.w400,
+                    height: 1.4,
+                    color: Color(0xFF414141))),
+            padding: const EdgeInsets.symmetric(vertical: 16.0)),
+        TextFormField(
+            controller: _smokeYears,
+            decoration: const InputDecoration(
+              labelText: "1",
+              suffixText: " years",
+            ),
+            validator: FormBuilderValidators.numeric(
+                context),
+            keyboardType: TextInputType.number),
       ]);
     }
 

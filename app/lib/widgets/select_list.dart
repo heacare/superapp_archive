@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:hea/widgets/gradient_button.dart';
 
-class SelectListItem {
+class SelectListItem<T> {
   SelectListItem({required this.text, required this.value});
 
   String text;
-  String value;
+  T value;
 }
 
-class SelectList extends StatefulWidget {
+class SelectList<T> extends StatefulWidget {
   SelectList({Key? key, required this.items, required this.onChange})
       : super(key: key);
 
-  List<SelectListItem> items;
+  List<SelectListItem<T>> items;
   Function onChange;
 
   @override
-  SelectListState createState() => SelectListState();
+  SelectListState<T> createState() => SelectListState<T>();
 }
 
-class SelectListState extends State<SelectList> {
-  String selected = "";
+class SelectListState<T> extends State<SelectList<T>> {
+  T? selected;
 
   @override
   void initState() {
