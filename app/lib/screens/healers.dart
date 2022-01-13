@@ -1,4 +1,5 @@
 import 'dart:ui' as ui;
+import 'dart:core';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -29,7 +30,8 @@ class _HealersScreenState extends State<HealersScreen> {
   String _mapStyle = "";
   GlobalKey? _keyGoogleMap = GlobalKey();
   List<Healer> _nearestHealers = [];
-  late BitmapDescriptor _marker;
+  Set<Marker> _markers = {};
+  late BitmapDescriptor _markerIcon;
 
   @override
   void initState() {
@@ -42,7 +44,7 @@ class _HealersScreenState extends State<HealersScreen> {
 
     _getUserLocation(context);
     _bitmapDescriptorFromSvgAsset(context, "assets/svg/marker.svg", 65)
-        .then((value) => _marker = value);
+        .then((value) => _markerIcon = value);
   }
 
   Future<BitmapDescriptor> _bitmapDescriptorFromSvgAsset(
@@ -62,6 +64,15 @@ class _HealersScreenState extends State<HealersScreen> {
     List<Healer> healers = await serviceLocator<HealerService>().getNearby(loc);
     setState(() {
       _nearestHealers = healers;
+      _markers.clear();
+      _nearestHealers.forEach((healer) {
+        // Add in the markers
+        _markers.add(Marker(
+            markerId: MarkerId(healer.id.toString()),
+            icon: _markerIcon,
+            zIndex: 10.0,
+            position: healer.location!));
+      });
     });
   }
 
@@ -108,6 +119,7 @@ class _HealersScreenState extends State<HealersScreen> {
         body: GoogleMap(
           myLocationEnabled: true,
           mapToolbarEnabled: true,
+          markers: _markers,
           initialCameraPosition: _getLocationTarget(),
           onMapCreated: (GoogleMapController controller) {
             _mapController = controller;

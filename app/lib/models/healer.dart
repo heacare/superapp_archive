@@ -23,6 +23,8 @@ class Healer {
     availabilities = rawAvailabilities
         .map((availability) => Availability.fromJson(availability))
         .toList();
+
+    location = LatLng(data["location"]["lat"], data["location"]["lng"]);
   }
 }
 
