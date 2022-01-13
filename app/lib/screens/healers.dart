@@ -50,7 +50,7 @@ class _HealersScreenState extends State<HealersScreen> {
     });
 
     _getUserLocation(context);
-    _bitmapDescriptorFromSvgAsset(context, "assets/svg/marker.svg", 65)
+    _bitmapDescriptorFromSvgAsset(context, "assets/svg/marker.svg", 100)
         .then((value) => _markerIcon = value);
   }
 
