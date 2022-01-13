@@ -34,13 +34,12 @@ class _HealersScreenState extends State<HealersScreen> {
     _getUserLocation(context);
   }
 
-  void _getPharmacyList() async {}
+  void _getHealerList() async {}
 
   Future<void> _getUserLocation(BuildContext context) async {
-    print("Hello World");
     PermissionUtils?.requestPermission(Permission.location, context,
         isOpenSettings: true, permissionGrant: () async {
-      await LocationService().fetchCurrentLocation(context, _getPharmacyList,
+      await LocationService().fetchCurrentLocation(context, _getHealerList,
           updatePosition: updateCameraPosition);
     }, permissionDenied: () {
       // Sad
@@ -75,7 +74,6 @@ class _HealersScreenState extends State<HealersScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("Hello world1");
     return Scaffold(
       body: GoogleMap(
         myLocationEnabled: true,
@@ -86,6 +84,7 @@ class _HealersScreenState extends State<HealersScreen> {
           _mapController.setMapStyle(_mapStyle);
         },
         onCameraMove: (CameraPosition position) {
+          debugPrint(position.toString());
           Provider.of<MapProvider>(context, listen: false)
               .updateCurrentLocation(
                   LatLng(position.target.latitude, position.target.longitude));
