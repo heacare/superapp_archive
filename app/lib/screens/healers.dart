@@ -42,8 +42,8 @@ class _HealersScreenState extends State<HealersScreen> {
   void _getHealerList() async {
     LatLng loc =
         Provider.of<MapProvider>(context, listen: false).currentLatLng!;
-    setState(() {
-      _nearestHealers = serviceLocator<HealerService>().getNearby(loc);
+    setState(() async {
+      _nearestHealers = await serviceLocator<HealerService>().getNearby(loc);
     });
   }
 

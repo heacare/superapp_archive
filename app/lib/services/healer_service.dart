@@ -1,7 +1,9 @@
+import 'dart:convert';
+import 'package:hea/services/api_endpoint.dart';
+import 'package:hea/services/api_manager.dart';
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/models/healer.dart';
-import 'package:location/location.dart';
-import 'api_endpoint.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 const onboardedRespondedLevel = "filledv1";
 
@@ -15,7 +17,7 @@ class HealerServiceImpl implements HealerService {
 
   @override
   Future<List<Healer>> getNearby(LatLng location) async {
-    final resp = await api.get(ApiEndpoint.healerNeaby);
+    final resp = await api.get(ApiEndpoint.healerNearby);
     if (resp.statusCode == 200) {
       return jsonDecode(resp.body)
           .map((healer) => Healer.fromJson(healer))
