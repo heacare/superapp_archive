@@ -3,6 +3,7 @@ import 'package:hea/services/auth_service.dart';
 import 'package:hea/services/api_manager.dart';
 import 'package:hea/services/content_service.dart';
 import 'package:hea/services/user_service.dart';
+import 'package:hea/services/healer_service.dart';
 
 GetIt serviceLocator = GetIt.instance;
 
@@ -13,4 +14,5 @@ void setupServiceLocator() {
   serviceLocator.registerSingleton<ApiManager>(ApiManager());
   serviceLocator.registerSingleton<ContentService>(ContentServiceImpl());
   serviceLocator.registerSingleton<UserService>(UserServiceImpl());
+  serviceLocator.registerSingleton<HealerService>(HealerServiceImpl());
 }

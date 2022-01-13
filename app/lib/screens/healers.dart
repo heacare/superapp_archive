@@ -31,16 +31,15 @@ class _HealersScreenState extends State<HealersScreen> {
       });
     });
 
-    debugPrint("Called");
     _getUserLocation(context);
   }
 
-  void _getPharmacyList() async {}
+  void _getHealerList() async {}
 
   Future<void> _getUserLocation(BuildContext context) async {
     PermissionUtils?.requestPermission(Permission.location, context,
         isOpenSettings: true, permissionGrant: () async {
-      await LocationService().fetchCurrentLocation(context, _getPharmacyList,
+      await LocationService().fetchCurrentLocation(context, _getHealerList,
           updatePosition: updateCameraPosition);
     }, permissionDenied: () {
       // Sad
