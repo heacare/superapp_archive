@@ -19,12 +19,14 @@ export class LocationDto {
     if (typeof this.lng !== 'number' || typeof this.lat !== 'number') throw new Error('Invalid Point');
     return {
       type: 'Point',
-      coordinates: [this.lat, this.lng],
+      coordinates: [this.lng, this.lat],
     };
   }
 
-  constructor(lat: number, lng: number) {
-    this.lat = lat;
+  // For consistency with PostGIS ST_MakePoint, order coordinates as lat./lng.
+  // c.f.: https://postgis.net/docs/ST_MakePoint.html
+  constructor(lng: number, lat: number) {
     this.lng = lng;
+    this.lat = lat;
   }
 }
