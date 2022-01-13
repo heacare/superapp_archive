@@ -9,6 +9,10 @@ import 'package:hea/providers/map.dart';
 import 'package:hea/utils/permission.dart';
 import 'package:hea/utils/reusable_methods.dart';
 import 'package:hea/services/location_service.dart';
+import 'package:hea/models/healer.dart';
+
+import 'package:hea/services/healer_service.dart';
+import 'package:hea/services/service_locator.dart';
 
 class HealersScreen extends StatefulWidget {
   HealersScreen({Key? key}) : super(key: key);
@@ -21,6 +25,7 @@ class _HealersScreenState extends State<HealersScreen> {
   late GoogleMapController _mapController;
   String _mapStyle = "";
   GlobalKey? _keyGoogleMap = GlobalKey();
+  List<Healer> _nearestHealers = [];
 
   @override
   void initState() {
@@ -34,7 +39,13 @@ class _HealersScreenState extends State<HealersScreen> {
     _getUserLocation(context);
   }
 
-  void _getHealerList() async {}
+  void _getHealerList() async {
+    LatLng loc =
+        Provider.of<MapProvider>(context, listen: false).currentLatLng!;
+    setState(() {
+      _nearestHealers = serviceLocator<HealerService>().getNearby(loc);
+    });
+  }
 
   Future<void> _getUserLocation(BuildContext context) async {
     PermissionUtils?.requestPermission(Permission.location, context,
