@@ -8,6 +8,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:hea/providers/map.dart';
 import 'package:hea/utils/permission.dart';
@@ -33,6 +34,11 @@ class _HealersScreenState extends State<HealersScreen> {
   List<Healer> _nearestHealers = [];
   Set<Marker> _markers = {};
   late BitmapDescriptor _markerIcon;
+  Healer testHealer = Healer(
+      id: 10,
+      name: "Dan Green",
+      description:
+          "Hello, I’m Dan! I’ve been a sleep specialist since 2015, and have a pHD in sleep research from NUS.");
 
   @override
   void initState() {
@@ -163,15 +169,68 @@ class _HealersScreenState extends State<HealersScreen> {
                     AvatarIcon(),
                   ])))),
       Positioned.fill(
-          child: Align(alignment: Alignment.bottomCenter, child: HealerCard())),
+          child: Align(
+              alignment: Alignment.bottomRight,
+              child: Padding(
+                  padding:
+                      EdgeInsets.only(bottom: 30.0, left: 20.0, right: 20.0),
+                  child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        MapIconButton(
+                          icon:
+                              const FaIcon(FontAwesomeIcons.search, size: 24.0),
+                          onPressed: () {},
+                        ),
+                        SizedBox(height: 8.0),
+                        MapIconButton(
+                          icon: const FaIcon(FontAwesomeIcons.locationArrow,
+                              size: 24.0),
+                          onPressed: () => _getUserLocation(context),
+                        ),
+                        SizedBox(height: 8.0),
+                        HealerCard(healer: testHealer)
+                      ])))),
     ]);
   }
 }
 
-class HealerCard extends StatelessWidget {
-  // Healer healer;
+class MapIconButton extends StatelessWidget {
+  FaIcon icon;
+  void Function() onPressed;
 
-  HealerCard({Key? key});
+  MapIconButton({Key? key, required this.icon, required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 60.0,
+      height: 60.0,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: const BorderRadius.all(Radius.circular(15.0)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5), //color of shadow
+            blurRadius: 5, // blur radius
+            offset: const Offset(0, 2), // changes position of shadow
+          )
+        ],
+      ),
+      child: IconButton(
+        icon: icon,
+        color: Color(0xFF414141),
+        onPressed: onPressed,
+      ),
+    );
+  }
+}
+
+class HealerCard extends StatelessWidget {
+  Healer healer;
+
+  HealerCard({Key? key, required this.healer});
 
   @override
   Widget build(BuildContext context) {
@@ -181,7 +240,6 @@ class HealerCard extends StatelessWidget {
           borderRadius: const BorderRadius.all(Radius.circular(15.0)),
         ),
         padding: EdgeInsets.all(20.0),
-        margin: EdgeInsets.all(20.0),
         child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
           Row(children: <Widget>[
             AvatarIcon(),
@@ -192,13 +250,12 @@ class HealerCard extends StatelessWidget {
                 children: <Widget>[
                   Text("Sleep Clinic",
                       style: Theme.of(context).textTheme.headline2),
-                  Text("Dan Green",
+                  Text(healer.name,
                       style: Theme.of(context).textTheme.bodyText1),
                 ])
           ]),
           SizedBox(height: 15.0),
-          Text(
-              "Hello, I’m Dan! I’ve been a sleep specialist since 2015, and have a pHD in sleep research from NUS.",
+          Text(healer.description,
               style: Theme.of(context).textTheme.bodyText2),
         ]));
   }

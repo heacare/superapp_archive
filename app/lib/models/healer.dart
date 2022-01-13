@@ -10,6 +10,12 @@ class Healer {
   List<Availability> availabilities = [];
   LatLng? location;
 
+  Healer(
+      {required this.id,
+      required this.name,
+      required this.description,
+      this.location});
+
   Healer.fromJson(Map<String, dynamic> data)
       : id = data["id"]!,
         name = data["name"]! as String,
