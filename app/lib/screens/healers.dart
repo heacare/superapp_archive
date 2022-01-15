@@ -34,11 +34,7 @@ class _HealersScreenState extends State<HealersScreen> {
   List<Healer> _nearestHealers = [];
   Set<Marker> _markers = {};
   late BitmapDescriptor _markerIcon;
-  Healer testHealer = Healer(
-      id: 10,
-      name: "Dan Green",
-      description:
-          "Hello, I’m Dan! I’ve been a sleep specialist since 2015, and have a pHD in sleep research from NUS.");
+  Healer? selectedHealer;
 
   @override
   void initState() {
@@ -50,7 +46,7 @@ class _HealersScreenState extends State<HealersScreen> {
     });
 
     _getUserLocation(context);
-    _bitmapDescriptorFromSvgAsset(context, "assets/svg/marker.svg", 65)
+    _bitmapDescriptorFromSvgAsset(context, "assets/svg/marker.svg", 100)
         .then((value) => _markerIcon = value);
   }
 
@@ -78,7 +74,12 @@ class _HealersScreenState extends State<HealersScreen> {
             markerId: MarkerId(healer.id.toString()),
             icon: _markerIcon,
             zIndex: 10.0,
-            position: healer.location!));
+            position: healer.location!,
+            onTap: () {
+              setState(() {
+                selectedHealer = healer;
+              });
+            }));
       });
     });
   }
@@ -129,12 +130,16 @@ class _HealersScreenState extends State<HealersScreen> {
           mapToolbarEnabled: false,
           myLocationButtonEnabled: false,
           initialCameraPosition: _getLocationTarget(),
+          onTap: (_) {
+            setState(() {
+              selectedHealer = null;
+            });
+          },
           onMapCreated: (GoogleMapController controller) {
             _mapController = controller;
             _mapController.setMapStyle(_mapStyle);
           },
           onCameraMove: (CameraPosition position) {
-            debugPrint(position.toString());
             Provider.of<MapProvider>(context, listen: false)
                 .updateCurrentLocation(LatLng(
                     position.target.latitude, position.target.longitude));
@@ -190,7 +195,9 @@ class _HealersScreenState extends State<HealersScreen> {
                           onPressed: () => _getUserLocation(context),
                         ),
                         SizedBox(height: 8.0),
-                        HealerCard(healer: testHealer)
+                        (selectedHealer == null)
+                            ? Container()
+                            : HealerCard(healer: selectedHealer!)
                       ])))),
     ]);
   }
@@ -235,28 +242,31 @@ class HealerCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: const BorderRadius.all(Radius.circular(15.0)),
         ),
         padding: EdgeInsets.all(20.0),
-        child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-          Row(children: <Widget>[
-            AvatarIcon(),
-            SizedBox(width: 15.0),
-            Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Text("Sleep Clinic",
-                      style: Theme.of(context).textTheme.headline2),
-                  Text(healer.name,
-                      style: Theme.of(context).textTheme.bodyText1),
-                ])
-          ]),
-          SizedBox(height: 15.0),
-          Text(healer.description,
-              style: Theme.of(context).textTheme.bodyText2),
-        ]));
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Row(children: <Widget>[
+                AvatarIcon(),
+                SizedBox(width: 15.0),
+                Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text("Sleep Clinic",
+                          style: Theme.of(context).textTheme.headline2),
+                      Text(healer.name,
+                          style: Theme.of(context).textTheme.bodyText1),
+                    ])
+              ]),
+              SizedBox(height: 15.0),
+              Text(healer.description,
+                  style: Theme.of(context).textTheme.bodyText2),
+            ]));
   }
 }
