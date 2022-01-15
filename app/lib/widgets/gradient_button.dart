@@ -26,7 +26,9 @@ class GradientButton extends StatelessWidget {
         height: 50.0,
         child: GestureDetector(
             onTap: this.onPressed,
-            child: Ink(
+            child: Container(
+              constraints: const BoxConstraints(minWidth: 88.0, minHeight: 36.0),
+              alignment: Alignment.center,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
@@ -35,20 +37,16 @@ class GradientButton extends StatelessWidget {
                 ),
                 borderRadius: const BorderRadius.all(Radius.circular(15.0)),
               ),
-              child: Container(
-                constraints:
-                    const BoxConstraints(minWidth: 88.0, minHeight: 36.0),
-                alignment: Alignment.center,
-                child: Text(text,
-                    style: const TextStyle(
-                        fontFamily: "Poppins",
-                        letterSpacing: 1.0,
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w600,
-                        height: 1.5,
-                        color: Colors.white),
-                    textAlign: TextAlign.center),
-              ),
-            )));
+              child: Text(text,
+                  style: const TextStyle(
+                      fontFamily: "Poppins",
+                      letterSpacing: 1.0,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w600,
+                      height: 1.5,
+                      color: Colors.white),
+                  textAlign: TextAlign.center),
+            ),
+          ));
   }
 }

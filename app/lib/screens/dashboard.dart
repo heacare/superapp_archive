@@ -6,6 +6,10 @@ import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hea/widgets/avatar_icon.dart';
 
+import 'package:hea/screens/booking.dart';
+import 'package:hea/models/healer.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({Key? key}) : super(key: key);
 
@@ -78,8 +82,38 @@ class DashboardPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                DeathClock(
+                GestureDetector(
+                child: DeathClock(
                     lifeScore: expYears, sleepScore: 30, socialScore: 60),
+                    onTap: () async {
+                      Healer test = Healer(
+                        id: 1,
+                        name: 'Dan Green',
+                        description: 'Hello, I’m Dan! I’ve been a sleep specialist since 2015, and have a pHD in sleep research from NUS.',
+                        location: LatLng(0, 0),
+                      );
+
+                      test.proficiencies.add(Proficiency(
+                        name: 'Sleep',
+                        description: 'I am very good at it',
+                        proficiency: 100,
+                      ));
+
+                      test.availabilities.add(Availability(
+                        range: DateTimeRange(
+                          start: DateTime(2022, 1, 18, 12),
+                          end: DateTime(2022, 1, 18, 16),
+                        ),
+                        isHouseVisit: true,
+                      ));
+
+                      final dt = await Navigator.push(context, MaterialPageRoute<DateTime>(
+                        builder: (BuildContext context) {
+                          return BookingScreen(name: 'Sleep Clinic', healer: test);
+                      }));
+                      print(dt);
+                    }
+                  ),
                 SizedBox(height: 20.0),
                 Text("Notifications",
                     style: Theme.of(context).textTheme.headline3),
