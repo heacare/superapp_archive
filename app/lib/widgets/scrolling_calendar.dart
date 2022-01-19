@@ -2,7 +2,20 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-final _monthNames = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+final _monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December"
+];
 String getMonthName(int month) {
   if (month > 12 || month < 1) {
     return "";
@@ -11,7 +24,7 @@ String getMonthName(int month) {
   return _monthNames[month - 1];
 }
 
-final _abbreviatedDayNames = [ "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+final _abbreviatedDayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 String getAbbreviatedDayName(int day) {
   if (day > 7 || day < 1) {
     return "";
@@ -21,16 +34,25 @@ String getAbbreviatedDayName(int day) {
 }
 
 bool equivalentDayHour(DateTime a, DateTime b) {
-  return a.year == b.year && a.month == b.month && a.day == b.day && a.hour == b.hour;
+  return a.year == b.year &&
+      a.month == b.month &&
+      a.day == b.day &&
+      a.hour == b.hour;
 }
 
 List<DateTime> generateMonth(DateTime seed) {
   final lastDay = DateUtils.getDaysInMonth(seed.year, seed.month);
-  return List.generate(lastDay - seed.day + 1, (i) => DateTime(seed.year, seed.month, i + seed.day));
+  return List.generate(lastDay - seed.day + 1,
+      (i) => DateTime(seed.year, seed.month, i + seed.day));
 }
 
 class ScrollingCalendarItem extends StatelessWidget {
-  const ScrollingCalendarItem({Key? key, required this.date, required this.available, required this.selected}) : super(key: key);
+  const ScrollingCalendarItem(
+      {Key? key,
+      required this.date,
+      required this.available,
+      required this.selected})
+      : super(key: key);
 
   final DateTime date;
   final int available;
@@ -43,19 +65,19 @@ class ScrollingCalendarItem extends StatelessWidget {
       border = Border.all(width: 3.0, color: const Color(0xFF5FD0F9));
     }
 
-    final card = Container (
-      margin: const EdgeInsets.only(left: 10.0, right: 10.0),
-      padding: const EdgeInsets.all(30.0),
-      decoration: BoxDecoration(
-        border: border,
-        borderRadius: const BorderRadius.all(Radius.circular(20.0)),
-        color: Colors.grey[300]),
-      child: Column(
-        children: [
+    final card = Container(
+        margin: const EdgeInsets.only(left: 10.0, right: 10.0),
+        padding: const EdgeInsets.all(30.0),
+        decoration: BoxDecoration(
+            border: border,
+            borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+            color: Colors.grey[200]),
+        child: Column(children: [
           Text(getAbbreviatedDayName(date.weekday),
-            style: Theme.of(context).textTheme.headline4),
+              style: Theme.of(context).textTheme.headline4),
           Text(date.day.toString().padLeft(2, '0'),
-            style: Theme.of(context).textTheme.headline3)]));
+              style: Theme.of(context).textTheme.headline3)
+        ]));
 
     final badge = Container(
       width: 25,
@@ -63,22 +85,19 @@ class ScrollingCalendarItem extends StatelessWidget {
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: const Color(0xFF5FD0F9),
-          borderRadius: const BorderRadius.all(Radius.circular(12.5)),
+        borderRadius: const BorderRadius.all(Radius.circular(12.5)),
       ),
       child: Text(available.toString(),
-        style: TextStyle(
-            fontSize: 16.0,
-            fontWeight: FontWeight.w600,
-            height: 1.2,
-            color: Colors.white)),
+          style: TextStyle(
+              fontSize: 16.0,
+              fontWeight: FontWeight.w600,
+              height: 1.2,
+              color: Colors.white)),
     );
 
-    List<Widget> children = [ card ];
+    List<Widget> children = [card];
     if (available > 0) {
-      children.add(Positioned (
-        top: -12.5,
-        right: 0,
-        child: badge));
+      children.add(Positioned(top: -12.5, right: 0, child: badge));
     }
 
     return Stack(
@@ -91,7 +110,8 @@ class ScrollingCalendarItem extends StatelessWidget {
 void doNothing() {}
 
 class ScrollingCalendar extends StatefulWidget {
-  ScrollingCalendar({Key? key, this.available, this.onChange = doNothing}) : super(key: key);
+  ScrollingCalendar({Key? key, this.available, this.onChange = doNothing})
+      : super(key: key);
 
   Map<DateTime, int>? available = Map();
   Function onChange;
@@ -125,10 +145,16 @@ class _ScrollingCalendarState extends State<ScrollingCalendar> {
 
     _scrollController = ScrollController();
     _scrollController.addListener(() {
-      if (_scrollController.offset >= _scrollController.position.maxScrollExtent && !_scrollController.position.outOfRange) {
+      if (_scrollController.offset >=
+              _scrollController.position.maxScrollExtent &&
+          !_scrollController.position.outOfRange) {
         if (mounted) {
-          List<DateTime> newDates = generateMonth(DateUtils.addMonthsToMonthDate(DateTime(currentYear, currentMonth, 1), 1));
-          setState(() { dates = dates + newDates; });
+          List<DateTime> newDates = generateMonth(
+              DateUtils.addMonthsToMonthDate(
+                  DateTime(currentYear, currentMonth, 1), 1));
+          setState(() {
+            dates = dates + newDates;
+          });
         }
       }
     });
@@ -141,33 +167,43 @@ class _ScrollingCalendarState extends State<ScrollingCalendar> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(getMonthName(currentMonth) + " " + currentYear.toString(),
-          style: Theme.of(context).textTheme.headline4),
+            style: Theme.of(context).textTheme.headline4),
         const SizedBox(height: 8.0),
         SingleChildScrollView(
-          controller: _scrollController,
-          scrollDirection: Axis.horizontal,
-          child: Container(
-            margin: const EdgeInsets.only(top: 12.5),
-            child: Row(children: dates.map((dt) => VisibilityDetector(
-              key: Key(dt.toString()),
-              onVisibilityChanged: (info) {
-                if (mounted) {
-                  setState(() {
-                    currentMonth = dt.month;
-                    currentYear = dt.year;
-                  });
-                }
-              },
-              child: InkWell(
-                onTap: () {
-                  if (available[dt] != null) {
-                    setState(() { selectedDate = dt; });
-                    widget.onChange(DateUtils.dateOnly(dt));
-                  }
-                },
-                child: ScrollingCalendarItem(date: dt, available: available[dt] ?? 0, selected: (selectedDate ?? dt.add(const Duration(days: 1))) == dt),
-              ),
-            )).toList()))),
+            controller: _scrollController,
+            scrollDirection: Axis.horizontal,
+            child: Container(
+                margin: const EdgeInsets.only(top: 12.5),
+                child: Row(
+                    children: dates
+                        .map((dt) => VisibilityDetector(
+                              key: Key(dt.toString()),
+                              onVisibilityChanged: (info) {
+                                if (mounted) {
+                                  setState(() {
+                                    currentMonth = dt.month;
+                                    currentYear = dt.year;
+                                  });
+                                }
+                              },
+                              child: InkWell(
+                                onTap: () {
+                                  if (available[dt] != null) {
+                                    setState(() {
+                                      selectedDate = dt;
+                                    });
+                                    widget.onChange(DateUtils.dateOnly(dt));
+                                  }
+                                },
+                                child: ScrollingCalendarItem(
+                                    date: dt,
+                                    available: available[dt] ?? 0,
+                                    selected: (selectedDate ??
+                                            dt.add(const Duration(days: 1))) ==
+                                        dt),
+                              ),
+                            ))
+                        .toList()))),
       ],
     );
   }

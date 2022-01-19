@@ -7,4 +7,5 @@ class ApiEndpoint {
   static const userOnboard = "/api/user/onboard";
   static const healerNearby = "/api/healer/nearby";
   static const healerAvailability = "/api/healer/availability";
+  static const healerBook = "/api/session/book";
 }

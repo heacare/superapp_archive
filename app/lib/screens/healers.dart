@@ -16,6 +16,8 @@ import 'package:hea/utils/reusable_methods.dart';
 import 'package:hea/services/location_service.dart';
 import 'package:hea/models/healer.dart';
 import 'package:hea/widgets/avatar_icon.dart';
+import 'package:hea/widgets/healer_card.dart';
+import 'package:hea/screens/booking.dart';
 
 import 'package:hea/services/healer_service.dart';
 import 'package:hea/services/service_locator.dart';
@@ -178,7 +180,7 @@ class _HealersScreenState extends State<HealersScreen> {
               alignment: Alignment.bottomRight,
               child: Padding(
                   padding:
-                      EdgeInsets.only(bottom: 30.0, left: 20.0, right: 20.0),
+                      EdgeInsets.only(bottom: 40.0, left: 20.0, right: 20.0),
                   child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.end,
@@ -197,7 +199,17 @@ class _HealersScreenState extends State<HealersScreen> {
                         SizedBox(height: 8.0),
                         (selectedHealer == null)
                             ? Container()
-                            : HealerCard(healer: selectedHealer!)
+                            : HealerCard(
+                                healer: selectedHealer!,
+                                onTap: () {
+                                  Navigator.push(context,
+                                      MaterialPageRoute<DateTime>(
+                                          builder: (BuildContext context) {
+                                    return BookingScreen(
+                                        name: 'Sleep Clinic',
+                                        healer: selectedHealer!);
+                                  }));
+                                })
                       ])))),
     ]);
   }
@@ -231,42 +243,5 @@ class MapIconButton extends StatelessWidget {
         onPressed: onPressed,
       ),
     );
-  }
-}
-
-class HealerCard extends StatelessWidget {
-  Healer healer;
-
-  HealerCard({Key? key, required this.healer});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: const BorderRadius.all(Radius.circular(15.0)),
-        ),
-        padding: EdgeInsets.all(20.0),
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Row(children: <Widget>[
-                AvatarIcon(),
-                SizedBox(width: 15.0),
-                Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Text("Sleep Clinic",
-                          style: Theme.of(context).textTheme.headline2),
-                      Text(healer.name,
-                          style: Theme.of(context).textTheme.bodyText1),
-                    ])
-              ]),
-              SizedBox(height: 15.0),
-              Text(healer.description,
-                  style: Theme.of(context).textTheme.bodyText2),
-            ]));
   }
 }

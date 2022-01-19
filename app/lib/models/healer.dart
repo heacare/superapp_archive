@@ -61,4 +61,12 @@ class Availability {
             start: DateTime.parse(data["start"]!),
             end: DateTime.parse(data["end"]!)),
         isHouseVisit = data["isHouseVisit"]! as bool;
+
+  Map<String, dynamic> toJson() {
+    return {
+      'start': range.start.toIso8601String(),
+      'end': range.end.toIso8601String(),
+      'isHouseVisit': isHouseVisit
+    };
+  }
 }

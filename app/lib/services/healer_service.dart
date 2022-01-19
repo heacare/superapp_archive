@@ -10,6 +10,7 @@ const onboardedRespondedLevel = "filledv1";
 abstract class HealerService {
   Future<List<Healer>> getNearby(LatLng location);
   Future<List<Availability>> getHealerAvailability();
+  Future<void> bookHealerAvailability(Availability availability);
 }
 
 class HealerServiceImpl implements HealerService {
@@ -42,6 +43,15 @@ class HealerServiceImpl implements HealerService {
           .map((availability) => Availability.fromJson(availability))
           .toList();
     } else {
+      throw ApiManagerException(
+          message: "Failure in getHealerAvailability: ${resp.statusCode}");
+    }
+  }
+
+  @override
+  Future<void> bookHealerAvailability(Availability availability) async {
+    final resp = await api.post(ApiEndpoint.healerBook, availability.toJson());
+    if (resp.statusCode != 200) {
       throw ApiManagerException(
           message: "Failure in getHealerAvailability: ${resp.statusCode}");
     }
