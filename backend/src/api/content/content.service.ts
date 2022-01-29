@@ -12,7 +12,7 @@ export class ContentService {
   ) {}
 
   async getUnits(): Promise<Unit[]> {
-    return this.units.find({ order: { unitOrder: 'ASC' } });
+    return this.units.find({ order: { moduleOrder: 'ASC' } });
   }
 
   async getLessons(unitId: string): Promise<Lesson[]> {

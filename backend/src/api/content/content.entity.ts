@@ -7,7 +7,7 @@ export class Unit {
   id: number;
 
   @Column({ unique: true })
-  unitOrder: number;
+  moduleOrder: number;
 
   @Column()
   icon: string;
@@ -21,7 +21,7 @@ export class Unit {
   lessons: Lesson[];
 
   constructor(unitOrder: number, icon: string, title: string, lessons?: Lesson[]) {
-    this.unitOrder = unitOrder;
+    this.moduleOrder = unitOrder;
     this.icon = icon;
     this.title = title;
     if (lessons) {

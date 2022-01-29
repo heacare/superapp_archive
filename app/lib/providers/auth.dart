@@ -17,15 +17,17 @@ class Authentication {
     try {
       await firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
-    } on FirebaseAuthException catch(e) {
+    } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         throw AuthenticationException(message: "Password is weak");
       } else if (e.code == 'email-already-in-use') {
         throw AuthenticationException(
-            message: "Email is already in use - did you mean to login instead?");
+            message:
+                "Email is already in use - did you mean to login instead?");
       }
       throw AuthenticationException(
-          message: "Unknown authentication error occurred in signup! Please try again");
+          message:
+              "Unknown authentication error occurred in signup! Please try again");
     }
   }
 
@@ -33,7 +35,7 @@ class Authentication {
     try {
       await firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
-    } on FirebaseAuthException catch(e) {
+    } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         throw AuthenticationException(
             message: "Username not found - did you mean to signup instead?");
@@ -42,7 +44,8 @@ class Authentication {
             message: "Wrong password - is it really hunter2?");
       }
       throw AuthenticationException(
-          message: "An unknown authentication error occurred in login! Please try again");
+          message:
+              "An unknown authentication error occurred in login! Please try again");
     }
   }
 
