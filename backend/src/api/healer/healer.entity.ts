@@ -1,13 +1,6 @@
 import { Point } from 'geojson';
 import { IPostgresInterval } from 'postgres-interval';
-import {
-  Column,
-  Entity,
-  Index,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, Index, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Session } from '../session/session.entity';
 
 @Entity()

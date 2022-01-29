@@ -1,4 +1,5 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post } from '@nestjs/common';
+import { ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { AuthRequestDto, AuthResponseDto } from './auth.dto';
 import { AuthService } from './auth.service';
 
@@ -6,22 +7,15 @@ import { AuthService } from './auth.service';
 export class AuthController {
   constructor(private authSvc: AuthService) {}
 
-  // TODO catch firebase token invalid and return to user
-  // TODO catch our JWT's token invalid in Guards for other
-  // methods then redirect them to here.
-
-  /*
+  /**
    * Given a [Firebase TokenId](https://firebase.google.com/docs/auth/admin/verify-id-tokens#android), verify the token and return
    * another a JWT to be used for future API calls to protected endpoints (in Bearer authentication).
    */
   @Post('verify')
-  async verify(
-    @Body() auth: AuthRequestDto,
-  ): Promise<AuthResponseDto | undefined> {
+  @HttpCode(200)
+  @ApiUnauthorizedResponse({ description: 'Invalid/Expired Firebase token' })
+  async verify(@Body() auth: AuthRequestDto): Promise<AuthResponseDto> {
     const jwt = await this.authSvc.verify(auth.firebaseToken);
-    if (jwt === undefined) {
-      return undefined;
-    }
     return { jwt };
   }
 }

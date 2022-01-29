@@ -1,11 +1,5 @@
 import { Point } from 'geojson';
-import {
-  Column,
-  Entity,
-  Index,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Healer } from '../healer/healer.entity';
 import { User } from '../user/user.entity';
 

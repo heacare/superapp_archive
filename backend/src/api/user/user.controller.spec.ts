@@ -1,6 +1,6 @@
 import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
-import { validateOrReject } from 'class-validator';
+import { validate } from 'class-validator';
 import { OnboardingDto } from './onboarding.dto';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
@@ -33,7 +33,9 @@ describe('UserController', () => {
 
     it('fails validation', () => {
       const obj = new OnboardingDto();
-      expect(validateOrReject(obj)).rejects.toBeCalled();
+      return validate(obj).then((errors) => {
+        expect(errors.length).toBe(12);
+      });
     });
   });
 });

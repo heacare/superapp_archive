@@ -1,12 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Session } from '../session/session.entity';
-import {
-  AlcoholFrequency,
-  Gender,
-  MaritalStatus,
-  Outlook,
-  SmokingPacks,
-} from './onboarding.dto';
+import { AlcoholFrequency, Gender, MaritalStatus, Outlook, SmokingPacks } from './onboarding.dto';
 
 // Add more labels whenever we add questions so that we should
 // force the user to answer questions
@@ -14,12 +8,6 @@ import {
 // Our DTOs will be of the form { level: 'filledv1', ...fields },
 // where each field uses 'class-validator' for validation and checking existence.
 export type RespondedLevel = 'uninit' | 'filledv1';
-
-export interface HealthData {
-  data_type: string;
-  value: number | string;
-  unit: string;
-}
 
 @Entity()
 export class User {
@@ -36,7 +24,11 @@ export class User {
   // directly, thus this is a jsonb data for
   // efficiency rather than it's own table
   @Column({ type: 'jsonb' })
-  healthData: HealthData[];
+  healthData: any;
+
+  // TODO support uploading of icon
+  @Column({ nullable: true })
+  icon?: string;
 
   @Column({ nullable: true })
   name?: string;

@@ -1,15 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { RRuleSet, rrulestr } from 'rrule';
+import { rrulestr } from 'rrule';
 import { isWithinRadius } from '../../util/geo';
 import { Repository } from 'typeorm';
 import { LocationDto } from '../common/common.dto';
-import {
-  AvailabilitySlotDto,
-  MedicalProficiencyDto,
-  NearbyHealerDto,
-  NearbyHealersDto,
-} from './healer.dto';
+import { AvailabilitySlotDto, MedicalProficiencyDto, NearbyHealerDto, NearbyHealersDto } from './healer.dto';
 import { Healer, Slot } from './healer.entity';
 import { DateTime, Duration } from 'luxon';
 import { AuthUser } from '../auth/auth.strategy';
@@ -23,10 +18,7 @@ export class HealerService {
    * @param location Location of a user
    * @param radius Radius in metres
    */
-  async getNearby(
-    location: LocationDto,
-    radius: number,
-  ): Promise<NearbyHealersDto> {
+  async getNearby(location: LocationDto, radius: number): Promise<NearbyHealersDto> {
     const userLocation = location.toPoint();
     const nearbyHealers = await this.healers
       .createQueryBuilder('healer')
@@ -56,11 +48,7 @@ export class HealerService {
       const start = DateTime.now();
       const end = start.plus({ week: 1 });
 
-      hdto.availability = this.availabilitySlotsBetween(
-        h.slots,
-        start.toJSDate(),
-        end.toJSDate(),
-      );
+      hdto.availability = this.availabilitySlotsBetween(h.slots, start.toJSDate(), end.toJSDate());
       return hdto;
     });
 
@@ -71,12 +59,7 @@ export class HealerService {
 
   // TODO make sure that only ppl who recently saw this
   // healer can access their availability
-  async availability(
-    user: AuthUser,
-    healerId: number,
-    start: Date,
-    end: Date,
-  ): Promise<AvailabilitySlotDto[]> {
+  async availability(user: AuthUser, healerId: number, start: Date, end: Date): Promise<AvailabilitySlotDto[]> {
     const healer = await this.healers.findOneOrFail(healerId, {
       relations: ['slots'],
     });
