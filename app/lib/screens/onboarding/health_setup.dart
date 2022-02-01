@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:health/health.dart';
 
 import 'package:hea/widgets/gradient_button.dart';
@@ -40,15 +39,6 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
 
     setState(() => _state = AppState.FETCHING_DATA);
 
-    Navigator.of(context, rootNavigator: true).pop(OnboardingStepReturn(
-      nextStep: OnboardingStep.starter,
-      returnData: <String, dynamic>{
-        "healthData": _healthDataList.map((e) => e.toJson()).toList(),
-      },
-    ));
-
-    return;
-
     // OAuth request authorization to data
     bool accessWasGranted = await health.requestAuthorization(types);
     if (!accessWasGranted) {
@@ -74,7 +64,12 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
         print("${h.typeString}: ${h.value} [${h.unitString}]");
       }
 
-      Navigator.of(context, rootNavigator: true).pop(_healthDataList);
+      Navigator.of(context, rootNavigator: true).pop(OnboardingStepReturn(
+        nextStep: OnboardingStep.starter,
+        returnData: <String, dynamic>{
+          "healthData": _healthDataList.map((e) => e.toJson()).toList(),
+        },
+      ));
     } catch (e) {
       print("Caught exception in getHealthDataFromTypes: $e");
     }

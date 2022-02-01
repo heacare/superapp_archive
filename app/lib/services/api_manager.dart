@@ -53,7 +53,7 @@ class ApiManager {
           'Content-Type': 'application/json; charset=UTF-8'
         });
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       if (response.body.isEmpty) {
         throw ApiManagerException(message: "Expected JWT token");
       }

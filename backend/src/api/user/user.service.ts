@@ -34,6 +34,7 @@ export class UserService {
 
     this.users.update(user.id, {
       alcoholFreq: onboarding.alcoholFreq,
+      level: 'filledv1',
       name: onboarding.name,
       gender: onboarding.gender,
       birthday: onboarding.birthday,

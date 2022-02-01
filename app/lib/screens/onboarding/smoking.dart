@@ -1,22 +1,18 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:hea/models/onboarding_types.dart';
-import 'package:hea/providers/auth.dart';
-import 'package:hea/screens/home.dart';
 import 'package:hea/screens/onboarding.dart';
-import 'package:hea/widgets/navigable_text.dart';
 import 'package:hea/widgets/gradient_button.dart';
-import 'package:hea/widgets/safearea_container.dart';
 import 'package:hea/widgets/switch_button.dart';
 import 'package:hea/widgets/select_list.dart';
 
 final List<SelectListItem<SmokingPacks>> choices = [
   SelectListItem(text: "Less than a pack", value: SmokingPacks.LessOnePack),
   SelectListItem(text: "One to two packs", value: SmokingPacks.OneToTwoPacks),
-  SelectListItem(text: "Three to five packs", value: SmokingPacks.ThreeToFivePacks),
+  SelectListItem(
+      text: "Three to five packs", value: SmokingPacks.ThreeToFivePacks),
   SelectListItem(text: "More than five packs", value: SmokingPacks.FivePacks),
 ];
 
@@ -142,8 +138,7 @@ class OnboardingSmokingScreenState extends State<OnboardingSmokingScreen> {
               labelText: "1",
               suffixText: " years",
             ),
-            validator: FormBuilderValidators.numeric(
-                context),
+            validator: FormBuilderValidators.numeric(context),
             keyboardType: TextInputType.number),
       ]);
     }
