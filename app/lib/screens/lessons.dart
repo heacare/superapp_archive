@@ -1,12 +1,13 @@
 import 'dart:developer';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Page;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'package:hea/screens/lesson.dart';
 import 'package:hea/models/content/module.dart';
 import 'package:hea/models/content/lesson.dart';
+import 'package:hea/models/content/page.dart';
 
 import 'package:hea/services/content_service.dart';
 import 'package:hea/services/service_locator.dart';
@@ -48,9 +49,6 @@ class _LessonsScreenState extends State<LessonsScreen> {
               itemBuilder: (context, index) {
                 final lesson = lessons[index];
                 return LessonListItem(
-                    title: lesson.title,
-                    description: "12 sections • 15min",
-                    leading: Container(),
                     gradient1: widget.gradient1,
                     gradient2: widget.gradient2,
                     lesson: lesson);
@@ -130,9 +128,6 @@ class _LessonsScreenState extends State<LessonsScreen> {
 }
 
 class LessonListItem extends StatelessWidget {
-  final String title;
-  final String description;
-  final Widget leading;
   final Lesson lesson;
 
   final Color gradient1;
@@ -140,9 +135,6 @@ class LessonListItem extends StatelessWidget {
 
   LessonListItem(
       {Key? key,
-      required this.title,
-      required this.description,
-      required this.leading,
       required this.gradient1,
       required this.gradient2,
       required this.lesson})
@@ -150,40 +142,49 @@ class LessonListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-        onTap: () => Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => LessonScreen(
-                lesson: lesson, gradient1: gradient1, gradient2: gradient2))),
-        child: Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
-            decoration: const BoxDecoration(
-              color: Color(0xFFFAFAFA),
-              borderRadius: BorderRadius.all(Radius.circular(20.0)),
-            ),
-            child: Row(children: <Widget>[
-              Container(
-                  margin: const EdgeInsets.only(right: 15.0),
-                  height: 50,
-                  width: 50,
-                  decoration: BoxDecoration(
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(16.0)),
-                      color: Color(0x19000000))),
-              Expanded(
-                  child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                    Text(title, style: Theme.of(context).textTheme.headline3),
-                    Text(description,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText2
-                            ?.copyWith(color: Color(0xFF707070)))
-                  ])),
-              const FaIcon(FontAwesomeIcons.arrowRight,
-                  color: Color(0xFF868686), size: 18.0),
-            ])));
+    return FutureProvider<List<Page>>(
+        initialData: const [],
+        create: (_) => serviceLocator<ContentService>().getPages(lesson.id),
+        child: Consumer<List<Page>>(builder: (context, pages, _) {
+          return GestureDetector(
+              onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => LessonScreen(
+                      lesson: lesson,
+                      pages: pages,
+                      gradient1: gradient1,
+                      gradient2: gradient2))),
+              child: Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 15.0, vertical: 20.0),
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFFAFAFA),
+                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                  ),
+                  child: Row(children: <Widget>[
+                    Container(
+                        margin: const EdgeInsets.only(right: 15.0),
+                        height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(16.0)),
+                            color: Color(0x19000000))),
+                    Expanded(
+                        child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                          Text(lesson.title,
+                              style: Theme.of(context).textTheme.headline3),
+                          Text("${pages.length} sections",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2
+                                  ?.copyWith(color: Color(0xFF707070)))
+                        ])),
+                    const FaIcon(FontAwesomeIcons.arrowRight,
+                        color: Color(0xFF868686), size: 18.0),
+                  ])));
+        }));
   }
 }

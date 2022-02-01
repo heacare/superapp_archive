@@ -15,12 +15,14 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class LessonScreen extends StatefulWidget {
   final Lesson lesson;
+  final List<Page> pages;
   final Color gradient1;
   final Color gradient2;
 
   const LessonScreen(
       {Key? key,
       required this.lesson,
+      required this.pages,
       required this.gradient1,
       required this.gradient2})
       : super(key: key);
@@ -50,13 +52,6 @@ class _LessonScreenState extends State<LessonScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
-                height: 300,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    color: Color(0xFFF0F0F0)),
-              ),
-              SizedBox(height: 30.0),
               Flexible(
                 child: MarkdownBody(
                     data: card.text.replaceAll("<br>", "\n\n"),
@@ -72,61 +67,49 @@ class _LessonScreenState extends State<LessonScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureProvider<List<Page>>(
-      initialData: const [],
-      create: (_) =>
-          serviceLocator<ContentService>().getPages(widget.lesson.id),
-      child: Consumer<List<Page>>(builder: (context, pages, _) {
-        return Scaffold(
-            appBar: PreferredSize(
-                preferredSize: const Size.fromHeight(150),
-                child: SafeArea(
-                    child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 20.0),
-                        width: MediaQuery.of(context).size.width,
-                        child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              IconButton(
-                                  iconSize: 38,
-                                  icon: FaIcon(FontAwesomeIcons.arrowLeft,
-                                      color: widget.gradient1),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  }),
-                              SizedBox(width: 10.0),
-                              Expanded(
-                                  child: Text(widget.lesson.title,
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 2,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline1)),
-                            ])))),
-            body: SafeArea(
-                child: Column(
-              children: [
-                Flexible(
-                  child: PageView(
-                    controller: _pages,
-                    children: pages.map((e) => createPage(context, e)).toList(),
-                  ),
-                ),
-                SmoothPageIndicator(
-                    controller: _pages,
-                    effect: ExpandingDotsEffect(
-                        activeDotColor: widget.gradient1,
-                        dotColor: Color(0xFFF0F0F0)),
-                    count: pages.length),
-              ],
-            )));
-      }),
-      catchError: (context, error) {
-        log("$error");
-        log("${StackTrace.current}");
-        return [];
-      },
-    );
+    return Scaffold(
+        appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(150),
+            child: SafeArea(
+                child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10.0, horizontal: 20.0),
+                    width: MediaQuery.of(context).size.width,
+                    child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          IconButton(
+                              iconSize: 38,
+                              icon: FaIcon(FontAwesomeIcons.arrowLeft,
+                                  color: widget.gradient1),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              }),
+                          SizedBox(width: 10.0),
+                          Expanded(
+                              child: Text(widget.lesson.title,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
+                                  style:
+                                      Theme.of(context).textTheme.headline1)),
+                        ])))),
+        body: SafeArea(
+            child: Column(
+          children: [
+            Flexible(
+              child: PageView(
+                controller: _pages,
+                children:
+                    widget.pages.map((e) => createPage(context, e)).toList(),
+              ),
+            ),
+            SmoothPageIndicator(
+                controller: _pages,
+                effect: ExpandingDotsEffect(
+                    activeDotColor: widget.gradient1,
+                    dotColor: Color(0xFFF0F0F0)),
+                count: widget.pages.length),
+          ],
+        )));
   }
 }
