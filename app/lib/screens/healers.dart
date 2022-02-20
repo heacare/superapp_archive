@@ -12,7 +12,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:hea/providers/map.dart';
 import 'package:hea/utils/permission.dart';
-import 'package:hea/utils/reusable_methods.dart';
 import 'package:hea/services/location_service.dart';
 import 'package:hea/models/healer.dart';
 import 'package:hea/widgets/avatar_icon.dart';
@@ -34,7 +33,7 @@ class _HealersScreenState extends State<HealersScreen> {
   String _mapStyle = "";
   GlobalKey? _keyGoogleMap = GlobalKey();
   List<Healer> _nearestHealers = [];
-  Set<Marker> _markers = {};
+  final Set<Marker> _markers = {};
   late BitmapDescriptor _markerIcon;
   Healer? selectedHealer;
 
@@ -169,8 +168,7 @@ class _HealersScreenState extends State<HealersScreen> {
                             children: <Widget>[
                           Text("Check-ins",
                               style: Theme.of(context).textTheme.headline1),
-                          Text(
-                              "Feel indestructible by checking in with our experts",
+                          Text("Book time with our expert consultants",
                               style: Theme.of(context).textTheme.headline4),
                         ])),
                     AvatarIcon(),
@@ -179,8 +177,8 @@ class _HealersScreenState extends State<HealersScreen> {
           child: Align(
               alignment: Alignment.bottomRight,
               child: Padding(
-                  padding:
-                      EdgeInsets.only(bottom: 40.0, left: 20.0, right: 20.0),
+                  padding: const EdgeInsets.only(
+                      bottom: 40.0, left: 20.0, right: 20.0),
                   child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.end,
@@ -190,13 +188,13 @@ class _HealersScreenState extends State<HealersScreen> {
                               const FaIcon(FontAwesomeIcons.search, size: 24.0),
                           onPressed: () {},
                         ),
-                        SizedBox(height: 8.0),
+                        const SizedBox(height: 8.0),
                         MapIconButton(
                           icon: const FaIcon(FontAwesomeIcons.locationArrow,
                               size: 24.0),
                           onPressed: () => _getUserLocation(context),
                         ),
-                        SizedBox(height: 8.0),
+                        const SizedBox(height: 8.0),
                         (selectedHealer == null)
                             ? Container()
                             : HealerCard(
@@ -211,6 +209,18 @@ class _HealersScreenState extends State<HealersScreen> {
                                   }));
                                 })
                       ])))),
+      Positioned.fill(
+          child: Container(
+              color: Color(0xA4FFFFFF),
+              padding: const EdgeInsets.all(30.0),
+              child: Center(
+                  child: Text(
+                      "Psst, we're working to bring you an expert network of healthcare services to help you feel amazing 🚀",
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline4
+                          ?.copyWith(color: Colors.grey[600]))))),
     ]);
   }
 }

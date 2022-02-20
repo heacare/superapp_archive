@@ -1,14 +1,15 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:hea/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hea/widgets/avatar_icon.dart';
 
-import 'package:hea/screens/booking.dart';
-import 'package:hea/models/healer.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:hea/models/user.dart';
+import 'package:hea/models/content/module.dart';
+import 'package:hea/services/content_service.dart';
+import 'package:hea/services/service_locator.dart';
+import 'package:hea/widgets/avatar_icon.dart';
+import 'package:hea/screens/lessons.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -51,13 +52,48 @@ class DashboardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final moduleListView = FutureProvider<List<Module>>(
+      initialData: const [],
+      create: (_) => serviceLocator<ContentService>().getModules(),
+      child: Consumer<List<Module>>(builder: (context, modules, _) {
+        if (modules.length != 2) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ModuleListItem(
+                  title: "Sleep and Recovery",
+                  description:
+                      "Learn about the benefits and howtos of a good night of sleep",
+                  gradient1: const Color(0xFF00ABE9),
+                  gradient2: const Color(0xFF7FDDFF),
+                  icon: FontAwesomeIcons.solidMoon,
+                  module: modules[0]),
+              const SizedBox(height: 10.0),
+              ModuleListItem(
+                  title: "Psychosocial Health",
+                  description:
+                      "Bad social habits can cause a decrease in well-being",
+                  gradient1: const Color(0xFFFFC498),
+                  gradient2: const Color(0xFFFF7A60),
+                  icon: FontAwesomeIcons.peopleArrows,
+                  module: modules[1])
+            ]);
+      }),
+      catchError: (context, error) {
+        return [];
+      },
+    );
+
     return Scaffold(
         appBar: PreferredSize(
             preferredSize: const Size.fromHeight(150),
             child: SafeArea(
                 child: Container(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10.0, horizontal: 30.0),
                     child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
@@ -76,7 +112,7 @@ class DashboardPage extends StatelessWidget {
                           AvatarIcon(),
                         ])))),
         body: Container(
-          padding: const EdgeInsets.all(30.0),
+          padding: const EdgeInsets.symmetric(horizontal: 30.0),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,12 +120,11 @@ class DashboardPage extends StatelessWidget {
               children: [
                 DeathClock(
                     lifeScore: expYears, sleepScore: 30, socialScore: 60),
-                SizedBox(height: 20.0),
-                Text("Notifications",
-                    style: Theme.of(context).textTheme.headline3),
-                SizedBox(height: 10.0),
-                UpcomingEvent(
-                    title: "Health", provider: "Dan", time: DateTime.now())
+                const SizedBox(height: 20.0),
+                Text("Modules", style: Theme.of(context).textTheme.headline3),
+                const SizedBox(height: 10.0),
+                moduleListView,
+                const SizedBox(height: 30.0),
               ],
             ),
           ),
@@ -287,5 +322,73 @@ class DeathClock extends StatelessWidget {
         )
       ],
     );
+  }
+}
+
+class ModuleListItem extends StatelessWidget {
+  final String title;
+  final String description;
+  final Color gradient1;
+  final Color gradient2;
+  final IconData icon;
+  final Module module;
+
+  ModuleListItem(
+      {Key? key,
+      required this.title,
+      required this.description,
+      required this.gradient1,
+      required this.gradient2,
+      required this.icon,
+      required this.module})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+        onTap: () => Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => LessonsScreen(
+                title: title,
+                gradient1: gradient1,
+                gradient2: gradient2,
+                icon: icon,
+                module: module))),
+        child: Container(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
+            decoration: const BoxDecoration(
+              color: Color(0xFFF5F5F5),
+              borderRadius: BorderRadius.all(Radius.circular(20.0)),
+            ),
+            child: Row(children: <Widget>[
+              Container(
+                  margin: const EdgeInsets.only(right: 15.0),
+                  height: 50,
+                  width: 50,
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                    gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          gradient1,
+                          gradient2,
+                        ]),
+                  ),
+                  child: Center(child: FaIcon(icon, color: Colors.white))),
+              Expanded(
+                  child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                    Text(title, style: Theme.of(context).textTheme.headline3),
+                    const SizedBox(height: 5.0),
+                    Text(description,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText2
+                            ?.copyWith(color: Color(0xFF707070)))
+                  ])),
+            ])));
   }
 }
