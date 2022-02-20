@@ -3,13 +3,13 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:hea/services/auth_service.dart';
-import 'package:hea/screens/home.dart';
 import 'package:hea/screens/onboarding.dart';
+import 'package:hea/screens/home.dart';
 import 'package:hea/services/service_locator.dart';
+import 'package:hea/services/api_manager.dart';
 import 'package:hea/services/user_service.dart';
 import 'package:hea/widgets/navigable_text.dart';
 import 'package:hea/widgets/gradient_button.dart';
-import 'package:hea/widgets/safearea_container.dart';
 
 const svgAssetName = "assets/svg/login.svg";
 
@@ -38,6 +38,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       await _auth.login(_email.text, _password.text);
+      // Get new JWT Token and create user in backend if necessary
+      await serviceLocator<ApiManager>().fetchJwtToken();
+      // Redirect to correct page
       await navigateSuccess();
     } on AuthServiceException catch (e) {
       ScaffoldMessenger.of(context)
@@ -52,6 +55,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       await _auth.signup(_email.text, _password.text);
+      // Get new JWT Token and create user in backend if necessary
+      await serviceLocator<ApiManager>().fetchJwtToken();
+      // Redirect to correct page
       await navigateSuccess();
     } on AuthServiceException catch (e) {
       ScaffoldMessenger.of(context)

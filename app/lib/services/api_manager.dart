@@ -20,7 +20,7 @@ class ApiManager {
   String? _jwtToken;
 
   Future<http.Response> post(String endpoint, Map<String, dynamic> body) async {
-    if (_jwtToken == null) await _fetchJwtToken();
+    if (_jwtToken == null) await fetchJwtToken();
 
     return http.post(_buildUri(endpoint), body: jsonEncode(body), headers: {
       'accept': "application/json",
@@ -31,7 +31,7 @@ class ApiManager {
 
   Future<http.Response> get(String endpoint,
       {Map<String, String>? queryParams}) async {
-    if (_jwtToken == null) await _fetchJwtToken();
+    if (_jwtToken == null) await fetchJwtToken();
 
     return http.get(_buildUri(endpoint, queryParams: queryParams), headers: {
       'accept': "application/json",
@@ -40,7 +40,7 @@ class ApiManager {
   }
 
   // TODO: Cache token with flutter_secure_storage
-  _fetchJwtToken() async {
+  fetchJwtToken() async {
     final firebaseToken =
         await serviceLocator<AuthService>().currentUserToken();
     if (firebaseToken == null) return null;

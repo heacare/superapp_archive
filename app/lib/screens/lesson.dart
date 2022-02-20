@@ -1,13 +1,8 @@
-import 'dart:developer';
-
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/material.dart' hide Page;
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:provider/provider.dart';
 
-import 'package:hea/services/content_service.dart';
-import 'package:hea/services/service_locator.dart';
 import 'package:hea/models/content/page.dart';
 import 'package:hea/models/content/lesson.dart';
 
@@ -41,8 +36,9 @@ class _LessonScreenState extends State<LessonScreen> {
   }
 
   Widget createPage(BuildContext context, Page card) {
-    final markdownStyleSheet =
-        MarkdownStyleSheet(p: Theme.of(context).textTheme.bodyText1);
+    final markdownStyleSheet = MarkdownStyleSheet(
+        p: Theme.of(context).textTheme.bodyText1,
+        h1: Theme.of(context).textTheme.headline3);
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(18.0, 0.0, 18.0, 5.0),
@@ -54,7 +50,7 @@ class _LessonScreenState extends State<LessonScreen> {
             children: [
               Flexible(
                 child: MarkdownBody(
-                    data: card.text.replaceAll("<br>", "\n\n"),
+                    data: card.text,
                     extensionSet: md.ExtensionSet.gitHubFlavored,
                     styleSheet: markdownStyleSheet),
               ),
@@ -107,7 +103,7 @@ class _LessonScreenState extends State<LessonScreen> {
                 controller: _pages,
                 effect: ExpandingDotsEffect(
                     activeDotColor: widget.gradient1,
-                    dotColor: Color(0xFFF0F0F0)),
+                    dotColor: const Color(0xFFF0F0F0)),
                 count: widget.pages.length),
           ],
         )));

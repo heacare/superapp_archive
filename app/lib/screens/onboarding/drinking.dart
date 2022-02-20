@@ -1,13 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
-import 'package:hea/providers/auth.dart';
-import 'package:hea/screens/home.dart';
 import 'package:hea/screens/onboarding.dart';
-import 'package:hea/widgets/navigable_text.dart';
 import 'package:hea/widgets/gradient_button.dart';
-import 'package:hea/widgets/safearea_container.dart';
 import 'package:hea/widgets/select_list.dart';
 
 final List<SelectListItem> choices = [

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:health/health.dart';
 
 import 'package:hea/widgets/gradient_button.dart';
-import 'package:hea/widgets/safearea_container.dart';
 import 'package:hea/screens/onboarding.dart';
 
 const svgAssetName = "assets/svg/health_sync.svg";
@@ -109,33 +108,38 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
         : "Google Fit"; // Assume all other platforms will log in with Google
     String buttonText = "Sync with " + providerName;
 
-    return SafeAreaContainer(
-        child:
-            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-      Expanded(
-          child: Container(
-        decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(20.0)),
-            color: Colors.grey[200]),
-      )),
-      const SizedBox(height: 30.0),
-      Text(buttonText, style: Theme.of(context).textTheme.headline1),
-      const SizedBox(height: 10.0),
-      Text(
-          "I use " +
-              providerName +
-              " to personalise your recommendations and help you live longer!",
-          style: Theme.of(context).textTheme.headline2?.copyWith(
-              fontWeight: FontWeight.w400,
-              height: 1.4,
-              color: Color(0xFF707070))),
-      Padding(
-          child: GradientButton(
-            text: "SYNC DATA",
-            onPressed: fetchData,
-          ),
-          padding: const EdgeInsets.only(top: 30.0))
-    ]));
+    return SafeArea(
+        child: Container(
+            padding: const EdgeInsets.all(30.0),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                      child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(20.0)),
+                        color: Colors.grey[200]),
+                  )),
+                  const SizedBox(height: 30.0),
+                  Text(buttonText,
+                      style: Theme.of(context).textTheme.headline1),
+                  const SizedBox(height: 10.0),
+                  Text(
+                      "I use " +
+                          providerName +
+                          " to personalise your recommendations and help you live longer!",
+                      style: Theme.of(context).textTheme.headline2?.copyWith(
+                          fontWeight: FontWeight.w400,
+                          height: 1.4,
+                          color: Color(0xFF707070))),
+                  Padding(
+                      child: GradientButton(
+                        text: "SYNC DATA",
+                        onPressed: fetchData,
+                      ),
+                      padding: const EdgeInsets.only(top: 30.0))
+                ])));
   }
 
   Widget _authorizationNotGranted() {

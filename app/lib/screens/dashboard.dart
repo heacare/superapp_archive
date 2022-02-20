@@ -73,9 +73,9 @@ class DashboardPage extends StatelessWidget {
                   module: modules[0]),
               const SizedBox(height: 10.0),
               ModuleListItem(
-                  title: "Psychosocial Health",
+                  title: "Mental Hygiene",
                   description:
-                      "Bad social habits can cause a decrease in well-being",
+                      "Bad mental health habits can cause a decrease in well-being",
                   gradient1: const Color(0xFFFFC498),
                   gradient2: const Color(0xFFFF7A60),
                   icon: FontAwesomeIcons.peopleArrows,
