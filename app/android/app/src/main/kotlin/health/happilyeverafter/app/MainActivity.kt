@@ -1,4 +1,4 @@
-package studio.protoplasm.hea
+package health.happilyeverafter.app
 
 import io.flutter.embedding.android.FlutterActivity
 
