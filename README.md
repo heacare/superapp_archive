@@ -33,6 +33,8 @@ flutter run
 
 #### Configuring Firebase
 
+You only need to do this to change the Firebase project
+
 1. [`dart pub global activate flutterfire_cli`](https://firebase.flutter.dev/docs/overview#using-the-flutterfire-cli)
    - Depends on [Firebase CLI](https://firebase.google.com/docs/cli)
 2. `flutterfire configure`
@@ -43,7 +45,7 @@ flutter run
 
 | Firebase project | Purpose |
 |-|-|
-| Happily Ever After - Dev | Development and testing |
+| Happily Ever After | Development, testing and inital version |
 
 ### Backend
 
