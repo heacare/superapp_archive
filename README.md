@@ -54,6 +54,10 @@
      avdmanager create avd --name flutter_emulator --package "system-images;android-31;google_apis_playstore;x86_64" --device pixel_5
      flutter emulators --launch flutter_emulator
      ```
+	 - You might want to enable hardware keyboard by adding this in `~/.android/avd/flutter_emulator.ini`:
+	   ```
+	   hw.keyboard=yes
+       ```
    - (iOS) [Start Simulator](https://docs.flutter.dev/get-started/install/macos#set-up-the-ios-simulator)
      ```
      flutter emulators --launch apple_ios_simulator
