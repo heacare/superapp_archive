@@ -45,7 +45,8 @@ class UserServiceImpl implements UserService {
   Future updateUser(User user) async {
     final resp = await api.post(ApiEndpoint.userOnboard, user.toJson());
     if (resp.statusCode != 201) {
-      throw ApiManagerException(message: "Failure in updateUser: ${resp.statusCode} - ${resp.body}");
+      throw ApiManagerException(
+          message: "Failure in updateUser: ${resp.statusCode} - ${resp.body}");
     }
   }
 }

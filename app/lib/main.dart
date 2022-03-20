@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 import 'package:hea/screens/error.dart';
 import 'package:hea/screens/home.dart';
@@ -9,8 +10,12 @@ import 'package:hea/services/auth_service.dart';
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/services/user_service.dart';
 
-void main() {
+void main() async {
   setupServiceLocator();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const App());
 }
 
