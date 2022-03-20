@@ -20,15 +20,17 @@ class AuthService {
     try {
       await firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
-    } on FirebaseAuthException catch(e) {
+    } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         throw AuthServiceException(message: "Password is weak");
       } else if (e.code == 'email-already-in-use') {
         throw AuthServiceException(
-            message: "Email is already in use - did you mean to login instead?");
+            message:
+                "Email is already in use - did you mean to login instead?");
       }
       throw AuthServiceException(
-          message: "Unknown authentication error occurred in signup! Please try again");
+          message:
+              "Unknown authentication error occurred in signup! Please try again");
     }
   }
 
@@ -36,7 +38,7 @@ class AuthService {
     try {
       await firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
-    } on FirebaseAuthException catch(e) {
+    } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         throw AuthServiceException(
             message: "Username not found - did you mean to signup instead?");
@@ -45,7 +47,8 @@ class AuthService {
             message: "Wrong password - is it really hunter2?");
       }
       throw AuthServiceException(
-          message: "An unknown authentication error occurred in login! Please try again");
+          message:
+              "An unknown authentication error occurred in login! Please try again");
     }
   }
 

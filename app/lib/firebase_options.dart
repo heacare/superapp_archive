@@ -38,29 +38,39 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAFsz1fh3cNb946fV0-f6zGLFckSh0RLzY',
-    appId: '1:639499003234:web:dd9a9cfae35a7f84fcf83b',
-    messagingSenderId: '639499003234',
-    projectId: 'happily-ever-after-dev',
-    authDomain: 'happily-ever-after-dev.firebaseapp.com',
-    storageBucket: 'happily-ever-after-dev.appspot.com',
+    apiKey: 'AIzaSyA8AUKbFk8EdKqib45kT73VVV6eZoK45y0',
+    appId: '1:825250749124:web:b981e1efe5bf26ba090791',
+    messagingSenderId: '825250749124',
+    projectId: 'happily-ever-after-4b2fe',
+    authDomain: 'happily-ever-after-4b2fe.firebaseapp.com',
+    databaseURL:
+        'https://happily-ever-after-4b2fe-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'happily-ever-after-4b2fe.appspot.com',
+    measurementId: 'G-H713K1J5C1',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAtvJp2eQGr93OWwxrpqO3GxvchRPSUvBU',
-    appId: '1:639499003234:android:a58c2b8d849d7103fcf83b',
-    messagingSenderId: '639499003234',
-    projectId: 'happily-ever-after-dev',
-    storageBucket: 'happily-ever-after-dev.appspot.com',
+    apiKey: 'AIzaSyB7CT0_8_IENsJrCzUWkmd1g8RMcUzyYmY',
+    appId: '1:825250749124:android:721cb5ab745db555090791',
+    messagingSenderId: '825250749124',
+    projectId: 'happily-ever-after-4b2fe',
+    databaseURL:
+        'https://happily-ever-after-4b2fe-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'happily-ever-after-4b2fe.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyC-EJkPD8f4fQ9gT_xPYKnZ_1PsK5kXtCg',
-    appId: '1:639499003234:ios:a6e144e7af2c356dfcf83b',
-    messagingSenderId: '639499003234',
-    projectId: 'happily-ever-after-dev',
-    storageBucket: 'happily-ever-after-dev.appspot.com',
-    iosClientId: '639499003234-ksub7617j7dk07k0i9dmi5u67pv8tukc.apps.googleusercontent.com',
-    iosBundleId: 'health.happilyeverafter.app',
+    apiKey: 'AIzaSyDn3a67V0b5dprJPc3zVmhefotNmvN6i7U',
+    appId: '1:825250749124:ios:129f3cd75a15aed3090791',
+    messagingSenderId: '825250749124',
+    projectId: 'happily-ever-after-4b2fe',
+    databaseURL:
+        'https://happily-ever-after-4b2fe-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'happily-ever-after-4b2fe.appspot.com',
+    androidClientId:
+        '825250749124-ivrc77aqemm47m1ltdigeg2c4on135fe.apps.googleusercontent.com',
+    iosClientId:
+        '825250749124-8qchmst7ihvrpaq041bavbebm465l7qc.apps.googleusercontent.com',
+    iosBundleId: 'care.hea.app',
   );
 }

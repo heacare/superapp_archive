@@ -1,4 +1,4 @@
-package health.happilyeverafter.app
+package care.hea.app
 
 import io.flutter.embedding.android.FlutterActivity
 
