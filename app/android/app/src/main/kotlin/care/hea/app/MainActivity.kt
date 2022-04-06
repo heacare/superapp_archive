@@ -1,4 +1,4 @@
-package studio.protoplasm.hea
+package care.hea.app
 
 import io.flutter.embedding.android.FlutterActivity
 

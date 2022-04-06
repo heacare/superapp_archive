@@ -103,8 +103,12 @@ class User extends ChangeNotifier {
       'birthControl': birthControl
     };
     if (isSmoker) {
-      json.update('smoking',
-          (_) => {'packsPerDay': describeEnum(smokingPacksPerDay!), "years": smokingYears});
+      json.update(
+          'smoking',
+          (_) => {
+                'packsPerDay': describeEnum(smokingPacksPerDay!),
+                "years": smokingYears
+              });
     }
 
     return json;
