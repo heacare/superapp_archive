@@ -75,7 +75,7 @@ class DashboardPage extends StatelessWidget {
               ModuleListItem(
                   title: "Mental Hygiene",
                   description:
-                      "Bad mental health habits can cause a decrease in well-being",
+                      "Sneak preview of our upcoming Mental Hygiene module",
                   gradient1: const Color(0xFFFFC498),
                   gradient2: const Color(0xFFFF7A60),
                   icon: FontAwesomeIcons.peopleArrows,

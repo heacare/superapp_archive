@@ -12,13 +12,14 @@ export class ContentSeed1640166201279 implements MigrationInterface {
     console.log('Seeding content...');
 
     let unitOrder = 0;
-    let lessonOrder = 0;
-    let pageOrder = 0;
 
     // Parse JSON
     const units = data.units.map(
-      (unit) =>
-        new Unit(
+      (unit) => {
+        let lessonOrder = 0;
+        let pageOrder = 0;
+
+        return new Unit(
           unitOrder++,
           unit.icon,
           unit.title,
@@ -45,7 +46,8 @@ export class ContentSeed1640166201279 implements MigrationInterface {
                 }),
               ),
           ),
-        ),
+        );
+      },
     );
 
     connection.getRepository(Unit).create(units);

@@ -35,7 +35,7 @@ export class Lesson {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true })
+  @Column()
   lessonOrder: number;
 
   @Column()
@@ -69,7 +69,7 @@ export class Page {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true })
+  @Column()
   pageOrder: number;
 
   @Column()
