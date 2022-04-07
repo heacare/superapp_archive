@@ -1,7 +1,7 @@
 
 # Happily Ever After
 
-[![backend](https://github.com/Happily-Ever-After-Corp/hea/actions/workflows/backend.yml/badge.svg)](https://github.com/Happily-Ever-After-Corp/hea/actions/workflows/backend.yml)
+[![backend](https://github.com/happilyeveraftercorp/hea/actions/workflows/backend.yml/badge.svg)](https://github.com/happilyeveraftercorp/hea/actions/workflows/backend.yml)
 
 ## Developing (App)
 
@@ -70,9 +70,11 @@
 ### Setup
 
 ```
-git clone git@github.com:Happily-Ever-After-Corp/hea.git
+git clone git@github.com:happilyeveraftercorp/hea.git
 cd hea/app
 ```
+
+Then, on Android, you'll have to get the keystore file from Ambrose to get Google Fit synchronisation to work.
 
 ### Running
 
@@ -105,7 +107,7 @@ You only need to do this to change the Firebase project
 ### Setup
 
 ```
-git clone git@github.com:Happily-Ever-After-Corp/hea.git
+git clone git@github.com:happilyeveraftercorp/hea.git
 cd hea/backend
 ```
 
