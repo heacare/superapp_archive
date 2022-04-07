@@ -11,7 +11,7 @@ class IntroductionWelcome extends MarkdownPage {
   final image = null;
 
   @override
-  final nextPage = (BuildContext context) => IntroductionGettingToKnowYou();
+  final nextPage = () => IntroductionGettingToKnowYou();
 
   @override
   final String markdown = """

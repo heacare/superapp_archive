@@ -1,4 +1,6 @@
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:hea/services/auth_service.dart';
 import 'package:hea/services/api_manager.dart';
 import 'package:hea/services/content_service.dart';
@@ -15,4 +17,7 @@ void setupServiceLocator() {
   serviceLocator.registerSingleton<ContentService>(ContentServiceImpl());
   serviceLocator.registerSingleton<UserService>(UserServiceImpl());
   serviceLocator.registerSingleton<HealerService>(HealerServiceImpl());
+
+  serviceLocator.registerSingletonAsync<SharedPreferences>(
+      () => SharedPreferences.getInstance());
 }

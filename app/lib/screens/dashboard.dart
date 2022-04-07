@@ -1,16 +1,18 @@
 import 'dart:math';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Page;
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:hea/models/user.dart';
 import 'package:hea/models/content/module.dart';
 import 'package:hea/services/content_service.dart';
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/widgets/avatar_icon.dart';
+import 'package:hea/widgets/page.dart';
 
-import 'package:hea/pages/sleep/default.dart';
+import 'package:hea/pages/sleep/lookup.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -53,6 +55,8 @@ class DashboardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    PageBuilder resumeSleepPage =
+        sleep.lookup(serviceLocator<SharedPreferences>().getString('sleep'));
     final moduleListView = FutureProvider<List<Module>>(
       initialData: const [],
       create: (_) => serviceLocator<ContentService>().getModules(),
@@ -71,7 +75,7 @@ class DashboardPage extends StatelessWidget {
                   gradient1: const Color(0xFF00ABE9),
                   gradient2: const Color(0xFF7FDDFF),
                   icon: FontAwesomeIcons.solidMoon,
-                  resume: defaultSleepPage(context)),
+                  resume: resumeSleepPage),
               const SizedBox(height: 10.0),
               /*
               ModuleListItem(
@@ -336,7 +340,7 @@ class ModuleListItem extends StatelessWidget {
   final Color gradient1;
   final Color gradient2;
   final IconData icon;
-  final Widget resume;
+  final PageBuilder resume;
 
   ModuleListItem(
       {Key? key,
@@ -352,7 +356,7 @@ class ModuleListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () => Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => resume)),
+            .push(MaterialPageRoute(builder: (context) => resume())),
         child: Container(
             padding:
                 const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),

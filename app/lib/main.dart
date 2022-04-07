@@ -160,6 +160,8 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     final Future<UserStatus> hasUserData = _firebaseInit.then((value) async {
+      await serviceLocator.allReady();
+
       // Authentication user exists separately from user data, so we have to check for the case where
       // the user signed up but uninstalled/reset the app before finishing onboarding
       final authService = serviceLocator<AuthService>();

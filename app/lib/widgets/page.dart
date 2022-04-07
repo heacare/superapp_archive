@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:hea/services/service_locator.dart';
+import 'package:hea/pages/sleep/lookup.dart';
 
 abstract class Page extends StatelessWidget {
   abstract final String title;
 
   const Page({Key? key}) : super(key: key);
 
-  abstract final WidgetBuilder? nextPage;
+  abstract final PageBuilder? nextPage;
 
   Widget buildPage(BuildContext context);
 
@@ -47,10 +51,17 @@ abstract class Page extends StatelessWidget {
       floatingActionButton: nextPage == null
           ? null
           : FloatingActionButton(
-              onPressed: () =>
-                  Navigator.of(context).pushReplacement(MaterialPageRoute<void>(
-                builder: (BuildContext context) => nextPage!(context),
-              )),
+              onPressed: () {
+                Page next = nextPage!();
+                String? s = sleep.rlookup(next.runtimeType);
+                print(s);
+                if (s != null) {
+                  serviceLocator<SharedPreferences>().setString('sleep', s);
+                }
+                Navigator.of(context).pushReplacement(MaterialPageRoute<void>(
+                  builder: (BuildContext context) => next,
+                ));
+              },
               tooltip: 'Next',
               backgroundColor: Color(0xFF00ABE9),
               child: Icon(FontAwesomeIcons.arrowRight,
