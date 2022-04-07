@@ -98,7 +98,7 @@ flutter:
     - assets/svg/health_sync.svg
     - assets/svg/error.svg
     - assets/svg/marker.svg
-    - assets/images/
+    - assets/images/sleep/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
