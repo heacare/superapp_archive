@@ -6,11 +6,11 @@ import 'package:provider/provider.dart';
 import 'package:hea/models/user.dart';
 import 'package:hea/screens/dashboard.dart';
 import 'package:hea/screens/error.dart';
-import 'package:hea/screens/healers.dart';
+//import 'package:hea/screens/healers.dart';
 import 'package:hea/screens/profile.dart';
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/services/user_service.dart';
-import 'package:hea/providers/map.dart';
+//import 'package:hea/providers/map.dart';
 
 import 'package:hea/widgets/fancy_bottom_bar.dart';
 
@@ -29,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
         body: pageFor(index),
         bottomNavigationBar: FancyBottomNav(
-            icons: const <IconData>[Icons.home, Icons.map, Icons.person],
+            icons: const <IconData>[Icons.home, /* Icons.map, */ Icons.person],
             clicked: (i) => setState(() {
                   index = i;
                 })));
@@ -41,10 +41,12 @@ class _HomeScreenState extends State<HomeScreen> {
     if (index == 0) {
       child = const DashboardScreen();
     } else if (index == 1) {
+      /*
       child = ChangeNotifierProvider<MapProvider>(
-          create: (_) => MapProvider(),
-          builder: (context, _) => HealersScreen());
-    } else if (index == 2) {
+        create: (_) => MapProvider(),
+        builder: (context, _) => HealersScreen());
+      } else if (index == 2) {
+      */
       child = ProfileScreen();
     } else {
       // Should never hit this unless something goes horribly wrong

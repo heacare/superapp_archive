@@ -9,7 +9,8 @@ import 'package:hea/models/content/module.dart';
 import 'package:hea/services/content_service.dart';
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/widgets/avatar_icon.dart';
-import 'package:hea/screens/lessons.dart';
+
+import 'package:hea/pages/sleep/default.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -70,8 +71,9 @@ class DashboardPage extends StatelessWidget {
                   gradient1: const Color(0xFF00ABE9),
                   gradient2: const Color(0xFF7FDDFF),
                   icon: FontAwesomeIcons.solidMoon,
-                  module: modules[0]),
+                  resume: defaultSleepPage(context)),
               const SizedBox(height: 10.0),
+              /*
               ModuleListItem(
                   title: "Mental Hygiene",
                   description:
@@ -80,6 +82,7 @@ class DashboardPage extends StatelessWidget {
                   gradient2: const Color(0xFFFF7A60),
                   icon: FontAwesomeIcons.peopleArrows,
                   module: modules[1])
+			  */
             ]);
       }),
       catchError: (context, error) {
@@ -118,8 +121,10 @@ class DashboardPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
+                /*
                 DeathClock(
                     lifeScore: expYears, sleepScore: 30, socialScore: 60),
+			    */
                 const SizedBox(height: 20.0),
                 Text("Modules", style: Theme.of(context).textTheme.headline3),
                 const SizedBox(height: 10.0),
@@ -331,7 +336,7 @@ class ModuleListItem extends StatelessWidget {
   final Color gradient1;
   final Color gradient2;
   final IconData icon;
-  final Module module;
+  final Widget resume;
 
   ModuleListItem(
       {Key? key,
@@ -340,19 +345,14 @@ class ModuleListItem extends StatelessWidget {
       required this.gradient1,
       required this.gradient2,
       required this.icon,
-      required this.module})
+      required this.resume})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: () => Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => LessonsScreen(
-                title: title,
-                gradient1: gradient1,
-                gradient2: gradient2,
-                icon: icon,
-                module: module))),
+        onTap: () => Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => resume)),
         child: Container(
             padding:
                 const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
