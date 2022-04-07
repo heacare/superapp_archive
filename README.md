@@ -74,7 +74,7 @@ git clone git@github.com:happilyeveraftercorp/hea.git
 cd hea/app
 ```
 
-Then, on Android, you'll have to get the keystore file from Ambrose to get Google Fit synchronisation to work.
+Then, see the section on [Google Maps and Google Fit](#google-maps-and-google-fit)
 
 ### Running
 
@@ -96,6 +96,16 @@ You only need to do this to change the Firebase project
 | Firebase project | Purpose |
 |-|-|
 | happily-ever-after-4b2fe | Development, testing and inital version |
+
+### Google Maps and Google Fit
+
+Ambrose holds the shared debug keystore file. Sharing the keystore file allows us to use the same API key for development.
+
+Current API keys:
+- Google Maps (Ambrose's private project)
+  - Eventually need to be replaced with an official release API key in the project and add security measures
+- Google Fit
+  - Relies on the app's certificate, so the keystore file needs to be shared
 
 ## Developing (Backend)
 
