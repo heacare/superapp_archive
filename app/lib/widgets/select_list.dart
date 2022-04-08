@@ -1,39 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:hea/widgets/gradient_button.dart';
 
 class SelectListItem<T> {
-  SelectListItem({required this.text, required this.value});
+  SelectListItem({required this.text, required this.value, this.other = false});
 
   String text;
   T value;
+  bool other;
 }
 
+typedef SelectListOnChange<T> = Function(List<T>);
+
 class SelectList<T> extends StatefulWidget {
-  SelectList({Key? key, required this.items, required this.onChange})
+  SelectList({Key? key, required this.items, this.max = 1, required this.onChange})
       : super(key: key);
 
   List<SelectListItem<T>> items;
-  Function onChange;
+  int max;
+  SelectListOnChange<T> onChange;
 
   @override
   SelectListState<T> createState() => SelectListState<T>();
 }
 
 class SelectListState<T> extends State<SelectList<T>> {
-  T? selected;
+  List<T> selected = [];
 
   @override
   void initState() {
+    super.initState();
     widget.items = widget.items.toSet().toList(); // Deduplicate
-    selected = widget.items[0].value;
+    selected = [];
   }
 
   Widget getButton(SelectListItem item) {
-    if (item.value == selected) {
+    if (selected.contains(item.value)) {
       return SizedBox(
         height: 50.0,
         child: ElevatedButton(
-          child: Text(item.text,
+          child: Text(item.other? "Other (TODO)" : item.text,
               style: TextStyle(
                 fontWeight: FontWeight.w500,
                 color: Color(0xFFFF5576),
@@ -41,7 +45,7 @@ class SelectListState<T> extends State<SelectList<T>> {
               )),
           onPressed: () {
             setState(() {
-              selected = item.value;
+              selected.remove(item.value);
             });
             widget.onChange(selected);
           },
@@ -63,7 +67,10 @@ class SelectListState<T> extends State<SelectList<T>> {
               )),
           onPressed: () {
             setState(() {
-              selected = item.value;
+              selected.add(item.value);
+			  while (widget.max != 0 && selected.length > widget.max) {
+				  selected.removeAt(0);
+			  }
             });
             widget.onChange(selected);
           },

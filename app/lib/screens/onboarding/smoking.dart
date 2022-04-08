@@ -118,9 +118,9 @@ class OnboardingSmokingScreenState extends State<OnboardingSmokingScreen> {
             padding: const EdgeInsets.symmetric(vertical: 16.0)),
         SelectList(
           items: choices,
-          onChange: (SmokingPacks c) {
+          onChange: (List<SmokingPacks> c) {
             setState(() {
-              packs = c;
+              packs = c[0];
             });
           },
         ),

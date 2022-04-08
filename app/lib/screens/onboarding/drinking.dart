@@ -4,7 +4,7 @@ import 'package:hea/screens/onboarding.dart';
 import 'package:hea/widgets/gradient_button.dart';
 import 'package:hea/widgets/select_list.dart';
 
-final List<SelectListItem> choices = [
+final List<SelectListItem<String>> choices = [
   SelectListItem(text: "I never drink", value: "NotAtAll"),
   SelectListItem(text: "Once a month", value: "OnceAMonth"),
   SelectListItem(text: "Few times a week", value: "FewTimesAWeek"),
@@ -42,9 +42,9 @@ class OnboardingDrinkingScreenState extends State<OnboardingDrinkingScreen> {
                     children: [
                   SelectList(
                     items: choices,
-                    onChange: (String c) {
+                    onChange: (List<String> c) {
                       setState(() {
-                        choice = c;
+                        choice = c[0];
                       });
                     },
                   ),

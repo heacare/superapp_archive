@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:hea/widgets/select_list.dart';
 import 'package:hea/widgets/gradient_button.dart';
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/pages/sleep/lookup.dart';
@@ -67,7 +67,9 @@ abstract class Page extends StatelessWidget {
       body: SafeArea(
           child: Padding(
         padding: const EdgeInsets.fromLTRB(18.0, 0.0, 18.0, 5.0),
-        child: buildPage(context),
+        child: SingleChildScrollView(
+		child: buildPage(context),
+		),
       )),
       floatingActionButton: nextPage == null
           ? null
@@ -122,6 +124,7 @@ abstract class MultipleChoicePage extends Page {
   abstract final Image? image;
 
   abstract final int maxChoice;
+  abstract final List<SelectListItem<String>> choices;
 
   const MultipleChoicePage({Key? key}) : super(key: key);
 
@@ -142,13 +145,10 @@ abstract class MultipleChoicePage extends Page {
                   styleSheet: markdownStyleSheet),
 				  if (markdown != "")
 				SizedBox(height: 4.0),
-		  GradientButton(text: "Option 1", onPressed: () {
-
-		  }),
-				SizedBox(height: 4.0),
-		  GradientButton(text: "Option 2", onPressed: () {
-
-		  })
+				SelectList(items: choices, max: maxChoice, onChange: (List<String> c) {
+				// TODO: Save value
+					print(c);
+				}),
         ]);
   }
 }
