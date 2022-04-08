@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hea/utils/kv_wrap.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:hea/widgets/select_list.dart';
-import 'package:hea/widgets/gradient_button.dart';
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/pages/sleep/lookup.dart';
 
@@ -125,6 +125,7 @@ abstract class MultipleChoicePage extends Page {
 
   abstract final int maxChoice;
   abstract final List<SelectListItem<String>> choices;
+  abstract final String valueName;
 
   const MultipleChoicePage({Key? key}) : super(key: key);
 
@@ -147,9 +148,11 @@ abstract class MultipleChoicePage extends Page {
           SelectList(
               items: choices,
               max: maxChoice,
+			  defaultSelected: kvReadStringList("sleep", valueName),
               onChange: (List<String> c) {
                 // TODO: Save value
                 print(c);
+				kvWrite<List<String>>("sleep", valueName, c);
               }),
         ]);
   }

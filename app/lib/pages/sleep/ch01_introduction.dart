@@ -8,13 +8,11 @@ class IntroductionWelcome extends MarkdownPage {
 
   @override
   final title = "Welcome";
-
   @override
   final image = null;
 
   @override
   final nextPage = () => IntroductionGettingToKnowYou();
-
   @override
   final prevPage = null;
 
@@ -33,13 +31,11 @@ class IntroductionGettingToKnowYou extends MultipleChoicePage {
 
   @override
   final title = "Getting to know you";
-
   @override
   final image = Image.asset("assets/images/sleep/ch01-roles-in-society.gif");
 
   @override
   final nextPage = () => IntroductionHowTrackSleep();
-
   @override
   final prevPage = () => IntroductionWelcome();
 
@@ -50,7 +46,8 @@ Tell us a little about yourself. Choose as many as apply.
 
   @override
   final maxChoice = 0;
-
+  @override
+  final valueName = "person";
   @override
   final List<SelectListItem<String>> choices = [
     SelectListItem(text: "Day Worker", value: "DayWorker"),
@@ -79,13 +76,11 @@ class IntroductionHowTrackSleep extends MultipleChoicePage {
 
   @override
   final title = "How are you tracking your sleep?";
-
   @override
   final image = null;
 
   @override
   final nextPage = null;
-
   @override
   final prevPage = () => IntroductionGettingToKnowYou();
 
@@ -96,7 +91,8 @@ Please select the exact tool/device and model (if applicable) you’ll be using 
 
   @override
   final maxChoice = 1;
-
+  @override
+  final valueName = "tracking-tool";
   @override
   final List<SelectListItem<String>> choices = [
     SelectListItem(text: "A clock and diary", value: "ClockPaper"),

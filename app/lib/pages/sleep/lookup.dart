@@ -1,4 +1,3 @@
-import 'package:hea/screens/error.dart';
 import 'package:hea/widgets/page.dart';
 import './ch01_introduction.dart';
 
@@ -37,4 +36,5 @@ class Lesson {
 Lesson sleep = Lesson([
   PageDef(IntroductionWelcome, () => IntroductionWelcome()),
   PageDef(IntroductionGettingToKnowYou, () => IntroductionGettingToKnowYou()),
+PageDef(IntroductionHowTrackSleep, () => IntroductionHowTrackSleep()),
 ]);
