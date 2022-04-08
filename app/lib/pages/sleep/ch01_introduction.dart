@@ -2,19 +2,20 @@ import 'package:flutter/material.dart';
 
 import 'package:hea/widgets/page.dart';
 import 'package:hea/widgets/select_list.dart';
+import 'ch02_now.dart';
 
 class IntroductionWelcome extends MarkdownPage {
   IntroductionWelcome({Key? key}) : super(key: key);
 
   @override
-  final title = "Welcome";
-  @override
-  final image = null;
-
-  @override
   final nextPage = () => IntroductionGettingToKnowYou();
   @override
   final prevPage = null;
+
+  @override
+  final title = "Welcome";
+  @override
+  final image = null;
 
   @override
   final markdown = """
@@ -30,14 +31,14 @@ class IntroductionGettingToKnowYou extends MultipleChoicePage {
   IntroductionGettingToKnowYou({Key? key}) : super(key: key);
 
   @override
-  final title = "Getting to know you";
-  @override
-  final image = Image.asset("assets/images/sleep/ch01-roles-in-society.gif");
-
-  @override
   final nextPage = () => IntroductionHowTrackSleep();
   @override
   final prevPage = () => IntroductionWelcome();
+
+  @override
+  final title = "Getting to know you";
+  @override
+  final image = Image.asset("assets/images/sleep/ch01-roles-in-society.gif");
 
   @override
   final markdown = """
@@ -75,14 +76,14 @@ class IntroductionHowTrackSleep extends MultipleChoicePage {
   IntroductionHowTrackSleep({Key? key}) : super(key: key);
 
   @override
+  final nextPage = () => NowFirstThingsFirst();
+  @override
+  final prevPage = () => IntroductionGettingToKnowYou();
+
+  @override
   final title = "How are you tracking your sleep?";
   @override
   final image = null;
-
-  @override
-  final nextPage = null;
-  @override
-  final prevPage = () => IntroductionGettingToKnowYou();
 
   @override
   final markdown = """

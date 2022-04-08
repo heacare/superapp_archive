@@ -12,7 +12,11 @@ typedef SelectListOnChange<T> = Function(List<T>);
 
 class SelectList<T> extends StatefulWidget {
   SelectList(
-      {Key? key, required this.items, this.defaultSelected = const [], this.max = 1, required this.onChange})
+      {Key? key,
+      required this.items,
+      this.defaultSelected = const [],
+      this.max = 1,
+      required this.onChange})
       : super(key: key);
 
   List<SelectListItem<T>> items;
