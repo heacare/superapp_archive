@@ -52,7 +52,7 @@ class NowMinutesFallAsleep extends MultipleChoicePage {
   NowMinutesFallAsleep({Key? key}) : super(key: key);
 
   @override
-  final nextPage = null;
+  final nextPage = () => NowTimeOutBed();
   @override
   final prevPage = () => NowTimeGoneBed();
 
@@ -69,7 +69,7 @@ How many minutes does it usually take you to fall asleep?
   @override
   final maxChoice = 1;
   @override
-  final valueName = "minutes-fall-asleep";
+  final valueName = "points-fall-asleep";
   @override
   final List<SelectListItem<String>> choices = [
     SelectListItem(text: "15 minutes or less", value: "0"),
@@ -77,4 +77,47 @@ How many minutes does it usually take you to fall asleep?
     SelectListItem(text: "Between 31 minutes and 60 minutes", value: "2"),
     SelectListItem(text: "60 minutes or more", value: "3"),
   ];
+}
+
+class NowTimeOutBed extends TimePickerPage {
+  NowTimeOutBed({Key? key}) : super(key: key);
+
+  @override
+  final nextPage = () => NowGetSleep();
+  @override
+  final prevPage = () => NowMinutesFallAsleep();
+
+  @override
+  final title = "In the past month";
+  @override
+  final image = null;
+
+  @override
+  final markdown = "When have you usually gotten out of bed?";
+
+  @override
+  final valueName = "time-out-bed";
+}
+
+class NowGetSleep extends DurationPickerPage {
+  NowGetSleep({Key? key}) : super(key: key);
+
+  @override
+  final nextPage = null;
+  @override
+  final prevPage = () => NowTimeOutBed();
+
+  @override
+  final title = "In the past month";
+  @override
+  final image = null;
+
+  @override
+  final markdown = """
+On average, how many hours of sleep do you get at night?
+(*This differs from the number of hours you spend in bed.*)
+""";
+
+  @override
+  final valueName = "hours-asleep";
 }

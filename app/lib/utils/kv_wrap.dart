@@ -26,16 +26,19 @@ T kvRead<T>(String module, String key) {
   return object[key];
 }
 
-List<String> kvReadStringList(String module, String key) {
-  String? json =
-      serviceLocator<SharedPreferences>().getString('data-' + module);
-  if (json == null) {
-    json = "{}";
+int? kvReadInt(String module, String key) {
+  dynamic v = kvRead(module, key);
+  if (v is int) {
+    return v;
   }
-  Map object = jsonDecode(json);
+  return null;
+}
+
+List<String> kvReadStringList(String module, String key) {
+  dynamic v = kvRead(module, key);
   List<String> items = [];
-  if (object[key] is List) {
-    for (var item in object[key]) {
+  if (v is List) {
+    for (var item in v) {
       if (item is String) {
         items.add(item);
       }
@@ -45,31 +48,17 @@ List<String> kvReadStringList(String module, String key) {
 }
 
 kvWriteTimeOfDay(String module, String key, TimeOfDay value) {
-  String? json =
-      serviceLocator<SharedPreferences>().getString('data-' + module);
-  if (json == null) {
-    json = "{}";
-  }
-  Map object = jsonDecode(json);
-  object[key] = {
+  kvWrite(module, key, {
     "hour": value.hour,
     "minute": value.minute,
-  };
-  json = jsonEncode(object);
-  serviceLocator<SharedPreferences>().setString('data-' + module, json);
+  });
 }
 
 TimeOfDay? kvReadTimeOfDay(String module, String key) {
-  String? json =
-      serviceLocator<SharedPreferences>().getString('data-' + module);
-  if (json == null) {
-    json = "{}";
-  }
-  Map object = jsonDecode(json);
-  if (object[key] is Map) {
-    if (object[key]["hour"] is int && object[key]["minute"] is int) {
-      return TimeOfDay(
-          hour: object[key]["hour"], minute: object[key]["minute"]);
+  dynamic v = kvRead(module, key);
+  if (v is Map) {
+    if (v["hour"] is int && v["minute"] is int) {
+      return TimeOfDay(hour: v["hour"], minute: v["minute"]);
     }
   }
   return null;

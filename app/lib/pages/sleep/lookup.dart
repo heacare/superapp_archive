@@ -10,4 +10,6 @@ Lesson sleep = Lesson([
   PageDef(NowFirstThingsFirst, () => NowFirstThingsFirst()),
   PageDef(NowTimeGoneBed, () => NowTimeGoneBed()),
   PageDef(NowMinutesFallAsleep, () => NowMinutesFallAsleep()),
+  PageDef(NowTimeOutBed, () => NowTimeOutBed()),
+  PageDef(NowGetSleep, () => NowGetSleep()),
 ]);

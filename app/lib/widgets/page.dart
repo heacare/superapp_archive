@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hea/utils/kv_wrap.dart';
@@ -269,6 +270,111 @@ abstract class TimePickerPage extends Page {
           TimePickerBlock(
               initialTime: initialTime,
               onChange: (time) => kvWriteTimeOfDay("sleep", valueName, time)),
+        ]);
+  }
+}
+
+typedef DurationPickerBlockOnChange = Function(Duration);
+
+class DurationPickerBlock extends StatefulWidget {
+  DurationPickerBlock(
+      {Key? key, required this.initialDuration, required this.onChange})
+      : super(key: key);
+
+  Duration initialDuration;
+  DurationPickerBlockOnChange onChange;
+
+  @override
+  DurationPickerBlockState createState() => DurationPickerBlockState();
+}
+
+class DurationPickerBlockState extends State<DurationPickerBlock> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  Duration selectedDuration = Duration();
+
+  @override
+  void initState() {
+    super.initState();
+    selectedDuration = widget.initialDuration;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+        key: _formKey,
+        child: Column(children: [
+          Row(children: [
+            Container(
+                width: 72.0,
+                child: TextFormField(
+                    keyboardType: TextInputType.number,
+                    textAlign: TextAlign.end,
+                    initialValue: (selectedDuration.inHours).toString(),
+                    onChanged: (String value) {
+                      int hours = int.tryParse(value) ?? 0;
+                      setState(() {
+                        selectedDuration = Duration(
+                            hours: hours,
+                            minutes: selectedDuration.inMinutes % 60);
+                      });
+                      widget.onChange(selectedDuration);
+                    })),
+            Text('hours'),
+          ]),
+          Row(children: [
+            Container(
+                width: 72.0,
+                child: TextFormField(
+                    keyboardType: TextInputType.number,
+                    textAlign: TextAlign.end,
+                    initialValue: (selectedDuration.inMinutes % 60).toString(),
+                    onChanged: (String value) {
+                      int minutes = int.tryParse(value) ?? 0;
+                      setState(() {
+                        selectedDuration = Duration(
+                            hours: selectedDuration.inHours, minutes: minutes);
+                      });
+                      widget.onChange(selectedDuration);
+                    })),
+            Text('minutes'),
+          ]),
+        ]));
+  }
+}
+
+abstract class DurationPickerPage extends Page {
+  abstract final String markdown;
+  abstract final Image? image;
+
+  abstract final String valueName;
+
+  const DurationPickerPage({Key? key}) : super(key: key);
+
+  @override
+  Widget buildPage(BuildContext context) {
+    final markdownStyleSheet = MarkdownStyleSheet(
+        p: Theme.of(context).textTheme.bodyText1,
+        h1: Theme.of(context).textTheme.headline3);
+    int? duration = kvReadInt("sleep", valueName);
+    if (duration == null) {
+      duration = 8 * 60;
+    }
+    Duration initialDuration = Duration(minutes: duration);
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          if (image != null) image!,
+          if (image != null) SizedBox(height: 4.0),
+          if (markdown != "")
+            MarkdownBody(
+                data: markdown,
+                extensionSet: md.ExtensionSet.gitHubFlavored,
+                styleSheet: markdownStyleSheet),
+          if (markdown != "") SizedBox(height: 4.0),
+          DurationPickerBlock(
+              initialDuration: initialDuration,
+              onChange: (duration) =>
+                  kvWrite("sleep", valueName, duration.inMinutes)),
         ]);
   }
 }
