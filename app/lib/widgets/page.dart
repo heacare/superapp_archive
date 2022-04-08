@@ -68,8 +68,8 @@ abstract class Page extends StatelessWidget {
           child: Padding(
         padding: const EdgeInsets.fromLTRB(18.0, 0.0, 18.0, 5.0),
         child: SingleChildScrollView(
-		child: buildPage(context),
-		),
+          child: buildPage(context),
+        ),
       )),
       floatingActionButton: nextPage == null
           ? null
@@ -110,11 +110,11 @@ abstract class MarkdownPage extends Page {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           if (image != null) image!,
-          if (image != null)	SizedBox(height: 4.0),
-              MarkdownBody(
-                  data: markdown,
-                  extensionSet: md.ExtensionSet.gitHubFlavored,
-                  styleSheet: markdownStyleSheet),
+          if (image != null) SizedBox(height: 4.0),
+          MarkdownBody(
+              data: markdown,
+              extensionSet: md.ExtensionSet.gitHubFlavored,
+              styleSheet: markdownStyleSheet),
         ]);
   }
 }
@@ -137,18 +137,20 @@ abstract class MultipleChoicePage extends Page {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           if (image != null) image!,
-          if (image != null)	SizedBox(height: 4.0),
-		  if (markdown != "")
-              MarkdownBody(
-                  data: markdown,
-                  extensionSet: md.ExtensionSet.gitHubFlavored,
-                  styleSheet: markdownStyleSheet),
-				  if (markdown != "")
-				SizedBox(height: 4.0),
-				SelectList(items: choices, max: maxChoice, onChange: (List<String> c) {
-				// TODO: Save value
-					print(c);
-				}),
+          if (image != null) SizedBox(height: 4.0),
+          if (markdown != "")
+            MarkdownBody(
+                data: markdown,
+                extensionSet: md.ExtensionSet.gitHubFlavored,
+                styleSheet: markdownStyleSheet),
+          if (markdown != "") SizedBox(height: 4.0),
+          SelectList(
+              items: choices,
+              max: maxChoice,
+              onChange: (List<String> c) {
+                // TODO: Save value
+                print(c);
+              }),
         ]);
   }
 }

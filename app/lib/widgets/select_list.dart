@@ -11,7 +11,8 @@ class SelectListItem<T> {
 typedef SelectListOnChange<T> = Function(List<T>);
 
 class SelectList<T> extends StatefulWidget {
-  SelectList({Key? key, required this.items, this.max = 1, required this.onChange})
+  SelectList(
+      {Key? key, required this.items, this.max = 1, required this.onChange})
       : super(key: key);
 
   List<SelectListItem<T>> items;
@@ -37,7 +38,7 @@ class SelectListState<T> extends State<SelectList<T>> {
       return SizedBox(
         height: 50.0,
         child: ElevatedButton(
-          child: Text(item.other? "Other (TODO)" : item.text,
+          child: Text(item.other ? "Other (TODO)" : item.text,
               style: TextStyle(
                 fontWeight: FontWeight.w500,
                 color: Color(0xFFFF5576),
@@ -68,9 +69,9 @@ class SelectListState<T> extends State<SelectList<T>> {
           onPressed: () {
             setState(() {
               selected.add(item.value);
-			  while (widget.max != 0 && selected.length > widget.max) {
-				  selected.removeAt(0);
-			  }
+              while (widget.max != 0 && selected.length > widget.max) {
+                selected.removeAt(0);
+              }
             });
             widget.onChange(selected);
           },
