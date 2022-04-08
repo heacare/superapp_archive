@@ -55,7 +55,6 @@ class DashboardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-        
     final moduleListView = FutureProvider<List<Module>>(
       initialData: const [],
       create: (_) => serviceLocator<ContentService>().getModules(),
@@ -352,12 +351,12 @@ class ModuleListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-    PageBuilder resume =
-        sleep.lookup(serviceLocator<SharedPreferences>().getString('sleep'));
+          PageBuilder resume = sleep
+              .lookup(serviceLocator<SharedPreferences>().getString('sleep'));
 
-		Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => resume()));
-			},
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => resume()));
+        },
         child: Container(
             padding:
                 const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),

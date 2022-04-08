@@ -17,7 +17,7 @@ class IntroductionWelcome extends MarkdownPage {
   final prevPage = null;
 
   @override
-  final String markdown = """
+  final markdown = """
 Welcome to your first journey on Happily Ever After. We’re glad you’ve chosen to optimise your lifestyle, and to start with sleep.
 
 Good sleep is the foundation of life. It is an essential biological process that supports the optimal functioning of our body and well being.
@@ -26,7 +26,7 @@ Good sleep is the foundation of life. It is an essential biological process that
 """;
 }
 
-class IntroductionGettingToKnowYou extends MarkdownPage {
+class IntroductionGettingToKnowYou extends MultipleChoicePage {
   IntroductionGettingToKnowYou({Key? key}) : super(key: key);
 
   @override
@@ -42,7 +42,10 @@ class IntroductionGettingToKnowYou extends MarkdownPage {
   final prevPage = () => IntroductionWelcome();
 
   @override
-  final String markdown = """
-TODO
+  final markdown = """
+Tell us a little about yourself. Choose as many as apply.
 """;
+
+  @override
+  final maxChoice = 0;
 }

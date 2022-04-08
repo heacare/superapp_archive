@@ -5,6 +5,7 @@ import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:hea/widgets/gradient_button.dart';
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/pages/sleep/lookup.dart';
 
@@ -44,22 +45,24 @@ abstract class Page extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 2,
                                 style: Theme.of(context).textTheme.headline1)),
-								if (prevPage != null)
-                        IconButton(
-                            iconSize: 24,
-                            icon: const FaIcon(FontAwesomeIcons.undo,
-                                color: Color(0xFF00ABE9)),
-                            onPressed: () {
-                Page prev = prevPage!();
-                String? s = sleep.rlookup(prev.runtimeType);
-                print(s);
-                if (s != null) {
-                  serviceLocator<SharedPreferences>().setString('sleep', s);
-                }
-                Navigator.of(context).pushReplacement(MaterialPageRoute<void>(
-                  builder: (BuildContext context) => prev,
-                ));
-                            }),
+                        if (prevPage != null)
+                          IconButton(
+                              iconSize: 24,
+                              icon: const FaIcon(FontAwesomeIcons.undo,
+                                  color: Color(0xFF00ABE9)),
+                              onPressed: () {
+                                Page prev = prevPage!();
+                                String? s = sleep.rlookup(prev.runtimeType);
+                                print(s);
+                                if (s != null) {
+                                  serviceLocator<SharedPreferences>()
+                                      .setString('sleep', s);
+                                }
+                                Navigator.of(context)
+                                    .pushReplacement(MaterialPageRoute<void>(
+                                  builder: (BuildContext context) => prev,
+                                ));
+                              }),
                       ])))),
       body: SafeArea(
           child: Padding(
@@ -102,13 +105,50 @@ abstract class MarkdownPage extends Page {
         p: Theme.of(context).textTheme.bodyText1,
         h1: Theme.of(context).textTheme.headline3);
     return Column(
-	crossAxisAlignment: CrossAxisAlignment.start,
-	children: <Widget>[
-      if (image != null) image!,
-      FittedBox(child: MarkdownBody(
-          data: markdown,
-          extensionSet: md.ExtensionSet.gitHubFlavored,
-          styleSheet: markdownStyleSheet)),
-    ]);
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          if (image != null) image!,
+          if (image != null)	SizedBox(height: 4.0),
+              MarkdownBody(
+                  data: markdown,
+                  extensionSet: md.ExtensionSet.gitHubFlavored,
+                  styleSheet: markdownStyleSheet),
+        ]);
+  }
+}
+
+abstract class MultipleChoicePage extends Page {
+  abstract final String markdown;
+  abstract final Image? image;
+
+  abstract final int maxChoice;
+
+  const MultipleChoicePage({Key? key}) : super(key: key);
+
+  @override
+  Widget buildPage(BuildContext context) {
+    final markdownStyleSheet = MarkdownStyleSheet(
+        p: Theme.of(context).textTheme.bodyText1,
+        h1: Theme.of(context).textTheme.headline3);
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          if (image != null) image!,
+          if (image != null)	SizedBox(height: 4.0),
+		  if (markdown != "")
+              MarkdownBody(
+                  data: markdown,
+                  extensionSet: md.ExtensionSet.gitHubFlavored,
+                  styleSheet: markdownStyleSheet),
+				  if (markdown != "")
+				SizedBox(height: 4.0),
+		  GradientButton(text: "Option 1", onPressed: () {
+
+		  }),
+				SizedBox(height: 4.0),
+		  GradientButton(text: "Option 2", onPressed: () {
+
+		  })
+        ]);
   }
 }
