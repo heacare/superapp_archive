@@ -14,41 +14,37 @@ export class ContentSeed1640166201279 implements MigrationInterface {
     let unitOrder = 0;
 
     // Parse JSON
-    const units = data.units.map(
-      (unit) => {
-        let lessonOrder = 0;
-        let pageOrder = 0;
+    const units = data.units.map((unit) => {
+      let lessonOrder = 0;
+      let pageOrder = 0;
 
-        return new Unit(
-          unitOrder++,
-          unit.icon,
-          unit.title,
-          unit.lessons.map(
-            (lesson) =>
-              new Lesson(
-                lessonOrder++,
-                lesson.icon,
-                lesson.title,
-                lesson.pages.map((page) => {
-                  if ('quizOptions' in page) {
-                    return new QuizPage(
-                      pageOrder++,
-                      page.icon,
-                      page.title,
-                      page.text,
-                      page.quizOptions.map(
-                        (quizOption) => new QuizOption(quizOption.text, quizOption.isAnswer ?? false),
-                      ),
-                    );
-                  } else {
-                    return new TextPage(pageOrder++, page.icon, page.title, page.text);
-                  }
-                }),
-              ),
-          ),
-        );
-      },
-    );
+      return new Unit(
+        unitOrder++,
+        unit.icon,
+        unit.title,
+        unit.lessons.map(
+          (lesson) =>
+            new Lesson(
+              lessonOrder++,
+              lesson.icon,
+              lesson.title,
+              lesson.pages.map((page) => {
+                if ('quizOptions' in page) {
+                  return new QuizPage(
+                    pageOrder++,
+                    page.icon,
+                    page.title,
+                    page.text,
+                    page.quizOptions.map((quizOption) => new QuizOption(quizOption.text, quizOption.isAnswer ?? false)),
+                  );
+                } else {
+                  return new TextPage(pageOrder++, page.icon, page.title, page.text);
+                }
+              }),
+            ),
+        ),
+      );
+    });
 
     connection.getRepository(Unit).create(units);
     await connection.getRepository(Unit).save(units);
