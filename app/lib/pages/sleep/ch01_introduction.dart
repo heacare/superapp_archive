@@ -14,6 +14,9 @@ class IntroductionWelcome extends MarkdownPage {
   final nextPage = () => IntroductionGettingToKnowYou();
 
   @override
+  final prevPage = null;
+
+  @override
   final String markdown = """
 Welcome to your first journey on Happily Ever After. We’re glad you’ve chosen to optimise your lifestyle, and to start with sleep.
 
@@ -34,6 +37,9 @@ class IntroductionGettingToKnowYou extends MarkdownPage {
 
   @override
   final nextPage = null;
+
+  @override
+  final prevPage = () => IntroductionWelcome();
 
   @override
   final String markdown = """

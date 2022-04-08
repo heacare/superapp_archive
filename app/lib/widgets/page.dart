@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -13,6 +14,7 @@ abstract class Page extends StatelessWidget {
   const Page({Key? key}) : super(key: key);
 
   abstract final PageBuilder? nextPage;
+  abstract final PageBuilder? prevPage;
 
   Widget buildPage(BuildContext context);
 
@@ -31,7 +33,7 @@ abstract class Page extends StatelessWidget {
                       children: <Widget>[
                         IconButton(
                             iconSize: 38,
-                            icon: const FaIcon(FontAwesomeIcons.arrowLeft,
+                            icon: const FaIcon(FontAwesomeIcons.times,
                                 color: Color(0xFF00ABE9)),
                             onPressed: () {
                               Navigator.of(context).pop();
@@ -42,6 +44,22 @@ abstract class Page extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 2,
                                 style: Theme.of(context).textTheme.headline1)),
+								if (prevPage != null)
+                        IconButton(
+                            iconSize: 24,
+                            icon: const FaIcon(FontAwesomeIcons.undo,
+                                color: Color(0xFF00ABE9)),
+                            onPressed: () {
+                Page prev = prevPage!();
+                String? s = sleep.rlookup(prev.runtimeType);
+                print(s);
+                if (s != null) {
+                  serviceLocator<SharedPreferences>().setString('sleep', s);
+                }
+                Navigator.of(context).pushReplacement(MaterialPageRoute<void>(
+                  builder: (BuildContext context) => prev,
+                ));
+                            }),
                       ])))),
       body: SafeArea(
           child: Padding(
@@ -83,12 +101,14 @@ abstract class MarkdownPage extends Page {
     final markdownStyleSheet = MarkdownStyleSheet(
         p: Theme.of(context).textTheme.bodyText1,
         h1: Theme.of(context).textTheme.headline3);
-    return Column(children: <Widget>[
+    return Column(
+	crossAxisAlignment: CrossAxisAlignment.start,
+	children: <Widget>[
       if (image != null) image!,
-      MarkdownBody(
+      FittedBox(child: MarkdownBody(
           data: markdown,
           extensionSet: md.ExtensionSet.gitHubFlavored,
-          styleSheet: markdownStyleSheet),
+          styleSheet: markdownStyleSheet)),
     ]);
   }
 }
