@@ -6,6 +6,7 @@ import 'package:hea/utils/kv_wrap.dart';
 import 'package:hea/widgets/page.dart';
 import 'package:hea/widgets/select_list.dart';
 import 'ch01_introduction.dart';
+import 'ch03_goals.dart';
 
 class NowFirstThingsFirst extends MarkdownPage {
   NowFirstThingsFirst({Key? key}) : super(key: key);
@@ -685,7 +686,7 @@ class NowScore extends Page {
   NowScore({Key? key}) : super(key: key);
 
   @override
-  final nextPage = null;
+  final nextPage = () => GoalsSleepNeeds();
   @override
   final prevPage = () => NowFatigue();
 
@@ -745,7 +746,11 @@ class NowScore extends Page {
     ];
     int pointsDisturbance = 0;
     for (String key in keys) {
-      pointsDisturbance += int.tryParse(kvReadStringList("sleep", key)[0]) ?? 0;
+	  List<String> values = kvReadStringList("sleep", key);
+	  if (values.length != 1) {
+	  continue;
+	  }
+      pointsDisturbance += int.tryParse(values[0]) ?? 0;
     }
     int sleepDisturbances = (pointsDisturbance / keys.length).ceil();
 

@@ -40,10 +40,9 @@ class SelectListState<T> extends State<SelectList<T>> {
 
   Widget getButton(SelectListItem item) {
     if (selected.contains(item.value)) {
-      return SizedBox(
-        height: 50.0,
-        child: ElevatedButton(
+      return ElevatedButton(
           child: Text(item.other ? "Other (TODO)" : item.text,
+		  textAlign: TextAlign.center,
               style: TextStyle(
                 fontWeight: FontWeight.w500,
                 color: Color(0xFFFF5576),
@@ -56,16 +55,15 @@ class SelectListState<T> extends State<SelectList<T>> {
             widget.onChange(selected);
           },
           style: TextButton.styleFrom(
+		     padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
               primary: Colors.black,
               backgroundColor: Color(0x33FF587A),
               elevation: 0.0),
-        ),
       );
     } else {
-      return SizedBox(
-        height: 50.0,
-        child: ElevatedButton(
+      return ElevatedButton(
           child: Text(item.text,
+		  textAlign: TextAlign.center,
               style: TextStyle(
                 fontWeight: FontWeight.w500,
                 color: Color(0xFF414141),
@@ -81,10 +79,10 @@ class SelectListState<T> extends State<SelectList<T>> {
             widget.onChange(selected);
           },
           style: TextButton.styleFrom(
+		     padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
               primary: Colors.black,
               backgroundColor: Color(0xFFF5F5F5),
               elevation: 0.0),
-        ),
       );
     }
   }
