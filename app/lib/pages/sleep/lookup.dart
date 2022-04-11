@@ -3,7 +3,6 @@ import 'ch01_introduction.dart';
 import 'ch02_now.dart';
 
 Lesson sleep = Lesson([
-  // This does not control the order
   PageDef(IntroductionWelcome, () => IntroductionWelcome()),
   PageDef(IntroductionGettingToKnowYou, () => IntroductionGettingToKnowYou()),
   PageDef(IntroductionHowTrackSleep, () => IntroductionHowTrackSleep()),
@@ -12,4 +11,21 @@ Lesson sleep = Lesson([
   PageDef(NowMinutesFallAsleep, () => NowMinutesFallAsleep()),
   PageDef(NowTimeOutBed, () => NowTimeOutBed()),
   PageDef(NowGetSleep, () => NowGetSleep()),
+  PageDef(NowHowEfficientSleep, () => NowHowEfficientSleep()),
+  PageDef(NowHowEfficientSleep2, () => NowHowEfficientSleep2()),
+  PageDef(NowDifficultySleeping, () => NowDifficultySleeping()),
+  PageDef(NowSleepDisturbances, () => NowSleepDisturbances()),
+  PageDef(NowTroubleSleepingWakeUp, () => NowTroubleSleepingWakeUp()),
+  PageDef(NowTroubleSleepingBathroom, () => NowTroubleSleepingBathroom()),
+  PageDef(NowTroubleSleepingBreath, () => NowTroubleSleepingBreath()),
+  PageDef(NowTroubleSleepingSnore, () => NowTroubleSleepingSnore()),
+  PageDef(NowTroubleSleepingCold, () => NowTroubleSleepingCold()),
+  PageDef(NowTroubleSleepingHot, () => NowTroubleSleepingHot()),
+  PageDef(NowTroubleSleepingBadDreams, () => NowTroubleSleepingBadDreams()),
+  PageDef(NowTroubleSleepingPain, () => NowTroubleSleepingPain()),
+  PageDef(NowOtherFactors, () => NowOtherFactors()),
+  PageDef(NowOverallQuality, () => NowOverallQuality()),
+  PageDef(NowSleepMedication, () => NowSleepMedication()),
+  PageDef(NowFatigue, () => NowFatigue()),
+  PageDef(NowScore, () => NowScore()),
 ]);

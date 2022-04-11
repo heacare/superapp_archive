@@ -14,6 +14,7 @@ kvWrite<T>(String module, String key, T value) {
   object[key] = value;
   json = jsonEncode(object);
   serviceLocator<SharedPreferences>().setString('data-' + module, json);
+  // TODO: Dispatch a rate-limited blob upload
 }
 
 T kvRead<T>(String module, String key) {
