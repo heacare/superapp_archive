@@ -746,10 +746,10 @@ class NowScore extends Page {
     ];
     int pointsDisturbance = 0;
     for (String key in keys) {
-	  List<String> values = kvReadStringList("sleep", key);
-	  if (values.length != 1) {
-	  continue;
-	  }
+      List<String> values = kvReadStringList("sleep", key);
+      if (values.length != 1) {
+        continue;
+      }
       pointsDisturbance += int.tryParse(values[0]) ?? 0;
     }
     int sleepDisturbances = (pointsDisturbance / keys.length).ceil();
