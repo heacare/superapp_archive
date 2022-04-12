@@ -2,6 +2,7 @@ import 'package:hea/widgets/page.dart';
 import 'ch01_introduction.dart';
 import 'ch02_now.dart';
 import 'ch03_goals.dart';
+import 'ch04_rhythm.dart';
 
 Lesson sleep = Lesson([
   PageDef(IntroductionWelcome, () => IntroductionWelcome()),
@@ -36,4 +37,9 @@ Lesson sleep = Lesson([
   PageDef(GoalsCalmingActivities, () => GoalsCalmingActivities()),
   PageDef(GoalsEmbraceAndManifest, () => GoalsEmbraceAndManifest()),
   PageDef(GoalsGettingThere, () => GoalsGettingThere()),
+  PageDef(RhythmConsistency, () => RhythmConsistency()),
+  PageDef(RhythmWhy, () => RhythmWhy()),
+  PageDef(RhythmHow, () => RhythmHow()),
+  PageDef(RhythmPeaksAndDips1, () => RhythmPeaksAndDips1()),
+  PageDef(RhythmPeaksAndDips2, () => RhythmPeaksAndDips2()),
 ]);

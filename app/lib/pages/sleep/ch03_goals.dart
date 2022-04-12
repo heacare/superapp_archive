@@ -6,6 +6,7 @@ import 'package:hea/utils/kv_wrap.dart';
 import 'package:hea/widgets/page.dart';
 import 'package:hea/widgets/select_list.dart';
 import 'ch02_now.dart';
+import 'ch04_rhythm.dart';
 
 class GoalsSleepNeeds extends MarkdownPage {
   GoalsSleepNeeds({Key? key}) : super(key: key);
@@ -261,7 +262,7 @@ class GoalsGettingThere extends MarkdownPage {
   GoalsGettingThere({Key? key}) : super(key: key);
 
   @override
-  final nextPage = null;
+  final nextPage = () => RhythmConsistency();
   @override
   final prevPage = () => GoalsEmbraceAndManifest();
 
