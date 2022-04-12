@@ -4,7 +4,7 @@ for m in Path('lib', 'pages').iterdir():
     imports = ['package:hea/widgets/page.dart']
     pagedefs = []
 
-    for chapter in m.iterdir():
+    for chapter in sorted(m.iterdir()):
         if 'lookup' in chapter.name:
             continue
         imports.append(chapter.name)
@@ -25,6 +25,7 @@ for m in Path('lib', 'pages').iterdir():
 
     with open(m / "lookup.dart", "w") as f:
         f.write("\n".join(lookup))
+        f.write("\n")
 
 
 # vim: set et ts=4 sw=4:

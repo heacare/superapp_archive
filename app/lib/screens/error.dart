@@ -47,7 +47,8 @@ class ErrorScreen extends StatelessWidget {
                         text: "Logout", onPressed: () => logout(context)),
 					*/
                     GradientButton(
-                        text: "Restart", onPressed: () => App.of(context).restart()),
+                        text: "Restart",
+                        onPressed: () => App.of(context).restart()),
                   ],
                 ))));
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart' hide Page;
 
 import 'package:hea/widgets/page.dart';
 import 'ch03_goals.dart';
+import 'ch05_owning.dart';
 
 class RhythmConsistency extends MarkdownPage {
   RhythmConsistency({Key? key}) : super(key: key);
@@ -99,7 +100,7 @@ class RhythmPeaksAndDips2 extends MarkdownPage {
   RhythmPeaksAndDips2({Key? key}) : super(key: key);
 
   @override
-  final nextPage = null;
+  final nextPage = () => OwningRoutine();
   @override
   final prevPage = () => RhythmPeaksAndDips1();
 

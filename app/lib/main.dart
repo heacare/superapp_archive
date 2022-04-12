@@ -23,8 +23,8 @@ class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
 
   static _AppState of(BuildContext context) {
-     _RestartInheritedWidget? result = context
-        .findAncestorWidgetOfExactType<_RestartInheritedWidget>();
+    _RestartInheritedWidget? result =
+        context.findAncestorWidgetOfExactType<_RestartInheritedWidget>();
     return result!.data;
   }
 
@@ -41,12 +41,11 @@ enum UserStatus {
 class _AppState extends State<App> {
   Key _key = UniqueKey();
 
-	void restart() async {
-	setState(() {
-		_key = UniqueKey();
-	});
-	}
-
+  void restart() async {
+    setState(() {
+      _key = UniqueKey();
+    });
+  }
 
   final Future<FirebaseApp> _firebaseInit = Firebase.initializeApp();
 
@@ -193,19 +192,19 @@ class _AppState extends State<App> {
     });
 
     return _RestartInheritedWidget(
-	key: _key,
-	data: this,
-	child: FutureBuilder(
-      future: hasUserData,
-      builder: (context, AsyncSnapshot<UserStatus> snapshot) {
-        return MaterialApp(
-            title: 'Happily Ever After',
-            theme: _getThemeData(),
-            // TODO design a loading page and a 'error' page
-            // Match Firebase initialization result
-            home: mainScreen(snapshot));
-      },
-    ));
+        key: _key,
+        data: this,
+        child: FutureBuilder(
+          future: hasUserData,
+          builder: (context, AsyncSnapshot<UserStatus> snapshot) {
+            return MaterialApp(
+                title: 'Happily Ever After',
+                theme: _getThemeData(),
+                // TODO design a loading page and a 'error' page
+                // Match Firebase initialization result
+                home: mainScreen(snapshot));
+          },
+        ));
   }
 
   Widget mainScreen(AsyncSnapshot<UserStatus> snapshot) {
@@ -250,4 +249,3 @@ class _RestartInheritedWidget extends InheritedWidget {
     return false;
   }
 }
-

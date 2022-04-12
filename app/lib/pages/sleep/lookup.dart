@@ -3,6 +3,7 @@ import 'ch01_introduction.dart';
 import 'ch02_now.dart';
 import 'ch03_goals.dart';
 import 'ch04_rhythm.dart';
+import 'ch05_owning.dart';
 
 Lesson sleep = Lesson([
   PageDef(IntroductionWelcome, () => IntroductionWelcome()),
@@ -42,4 +43,20 @@ Lesson sleep = Lesson([
   PageDef(RhythmHow, () => RhythmHow()),
   PageDef(RhythmPeaksAndDips1, () => RhythmPeaksAndDips1()),
   PageDef(RhythmPeaksAndDips2, () => RhythmPeaksAndDips2()),
+  PageDef(OwningRoutine, () => OwningRoutine()),
+  PageDef(OwningZeitgebers, () => OwningZeitgebers()),
+  PageDef(OwningSettingCourseIntro, () => OwningSettingCourseIntro()),
+  PageDef(OwningSettingCourse, () => OwningSettingCourse()),
+  PageDef(OwningHaveRoutine, () => OwningHaveRoutine()),
+  PageDef(OwniningRoutineActivities1, () => OwniningRoutineActivities1()),
+  PageDef(OwniningRoutineActivities2, () => OwniningRoutineActivities2()),
+  PageDef(OwniningRoutineActivities3, () => OwniningRoutineActivities3()),
+  PageDef(OwningRoutineStart, () => OwningRoutineStart()),
+  PageDef(OwningStarter, () => OwningStarter()),
+  PageDef(OwningBeforeBedtime, () => OwningBeforeBedtime()),
+  PageDef(OwningTheDaySupporting, () => OwningTheDaySupporting()),
+  PageDef(OwningTheDayNegative, () => OwningTheDayNegative()),
+  PageDef(OwningTheDayNote, () => OwningTheDayNote()),
+  PageDef(OwningWhy, () => OwningWhy()),
+  PageDef(OwningWhatsNext, () => OwningWhatsNext()),
 ]);

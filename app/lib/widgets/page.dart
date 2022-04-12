@@ -59,7 +59,7 @@ class BasePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(150),
+          preferredSize: const Size.fromHeight(154),
           child: SafeArea(
               child: Container(
                   padding: const EdgeInsets.symmetric(
@@ -68,42 +68,46 @@ class BasePage extends StatelessWidget {
                   child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        IconButton(
-                            iconSize: 38,
-                            icon: const FaIcon(FontAwesomeIcons.times,
-                                color: Color(0xFF00ABE9)),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            }),
+                        Container(
+                            //alignment: AlignmentDirectional.topCenter,
+                            child: IconButton(
+                                iconSize: 38,
+                                icon: const FaIcon(FontAwesomeIcons.times,
+                                    color: Color(0xFF00ABE9)),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                })),
                         SizedBox(width: 10.0),
                         Expanded(
                             child: Text(title,
                                 overflow: TextOverflow.ellipsis,
-                                maxLines: 2,
+                                maxLines: 4,
                                 style: Theme.of(context).textTheme.headline1)),
                         if (prevPage != null)
-                          IconButton(
-                              iconSize: 24,
-                              icon: const FaIcon(FontAwesomeIcons.undo,
-                                  color: Color(0xFF00ABE9)),
-                              onPressed: () {
-                                Widget prev = prevPage!();
-                                String? s = sleep.rlookup(prev.runtimeType);
-                                print(s);
-                                if (s != null) {
-                                  serviceLocator<SharedPreferences>()
-                                      .setString('sleep', s);
-                                }
-                                Navigator.of(context)
-                                    .pushReplacement(MaterialPageRoute<void>(
-                                  builder: (BuildContext context) => prev,
-                                ));
-                              }),
+                          Container(
+                              //alignment: AlignmentDirectional.topCenter,
+                              child: IconButton(
+                                  iconSize: 24,
+                                  icon: const FaIcon(FontAwesomeIcons.undo,
+                                      color: Color(0xFF00ABE9)),
+                                  onPressed: () {
+                                    Widget prev = prevPage!();
+                                    String? s = sleep.rlookup(prev.runtimeType);
+                                    print(s);
+                                    if (s != null) {
+                                      serviceLocator<SharedPreferences>()
+                                          .setString('sleep', s);
+                                    }
+                                    Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute<void>(
+                                      builder: (BuildContext context) => prev,
+                                    ));
+                                  })),
                       ])))),
-      body: SafeArea(
-          child: Padding(
-        padding: const EdgeInsets.fromLTRB(18.0, 0.0, 18.0, 5.0),
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+          child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(18.0, 0.0, 18.0, 5.0),
           child: Column(children: [
             page,
             SizedBox(height: 64.0),
@@ -217,6 +221,7 @@ abstract class MultipleChoicePage extends StatefulWidget {
   abstract final Image? image;
 
   abstract final int maxChoice;
+  final int? minSelected = null;
   abstract final List<SelectListItem<String>> choices;
   abstract final String valueName;
 
@@ -233,10 +238,15 @@ abstract class MultipleChoicePage extends StatefulWidget {
 class MultipleChoicePageState extends State<MultipleChoicePage> {
   bool hideNext = false;
 
+  bool canNext() {
+    int minLength = widget.minSelected ?? 1;
+    return kvReadStringList("sleep", widget.valueName).length >= minLength;
+  }
+
   @override
   void initState() {
     super.initState();
-    hideNext = kvReadStringList("sleep", widget.valueName).isEmpty;
+    hideNext = !canNext();
   }
 
   @override
@@ -265,10 +275,10 @@ class MultipleChoicePageState extends State<MultipleChoicePage> {
                   max: widget.maxChoice,
                   defaultSelected: kvReadStringList("sleep", widget.valueName),
                   onChange: (List<String> c) {
-                    setState(() {
-                      hideNext = c.isEmpty;
-                    });
                     kvWrite<List<String>>("sleep", widget.valueName, c);
+                    setState(() {
+                      hideNext = !canNext();
+                    });
                   }),
             ]));
   }
@@ -297,6 +307,7 @@ class TimePickerBlockState extends State<TimePickerBlock> {
   }
 
   Future<void> onTap(context) async {
+    FocusScope.of(context).requestFocus(FocusNode());
     TimeOfDay? time = await showTimePicker(
       context: context,
       initialTime: selectedTime,
@@ -311,12 +322,20 @@ class TimePickerBlockState extends State<TimePickerBlock> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => onTap(context),
-      child: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Text(selectedTime.format(context)),
-      ),
+    return ElevatedButton(
+      child: Text(selectedTime.format(context),
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            color: Color(0xFF414141),
+            fontSize: 20.0,
+          )),
+      onPressed: () => onTap(context),
+      style: TextButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+          primary: Colors.black,
+          backgroundColor: Color(0xFFF5F5F5),
+          elevation: 0.0),
     );
   }
 }
@@ -335,8 +354,7 @@ abstract class TimePickerPage extends Page {
     final markdownStyleSheet = MarkdownStyleSheet(
         p: Theme.of(context).textTheme.bodyText1,
         h1: Theme.of(context).textTheme.headline3);
-    TimeOfDay time = kvReadTimeOfDay("sleep", valueName) ?? defaultTime;
-    TimeOfDay initialTime = time;
+    TimeOfDay initialTime = kvReadTimeOfDay("sleep", valueName) ?? defaultTime;
     kvWriteTimeOfDay("sleep", valueName, initialTime);
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -403,8 +421,10 @@ class DurationPickerBlockState extends State<DurationPickerBlock> {
                       });
                       widget.onChange(selectedDuration);
                     })),
+            SizedBox(width: 4.0),
             Text('hours'),
           ]),
+          SizedBox(height: 4.0),
           Row(children: [
             Container(
                 width: 72.0,
@@ -422,6 +442,7 @@ class DurationPickerBlockState extends State<DurationPickerBlock> {
                       });
                       widget.onChange(selectedDuration);
                     })),
+            SizedBox(width: 4.0),
             Text('minutes'),
           ]),
         ]));

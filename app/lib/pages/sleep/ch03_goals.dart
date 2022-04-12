@@ -146,25 +146,26 @@ What do you usually end up doing instead of going to bed?
   @override
   final valueName = "doing-before-bed";
   @override
-  final List<SelectListItem<String>> choices = [
-    SelectListItem(text: "Watching TV/videos", value: "Watching TV/videos"),
-    SelectListItem(text: "Playing video games", value: "Playing video games"),
-    SelectListItem(text: "Surfing the internet", value: "Surfing the internet"),
-    SelectListItem(
-        text: "Going on social media content ",
-        value: "Going on social media content "),
-    SelectListItem(
-        text: "Working till the last hour",
-        value: "Working till the last hour"),
-    SelectListItem(
-        text: "Studying till the last hour",
-        value: "Studying till the last hour"),
-    SelectListItem(
-        text: "Chilling/chatting with others",
-        value: "Chilling/chatting with others"),
-    SelectListItem(text: "Other", value: "", other: true),
-  ];
+  final List<SelectListItem<String>> choices = activityChoices;
 }
+
+final List<SelectListItem<String>> activityChoices = [
+  SelectListItem(text: "Watching TV/videos", value: "Watching TV/videos"),
+  SelectListItem(text: "Playing video games", value: "Playing video games"),
+  SelectListItem(text: "Surfing the internet", value: "Surfing the internet"),
+  SelectListItem(
+      text: "Going on social media content ",
+      value: "Going on social media content "),
+  SelectListItem(
+      text: "Working till the last hour", value: "Working till the last hour"),
+  SelectListItem(
+      text: "Studying till the last hour",
+      value: "Studying till the last hour"),
+  SelectListItem(
+      text: "Chilling/chatting with others",
+      value: "Chilling/chatting with others"),
+  SelectListItem(text: "Other", value: "", other: true),
+];
 
 class GoalsCalmingActivities extends MarkdownPage {
   GoalsCalmingActivities({Key? key}) : super(key: key);
