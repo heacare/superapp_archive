@@ -22,6 +22,12 @@ void main() async {
 class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
 
+  static _AppState of(BuildContext context) {
+     _RestartInheritedWidget? result = context
+        .findAncestorWidgetOfExactType<_RestartInheritedWidget>();
+    return result!.data;
+  }
+
   @override
   _AppState createState() => _AppState();
 }
@@ -33,6 +39,15 @@ enum UserStatus {
 }
 
 class _AppState extends State<App> {
+  Key _key = UniqueKey();
+
+	void restart() async {
+	setState(() {
+		_key = UniqueKey();
+	});
+	}
+
+
   final Future<FirebaseApp> _firebaseInit = Firebase.initializeApp();
 
   ThemeData _getThemeData() {
@@ -177,7 +192,10 @@ class _AppState extends State<App> {
       }
     });
 
-    return FutureBuilder(
+    return _RestartInheritedWidget(
+	key: _key,
+	data: this,
+	child: FutureBuilder(
       future: hasUserData,
       builder: (context, AsyncSnapshot<UserStatus> snapshot) {
         return MaterialApp(
@@ -187,7 +205,7 @@ class _AppState extends State<App> {
             // Match Firebase initialization result
             home: mainScreen(snapshot));
       },
-    );
+    ));
   }
 
   Widget mainScreen(AsyncSnapshot<UserStatus> snapshot) {
@@ -217,3 +235,19 @@ class _AppState extends State<App> {
     return const ErrorScreen();
   }
 }
+
+class _RestartInheritedWidget extends InheritedWidget {
+  final _AppState data;
+
+  _RestartInheritedWidget({
+    required Key key,
+    required this.data,
+    required Widget child,
+  }) : super(key: key, child: child);
+
+  @override
+  bool updateShouldNotify(_RestartInheritedWidget old) {
+    return false;
+  }
+}
+

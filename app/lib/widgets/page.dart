@@ -104,7 +104,10 @@ class BasePage extends StatelessWidget {
           child: Padding(
         padding: const EdgeInsets.fromLTRB(18.0, 0.0, 18.0, 5.0),
         child: SingleChildScrollView(
-          child: page,
+          child: Column(children: [
+            page,
+            SizedBox(height: 64.0),
+          ]),
         ),
       )),
       floatingActionButton: nextPage == null || hideNext

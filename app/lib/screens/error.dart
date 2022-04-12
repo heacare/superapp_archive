@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+
+import 'package:hea/main.dart';
 import 'package:hea/screens/login.dart';
 import 'package:hea/widgets/gradient_button.dart';
 import 'package:hea/services/auth_service.dart';
@@ -40,8 +42,12 @@ class ErrorScreen extends StatelessWidget {
                           Text("Something broke along the way",
                               style: Theme.of(context).textTheme.headline2)
                         ])),
+                    /*
                     GradientButton(
-                        text: "Logout", onPressed: () => logout(context))
+                        text: "Logout", onPressed: () => logout(context)),
+					*/
+                    GradientButton(
+                        text: "Restart", onPressed: () => App.of(context).restart()),
                   ],
                 ))));
   }
