@@ -44,7 +44,7 @@ class OwningZeitgebers extends MarkdownPage {
   final title = "Zeitgebers";
   @override
   final image =
-      Image.asset("assets/images/sleep/ch05-cim-circadian-clock-kyoung.tif");
+      Image.asset("assets/images/sleep/ch05-cim-circadian-clock-kyoung.png");
 
   @override
   final markdown = """
