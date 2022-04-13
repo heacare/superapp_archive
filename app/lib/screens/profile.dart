@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hea/models/user.dart';
+import 'package:health/health.dart';
 
 import 'package:hea/screens/login.dart';
 import 'package:hea/services/api_manager.dart';
@@ -24,6 +25,45 @@ class _ProfileScreenState extends State<ProfileScreen> {
         MaterialPageRoute(builder: (context) {
       return LoginScreen();
     }), (route) => false);
+  }
+
+  Future<void> sendDemoHealthData() async {
+    HealthFactory health = HealthFactory();
+
+    // Define the types to get
+    List<HealthDataType> types = [
+      HealthDataType.WEIGHT,
+      HealthDataType.HEIGHT,
+      HealthDataType.BODY_FAT_PERCENTAGE,
+      HealthDataType.BODY_MASS_INDEX,
+    ];
+
+    // OAuth request authorization to data
+    bool accessWasGranted = await health.requestAuthorization(types);
+    if (!accessWasGranted) {
+      print("Authorization not granted");
+      return;
+    }
+
+    // TODO On Android requires Google Fit to be installed or data will be empty
+    try {
+      // Fetch data from 1st Jan 2000 till current date
+      DateTime startDate = DateTime(2000);
+      DateTime endDate = DateTime.now();
+      List<HealthDataPoint> healthData =
+          await health.getHealthDataFromTypes(startDate, endDate, types);
+
+      List<HealthDataPoint> _healthDataList = [];
+      _healthDataList.addAll(healthData);
+
+      // Filter out duplicates
+      _healthDataList = HealthFactory.removeDuplicates(_healthDataList);
+      for (var h in _healthDataList) {
+        print("${h.typeString}: ${h.value} [${h.unitString}]");
+      }
+    } catch (e) {
+      print("Caught exception in getHealthDataFromTypes: $e");
+    }
   }
 
   @override
@@ -75,7 +115,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  GradientButton(text: "Logout", onPressed: logout)
+                  GradientButton(text: "Logout", onPressed: logout),
+                  GradientButton(
+                      text: "Send Demo Health Data",
+                      onPressed: sendDemoHealthData)
                 ])));
   }
 }

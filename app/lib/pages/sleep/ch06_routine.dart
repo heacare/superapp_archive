@@ -7,6 +7,7 @@ import 'package:hea/widgets/page.dart';
 import 'package:hea/widgets/select_list.dart';
 import 'ch03_goals.dart';
 import 'ch05_owning.dart';
+import 'ch07_diary.dart';
 
 class RoutineIntro extends MarkdownPage {
   RoutineIntro({Key? key}) : super(key: key);
@@ -449,7 +450,7 @@ class RoutineReminders extends TimePickerPage {
   RoutineReminders({Key? key}) : super(key: key);
 
   @override
-  final nextPage = () => RoutineReminders();
+  final nextPage = () => DiaryReminders();
   @override
   final prevPage = () => RoutineOptInGroup();
 

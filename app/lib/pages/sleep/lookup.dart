@@ -5,6 +5,7 @@ import 'ch03_goals.dart';
 import 'ch04_rhythm.dart';
 import 'ch05_owning.dart';
 import 'ch06_routine.dart';
+import 'ch07_diary.dart';
 
 Lesson sleep = Lesson([
   PageDef(IntroductionWelcome, () => IntroductionWelcome()),
@@ -69,4 +70,6 @@ Lesson sleep = Lesson([
   PageDef(RoutineOptInGroup, () => RoutineOptInGroup()),
   PageDef(RoutinePledgeIntro, () => RoutinePledgeIntro()),
   PageDef(RoutineReminders, () => RoutineReminders()),
+  PageDef(DiaryReminders, () => DiaryReminders()),
+  PageDef(DiaryStart, () => DiaryStart()),
 ]);
