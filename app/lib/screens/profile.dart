@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hea/models/user.dart';
 import 'package:health/health.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'package:hea/screens/login.dart';
 import 'package:hea/services/api_manager.dart';
 import 'package:hea/services/auth_service.dart';
+import 'package:hea/services/notification_service.dart';
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/widgets/avatar_icon.dart';
 import 'package:hea/widgets/gradient_button.dart';
@@ -66,6 +68,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  Future<void> triggerDemoNotification() async {
+    await serviceLocator<NotificationService>().showReminder(0,
+        'Time to wind down', 'Remember to _____ today', 'reminder-wind-down');
+  }
+
   @override
   Widget build(BuildContext context) {
     serviceLocator<ApiManager>().get("/");
@@ -116,9 +123,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   GradientButton(text: "Logout", onPressed: logout),
+                  const SizedBox(height: 8.0),
                   GradientButton(
                       text: "Send Demo Health Data",
-                      onPressed: sendDemoHealthData)
+                      onPressed: sendDemoHealthData),
+                  const SizedBox(height: 8.0),
+                  GradientButton(
+                      text: "Trigger Demo Notification",
+                      onPressed: triggerDemoNotification)
                 ])));
   }
 }

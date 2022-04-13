@@ -7,6 +7,7 @@ import 'package:hea/services/content_service.dart';
 import 'package:hea/services/user_service.dart';
 import 'package:hea/services/healer_service.dart';
 import 'package:hea/services/messaging_service.dart';
+import 'package:hea/services/notification_service.dart';
 
 GetIt serviceLocator = GetIt.instance;
 
@@ -23,4 +24,6 @@ void setupServiceLocator() {
       () => SharedPreferences.getInstance());
   serviceLocator.registerSingletonAsync<MessagingService>(
       () => MessagingService.create());
+  serviceLocator.registerSingletonAsync<NotificationService>(
+      () => NotificationService.create());
 }

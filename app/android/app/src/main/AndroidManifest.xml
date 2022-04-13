@@ -30,8 +30,14 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <!-- Google Maps -->
         <meta-data android:name="com.google.android.geo.API_KEY"
                    android:value="AIzaSyDvLARyx5mAm--G45SH8_tI1mlovu8KVNI"/>
+        <!-- Firebase Messaging -->
+        <meta-data android:name="com.google.firebase.messaging.default_notification_icon"
+                   android:resource="@drawable/notification_icon_temporary" />
+        <meta-data android:name="com.google.firebase.messaging.default_notification_color"
+                   android:resource="@color/colorAccent" />
     </application>
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
 </manifest>
