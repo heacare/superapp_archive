@@ -11,11 +11,11 @@ import 'package:hea/services/service_locator.dart';
 import 'package:hea/services/user_service.dart';
 
 void main() async {
-  setupServiceLocator();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  setupServiceLocator();
   runApp(const App());
 }
 
