@@ -153,9 +153,7 @@ final List<SelectListItem<String>> activityChoices = [
   SelectListItem(text: "Watching TV/videos", value: "watching TV/videos"),
   SelectListItem(text: "Playing video games", value: "playing video games"),
   SelectListItem(text: "Surfing the internet", value: "surfing the internet"),
-  SelectListItem(
-      text: "Going on social media",
-      value: "going on social media"),
+  SelectListItem(text: "Going on social media", value: "going on social media"),
   SelectListItem(
       text: "Working till the last hour", value: "working till the last hour"),
   SelectListItem(

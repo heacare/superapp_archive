@@ -40,8 +40,9 @@ class SelectListState<T> extends State<SelectList<T>> {
   void initState() {
     super.initState();
     widget.items = widget.items.toSet().toList(); // Deduplicate
-	List<T> values = widget.items.map((item) => item.value).toList();
-    selected = widget.defaultSelected.where((sel) => values.contains(sel)).toList();
+    List<T> values = widget.items.map((item) => item.value).toList();
+    selected =
+        widget.defaultSelected.where((sel) => values.contains(sel)).toList();
   }
 
   Widget getButton(SelectListItem item) {

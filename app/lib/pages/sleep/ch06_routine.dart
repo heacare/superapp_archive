@@ -61,19 +61,26 @@ Check as many as you wish to include in your routine:
 
 final List<SelectListItem<String>> calmActivityChoices = [
   SelectListItem(
-      text: "Dimming lights shortly after sunset", value: "Dimming lights shortly after sunset"),
+      text: "Dimming lights shortly after sunset",
+      value: "Dimming lights shortly after sunset"),
   SelectListItem(
-      text: "Setting up your sleep space to prepare for sleep", value: "Setting up your sleep space to prepare for sleep"),
+      text: "Setting up your sleep space to prepare for sleep",
+      value: "Setting up your sleep space to prepare for sleep"),
   SelectListItem(
       text: "Hiding wake-promoting items (laptops, game consoles, books, etc.)",
-      value: "Hiding wake-promoting items (laptops, game consoles, books, etc.)"),
+      value:
+          "Hiding wake-promoting items (laptops, game consoles, books, etc.)"),
   SelectListItem(
       text: "Silencing notifications and hiding phone from view",
       value: "Silencing notifications and hiding phone from view"),
-  SelectListItem(text: "Having a warm shower/bath", value: "Having a warm shower/bath"),
-  SelectListItem(text: "Journaling to declutter the mind", value: "Journaling to declutter the mind"),
+  SelectListItem(
+      text: "Having a warm shower/bath", value: "Having a warm shower/bath"),
+  SelectListItem(
+      text: "Journaling to declutter the mind",
+      value: "Journaling to declutter the mind"),
   SelectListItem(text: "Relaxing stretches", value: "Relaxing stretches"),
-  SelectListItem(text: "Practicing gentle yoga", value: "Practicing gentle yoga"),
+  SelectListItem(
+      text: "Practicing gentle yoga", value: "Practicing gentle yoga"),
   SelectListItem(text: "Breathing exercises", value: "Breathing exercises"),
   SelectListItem(text: "Meditating", value: "Meditating"),
   SelectListItem(text: "Other", value: "", other: true, otherMultiple: true),
@@ -81,14 +88,14 @@ final List<SelectListItem<String>> calmActivityChoices = [
 
 abstract class RoutineCalmingActivities extends Page {
   RoutineCalmingActivities({Key? key}) : super(key: key);
-   
-   abstract final Image? image;
-abstract final String markdown;
 
-abstract final String valueNameRemoveDefault;
-abstract  final String valueNameRemove;
-abstract final String valueNameAddDefault;
-abstract  final String valueNameAdd;
+  abstract final Image? image;
+  abstract final String markdown;
+
+  abstract final String valueNameRemoveDefault;
+  abstract final String valueNameRemove;
+  abstract final String valueNameAddDefault;
+  abstract final String valueNameAdd;
 
   /*
   bool canNext() {
@@ -153,7 +160,6 @@ abstract  final String valueNameAdd;
 }
 
 class RoutineCalmingActivities1 extends RoutineCalmingActivities {
-
   RoutineCalmingActivities1({Key? key}) : super(key: key);
 
   @override
@@ -164,20 +170,19 @@ class RoutineCalmingActivities1 extends RoutineCalmingActivities {
   @override
   final title = "Activity: Winding down for the day";
 
-@override
-  final image =
-      null;
+  @override
+  final image = null;
 
-@override
-final valueNameRemoveDefault = "routine-60m";
-@override
+  @override
+  final valueNameRemoveDefault = "routine-60m";
+  @override
   final valueNameRemove = "routine-remove-60m";
-@override
-final valueNameAddDefault = "included-activities";
-@override
+  @override
+  final valueNameAddDefault = "included-activities";
+  @override
   final valueNameAdd = "routine-add-60m";
 
-@override
+  @override
   final markdown = """
 Let’s see how you can remove/swap activating items for more calming ones.
 
@@ -186,7 +191,6 @@ Let’s see how you can remove/swap activating items for more calming ones.
 }
 
 class RoutineCalmingActivities2 extends RoutineCalmingActivities {
-
   RoutineCalmingActivities2({Key? key}) : super(key: key);
 
   @override
@@ -197,20 +201,19 @@ class RoutineCalmingActivities2 extends RoutineCalmingActivities {
   @override
   final title = "Activity: Winding down for the day";
 
-@override
-  final image =
-      null;
+  @override
+  final image = null;
 
-@override
-final valueNameRemoveDefault = "routine-30m";
-@override
+  @override
+  final valueNameRemoveDefault = "routine-30m";
+  @override
   final valueNameRemove = "routine-remove-30m";
-@override
-final valueNameAddDefault = "included-activities";
-@override
+  @override
+  final valueNameAddDefault = "included-activities";
+  @override
   final valueNameAdd = "routine-add-30m";
 
-@override
+  @override
   final markdown = """
 Let’s see how you can remove/swap activating items for more calming ones.
 
@@ -219,7 +222,6 @@ Let’s see how you can remove/swap activating items for more calming ones.
 }
 
 class RoutineCalmingActivities3 extends RoutineCalmingActivities {
-
   RoutineCalmingActivities3({Key? key}) : super(key: key);
 
   @override
@@ -230,20 +232,19 @@ class RoutineCalmingActivities3 extends RoutineCalmingActivities {
   @override
   final title = "Activity: Winding down for the day";
 
-@override
-  final image =
-      null;
+  @override
+  final image = null;
 
-@override
-final valueNameRemoveDefault = "routine-15m";
-@override
+  @override
+  final valueNameRemoveDefault = "routine-15m";
+  @override
   final valueNameRemove = "routine-remove-15m";
-@override
-final valueNameAddDefault = "included-activities";
-@override
+  @override
+  final valueNameAddDefault = "included-activities";
+  @override
   final valueNameAdd = "routine-add-15m";
 
-@override
+  @override
   final markdown = """
 Let’s see how you can remove/swap activating items for more calming ones.
 
@@ -301,8 +302,8 @@ You’ll be added into a chat group of up to four people with one of our HEAlers
   final valueName = "opt-in-group";
   @override
   final List<SelectListItem<String>> choices = [
-	SelectListItem(text: "Join others", value: "yes"),
-	SelectListItem(text: "Go on it alone", value: "no"),
+    SelectListItem(text: "Join others", value: "yes"),
+    SelectListItem(text: "Go on it alone", value: "no"),
   ];
 }
 
@@ -332,7 +333,8 @@ class RoutinePledge extends StatefulWidget {
   final PageBuilder? prevPage = () => RoutinePledgeIntro();
 
   final String title = "Activity: Take action!";
-  final Image? image = Image.asset("assets/images/sleep/ch06-my-sleep-pledge.gif");
+  final Image? image =
+      Image.asset("assets/images/sleep/ch06-my-sleep-pledge.gif");
 
   final int maxChoice = 1;
   final int? minSelected = null;
@@ -362,79 +364,87 @@ class RoutinePledgeState extends State<RoutinePledge> {
     final markdownStyleSheet = MarkdownStyleSheet(
         p: Theme.of(context).textTheme.bodyText1,
         h1: Theme.of(context).textTheme.headline3);
-		List<String> goals = kvReadStringList("sleep", "sleep-goals");
-		String goalsText = formatList(goals);
-		Duration goalsSleepDuration = Duration(minutes: kvReadInt("sleep", "goals-sleep-duration") ?? 0);
-		int goalsSleepDurationMinutes = goalsSleepDuration.inMinutes.remainder(Duration.minutesPerHour);
-		int goalsSleepDurationHours = goalsSleepDuration.inHours;
-		String goalsSleepDurationText = "$goalsSleepDurationHours hours";
-		if (goalsSleepDurationMinutes > 0) {
-		goalsSleepDurationText += " and $goalsSleepDurationMinutes minutes";
-		}
-		TimeOfDay goalsWakeTime = kvReadTimeOfDay("sleep", "goals-wake-time") ?? TimeOfDay(hour: 0, minute: 0);
-		String goalsWakeTimeText = goalsWakeTime.format(context);
-		TimeOfDay goalsSleepTime = kvReadTimeOfDay("sleep", "goals-sleep-time") ?? TimeOfDay(hour: 0, minute: 0);
-		String goalsSleepTimeText = goalsSleepTime.format(context);
-		List<String> doingBeforeBed = kvReadStringList("sleep", "doing-before-bed");
-		String doingBeforeBedText = formatList(doingBeforeBed);
+    List<String> goals = kvReadStringList("sleep", "sleep-goals");
+    String goalsText = formatList(goals);
+    Duration goalsSleepDuration =
+        Duration(minutes: kvReadInt("sleep", "goals-sleep-duration") ?? 0);
+    int goalsSleepDurationMinutes =
+        goalsSleepDuration.inMinutes.remainder(Duration.minutesPerHour);
+    int goalsSleepDurationHours = goalsSleepDuration.inHours;
+    String goalsSleepDurationText = "$goalsSleepDurationHours hours";
+    if (goalsSleepDurationMinutes > 0) {
+      goalsSleepDurationText += " and $goalsSleepDurationMinutes minutes";
+    }
+    TimeOfDay goalsWakeTime = kvReadTimeOfDay("sleep", "goals-wake-time") ??
+        TimeOfDay(hour: 0, minute: 0);
+    String goalsWakeTimeText = goalsWakeTime.format(context);
+    TimeOfDay goalsSleepTime = kvReadTimeOfDay("sleep", "goals-sleep-time") ??
+        TimeOfDay(hour: 0, minute: 0);
+    String goalsSleepTimeText = goalsSleepTime.format(context);
+    List<String> doingBeforeBed = kvReadStringList("sleep", "doing-before-bed");
+    String doingBeforeBedText = formatList(doingBeforeBed);
 
-		List<String> includedActivities = kvReadStringList("sleep", "included-activities");
-		List<SelectListItem<String>> selectedActivities = includedActivities.map((s) => SelectListItem(text: s, value: s)).toList();
+    List<String> includedActivities =
+        kvReadStringList("sleep", "included-activities");
+    List<SelectListItem<String>> selectedActivities = includedActivities
+        .map((s) => SelectListItem(text: s, value: s))
+        .toList();
     return BasePage(
         title: widget.title,
         nextPage: widget.nextPage,
         prevPage: widget.prevPage,
         hideNext: hideNext,
         page: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          if (widget.image != null) widget.image!,
-          if (widget.image != null) SizedBox(height: 4.0),
-            MarkdownBody(
-                data: """
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              if (widget.image != null) widget.image!,
+              if (widget.image != null) SizedBox(height: 4.0),
+              MarkdownBody(
+                  data: """
 I'd like to $goalsText
 
 My desired sleep duration is $goalsSleepDurationText. If I'd like to wake up by $goalsWakeTimeText, I should be sleeping by $goalsSleepTimeText.
 
 I've identified $doingBeforeBedText as obstacles from reaching my goals.
 """,
-                extensionSet: md.ExtensionSet.gitHubFlavored,
-                styleSheet: markdownStyleSheet),
-          SizedBox(height: 4.0),
-            MarkdownBody(
-                data: """
+                  extensionSet: md.ExtensionSet.gitHubFlavored,
+                  styleSheet: markdownStyleSheet),
+              SizedBox(height: 4.0),
+              MarkdownBody(
+                  data: """
 **To start sleeping better, I am going to commit to doing one of the following over the next 7 days:**
 """,
-                extensionSet: md.ExtensionSet.gitHubFlavored,
-                styleSheet: markdownStyleSheet),
-          SizedBox(height: 4.0),
-          SelectList(
-              items: selectedActivities,
-              max: 1,
-              defaultSelected: kvReadStringList("sleep", "commit-habit"),
-              onChange: (List<String> c) {
-                kvWrite<List<String>>("sleep", "commit-habit", c);
+                  extensionSet: md.ExtensionSet.gitHubFlavored,
+                  styleSheet: markdownStyleSheet),
+              SizedBox(height: 4.0),
+              SelectList(
+                  items: selectedActivities,
+                  max: 1,
+                  defaultSelected: kvReadStringList("sleep", "commit-habit"),
+                  onChange: (List<String> c) {
+                    kvWrite<List<String>>("sleep", "commit-habit", c);
                     setState(() {
                       hideNext = !canNext();
                     });
-              }),
-        ]));
+                  }),
+            ]));
   }
 }
 
 String formatList(List<String> l) {
-		String text = "";
-		for (int i = 0; i < l.length; i++) {
-		    String item = l[i];
-			if (i == l.length - 1) {
-			  text+= " and ";
-			} else if (i > 0) {
-			  text += ", ";
-		  }
-			text += item;
-		}
-		return text;
+  String text = "";
+  for (int i = 0; i < l.length; i++) {
+    String item = l[i];
+    if (i == l.length - 1) {
+      text += " and ";
+    } else if (i > 0) {
+      text += ", ";
+    }
+    text += item;
+  }
+  return text;
 }
+
 class RoutineReminders extends TimePickerPage {
   RoutineReminders({Key? key}) : super(key: key);
 
@@ -444,19 +454,19 @@ class RoutineReminders extends TimePickerPage {
   final prevPage = () => RoutineOptInGroup();
 
   @override
-  final title = "Activity: Take action!";
+  final title = "Let's help with reminders";
   @override
-  final image = Image.asset("assets/images/sleep/ch06-my-sleep-pledge.gif");
+  final image = Image.asset("assets/images/sleep/ch06-reminder-self-care.gif");
 
   @override
   final markdown = """
-Over the next week, we’ll help you commit to a routine to improve your sleep. Review your pledge and choose one thing to start practising for the next 7 days.
+Remember, consistency is key. Winding down at the same time before bed signals your body to prepare for sleep. We’re here to help by sending you a daily reminder. 
 
-#tip: Inform your friends, family and co-workers of your intention to sleep better. This can help create support for you. Who knows, they might be keen to improve their sleep too.
+Noting that you wish to start winding down at least <1 hour / 30 mins / 15 mins> before bed.  When would you like to be reminded to start winding down for sleep? 
 """;
 
-@override 
-final defaultTime = TimeOfDay(hour: 22, minute: 00);
-@override
-final valueName = "routine-reminder-times";
+  @override
+  final defaultTime = TimeOfDay(hour: 22, minute: 00);
+  @override
+  final valueName = "routine-reminder-times";
 }
