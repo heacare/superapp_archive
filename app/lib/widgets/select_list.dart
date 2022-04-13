@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 
 class SelectListItem<T> {
-  SelectListItem({required this.text, required this.value, this.other = false});
+  SelectListItem(
+      {required this.text,
+      required this.value,
+      this.other = false,
+      this.otherMultiple = false});
 
   String text;
   T value;
   bool other;
+  bool otherMultiple; // requires other to be true
 }
 
 typedef SelectListOnChange<T> = Function(List<T>);
@@ -35,7 +40,8 @@ class SelectListState<T> extends State<SelectList<T>> {
   void initState() {
     super.initState();
     widget.items = widget.items.toSet().toList(); // Deduplicate
-    selected = widget.defaultSelected;
+	List<T> values = widget.items.map((item) => item.value).toList();
+    selected = widget.defaultSelected.where((sel) => values.contains(sel)).toList();
   }
 
   Widget getButton(SelectListItem item) {

@@ -4,6 +4,7 @@ import 'ch02_now.dart';
 import 'ch03_goals.dart';
 import 'ch04_rhythm.dart';
 import 'ch05_owning.dart';
+import 'ch06_routine.dart';
 
 Lesson sleep = Lesson([
   PageDef(IntroductionWelcome, () => IntroductionWelcome()),
@@ -59,4 +60,13 @@ Lesson sleep = Lesson([
   PageDef(OwningTheDayNote, () => OwningTheDayNote()),
   PageDef(OwningWhy, () => OwningWhy()),
   PageDef(OwningWhatsNext, () => OwningWhatsNext()),
+  PageDef(RoutineIntro, () => RoutineIntro()),
+  PageDef(RoutineActivities, () => RoutineActivities()),
+  PageDef(RoutineCalmingActivities1, () => RoutineCalmingActivities1()),
+  PageDef(RoutineCalmingActivities2, () => RoutineCalmingActivities2()),
+  PageDef(RoutineCalmingActivities3, () => RoutineCalmingActivities3()),
+  PageDef(RoutineCalmingActivitiesNote, () => RoutineCalmingActivitiesNote()),
+  PageDef(RoutineOptInGroup, () => RoutineOptInGroup()),
+  PageDef(RoutinePledgeIntro, () => RoutinePledgeIntro()),
+  PageDef(RoutineReminders, () => RoutineReminders()),
 ]);

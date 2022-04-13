@@ -10,7 +10,7 @@ for m in Path('lib', 'pages').iterdir():
         imports.append(chapter.name)
         with open(chapter, "r") as f:
             for line in f:
-                if line.startswith("class "):
+                if line.startswith("class ") and "State" not in line:
                     name = line.split(" ")[1]
                     pagedefs.append(name)
 

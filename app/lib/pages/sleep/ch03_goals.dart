@@ -55,19 +55,19 @@ I'd like to:
   final valueName = "sleep-goals";
   @override
   final List<SelectListItem<String>> choices = [
-    SelectListItem(text: "Sleep more hours", value: "more hours"),
+    SelectListItem(text: "Sleep more hours", value: "sleep more hours"),
     SelectListItem(
         text: "Wake up feeling more refreshed and well-rested",
-        value: "refreshed and well-rested"),
+        value: "wake up feeling refreshed and well-rested"),
     SelectListItem(
         text: "Feel less sleepy during the day",
-        value: "less sleepy during the day"),
+        value: "feel less sleepy during the day"),
     SelectListItem(
         text: "Sleep through the night", value: "sleep through the night"),
     SelectListItem(text: "Fall asleep easier", value: "fall asleep easier"),
     SelectListItem(
         text: "Have a more consistent sleep schedule",
-        value: "more consistent sleep schedule"),
+        value: "have a more consistent sleep schedule"),
     SelectListItem(text: "Other", value: "", other: true),
   ];
 }
@@ -150,20 +150,20 @@ What do you usually end up doing instead of going to bed?
 }
 
 final List<SelectListItem<String>> activityChoices = [
-  SelectListItem(text: "Watching TV/videos", value: "Watching TV/videos"),
-  SelectListItem(text: "Playing video games", value: "Playing video games"),
-  SelectListItem(text: "Surfing the internet", value: "Surfing the internet"),
+  SelectListItem(text: "Watching TV/videos", value: "watching TV/videos"),
+  SelectListItem(text: "Playing video games", value: "playing video games"),
+  SelectListItem(text: "Surfing the internet", value: "surfing the internet"),
   SelectListItem(
-      text: "Going on social media content ",
-      value: "Going on social media content "),
+      text: "Going on social media",
+      value: "going on social media"),
   SelectListItem(
-      text: "Working till the last hour", value: "Working till the last hour"),
+      text: "Working till the last hour", value: "working till the last hour"),
   SelectListItem(
       text: "Studying till the last hour",
-      value: "Studying till the last hour"),
+      value: "studying till the last hour"),
   SelectListItem(
       text: "Chilling/chatting with others",
-      value: "Chilling/chatting with others"),
+      value: "chilling/chatting with others"),
   SelectListItem(text: "Other", value: "", other: true),
 ];
 

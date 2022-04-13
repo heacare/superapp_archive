@@ -7,6 +7,7 @@ import 'package:hea/widgets/page.dart';
 import 'package:hea/widgets/select_list.dart';
 import 'ch03_goals.dart';
 import 'ch04_rhythm.dart';
+import 'ch06_routine.dart';
 
 class OwningRoutine extends MarkdownPage {
   OwningRoutine({Key? key}) : super(key: key);
@@ -185,7 +186,7 @@ class OwningHaveRoutine extends MultipleChoicePage {
   final prevPage = () => OwningSettingCourse();
 
   @override
-  final title = "Setting a routine";
+  final title = "Existing routine";
   @override
   final image = null;
 
@@ -214,7 +215,7 @@ class OwniningRoutineActivities1 extends MultipleChoicePage {
   final prevPage = () => OwningHaveRoutine();
 
   @override
-  final title = "Setting a routine";
+  final title = "Existing routine";
   @override
   final image = null;
 
@@ -244,7 +245,7 @@ class OwniningRoutineActivities2 extends MultipleChoicePage {
   final prevPage = () => OwniningRoutineActivities1();
 
   @override
-  final title = "Setting a routine";
+  final title = "Existing routine";
   @override
   final image = null;
 
@@ -274,7 +275,7 @@ class OwniningRoutineActivities3 extends MultipleChoicePage {
   final prevPage = () => OwniningRoutineActivities2();
 
   @override
-  final title = "Setting a routine";
+  final title = "Existing routine";
   @override
   final image = null;
 
@@ -502,7 +503,7 @@ class OwningWhatsNext extends MarkdownPage {
   OwningWhatsNext({Key? key}) : super(key: key);
 
   @override
-  final nextPage = null;
+  final nextPage = () => RoutineIntro();
   @override
   final prevPage = () => OwningWhy();
 
