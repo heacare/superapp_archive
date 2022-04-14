@@ -1,0 +1,40 @@
+name: fastlane-beta
+
+on:
+  push:
+    #tags: ['v*']
+
+defaults:
+  run:
+    working-directory: app
+
+jobs:
+
+  ios:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: fastlane ios beta
+        env:
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          MATCH_GIT_PRIVATE_KEY: ${{ secrets.CODE_SIGNING_REPO_SSH }}
+
+  android:
+    runs-on: ubuntu-latest
+    env:
+      CODE_SIGNING_REPO: ${{ github.workspace }}/../code-signing
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+        with:
+          ssh-key: ${{ secrets.CODE_SIGNING_REPO_SSH }}
+          path: ${{ env.CODE_SIGNING_REPO }}
+      - name: Configure keystore
+        run: |
+          echo "storeFile=${{ env.CODE_SIGNING_REPO }}/android/firebase-app-distribution.json" >> key.properties
+          echo "keyAlias=hea" >> key.properties
+          echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> key.properties
+          echo "keyPassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> key.properties
+      - run: fastlane android beta
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ env.CODE_SIGNING_REPO }}/android/firebase-app-distribution.json

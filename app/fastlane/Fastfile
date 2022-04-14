@@ -1,0 +1,50 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Push a new beta build to TestFlight"
+  lane :beta do
+    match(type: "appstore", readonly: is_ci)
+    build_app(
+      workspace: "ios/Runner.xcworkspace",
+      scheme: "Runner",
+    )
+    upload_to_testflight
+  end
+end
+
+platform :android do
+  desc "Push a new beta build to Firebase"
+  lane :beta do
+    sh("flutter", "clean")
+    sh("flutter", "build", "apk", "--release")
+    firebase_app_distribution(
+      app: "1:825250749124:android:721cb5ab745db555090791",
+      android_artifact_path: "build/app/outputs/flutter-apk/app-release.apk",
+      groups: "automatic",
+    )
+  end
+
+  desc "Deploy a new version to the Google Play"
+  lane :deploy do
+    sh("flutter", "clean")
+    sh("flutter", "build", "appbundle", "--release")
+    upload_to_play_store(
+      aab: "build/app/outputs/bundle/release/app-release.aab",
+    )
+  end
+end
