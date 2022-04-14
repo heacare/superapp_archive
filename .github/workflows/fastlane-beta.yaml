@@ -18,7 +18,8 @@ jobs:
           flutter-version: '2.10'
           channel: 'stable'
       - uses: actions/checkout@v2
-      - run: fastlane ios beta
+      - run: bundle install
+      - run: bundle exec fastlane ios beta
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           MATCH_GIT_PRIVATE_KEY: ${{ secrets.CODE_SIGNING_REPO_SSH }}
@@ -40,10 +41,11 @@ jobs:
           path: ${{ env.CODE_SIGNING_REPO }}
       - name: Configure keystore
         run: |
-          echo "storeFile=${{ env.CODE_SIGNING_REPO }}/android/firebase-app-distribution.json" >> android/key.properties
+          echo "storeFile=${{ env.CODE_SIGNING_REPO }}/android/release.keystore" >> android/key.properties
           echo "keyAlias=hea" >> android/key.properties
           echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/key.properties
           echo "keyPassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/key.properties
-      - run: fastlane android beta
+      - run: bundle install
+      - run: bundle exec fastlane android beta
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ env.CODE_SIGNING_REPO }}/android/firebase-app-distribution.json
