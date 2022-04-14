@@ -21,6 +21,9 @@ import { HealerService } from './healer/healer.service';
 import { SessionController } from './session/session.controller';
 import { SessionService } from './session/session.service';
 import { Session } from './session/session.entity';
+import { LoggingController } from './logging/logging.controller';
+import { LoggingService } from './logging/logging.service';
+import { Log } from './logging/log.entity';
 
 export const ApiFirebaseModule = FirebaseAdminModule.forRootAsync({
   useFactory: () => {
@@ -35,13 +38,13 @@ export const ApiJwtModule = JwtModule.register({
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, Healer, Session]),
+    TypeOrmModule.forFeature([User, Healer, Session, Log]),
     ContentModule,
     ApiFirebaseModule,
     PassportModule,
     ApiJwtModule,
   ],
-  controllers: [UserController, AuthController, HealerController, SessionController],
-  providers: [UserService, HealerService, SessionService, AuthService, FirebaseService, ApiAuthStrategy],
+  controllers: [UserController, AuthController, HealerController, SessionController, LoggingController],
+  providers: [UserService, HealerService, SessionService, LoggingService, AuthService, FirebaseService, ApiAuthStrategy],
 })
 export class ApiModule {}
