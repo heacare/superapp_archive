@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hea/models/user.dart';
 import 'package:health/health.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'package:hea/screens/login.dart';
 import 'package:hea/services/api_manager.dart';
@@ -36,8 +35,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     List<HealthDataType> types = [
       HealthDataType.WEIGHT,
       HealthDataType.HEIGHT,
+      HealthDataType.BLOOD_GLUCOSE,
+      HealthDataType.BLOOD_OXYGEN,
       HealthDataType.BODY_FAT_PERCENTAGE,
       HealthDataType.BODY_MASS_INDEX,
+      HealthDataType.HEART_RATE,
+      HealthDataType.STEPS,
+      //HealthDataType.SLEEP_IN_BED,
+      HealthDataType.SLEEP_ASLEEP,
+      HealthDataType.SLEEP_AWAKE,
     ];
 
     // OAuth request authorization to data
@@ -61,7 +67,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       // Filter out duplicates
       _healthDataList = HealthFactory.removeDuplicates(_healthDataList);
       for (var h in _healthDataList) {
-        print("${h.typeString}: ${h.value} [${h.unitString}]");
+        print(
+            "${h.typeString}: ${h.dateFrom} ${h.dateTo} ${h.value} [${h.unitString}]");
       }
     } catch (e) {
       print("Caught exception in getHealthDataFromTypes: $e");
@@ -69,8 +76,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> triggerDemoNotification() async {
-    await serviceLocator<NotificationService>().showReminder(0,
-        'Time to wind down', 'Remember to _____ today', 'reminder-wind-down');
+    await serviceLocator<NotificationService>().showReminder(
+        0,
+        "sleep_reminders",
+        "Time to wind down",
+        "Remember to _____ today",
+        "wind-down");
+    await serviceLocator<NotificationService>().showDemoContentReminder(
+        1,
+        "sleep_content",
+        "Hop right in",
+        "Hi <name>! To get started, tell us how you'll be getting your sleep and health data");
   }
 
   @override
@@ -122,8 +138,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  GradientButton(text: "Logout", onPressed: logout),
+                  GradientButton(
+                      text: "Notification Preferences",
+                      onPressed: () => serviceLocator<NotificationService>()
+                          .showPreferences()),
                   const SizedBox(height: 8.0),
+                  GradientButton(text: "Logout", onPressed: logout),
+                  const SizedBox(height: 32.0),
                   GradientButton(
                       text: "Send Demo Health Data",
                       onPressed: sendDemoHealthData),

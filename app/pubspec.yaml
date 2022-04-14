@@ -37,9 +37,8 @@ dependencies:
   firebase_core: ^1.6.0
   firebase_auth: ^3.1.1
   firebase_messaging: ^11.2.12
-
-  # Local notifications
-  flutter_local_notifications: ^9.4.0
+  # Notifications
+  awesome_notifications: ^0.6.21
 
   # Health data
   health: ^3.1.1+1
