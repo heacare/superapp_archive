@@ -1,13 +1,10 @@
-import {
-  IsString,
-  IsNotEmpty,
-} from 'class-validator';
+import { IsString, IsNotEmpty } from 'class-validator';
 
 export class LogDto {
   @IsNotEmpty()
-	@IsString()
-	key: string
+  @IsString()
+  key: string;
 
-	@IsString()
-	value: string
+  @IsString()
+  value: string;
 }

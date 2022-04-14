@@ -45,6 +45,14 @@ export const ApiJwtModule = JwtModule.register({
     ApiJwtModule,
   ],
   controllers: [UserController, AuthController, HealerController, SessionController, LoggingController],
-  providers: [UserService, HealerService, SessionService, LoggingService, AuthService, FirebaseService, ApiAuthStrategy],
+  providers: [
+    UserService,
+    HealerService,
+    SessionService,
+    LoggingService,
+    AuthService,
+    FirebaseService,
+    ApiAuthStrategy,
+  ],
 })
 export class ApiModule {}

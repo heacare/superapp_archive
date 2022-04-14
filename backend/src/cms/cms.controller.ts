@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
 import { Client } from '@notionhq/client';
 import type { SearchResponse } from '@notionhq/client/build/src/api-endpoints';
-import { Controller, Get, Post, Query, Body, Req, Res, Redirect, Render } from '@nestjs/common';
+import { Controller, Get, Post, Query, Req, Res, Redirect, Render } from '@nestjs/common';
 
 import { NotionService } from './notion/notion.service';
-import { OAuthInfo, AccessToken } from './notion/notion.entity';
+import { OAuthInfo } from './notion/notion.entity';
 
 interface LoggedIn {
   logged_in: boolean;
@@ -16,9 +16,7 @@ export class CmsController {
 
   @Get('/')
   @Render('cms/index')
-  async index(
-    @Query('query') query: string,
-	  @Req() request: Request): Promise<OAuthInfo | LoggedIn | SearchResponse> {
+  async index(@Query('query') query: string, @Req() request: Request): Promise<OAuthInfo | LoggedIn | SearchResponse> {
     let response = {};
     if (request.cookies['access']) {
       const access = JSON.parse(request.cookies['access']);
