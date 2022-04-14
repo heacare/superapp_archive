@@ -24,8 +24,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pods-
       - uses: actions/checkout@v2
-      - run: bundle install
-      - run: bundle exec fastlane ios beta
+      - run: fastlane ios beta
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           MATCH_GIT_PRIVATE_KEY: ${{ secrets.CODE_SIGNING_REPO_SSH }}
@@ -51,7 +50,6 @@ jobs:
           echo "keyAlias=hea" >> android/key.properties
           echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/key.properties
           echo "keyPassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/key.properties
-      - run: bundle install
-      - run: bundle exec fastlane android beta
+      - run: fastlane android beta
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ env.CODE_SIGNING_REPO }}/android/firebase-app-distribution.json
