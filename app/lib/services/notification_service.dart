@@ -20,6 +20,7 @@ class NotificationService {
       title: title,
       body: body,
       payload: {"reminder": payload},
+      notificationLayout: NotificationLayout.BigText,
     ));
   }
 
@@ -33,6 +34,7 @@ class NotificationService {
           title: title,
           body: body,
           payload: {},
+          notificationLayout: NotificationLayout.BigText,
         ),
         actionButtons: [
           NotificationActionButton(
@@ -43,12 +45,7 @@ class NotificationService {
           NotificationActionButton(
             buttonType: ActionButtonType.KeepOnTop,
             key: "remind-tomorrow-morning",
-            label: "Remind me tomorrow morning",
-          ),
-          NotificationActionButton(
-            buttonType: ActionButtonType.KeepOnTop,
-            key: "remind-tomorrow-afternoon",
-            label: "Remind me tomorrow afternoon",
+            label: "Remind me tomorrow",
           ),
         ]);
   }
@@ -82,13 +79,13 @@ class NotificationService {
               channelName: "Sleep content",
               channelDescription: "In-app reminders: sleep content",
               defaultColor: Color(0xFFFF7FAA),
-              importance: NotificationImportance.High),
+              importance: NotificationImportance.Default),
           NotificationChannel(
               channelKey: "service_updates",
               channelName: "Service updates",
               channelDescription: "Updates about Happily Ever After",
               defaultColor: Color(0xFFFF7FAA),
-              importance: NotificationImportance.High),
+              importance: NotificationImportance.Default),
         ],
         channelGroups: [
           NotificationChannelGroup(
@@ -134,7 +131,7 @@ class NotificationService {
               body: message.notification?.body,
               bigPicture: imageUrl,
               notificationLayout: imageUrl == null
-                  ? NotificationLayout.Default
+                  ? NotificationLayout.BigText
                   : NotificationLayout.BigPicture));
     } else {
       // Handle custom push notifications
