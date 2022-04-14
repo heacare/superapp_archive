@@ -17,6 +17,12 @@ jobs:
         with:
           flutter-version: '2.10'
           channel: 'stable'
+      - uses: actions/cache@v3
+        with:
+          path: ios/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
       - uses: actions/checkout@v2
       - run: bundle install
       - run: bundle exec fastlane ios beta
