@@ -19,7 +19,7 @@ platform :ios do
   desc "Push a new beta build to TestFlight"
   lane :beta do
     sh("flutter", "clean")
-    sh("flutter", "build", "ipa", "--release", "--no-codesign")
+    sh("flutter", "build", "ipa", "--release")
     match(type: "appstore", readonly: is_ci)
     build_app(
 	  skip_build_archive: true,
