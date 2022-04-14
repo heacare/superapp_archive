@@ -35,7 +35,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/checkout@v2
         with:
-          repository: happilyeverafter/code-signing
+          repository: happilyeveraftercorp/code-signing
           ssh-key: ${{ secrets.CODE_SIGNING_REPO_SSH }}
           path: ${{ env.CODE_SIGNING_REPO }}
       - name: Configure keystore
