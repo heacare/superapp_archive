@@ -18,9 +18,9 @@ default_platform(:ios)
 platform :ios do
   desc "Push a new beta build to TestFlight"
   lane :beta do
-    match(type: "appstore", readonly: is_ci)
     sh("flutter", "clean")
     sh("flutter", "build", "ios", "--release", "--no-codesign")
+    match(type: "appstore", readonly: is_ci)
     build_app(
 	  skip_build_archive: true,
 	  archive_path: "build/ios/archive/Runner.xcarchive",

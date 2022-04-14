@@ -13,6 +13,10 @@ jobs:
   ios:
     runs-on: macos-latest
     steps:
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '2.10'
+          channel: 'stable'
       - uses: actions/checkout@v2
       - run: fastlane ios beta
         env:
@@ -24,6 +28,10 @@ jobs:
     env:
       CODE_SIGNING_REPO: ${{ github.workspace }}/code-signing
     steps:
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '2.10'
+          channel: 'stable'
       - uses: actions/checkout@v2
       - uses: actions/checkout@v2
         with:
