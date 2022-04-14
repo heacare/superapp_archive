@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:hea/models/user.dart';
 import 'package:hea/screens/dashboard.dart';
@@ -27,7 +28,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.activate();
     serviceLocator<LoggingService>().createLog('navigate', 'home');
+    serviceLocator<LoggingService>().createLog(
+        'sleep', serviceLocator<SharedPreferences>().getString("data-sleep"));
     return Scaffold(
         body: pageFor(index),
         bottomNavigationBar: FancyBottomNav(

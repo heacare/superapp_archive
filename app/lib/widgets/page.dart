@@ -101,6 +101,10 @@ class BasePage extends StatelessWidget {
                                     }
                                     serviceLocator<LoggingService>()
                                         .createLog('navigate', s);
+                                    serviceLocator<LoggingService>().createLog(
+                                        'sleep',
+                                        serviceLocator<SharedPreferences>()
+                                            .getString("data-sleep"));
                                     Navigator.of(context).pushReplacement(
                                         MaterialPageRoute<void>(
                                       builder: (BuildContext context) => prev,
@@ -127,6 +131,11 @@ class BasePage extends StatelessWidget {
                 if (s != null) {
                   serviceLocator<SharedPreferences>().setString('sleep', s);
                 }
+                serviceLocator<LoggingService>().createLog('navigate', s);
+                serviceLocator<LoggingService>().createLog(
+                    'sleep',
+                    serviceLocator<SharedPreferences>()
+                        .getString("data-sleep"));
                 Navigator.of(context).pushReplacement(MaterialPageRoute<void>(
                   builder: (BuildContext context) => next,
                 ));
