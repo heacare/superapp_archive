@@ -2,8 +2,16 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:hea/services/logging_service.dart';
 import 'package:hea/services/service_locator.dart';
+
+dynamic kvDump(String module) {
+  String? json =
+      serviceLocator<SharedPreferences>().getString('data-' + module);
+  if (json == null) {
+    json = "{}";
+  }
+  return jsonDecode(json);
+}
 
 kvWrite<T>(String module, String key, T value) {
   String? json =
