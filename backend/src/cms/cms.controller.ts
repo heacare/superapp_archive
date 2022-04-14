@@ -3,7 +3,6 @@ import { Client } from '@notionhq/client';
 import type { SearchResponse } from '@notionhq/client/build/src/api-endpoints';
 import { Controller, Get, Post, Query, Body, Req, Res, Redirect, Render } from '@nestjs/common';
 
-import { FindPageDto } from './find-page.dto';
 import { NotionService } from './notion/notion.service';
 import { OAuthInfo, AccessToken } from './notion/notion.entity';
 
@@ -17,19 +16,9 @@ export class CmsController {
 
   @Get('/')
   @Render('cms/index')
-  async index(@Req() request: Request): Promise<OAuthInfo | LoggedIn> {
-    return {
-      ...this.notionService.getOAuthInfo(),
-      logged_in: request.cookies['access'],
-    };
-  }
-
-  @Post('/')
-  @Render('cms/index')
-  async findPage(
-    @Body() findPage: FindPageDto,
-    @Req() request: Request,
-  ): Promise<OAuthInfo | LoggedIn | SearchResponse> {
+  async index(
+    @Query('query') query: string,
+	  @Req() request: Request): Promise<OAuthInfo | LoggedIn | SearchResponse> {
     let response = {};
     if (request.cookies['access']) {
       const access = JSON.parse(request.cookies['access']);
@@ -37,7 +26,7 @@ export class CmsController {
         auth: access.access_token,
       });
       response = await client.search({
-        query: findPage.query,
+        query: query,
         filter: {
           property: 'object',
           value: 'page',

@@ -9,13 +9,13 @@
         <input type='submit' value='Logout' />
       </form>
 
-      <form action='' method='post'>
+      <form action='' method='get'>
         <input type='search' name='query' />
         <input type='submit' value='Search' />
       </form>
       <ul id='results'>
         {{#each results}}
-          <li>{{id}} - {{#each properties}}{{#each title}}{{text.content}}{{/each}}{{/each}}</li>
+          <li><a href="/cms/preview/{{id}}"><code>{{id}}</code></a> - {{#each properties}}{{#each title}}{{text.content}}{{/each}}{{/each}}</li>
         {{/each}}
       </ul>
     {{else}}
