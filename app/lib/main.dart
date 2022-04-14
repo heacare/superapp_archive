@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:hea/services/logging_service.dart';
 import 'firebase_options.dart';
 
 import 'package:hea/screens/error.dart';

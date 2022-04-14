@@ -9,6 +9,7 @@ import 'package:hea/screens/error.dart';
 //import 'package:hea/screens/healers.dart';
 import 'package:hea/screens/profile.dart';
 import 'package:hea/services/service_locator.dart';
+import 'package:hea/services/logging_service.dart';
 import 'package:hea/services/user_service.dart';
 //import 'package:hea/providers/map.dart';
 
@@ -26,6 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    serviceLocator<LoggingService>().createLog('navigate', 'home');
     return Scaffold(
         body: pageFor(index),
         bottomNavigationBar: FancyBottomNav(

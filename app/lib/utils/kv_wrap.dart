@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:hea/services/logging_service.dart';
 import 'package:hea/services/service_locator.dart';
 
 kvWrite<T>(String module, String key, T value) {
@@ -15,6 +16,7 @@ kvWrite<T>(String module, String key, T value) {
   json = jsonEncode(object);
   serviceLocator<SharedPreferences>().setString('data-' + module, json);
   // TODO: Dispatch a rate-limited blob upload
+  serviceLocator<LoggingService>().createLog(key, value);
 }
 
 T kvRead<T>(String module, String key) {

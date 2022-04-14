@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:hea/utils/kv_wrap.dart';
 import 'package:hea/widgets/select_list.dart';
 import 'package:hea/services/service_locator.dart';
+import 'package:hea/services/logging_service.dart';
 import 'package:hea/pages/sleep/lookup.dart';
 
 typedef PageBuilder = Widget Function();
@@ -98,6 +99,8 @@ class BasePage extends StatelessWidget {
                                       serviceLocator<SharedPreferences>()
                                           .setString('sleep', s);
                                     }
+                                    serviceLocator<LoggingService>()
+                                        .createLog('navigate', s);
                                     Navigator.of(context).pushReplacement(
                                         MaterialPageRoute<void>(
                                       builder: (BuildContext context) => prev,

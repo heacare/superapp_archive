@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:hea/models/user.dart';
 import 'package:health/health.dart';
 
 import 'package:hea/screens/login.dart';
+import 'package:hea/models/user.dart';
 import 'package:hea/services/api_manager.dart';
 import 'package:hea/services/auth_service.dart';
 import 'package:hea/services/notification_service.dart';
+import 'package:hea/services/logging_service.dart';
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/widgets/avatar_icon.dart';
 import 'package:hea/widgets/gradient_button.dart';
@@ -20,6 +21,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   Future logout() async {
+    await serviceLocator<LoggingService>().createLog('logout', '');
     await serviceLocator<AuthService>().logout();
 
     Navigator.of(context).pushAndRemoveUntil(
@@ -28,7 +30,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }), (route) => false);
   }
 
-  Future<void> sendDemoHealthData() async {
+  Future<void> sendPastHealthData() async {
     HealthFactory health = HealthFactory();
 
     // Define the types to get
@@ -66,10 +68,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       // Filter out duplicates
       _healthDataList = HealthFactory.removeDuplicates(_healthDataList);
-      for (var h in _healthDataList) {
-        print(
-            "${h.typeString}: ${h.dateFrom} ${h.dateTo} ${h.value} [${h.unitString}]");
-      }
+      await serviceLocator<LoggingService>()
+          .createLog('past-health-data', _healthDataList);
     } catch (e) {
       print("Caught exception in getHealthDataFromTypes: $e");
     }
@@ -146,8 +146,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   GradientButton(text: "Logout", onPressed: logout),
                   const SizedBox(height: 32.0),
                   GradientButton(
-                      text: "Send Demo Health Data",
-                      onPressed: sendDemoHealthData),
+                      text: "Send Past Health Data",
+                      onPressed: sendPastHealthData),
                   const SizedBox(height: 8.0),
                   GradientButton(
                       text: "Trigger Demo Notification",

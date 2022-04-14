@@ -6,6 +6,7 @@ import 'package:hea/services/api_manager.dart';
 import 'package:hea/services/content_service.dart';
 import 'package:hea/services/user_service.dart';
 import 'package:hea/services/healer_service.dart';
+import 'package:hea/services/logging_service.dart';
 import 'package:hea/services/notification_service.dart';
 
 GetIt serviceLocator = GetIt.instance;
@@ -18,6 +19,7 @@ void setupServiceLocator() {
   serviceLocator.registerSingleton<ContentService>(ContentServiceImpl());
   serviceLocator.registerSingleton<UserService>(UserServiceImpl());
   serviceLocator.registerSingleton<HealerService>(HealerServiceImpl());
+  serviceLocator.registerSingleton<LoggingService>(LoggingServiceImpl());
 
   serviceLocator.registerSingletonAsync<SharedPreferences>(
       () => SharedPreferences.getInstance());

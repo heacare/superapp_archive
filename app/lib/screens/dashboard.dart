@@ -9,6 +9,7 @@ import 'package:hea/models/user.dart';
 import 'package:hea/models/content/module.dart';
 import 'package:hea/services/content_service.dart';
 import 'package:hea/services/service_locator.dart';
+import 'package:hea/services/logging_service.dart';
 import 'package:hea/widgets/avatar_icon.dart';
 import 'package:hea/widgets/page.dart';
 
@@ -351,9 +352,9 @@ class ModuleListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          PageBuilder resume = sleep
-              .lookup(serviceLocator<SharedPreferences>().getString('sleep'));
-
+          String? s = serviceLocator<SharedPreferences>().getString('sleep');
+          PageBuilder resume = sleep.lookup(s);
+          serviceLocator<LoggingService>().createLog('navigate', s);
           Navigator.of(context)
               .push(MaterialPageRoute(builder: (context) => resume()));
         },
