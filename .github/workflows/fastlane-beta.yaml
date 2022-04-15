@@ -28,6 +28,7 @@ jobs:
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           MATCH_GIT_PRIVATE_KEY: ${{ secrets.CODE_SIGNING_REPO_SSH }}
+          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
 
   android:
     runs-on: ubuntu-latest
