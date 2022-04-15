@@ -42,6 +42,7 @@ jobs:
         with:
           ruby-version: 3.1
           bundler-cache: true
+          working-directory: app
       - uses: actions/checkout@v2
       - uses: actions/checkout@v2
         with:
@@ -54,6 +55,6 @@ jobs:
           echo "keyAlias=hea" >> android/key.properties
           echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/key.properties
           echo "keyPassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/key.properties
-      - run: fastlane android beta
+      - run: bundle exec fastlane android beta
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ env.CODE_SIGNING_REPO }}/android/firebase-app-distribution.json
