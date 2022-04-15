@@ -38,11 +38,6 @@ jobs:
         with:
           flutter-version: '2.10'
           channel: 'stable'
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 3.1
-          bundler-cache: true
-          working-directory: app
       - uses: actions/checkout@v2
       - uses: actions/checkout@v2
         with:
@@ -55,6 +50,11 @@ jobs:
           echo "keyAlias=hea" >> android/key.properties
           echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/key.properties
           echo "keyPassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/key.properties
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1
+          bundler-cache: true
+          working-directory: app
       - run: bundle exec fastlane android beta
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ env.CODE_SIGNING_REPO }}/android/firebase-app-distribution.json
