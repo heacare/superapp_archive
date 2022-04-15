@@ -18,14 +18,10 @@ default_platform(:ios)
 platform :ios do
   desc "Push a new beta build to TestFlight"
   lane :beta do
-    sh("flutter", "clean")
-    sh("flutter", "build", "ios", "--release", "--no-codesign")
-    
+    sh("flutter", "clean")  
     setup_ci if ENV['CI']
     match(type: "appstore", readonly: is_ci)
     build_app(
-	  skip_build_archive: true,
-	  archive_path: "build/ios/archive/Runner.xcarchive",
       workspace: "ios/Runner.xcworkspace",
       scheme: "Runner",
     )
