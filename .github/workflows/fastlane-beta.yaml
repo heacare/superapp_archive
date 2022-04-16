@@ -2,7 +2,7 @@ name: fastlane-beta
 
 on:
   push:
-    #tags: ['v*']
+    tags: ['v*']
 
 defaults:
   run:
