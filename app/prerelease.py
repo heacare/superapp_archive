@@ -20,15 +20,10 @@ version_number = int(version_number) + 1
 # Parse version name
 version_name_parts = version_name.split("-")
 version_xyz = version_name_parts[0]
-version_prerelease = "beta.0"
+version_prerelease = "beta"
 if len(version_name_parts) == 2:
     version_prerelease = version_name_parts[1]
-# Parse version prerelease
-version_prerelease_type, version_prerelease_number = version_prerelease.split(".")
-# Increment version prerelease number
-version_prerelease_number = int(version_prerelease_number) + 1
 # Write new version
-version_prerelease = f"{version_prerelease_type}.{version_prerelease_number}"
 version_name = f"{version_xyz}-{version_prerelease}"
 version = f"{version_name}+{version_number}"
 pubspec = pubspec.replace(version_line, f"version: {version}")
