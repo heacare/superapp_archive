@@ -74,7 +74,8 @@ class BasePage extends StatelessWidget {
                             child: IconButton(
                                 iconSize: 38,
                                 icon: FaIcon(FontAwesomeIcons.times,
-                                    color: Theme.of(context).colorScheme.primary),
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 })),
@@ -90,7 +91,9 @@ class BasePage extends StatelessWidget {
                               child: IconButton(
                                   iconSize: 24,
                                   icon: FaIcon(FontAwesomeIcons.undo,
-                                      color: Theme.of(context).colorScheme.primary),
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary),
                                   onPressed: () {
                                     Widget prev = prevPage!();
                                     String? s = sleep.rlookup(prev.runtimeType);

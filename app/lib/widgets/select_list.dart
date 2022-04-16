@@ -65,7 +65,8 @@ class SelectListState<T> extends State<SelectList<T>> {
             padding:
                 const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
             primary: Colors.black,
-            backgroundColor: Theme.of(context).colorScheme.primary.withAlpha(0x30),
+            backgroundColor:
+                Theme.of(context).colorScheme.primary.withAlpha(0x30),
             elevation: 0.0),
       );
     } else {

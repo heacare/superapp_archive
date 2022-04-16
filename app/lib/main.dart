@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
 import 'package:hea/services/logging_service.dart';
 import 'firebase_options.dart';
 
@@ -85,6 +86,7 @@ class _AppState extends State<App> {
         accentColor: createMaterialColor(accentColor.value));
 
     return ThemeData(
+        primaryColor: primaryColor,
         colorScheme: colorScheme,
         fontFamily: "Poppins",
         textTheme: const TextTheme(
@@ -203,7 +205,12 @@ class _AppState extends State<App> {
                 theme: _getThemeData(),
                 // TODO design a loading page and a 'error' page
                 // Match Firebase initialization result
-                home: mainScreen(snapshot));
+                home: AnnotatedRegion<SystemUiOverlayStyle>(
+                    value: SystemUiOverlayStyle.dark.copyWith(
+                      systemNavigationBarColor: Color(0xFFFFFFFF),
+                      systemNavigationBarIconBrightness: Brightness.dark,
+                    ),
+                    child: mainScreen(snapshot)));
           },
         ));
   }
