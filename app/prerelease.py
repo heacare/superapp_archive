@@ -44,6 +44,9 @@ run(["git", "commit", "-m", message], check=True)
 # Perform Git tag
 tag = f"v{version}"
 run(["git", "tag", tag], check=True)
+# Perform Git push
+input("Press enter to push")
+run(["git", "push", "origin", "main", tag], check=True)
 
 
 # vim: set et ts=4 sw=4:
