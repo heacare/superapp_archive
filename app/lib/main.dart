@@ -86,7 +86,7 @@ class _AppState extends State<App> {
         accentColor: createMaterialColor(accentColor.value));
 
     return ThemeData(
-        primaryColor: primaryColor,
+        primaryColor: Colors.white,
         colorScheme: colorScheme,
         fontFamily: "Poppins",
         textTheme: const TextTheme(
