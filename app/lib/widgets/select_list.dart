@@ -45,14 +45,14 @@ class SelectListState<T> extends State<SelectList<T>> {
         widget.defaultSelected.where((sel) => values.contains(sel)).toList();
   }
 
-  Widget getButton(SelectListItem item) {
+  Widget getButton(BuildContext context, SelectListItem item) {
     if (selected.contains(item.value)) {
       return ElevatedButton(
         child: Text(item.other ? "Other (TODO)" : item.text,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontWeight: FontWeight.w500,
-              color: Color(0xFFFF5576),
+              color: Theme.of(context).colorScheme.primary,
               fontSize: 20.0,
             )),
         onPressed: () {
@@ -65,7 +65,7 @@ class SelectListState<T> extends State<SelectList<T>> {
             padding:
                 const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
             primary: Colors.black,
-            backgroundColor: Color(0x33FF587A),
+            backgroundColor: Theme.of(context).colorScheme.primary.withAlpha(0x30),
             elevation: 0.0),
       );
     } else {
@@ -100,7 +100,7 @@ class SelectListState<T> extends State<SelectList<T>> {
   Widget build(BuildContext context) {
     List<Widget> buttons = widget.items
         .map((item) {
-          Widget button = getButton(item);
+          Widget button = getButton(context, item);
           return [
             button,
             const SizedBox(height: 11.0),

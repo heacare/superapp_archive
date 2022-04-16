@@ -55,36 +55,38 @@ class NotificationService {
   }
 
   static Future<NotificationService> create() async {
+    const primaryColor = Color(0xFFE54A39);
+
     AwesomeNotifications notifications = AwesomeNotifications();
     notifications.initialize(
-        "resource://drawable/notification_icon_temporary",
+        "resource://drawable/notification_icon",
         [
           NotificationChannel(
               channelGroupKey: "reminders",
               channelKey: "sleep_reminders",
               channelName: "Sleep reminders",
               channelDescription: "In-app reminders: sleep reminders",
-              defaultColor: Color(0xFFFF7FAA),
+              defaultColor: primaryColor,
               importance: NotificationImportance.High),
           NotificationChannel(
               channelGroupKey: "reminders",
               channelKey: "hydration_reminders",
               channelName: "Hydration reminders",
               channelDescription: "In-app reminders: hydration reminders",
-              defaultColor: Color(0xFFFF7FAA),
+              defaultColor: primaryColor,
               importance: NotificationImportance.High),
           NotificationChannel(
               channelGroupKey: "content",
               channelKey: "sleep_content",
               channelName: "Sleep content",
               channelDescription: "In-app reminders: sleep content",
-              defaultColor: Color(0xFFFF7FAA),
+              defaultColor: primaryColor,
               importance: NotificationImportance.Default),
           NotificationChannel(
               channelKey: "service_updates",
               channelName: "Service updates",
               channelDescription: "Updates about Happily Ever After",
-              defaultColor: Color(0xFFFF7FAA),
+              defaultColor: primaryColor,
               importance: NotificationImportance.Default),
         ],
         channelGroups: [

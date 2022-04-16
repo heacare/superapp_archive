@@ -51,8 +51,8 @@ class _AppState extends State<App> {
   final Future<FirebaseApp> _firebaseInit = Firebase.initializeApp();
 
   ThemeData _getThemeData() {
-    const primaryColor = Color(0xFFFF5576);
-    const accentColor = Color(0xFFFF7FAA);
+    const primaryColor = Color(0xFFE54A39);
+    const accentColor = Color(0xFFEF9F2F);
 
     const primaryTextColor = Color(0xFF414141);
     const secondaryTextColor = Color(0xFF707070);

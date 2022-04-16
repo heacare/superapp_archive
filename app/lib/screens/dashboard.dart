@@ -245,8 +245,8 @@ class DeathClock extends StatelessWidget {
               value: lifeScore,
               gradient: const SweepGradient(
                 colors: <Color>[
-                  Color(0xFFFF7FAA),
-                  Color(0xFFFF5576),
+                  Color(0xFFF5877A),
+                  Color(0xFFFCB553),
                 ],
               ),
               width: gaugeWidth,

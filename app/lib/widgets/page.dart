@@ -73,8 +73,8 @@ class BasePage extends StatelessWidget {
                             //alignment: AlignmentDirectional.topCenter,
                             child: IconButton(
                                 iconSize: 38,
-                                icon: const FaIcon(FontAwesomeIcons.times,
-                                    color: Color(0xFF00ABE9)),
+                                icon: FaIcon(FontAwesomeIcons.times,
+                                    color: Theme.of(context).colorScheme.primary),
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 })),
@@ -89,8 +89,8 @@ class BasePage extends StatelessWidget {
                               //alignment: AlignmentDirectional.topCenter,
                               child: IconButton(
                                   iconSize: 24,
-                                  icon: const FaIcon(FontAwesomeIcons.undo,
-                                      color: Color(0xFF00ABE9)),
+                                  icon: FaIcon(FontAwesomeIcons.undo,
+                                      color: Theme.of(context).colorScheme.primary),
                                   onPressed: () {
                                     Widget prev = prevPage!();
                                     String? s = sleep.rlookup(prev.runtimeType);
@@ -137,7 +137,7 @@ class BasePage extends StatelessWidget {
                 ));
               },
               tooltip: 'Next',
-              backgroundColor: Color(0xFF00ABE9),
+              backgroundColor: Theme.of(context).colorScheme.primary,
               child: Icon(FontAwesomeIcons.arrowRight,
                   color: Theme.of(context).colorScheme.onPrimary),
             ),

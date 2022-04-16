@@ -35,7 +35,7 @@
                    android:value="AIzaSyDvLARyx5mAm--G45SH8_tI1mlovu8KVNI"/>
         <!-- Firebase Messaging -->
         <meta-data android:name="com.google.firebase.messaging.default_notification_icon"
-                   android:resource="@drawable/notification_icon_temporary" />
+                   android:resource="@drawable/notification_icon" />
         <meta-data android:name="com.google.firebase.messaging.default_notification_color"
                    android:resource="@color/accent" />
         <meta-data android:name="com.google.firebase.messaging.default_notification_channel_id"
