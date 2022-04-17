@@ -16,26 +16,36 @@
 default_platform(:ios)
 
 platform :ios do
+  before_all do
+     ensure_git_status_clean unless ENV['FL_NO_ENSURE_CLEAN']
+  end
+
   desc "Push a new beta build to TestFlight"
   lane :beta do
+    match(type: "appstore", readonly: true)
     sh("flutter", "clean")
     sh("flutter", "build", "ios", "--release", "--no-codesign")
-    api_key = app_store_connect_api_key(
-      key_id: "C47A4TCR5G",
-      issuer_id: "21c4a1c9-9d05-4413-b76d-10fca3021b3f",
-      key_content: ENV['CONNECT_API_KEY']
-    )
-    setup_ci if ENV['CI']
-    match(type: "appstore", readonly: is_ci)
     build_app(
       workspace: "ios/Runner.xcworkspace",
       scheme: "Runner",
     )
-    upload_to_testflight(api_key: api_key)
+    api_key = app_store_connect_api_key(
+      key_id: "C47A4TCR5G",
+      issuer_id: "21c4a1c9-9d05-4413-b76d-10fca3021b3f",
+      key_content: ENV['CONNECT_API_KEY'],
+    )
+    upload_to_testflight(
+      api_key: api_key,
+      skip_waiting_for_build_processing: is_ci,
+    )
   end
 end
 
 platform :android do
+  before_all do
+     ensure_git_status_clean unless ENV['FL_NO_ENSURE_CLEAN']
+  end
+
   desc "Push a new beta build to Firebase"
   lane :beta do
     sh("flutter", "clean")
