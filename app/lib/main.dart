@@ -11,6 +11,7 @@ import 'package:hea/screens/onboarding.dart';
 import 'package:hea/services/auth_service.dart';
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/services/user_service.dart';
+import 'package:hea/utils/kv_wrap.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -186,7 +187,9 @@ class _AppState extends State<App> {
       if (authService.currentUser() == null) {
         return UserStatus.signedOut;
       } else {
-        authService.currentUserToken()?.then((token) => print(token));
+        authService.currentUserToken()?.then((token) => debugPrint(token));
+        await serviceLocator<LoggingService>()
+            .createLog('sleep', kvDump("sleep"));
 
         return await serviceLocator<UserService>().isCurrentUserOnboarded()
             ? UserStatus.onboarded
@@ -217,7 +220,7 @@ class _AppState extends State<App> {
 
   Widget mainScreen(AsyncSnapshot<UserStatus> snapshot) {
     if (snapshot.hasError) {
-      print("Encountered error: ${snapshot.error}");
+      debugPrint("Encountered error: ${snapshot.error}");
       return const ErrorScreen();
     }
 

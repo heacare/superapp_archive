@@ -557,7 +557,6 @@ class NowOtherFactors extends Page {
               defaultSelected: kvReadStringList("sleep", valueName),
               onChange: (List<String> c) {
                 // TODO: Save value
-                print(c);
                 kvWrite<List<String>>("sleep", valueName, c);
               }),
         ]);

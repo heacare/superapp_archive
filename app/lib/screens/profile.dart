@@ -51,7 +51,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     // OAuth request authorization to data
     bool accessWasGranted = await health.requestAuthorization(types);
     if (!accessWasGranted) {
-      print("Authorization not granted");
+      debugPrint("Authorization not granted");
       return;
     }
 
@@ -71,7 +71,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       await serviceLocator<LoggingService>()
           .createLog('past-health-data', _healthDataList);
     } catch (e) {
-      print("Caught exception in getHealthDataFromTypes: $e");
+      debugPrint("Caught exception in getHealthDataFromTypes: $e");
     }
   }
 

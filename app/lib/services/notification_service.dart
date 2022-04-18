@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart' show Color;
+import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 
@@ -102,7 +103,7 @@ class NotificationService {
     FirebaseMessaging.onMessage
         .listen(service._firebaseMessagingForegroundHandler);
     // Debug: Print token
-    print(await service.messaging.getToken());
+    debugPrint(await service.messaging.getToken());
     // For now, request notifications on start up
     bool allowed = await AwesomeNotifications().isNotificationAllowed();
     if (!allowed) {
@@ -113,7 +114,7 @@ class NotificationService {
 
   Future<void> _firebaseMessagingForegroundHandler(
       RemoteMessage message) async {
-    print("foreground message: ${message.messageId}");
+    debugPrint("foreground message: ${message.messageId}");
     if (!AwesomeStringUtils.isNullOrEmpty(message.notification?.title,
             considerWhiteSpaceAsEmpty: true) ||
         !AwesomeStringUtils.isNullOrEmpty(message.notification?.body,
@@ -137,7 +138,7 @@ class NotificationService {
                   : NotificationLayout.BigPicture));
     } else {
       // Handle custom push notifications
-      print("message data: ${message.data}");
+      debugPrint("message data: ${message.data}");
       AwesomeNotifications().createNotificationFromJsonData(message.data);
     }
   }
@@ -148,7 +149,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // make sure you call `initializeApp` before using other Firebase services.
   //await Firebase.initializeApp();
 
-  print("background message: ${message.messageId}");
+  debugPrint("background message: ${message.messageId}");
   if (!AwesomeStringUtils.isNullOrEmpty(message.notification?.title,
           considerWhiteSpaceAsEmpty: true) ||
       !AwesomeStringUtils.isNullOrEmpty(message.notification?.body,
@@ -156,7 +157,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     // Firebase creates notification when the application is in the background.
   } else {
     // Handle custom push notifications
-    print("message data: ${message.data}");
+    debugPrint("message data: ${message.data}");
     AwesomeNotifications().createNotificationFromJsonData(message.data);
   }
 }

@@ -41,7 +41,7 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
     // OAuth request authorization to data
     bool accessWasGranted = await health.requestAuthorization(types);
     if (!accessWasGranted) {
-      print("Authorization not granted");
+      debugPrint("Authorization not granted");
       setState(() => _state = AppState.DATA_NOT_FETCHED);
 
       return;
@@ -60,7 +60,7 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
       // Filter out duplicates
       _healthDataList = HealthFactory.removeDuplicates(_healthDataList);
       for (var h in _healthDataList) {
-        print("${h.typeString}: ${h.value} [${h.unitString}]");
+        debugPrint("${h.typeString}: ${h.value} [${h.unitString}]");
       }
 
       Navigator.of(context, rootNavigator: true).pop(OnboardingStepReturn(
@@ -70,7 +70,7 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
         },
       ));
     } catch (e) {
-      print("Caught exception in getHealthDataFromTypes: $e");
+      debugPrint("Caught exception in getHealthDataFromTypes: $e");
     }
   }
 

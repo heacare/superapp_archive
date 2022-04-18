@@ -97,7 +97,7 @@ class BasePage extends StatelessWidget {
                                   onPressed: () {
                                     Widget prev = prevPage!();
                                     String? s = sleep.rlookup(prev.runtimeType);
-                                    print(s);
+                                    debugPrint(s);
                                     if (s != null) {
                                       serviceLocator<SharedPreferences>()
                                           .setString('sleep', s);
@@ -128,7 +128,7 @@ class BasePage extends StatelessWidget {
               onPressed: () {
                 Widget next = nextPage!();
                 String? s = sleep.rlookup(next.runtimeType);
-                print(s);
+                debugPrint(s);
                 if (s != null) {
                   serviceLocator<SharedPreferences>().setString('sleep', s);
                 }

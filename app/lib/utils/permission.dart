@@ -14,7 +14,7 @@ class PermissionUtils {
     permission.request().then((status) {
       var allPermissionGranted = true;
 
-      print(status.toString());
+      debugPrint(status.toString());
 
       allPermissionGranted =
           allPermissionGranted && (status == PermissionStatus.granted);
