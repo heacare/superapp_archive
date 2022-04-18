@@ -16,16 +16,28 @@
 default_platform(:ios)
 
 platform :ios do
-  desc "Synchronise code-signing certificates for development"
-  lane :development_sync do
-    ensure_git_status_clean unless ENV['FL_NO_ENSURE_CLEAN']
-    register_devices(devices_file: "fastlane/devices.txt")
-    match(type: "development")
-  end
-
   desc "Pull code-signing certificates for development"
   lane :development_pull do
     match(type: "development", readonly: true)
+  end
+
+  desc "Synchronise all code-signing certificates. Useful when entitlements have changed"
+  lane :cs_sync do
+    development_sync
+    appstore_sync
+  end
+
+  desc "Synchronise code-signing certificates for development. Useful when devices have changed"
+  lane :development_sync do
+    ensure_git_status_clean unless ENV['FL_NO_ENSURE_CLEAN']
+    register_devices(devices_file: "fastlane/devices.txt")
+    match(type: "development", force_for_new_devices: true)
+  end
+
+  desc "Synchronise code-signing certificates for App Store"
+  lane :appstore_sync do
+    ensure_git_status_clean unless ENV['FL_NO_ENSURE_CLEAN']
+    match(type: "appstore")
   end
 
   desc "Push a new beta build to TestFlight"

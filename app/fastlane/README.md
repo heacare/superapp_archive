@@ -15,14 +15,6 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ## iOS
 
-### ios development_sync
-
-```sh
-[bundle exec] fastlane ios development_sync
-```
-
-Synchronise code-signing certificates for development
-
 ### ios development_pull
 
 ```sh
@@ -30,6 +22,30 @@ Synchronise code-signing certificates for development
 ```
 
 Pull code-signing certificates for development
+
+### ios cs_sync
+
+```sh
+[bundle exec] fastlane ios cs_sync
+```
+
+Synchronise all code-signing certificates. Useful when entitlements have changed
+
+### ios development_sync
+
+```sh
+[bundle exec] fastlane ios development_sync
+```
+
+Synchronise code-signing certificates for development. Useful when devices have changed
+
+### ios appstore_sync
+
+```sh
+[bundle exec] fastlane ios appstore_sync
+```
+
+Synchronise code-signing certificates for App Store
 
 ### ios beta
 
