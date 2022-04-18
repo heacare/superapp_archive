@@ -1,9 +1,17 @@
 import 'dart:math';
 
-import 'package:flutter/material.dart' show Color;
-import 'package:flutter/foundation.dart' show debugPrint;
+import 'package:flutter/material.dart'
+    show Color, BuildContext, Navigator, MaterialPageRoute;
+import 'package:flutter/foundation.dart' show debugPrint, kDebugMode;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:hea/services/service_locator.dart';
+import 'package:hea/services/logging_service.dart';
+import 'package:hea/widgets/page.dart';
+
+import 'package:hea/pages/sleep/lookup.dart';
 
 class NotificationService {
   final AwesomeNotifications notifications;
@@ -11,44 +19,89 @@ class NotificationService {
 
   NotificationService({required this.notifications, required this.messaging});
 
-  Future<void> showReminder(int id, String channelKey, String title,
-      String body, String payload) async {
-    AwesomeNotifications().createNotification(
-        content: NotificationContent(
-      id: id,
-      channelKey: channelKey,
-      category: NotificationCategory.Reminder,
-      title: title,
-      body: body,
-      payload: {"reminder": payload},
-      notificationLayout: NotificationLayout.BigText,
-    ));
+  Future<void> cancelAllSchedules() async {
+    notifications.cancelAllSchedules();
   }
 
-  Future<void> showDemoContentReminder(
-      int id, String channelKey, String title, String body) async {
-    AwesomeNotifications().createNotification(
+  Future<void> showContentReminder(
+    int id,
+    String channelKey,
+    String title,
+    String body, {
+    String action = "Continue",
+    Map<String, String>? payload,
+    String remindAction = "Remind later",
+    int minHoursLater = 0,
+  }) async {
+    NotificationSchedule? schedule;
+    if (minHoursLater > 0) {
+      DateTime later = DateTime.now().add(Duration(hours: minHoursLater));
+      if (later.hour < 7) {
+        // Ensure arrives after 7am
+        later = DateTime(later.year, later.month, later.day, 8);
+      } else if (later.hour >= 22) {
+        later = later.add(const Duration(days: 1));
+        later = DateTime(later.year, later.month, later.day, 8);
+      }
+      schedule = NotificationCalendar(
+          era: 1,
+          year: later.year,
+          month: later.month,
+          day: later.day,
+          hour: later.hour);
+      if (kDebugMode) {
+        later = DateTime.now().add(Duration(minutes: minHoursLater));
+        schedule = NotificationCalendar(
+            era: 1,
+            year: later.year,
+            month: later.month,
+            day: later.day,
+            hour: later.hour,
+            minute: later.minute);
+      }
+    }
+    notifications.createNotification(
+        schedule: schedule,
         content: NotificationContent(
           id: id,
           channelKey: channelKey,
           category: NotificationCategory.Reminder,
           title: title,
           body: body,
-          payload: {},
+          payload: payload,
           notificationLayout: NotificationLayout.BigText,
         ),
         actionButtons: [
           NotificationActionButton(
             buttonType: ActionButtonType.Default,
             key: "continue",
-            label: "Continue",
+            label: action,
           ),
           NotificationActionButton(
             buttonType: ActionButtonType.KeepOnTop,
-            key: "remind-tomorrow-morning",
-            label: "Remind me tomorrow",
+            key: "remind-later",
+            label: remindAction,
           ),
         ]);
+  }
+
+  BuildContext? context;
+
+  Future<void> _recieved(ReceivedNotification receivedNotification) async {
+    debugPrint("${receivedNotification.id}");
+    if (receivedNotification is ReceivedAction) {
+      debugPrint(receivedNotification.buttonKeyPressed);
+    }
+    String? s = serviceLocator<SharedPreferences>().getString('sleep');
+    PageBuilder resume = sleep.lookup(s);
+    serviceLocator<LoggingService>().createLog('notification-navigate', s);
+    Navigator.of(context!)
+        .push(MaterialPageRoute(builder: (context) => resume()));
+  }
+
+  void listen(BuildContext context) {
+    this.context = context;
+    notifications.actionStream.listen(_recieved);
   }
 
   Future<void> showPreferences() async {
@@ -105,9 +158,9 @@ class NotificationService {
     // Debug: Print token
     debugPrint(await service.messaging.getToken());
     // For now, request notifications on start up
-    bool allowed = await AwesomeNotifications().isNotificationAllowed();
+    bool allowed = await notifications.isNotificationAllowed();
     if (!allowed) {
-      await AwesomeNotifications().requestPermissionToSendNotifications();
+      await notifications.requestPermissionToSendNotifications();
     }
     return service;
   }
@@ -120,12 +173,10 @@ class NotificationService {
         !AwesomeStringUtils.isNullOrEmpty(message.notification?.body,
             considerWhiteSpaceAsEmpty: true)) {
       // Firebase does not create notifications when the application is in the foreground.
-
       String? imageUrl;
       imageUrl ??= message.notification!.android?.imageUrl;
       imageUrl ??= message.notification!.apple?.imageUrl;
-
-      AwesomeNotifications().createNotification(
+      notifications.createNotification(
           content: NotificationContent(
               id: Random().nextInt(2147483647),
               channelKey:
@@ -139,7 +190,7 @@ class NotificationService {
     } else {
       // Handle custom push notifications
       debugPrint("message data: ${message.data}");
-      AwesomeNotifications().createNotificationFromJsonData(message.data);
+      notifications.createNotificationFromJsonData(message.data);
     }
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hea/utils/sleep_notifications.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -58,6 +59,7 @@ class BasePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    scheduleSleepNotifications();
     return Scaffold(
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(154),
@@ -110,6 +112,7 @@ class BasePage extends StatelessWidget {
                                         MaterialPageRoute<void>(
                                       builder: (BuildContext context) => prev,
                                     ));
+                                    scheduleSleepNotifications();
                                   })),
                       ])))),
       body: SingleChildScrollView(

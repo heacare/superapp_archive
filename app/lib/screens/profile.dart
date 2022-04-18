@@ -75,18 +75,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  Future<void> triggerDemoNotification() async {
-    await serviceLocator<NotificationService>().showReminder(
-        0,
-        "sleep_reminders",
-        "Time to wind down",
-        "Remember to _____ today",
-        "wind-down");
-    await serviceLocator<NotificationService>().showDemoContentReminder(
+  Future<void> scheduleDemoNotification() async {
+    await serviceLocator<NotificationService>().showContentReminder(
         1,
         "sleep_content",
         "Hop right in",
-        "Hi <name>! To get started, tell us how you'll be getting your sleep and health data");
+        "Hi {name}! To get started, tell us how you'll be getting your sleep and health data",
+        minHoursLater: 6);
   }
 
   @override
@@ -150,8 +145,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       onPressed: sendPastHealthData),
                   const SizedBox(height: 8.0),
                   GradientButton(
-                      text: "Trigger Demo Notification",
-                      onPressed: triggerDemoNotification)
+                      text: "Schedule Demo Notification",
+                      onPressed: scheduleDemoNotification)
                 ])));
   }
 }

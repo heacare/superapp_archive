@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
-import 'package:hea/services/logging_service.dart';
 import 'firebase_options.dart';
 
 import 'package:hea/screens/error.dart';
@@ -11,6 +10,9 @@ import 'package:hea/screens/onboarding.dart';
 import 'package:hea/services/auth_service.dart';
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/services/user_service.dart';
+import 'package:hea/services/logging_service.dart';
+import 'package:hea/services/notification_service.dart';
+import 'package:hea/utils/sleep_notifications.dart';
 import 'package:hea/utils/kv_wrap.dart';
 
 void main() async {
@@ -208,12 +210,12 @@ class _AppState extends State<App> {
                 theme: _getThemeData(),
                 // TODO design a loading page and a 'error' page
                 // Match Firebase initialization result
-                home: AnnotatedRegion<SystemUiOverlayStyle>(
+                home: NotificationHandler(AnnotatedRegion<SystemUiOverlayStyle>(
                     value: SystemUiOverlayStyle.dark.copyWith(
                       systemNavigationBarColor: Color(0xFFFFFFFF),
                       systemNavigationBarIconBrightness: Brightness.dark,
                     ),
-                    child: mainScreen(snapshot)));
+                    child: mainScreen(snapshot))));
           },
         ));
   }
@@ -259,4 +261,16 @@ class _RestartInheritedWidget extends InheritedWidget {
   bool updateShouldNotify(_RestartInheritedWidget old) {
     return false;
   }
+}
+
+class NotificationHandler extends StatelessWidget {
+	final Widget child;
+   NotificationHandler(this.child, {Key? key}) : super(key: key);
+
+@override
+Widget build(BuildContext context) {
+        serviceLocator<NotificationService>().listen(context);
+        scheduleSleepNotifications();
+		return child;
+		}
 }
