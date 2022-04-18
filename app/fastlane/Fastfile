@@ -16,12 +16,21 @@
 default_platform(:ios)
 
 platform :ios do
-  before_all do
-     ensure_git_status_clean unless ENV['FL_NO_ENSURE_CLEAN']
+  desc "Synchronise code-signing certificates for development"
+  lane :development_sync do
+    ensure_git_status_clean unless ENV['FL_NO_ENSURE_CLEAN']
+    register_devices(devices_file: "fastlane/devices.txt")
+    match(type: "development")
+  end
+
+  desc "Pull code-signing certificates for development"
+  lane :development_pull do
+    match(type: "development", readonly: true)
   end
 
   desc "Push a new beta build to TestFlight"
   lane :beta do
+    ensure_git_status_clean unless ENV['FL_NO_ENSURE_CLEAN']
     setup_ci if is_ci
     match(type: "appstore", readonly: true)
     sh("flutter", "clean")
@@ -43,12 +52,9 @@ platform :ios do
 end
 
 platform :android do
-  before_all do
-     ensure_git_status_clean unless ENV['FL_NO_ENSURE_CLEAN']
-  end
-
   desc "Push a new beta build to Firebase"
   lane :beta do
+    ensure_git_status_clean unless ENV['FL_NO_ENSURE_CLEAN']
     sh("flutter", "clean")
     sh("flutter", "build", "apk", "--release")
     firebase_app_distribution(

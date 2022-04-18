@@ -77,24 +77,29 @@ cd hea/app
 If you're working on iOS, run the following to obtain the code-signing certificates:
 
 ```
-bundle exec fastlane match development --readonly
+bundle exec fastlane development_pull
 ```
 
-Then, see the section on [Google Maps and Google Fit](#google-maps-and-google-fit)
+If you're working on Android, ask Ambrose for the debug keystore file. See the section on [Google Maps and Google Fit](#google-maps-and-google-fit) for more details.
 
 ### Running
 
 ```
 flutter run
+flutter run --device-id DEVICE_ID
+# For a list of devices
+flutter devices
 ```
 
 ### Managing code-signing certificates
 
-To create new certificates or profiles, use the `match` command line:
+To synchronise the list of development devices, run:
 
 ```
-fastlane match development
+bundle exec fastlane development_sync
 ```
+
+For other operations, see the [documentation](https://docs.fastlane.tools/actions/match/) for the `match` command-line tool.
 
 ### Configuring Firebase
 
@@ -113,11 +118,10 @@ You only need to do this to change the Firebase project
 
 ### Google Maps and Google Fit
 
-Ambrose holds the shared debug keystore file. Sharing the keystore file allows us to use the same API key for development.
-
 Current API keys:
 - Google Fit
-  - Relies on the app's certificate, so the debug keystore file needs to be shared
+  - Relies on the app's certificate, so the debug keystore SHA-1 needs to be [registered in CGP](https://console.cloud.google.com/apis/credentials?project=happily-ever-after-4b2fe)
+  - Ambrose owns an already-registered debug keystore file.
 - Google Maps (Ambrose's private project)
   - Eventually need to be replaced with an official release API key in the project and add security measures
 
