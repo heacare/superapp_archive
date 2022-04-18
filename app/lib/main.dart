@@ -264,13 +264,13 @@ class _RestartInheritedWidget extends InheritedWidget {
 }
 
 class NotificationHandler extends StatelessWidget {
-	final Widget child;
-   NotificationHandler(this.child, {Key? key}) : super(key: key);
+  final Widget child;
+  NotificationHandler(this.child, {Key? key}) : super(key: key);
 
-@override
-Widget build(BuildContext context) {
-        serviceLocator<NotificationService>().listen(context);
-        scheduleSleepNotifications();
-		return child;
-		}
+  @override
+  Widget build(BuildContext context) {
+    serviceLocator<NotificationService>().listen(context);
+    scheduleSleepNotifications();
+    return child;
+  }
 }
