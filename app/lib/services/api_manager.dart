@@ -66,6 +66,6 @@ class ApiManager {
 
   Uri _buildUri(String endpoint, {Map<String, String>? queryParams}) {
     // TODO: HTTPS?
-    return Uri.http(apiBaseUrl, endpoint, queryParams);
+    return Uri.https(apiBaseUrl, endpoint, queryParams);
   }
 }
