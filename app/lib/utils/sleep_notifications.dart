@@ -44,7 +44,5 @@ Future<void> scheduleSleepNotifications() async {
         "Sleep quality check",
         "We miss you ☹️. Do you need some help? Feel free to contact us directly",
         minHoursLater: firstReminder + nextReminder * 2);
-  } else {
-    // Cancel
   }
 }

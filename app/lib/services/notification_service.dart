@@ -30,7 +30,7 @@ class NotificationService {
     String body, {
     String action = "Continue",
     Map<String, String>? payload,
-    String remindAction = "Remind later",
+    String remindAction = "Remind me later",
     int minHoursLater = 0,
   }) async {
     NotificationSchedule? schedule;
@@ -99,9 +99,13 @@ class NotificationService {
         .push(MaterialPageRoute(builder: (context) => resume()));
   }
 
-  void listen(BuildContext context) {
+  bool actionStreamAttached = false;
+  void ensureListen(BuildContext context) {
     this.context = context;
-    notifications.actionStream.listen(_recieved);
+    if (!actionStreamAttached) {
+      notifications.actionStream.listen(_recieved);
+      actionStreamAttached = true;
+    }
   }
 
   Future<void> showPreferences() async {

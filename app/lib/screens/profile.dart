@@ -81,7 +81,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         "sleep_content",
         "Hop right in",
         "Hi {name}! To get started, tell us how you'll be getting your sleep and health data",
-        minHoursLater: 6);
+        minHoursLater: 1);
   }
 
   @override

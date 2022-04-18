@@ -210,12 +210,14 @@ class _AppState extends State<App> {
                 theme: _getThemeData(),
                 // TODO design a loading page and a 'error' page
                 // Match Firebase initialization result
-                home: NotificationHandler(AnnotatedRegion<SystemUiOverlayStyle>(
-                    value: SystemUiOverlayStyle.dark.copyWith(
-                      systemNavigationBarColor: Color(0xFFFFFFFF),
-                      systemNavigationBarIconBrightness: Brightness.dark,
-                    ),
-                    child: mainScreen(snapshot))));
+                home: NotificationHandler(
+                    snapshot.connectionState == ConnectionState.done,
+                    AnnotatedRegion<SystemUiOverlayStyle>(
+                        value: SystemUiOverlayStyle.dark.copyWith(
+                          systemNavigationBarColor: Color(0xFFFFFFFF),
+                          systemNavigationBarIconBrightness: Brightness.dark,
+                        ),
+                        child: mainScreen(snapshot))));
           },
         ));
   }
@@ -264,13 +266,16 @@ class _RestartInheritedWidget extends InheritedWidget {
 }
 
 class NotificationHandler extends StatelessWidget {
+  final bool ready;
   final Widget child;
-  NotificationHandler(this.child, {Key? key}) : super(key: key);
+  NotificationHandler(this.ready, this.child, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    serviceLocator<NotificationService>().listen(context);
-    scheduleSleepNotifications();
+    if (ready) {
+      serviceLocator<NotificationService>().ensureListen(context);
+      scheduleSleepNotifications();
+    }
     return child;
   }
 }
