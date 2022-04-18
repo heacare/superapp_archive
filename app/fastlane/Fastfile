@@ -22,6 +22,7 @@ platform :ios do
 
   desc "Push a new beta build to TestFlight"
   lane :beta do
+    setup_ci if is_ci
     match(type: "appstore", readonly: true)
     sh("flutter", "clean")
     sh("flutter", "build", "ios", "--release", "--no-codesign")
