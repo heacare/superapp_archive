@@ -52,8 +52,6 @@ class _AppState extends State<App> {
     });
   }
 
-  final Future<FirebaseApp> _firebaseInit = Firebase.initializeApp();
-
   ThemeData _getThemeData() {
     const primaryColor = Color(0xFFE54A39);
     const accentColor = Color(0xFFEF9F2F);
@@ -179,7 +177,7 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    final Future<UserStatus> hasUserData = _firebaseInit.then((value) async {
+    getUserData() async {
       await serviceLocator.allReady();
 
       // Authentication user exists separately from user data, so we have to check for the case where
@@ -197,8 +195,9 @@ class _AppState extends State<App> {
             ? UserStatus.onboarded
             : UserStatus.registered;
       }
-    });
+    }
 
+    final Future<UserStatus> hasUserData = getUserData();
     return _RestartInheritedWidget(
         key: _key,
         data: this,
