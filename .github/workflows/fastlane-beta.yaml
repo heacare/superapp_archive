@@ -7,6 +7,8 @@ on:
 defaults:
   run:
     working-directory: hea/app
+env:
+  FLUTTER_VERSION: 2.10
 
 jobs:
 
@@ -15,11 +17,17 @@ jobs:
     steps:
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '2.10'
+          flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: 'stable'
       - uses: actions/checkout@v2
         with:
           path: hea
+      - uses: actions/cache@v3
+        with:
+          path: ${{ env.PUB_CACHE }}
+          key: ${{ runner.os }}-flutter-${{ hashFiles('hea/app/**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-flutter-
       - uses: actions/cache@v3
         with:
           path: hea/app/ios/Pods
@@ -55,11 +63,17 @@ jobs:
     steps:
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '2.10'
+          flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: 'stable'
       - uses: actions/checkout@v2
         with:
           path: hea
+      - uses: actions/cache@v3
+        with:
+          path: ${{ env.PUB_CACHE }}
+          key: ${{ runner.os }}-flutter-${{ hashFiles('hea/app/**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-flutter-
       - uses: actions/checkout@v2
         with:
           repository: happilyeveraftercorp/code-signing

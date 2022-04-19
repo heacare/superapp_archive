@@ -73,7 +73,8 @@ platform :ios do
       api_key: api_key,
       app_platform: 'ios',
       distribute_only: true,
-      changelog: "We don't have changelogs yet",
+      # The API key does not allow setting changelogs
+      #changelog: "We don't have changelogs yet",
     )
   end
 end
@@ -88,7 +89,7 @@ platform :android do
       app: "1:825250749124:android:721cb5ab745db555090791",
       android_artifact_path: "build/app/outputs/flutter-apk/app-release.apk",
       groups: "automatic",
-      release_notes: "We don't have release notes yet",
+      #release_notes: "",
     )
   end
 

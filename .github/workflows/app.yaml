@@ -1,0 +1,32 @@
+name: fastlane-beta
+
+on:
+  push:
+
+defaults:
+  run:
+    working-directory: hea/app
+env:
+  FLUTTER_VERSION: 2.10
+
+jobs:
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: 'stable'
+      - name: Set up problem matcher
+        run: echo "::add-matcher::.github/matcher-flutter.json"
+      - uses: actions/checkout@v2
+        with:
+          path: hea
+      - uses: actions/cache@v3
+        with:
+          path: ${{ env.PUB_CACHE }}
+          key: ${{ runner.os }}-flutter-${{ hashFiles('hea/app/**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-flutter-
+      - run: flutter analyze
