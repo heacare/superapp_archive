@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:hea/models/user.dart';
+import 'package:hea/models/onboarding_types.dart';
 import 'package:hea/models/content/module.dart';
 import 'package:hea/services/content_service.dart';
 import 'package:hea/services/service_locator.dart';
@@ -34,7 +35,7 @@ class DashboardPage extends StatelessWidget {
   final double optYears;
   final double socScore;
 
-  DashboardPage(
+  const DashboardPage(
       {Key? key,
       required this.expYears,
       required this.optYears,
@@ -45,10 +46,11 @@ class DashboardPage extends StatelessWidget {
   factory DashboardPage.fromUser(User user) {
     Random random = Random((user.height + user.age).round());
     // Wow imagine only considering two genders in 2021, omg cancelled
-    double expYears =
-        user.gender == "Male" ? 72.4 : 74.6 + (3.5 * random.nextDouble()) - 5;
+    double expYears = user.gender == Gender.Male
+        ? 72.4
+        : 74.6 + (3.5 * random.nextDouble()) - 5;
     double optYears =
-        user.gender == "Male" ? 87 : 92 + (2.5 * random.nextDouble()) - 2;
+        user.gender == Gender.Male ? 87 : 92 + (2.5 * random.nextDouble()) - 2;
     double socScore = random.nextInt(21) + 5.0;
     return DashboardPage(
         expYears: expYears, optYears: optYears, socScore: socScore);
@@ -66,15 +68,15 @@ class DashboardPage extends StatelessWidget {
         return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisSize: MainAxisSize.min,
-            children: [
+            children: const [
               ModuleListItem(
                   title: "Sleep and Recovery",
                   description:
                       "Learn about the benefits and howtos of a good night of sleep",
-                  gradient1: const Color(0xFF00ABE9),
-                  gradient2: const Color(0xFF7FDDFF),
+                  gradient1: Color(0xFF00ABE9),
+                  gradient2: Color(0xFF7FDDFF),
                   icon: FontAwesomeIcons.solidMoon),
-              const SizedBox(height: 10.0),
+              SizedBox(height: 10.0),
               /*
               ModuleListItem(
                   title: "Mental Hygiene",
@@ -114,7 +116,7 @@ class DashboardPage extends StatelessWidget {
                                     style:
                                         Theme.of(context).textTheme.headline4),
                               ])),
-                          AvatarIcon(),
+                          const AvatarIcon(),
                         ])))),
         body: Container(
           padding: const EdgeInsets.symmetric(horizontal: 30.0),
@@ -144,7 +146,7 @@ class UpcomingEvent extends StatelessWidget {
   final String provider;
   final DateTime time;
 
-  UpcomingEvent(
+  const UpcomingEvent(
       {Key? key,
       required this.title,
       required this.provider,
@@ -175,14 +177,14 @@ class UpcomingEvent extends StatelessWidget {
       ),
       child: Row(children: <Widget>[
         Container(
-            margin: EdgeInsets.only(right: 15.0),
+            margin: const EdgeInsets.only(right: 15.0),
             height: 50,
             width: 50,
             decoration: const BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(16.0)),
               color: Color(0x0F000000),
             ),
-            child: Center(
+            child: const Center(
                 child:
                     FaIcon(FontAwesomeIcons.solidHeart, color: Colors.white))),
         Expanded(
@@ -213,7 +215,7 @@ class DeathClock extends StatelessWidget {
   final double max = 100;
   final double min = 0;
 
-  DeathClock(
+  const DeathClock(
       {Key? key,
       required this.lifeScore,
       required this.sleepScore,
@@ -339,7 +341,7 @@ class ModuleListItem extends StatelessWidget {
   final Color gradient2;
   final IconData icon;
 
-  ModuleListItem(
+  const ModuleListItem(
       {Key? key,
       required this.title,
       required this.description,
@@ -392,7 +394,7 @@ class ModuleListItem extends StatelessWidget {
                         style: Theme.of(context)
                             .textTheme
                             .bodyText2
-                            ?.copyWith(color: Color(0xFF707070)))
+                            ?.copyWith(color: const Color(0xFF707070)))
                   ])),
             ])));
   }

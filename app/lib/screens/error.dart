@@ -17,7 +17,7 @@ class ErrorScreen extends StatelessWidget {
 
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) {
-      return LoginScreen();
+      return const LoginScreen();
     }), (route) => false);
   }
 

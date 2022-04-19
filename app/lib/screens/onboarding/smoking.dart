@@ -24,7 +24,7 @@ final List<SelectListItem<SmokingPacks>> choices = [
 // ];
 
 class OnboardingSmokingScreen extends StatefulWidget {
-  OnboardingSmokingScreen({Key? key}) : super(key: key);
+  const OnboardingSmokingScreen({Key? key}) : super(key: key);
 
   @override
   State<OnboardingSmokingScreen> createState() =>
@@ -36,19 +36,19 @@ class OnboardingSmokingScreenState extends State<OnboardingSmokingScreen> {
   final _smokeYears = TextEditingController();
 
   bool smokes = false;
-  bool past_smokes = false;
+  bool pastSmokes = false;
   SmokingPacks packs = choices[0].value;
 
   _validateEntries() {
     Map<String, dynamic> res = <String, dynamic>{
-      "isSmoker": smokes || past_smokes,
+      "isSmoker": smokes || pastSmokes,
     };
 
-    if (past_smokes) {
-      res["smokingYears"] = past_smokes;
+    if (pastSmokes) {
+      res["smokingYears"] = pastSmokes;
     }
 
-    if (smokes || past_smokes) {
+    if (smokes || pastSmokes) {
       res["smokingPacksPerDay"] = describeEnum(packs);
 
       if (_smokeYears.text == "") {
@@ -93,20 +93,20 @@ class OnboardingSmokingScreenState extends State<OnboardingSmokingScreen> {
                 style: Theme.of(context).textTheme.headline2?.copyWith(
                     fontWeight: FontWeight.w400,
                     height: 1.4,
-                    color: Color(0xFF414141))),
+                    color: const Color(0xFF414141))),
             padding: const EdgeInsets.symmetric(vertical: 16.0)),
         SwitchButton(
-          selected: past_smokes,
+          selected: pastSmokes,
           onChange: (bool selected) {
             setState(() {
-              past_smokes = selected;
+              pastSmokes = selected;
             });
           },
         ),
       ]);
     }
 
-    if (smokes || past_smokes) {
+    if (smokes || pastSmokes) {
       children.addAll([
         const SizedBox(height: 24.0),
         Padding(
@@ -114,7 +114,7 @@ class OnboardingSmokingScreenState extends State<OnboardingSmokingScreen> {
                 style: Theme.of(context).textTheme.headline2?.copyWith(
                     fontWeight: FontWeight.w400,
                     height: 1.4,
-                    color: Color(0xFF414141))),
+                    color: const Color(0xFF414141))),
             padding: const EdgeInsets.symmetric(vertical: 16.0)),
         SelectList(
           items: choices,
@@ -130,7 +130,7 @@ class OnboardingSmokingScreenState extends State<OnboardingSmokingScreen> {
                 style: Theme.of(context).textTheme.headline2?.copyWith(
                     fontWeight: FontWeight.w400,
                     height: 1.4,
-                    color: Color(0xFF414141))),
+                    color: const Color(0xFF414141))),
             padding: const EdgeInsets.symmetric(vertical: 16.0)),
         TextFormField(
             controller: _smokeYears,

@@ -53,7 +53,7 @@ class SwitchButtonState extends State<SwitchButton> {
           Theme.of(context).colorScheme.primary
         ],
       ),
-      borderRadius: BorderRadius.all(
+      borderRadius: const BorderRadius.all(
         Radius.circular(15.0),
       ),
     );
@@ -63,13 +63,13 @@ class SwitchButtonState extends State<SwitchButton> {
       height: height,
       decoration: BoxDecoration(
         color: Colors.grey[200],
-        borderRadius: BorderRadius.all(Radius.circular(15.0)),
+        borderRadius: const BorderRadius.all(Radius.circular(15.0)),
       ),
       child: Stack(
         children: [
           AnimatedAlign(
             alignment: Alignment(xAlign, 0),
-            duration: Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 300),
             child: Container(
               width: width * 0.5,
               height: height,
@@ -84,7 +84,7 @@ class SwitchButtonState extends State<SwitchButton> {
               });
             },
             child: Align(
-              alignment: Alignment(-1, 0),
+              alignment: const Alignment(-1, 0),
               child: Container(
                 width: width * 0.5,
                 color: Colors.transparent,
@@ -108,7 +108,7 @@ class SwitchButtonState extends State<SwitchButton> {
               });
             },
             child: Align(
-              alignment: Alignment(1, 0),
+              alignment: const Alignment(1, 0),
               child: Container(
                 width: width * 0.5,
                 color: Colors.transparent,

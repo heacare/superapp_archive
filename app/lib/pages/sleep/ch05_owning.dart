@@ -80,6 +80,8 @@ Select the appropriate habits that happen under each time section accordingly. I
   @override
   final maxChoice = 0;
   @override
+  final minSelected = 1;
+  @override
   final valueName = "routine-60m";
   @override
   final List<SelectListItem<String>> choices = activityChoices;
@@ -110,6 +112,8 @@ Select the appropriate habits that happen under each time section accordingly. I
   @override
   final maxChoice = 0;
   @override
+  final minSelected = 1;
+  @override
   final valueName = "routine-30m";
   @override
   final List<SelectListItem<String>> choices = activityChoices;
@@ -139,6 +143,8 @@ Select the appropriate habits that happen under each time section accordingly. I
 
   @override
   final maxChoice = 0;
+  @override
+  final minSelected = 1;
   @override
   final valueName = "routine-15m";
   @override

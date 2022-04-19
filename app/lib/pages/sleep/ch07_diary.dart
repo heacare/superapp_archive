@@ -26,7 +26,7 @@ To help build consistency, missing a day or two with your diary will bring you b
 """;
 
   @override
-  final defaultTime = TimeOfDay(hour: 9, minute: 00);
+  final defaultTime = const TimeOfDay(hour: 9, minute: 00);
   @override
   final valueName = "diary-reminder-times";
 }

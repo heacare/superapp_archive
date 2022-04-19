@@ -70,7 +70,7 @@ class _AppState extends State<App> {
       for (int i = 1; i < 10; i++) {
         strengths.add(0.1 * i);
       }
-      strengths.forEach((strength) {
+      for (var strength in strengths) {
         final double ds = 0.5 - strength;
         swatch[(strength * 1000).round()] = Color.fromRGBO(
           r + ((ds < 0 ? r : (255 - r)) * ds).round(),
@@ -78,7 +78,7 @@ class _AppState extends State<App> {
           b + ((ds < 0 ? b : (255 - b)) * ds).round(),
           1,
         );
-      });
+      }
       return MaterialColor(color.value, swatch);
     }
 
@@ -213,7 +213,7 @@ class _AppState extends State<App> {
                     snapshot.connectionState == ConnectionState.done,
                     AnnotatedRegion<SystemUiOverlayStyle>(
                         value: SystemUiOverlayStyle.dark.copyWith(
-                          systemNavigationBarColor: Color(0xFFFFFFFF),
+                          systemNavigationBarColor: const Color(0xFFFFFFFF),
                           systemNavigationBarIconBrightness: Brightness.dark,
                         ),
                         child: mainScreen(snapshot))));
@@ -234,7 +234,7 @@ class _AppState extends State<App> {
     if (snapshot.hasData) {
       switch (snapshot.requireData) {
         case UserStatus.signedOut:
-          return LoginScreen();
+          return const LoginScreen();
 
         case UserStatus.registered:
           return const OnboardingScreen();
@@ -252,7 +252,7 @@ class _AppState extends State<App> {
 class _RestartInheritedWidget extends InheritedWidget {
   final _AppState data;
 
-  _RestartInheritedWidget({
+  const _RestartInheritedWidget({
     required Key key,
     required this.data,
     required Widget child,
@@ -267,7 +267,8 @@ class _RestartInheritedWidget extends InheritedWidget {
 class NotificationHandler extends StatelessWidget {
   final bool ready;
   final Widget child;
-  NotificationHandler(this.ready, this.child, {Key? key}) : super(key: key);
+  const NotificationHandler(this.ready, this.child, {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

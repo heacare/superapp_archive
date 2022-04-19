@@ -31,6 +31,8 @@ I'd like to:
   @override
   final maxChoice = 0;
   @override
+  final minSelected = 1;
+  @override
   final valueName = "sleep-goals";
   @override
   final List<SelectListItem<String>> choices = [
@@ -71,6 +73,8 @@ When it is time to sleep, I
 
   @override
   final maxChoice = 0;
+  @override
+  final minSelected = 1;
   @override
   final valueName = "time-to-sleep";
   @override
@@ -122,6 +126,8 @@ What do you usually end up doing instead of going to bed?
 
   @override
   final maxChoice = 0;
+  @override
+  final minSelected = 1;
   @override
   final valueName = "doing-before-bed";
   @override
@@ -179,7 +185,7 @@ class GoalsEmbraceAndManifest extends Page {
 
   Widget buildLine(BuildContext context, String valueName, String prefix) {
     return Container(
-        padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 0.0),
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0.0),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
             prefix + "",
@@ -214,22 +220,22 @@ class GoalsEmbraceAndManifest extends Page {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           if (image != null) image!,
-          if (image != null) SizedBox(height: 4.0),
+          if (image != null) const SizedBox(height: 4.0),
           MarkdownBody(
               data: """
 Knowing and accepting where you are is the first step to making change.
 """,
               extensionSet: md.ExtensionSet.gitHubFlavored,
               styleSheet: markdownStyleSheet),
-          SizedBox(height: 4.0),
+          const SizedBox(height: 4.0),
           buildLine(context, "bedtime", "When it is time to go to bed, I"),
-          SizedBox(height: 4.0),
+          const SizedBox(height: 4.0),
           buildLine(context, "bedtime-end-up-doing",
               "Instead of going to bed, I end up"),
-          SizedBox(height: 4.0),
+          const SizedBox(height: 4.0),
           buildLine(context, "would-like-to",
               "To get better sleep from hereon, I would like to"),
-          SizedBox(height: 4.0),
+          const SizedBox(height: 4.0),
         ]);
   }
 }

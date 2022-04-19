@@ -88,7 +88,7 @@ final List<SelectListItem<String>> calmActivityChoices = [
 ];
 
 abstract class RoutineCalmingActivities extends Page {
-  RoutineCalmingActivities({Key? key}) : super(key: key);
+  const RoutineCalmingActivities({Key? key}) : super(key: key);
 
   abstract final Image? image;
   abstract final String markdown;
@@ -127,12 +127,12 @@ abstract class RoutineCalmingActivities extends Page {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           if (image != null) image!,
-          if (image != null) SizedBox(height: 4.0),
+          if (image != null) const SizedBox(height: 4.0),
           MarkdownBody(
               data: markdown,
               extensionSet: md.ExtensionSet.gitHubFlavored,
               styleSheet: markdownStyleSheet),
-          SizedBox(height: 8.0),
+          const SizedBox(height: 8.0),
           Text(
             "I'd like to remove these",
             style: Theme.of(context).textTheme.bodyLarge,
@@ -144,7 +144,7 @@ abstract class RoutineCalmingActivities extends Page {
               onChange: (List<String> c) {
                 kvWrite<List<String>>("sleep", valueNameRemove, c);
               }),
-          SizedBox(height: 8.0),
+          const SizedBox(height: 8.0),
           Text(
             "I'd like to add these",
             style: Theme.of(context).textTheme.bodyLarge,
@@ -300,6 +300,8 @@ You’ll be added into a chat group of up to four people with one of our HEAlers
   @override
   final maxChoice = 1;
   @override
+  final minSelected = 1;
+  @override
   final valueName = "opt-in-group";
   @override
   final List<SelectListItem<String>> choices = [
@@ -377,10 +379,10 @@ class RoutinePledgeState extends State<RoutinePledge> {
       goalsSleepDurationText += " and $goalsSleepDurationMinutes minutes";
     }
     TimeOfDay goalsWakeTime = kvReadTimeOfDay("sleep", "goals-wake-time") ??
-        TimeOfDay(hour: 0, minute: 0);
+        const TimeOfDay(hour: 0, minute: 0);
     String goalsWakeTimeText = goalsWakeTime.format(context);
     TimeOfDay goalsSleepTime = kvReadTimeOfDay("sleep", "goals-sleep-time") ??
-        TimeOfDay(hour: 0, minute: 0);
+        const TimeOfDay(hour: 0, minute: 0);
     String goalsSleepTimeText = goalsSleepTime.format(context);
     List<String> doingBeforeBed = kvReadStringList("sleep", "doing-before-bed");
     String doingBeforeBedText = formatList(doingBeforeBed);
@@ -399,7 +401,7 @@ class RoutinePledgeState extends State<RoutinePledge> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               if (widget.image != null) widget.image!,
-              if (widget.image != null) SizedBox(height: 4.0),
+              if (widget.image != null) const SizedBox(height: 4.0),
               MarkdownBody(
                   data: """
 I'd like to $goalsText
@@ -410,14 +412,14 @@ I've identified $doingBeforeBedText as obstacles from reaching my goals.
 """,
                   extensionSet: md.ExtensionSet.gitHubFlavored,
                   styleSheet: markdownStyleSheet),
-              SizedBox(height: 4.0),
+              const SizedBox(height: 4.0),
               MarkdownBody(
                   data: """
 **To start sleeping better, I am going to commit to doing one of the following over the next 7 days:**
 """,
                   extensionSet: md.ExtensionSet.gitHubFlavored,
                   styleSheet: markdownStyleSheet),
-              SizedBox(height: 4.0),
+              const SizedBox(height: 4.0),
               SelectList(
                   items: selectedActivities,
                   max: 1,
@@ -467,7 +469,7 @@ Noting that you wish to start winding down at least <1 hour / 30 mins / 15 mins>
 """;
 
   @override
-  final defaultTime = TimeOfDay(hour: 22, minute: 00);
+  final defaultTime = const TimeOfDay(hour: 22, minute: 00);
   @override
   final valueName = "routine-reminder-times";
 }

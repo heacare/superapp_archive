@@ -1,29 +1,28 @@
 import 'package:flutter/material.dart';
 
-void doNothing() {}
+doNothing(a) {}
 
 class PillSelect<T> extends StatefulWidget {
-  PillSelect({Key? key, required this.items, this.onChange = doNothing})
+  const PillSelect({Key? key, required this.items, this.onChange = doNothing})
       : super(key: key);
 
-  Map<T, String> items;
-  Function onChange;
+  final Map<T, String> items;
+  final void Function(T) onChange;
 
   @override
-  PillSelectState<T> createState() => PillSelectState<T>(items: items);
+  PillSelectState<T> createState() => PillSelectState<T>();
 }
 
 class PillSelectState<T> extends State<PillSelect<T>> {
-  PillSelectState({required this.items});
+  PillSelectState();
 
-  Map<T, String> items;
+  Map<T, String> items = {};
   T? selected;
 
   @override
   void initState() {
     super.initState();
-
-    selected = null;
+    items = widget.items;
   }
 
   @override
@@ -35,8 +34,9 @@ class PillSelectState<T> extends State<PillSelect<T>> {
             width: 72.0,
             height: 30.0,
             decoration: BoxDecoration(
-              color:
-                  selected == entry.key ? Color(0xFF5FD0F9) : Colors.grey[300],
+              color: selected == entry.key
+                  ? const Color(0xFF5FD0F9)
+                  : Colors.grey[300],
               borderRadius: const BorderRadius.all(Radius.circular(10.0)),
             ),
             child: InkWell(

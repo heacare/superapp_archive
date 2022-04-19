@@ -16,7 +16,7 @@ const int baseId = 100;
 
 Future<void> scheduleSleepNotifications() async {
   String? s = serviceLocator<SharedPreferences>().getString('sleep');
-  Map sleepData = kvDump("sleep");
+  //Map sleepData = kvDump("sleep");
   await serviceLocator<NotificationService>().cancelAllSchedules();
   if (s == "NowFirstThingsFirst" ||
       s == "NowTimeGoneBed" ||
@@ -63,9 +63,9 @@ Future<void> scheduleSleepNotifications() async {
     // Set #3
     // Objective: finish baseline survey <chp 2 pg 4>
     TimeOfDay goBed = kvReadTimeOfDay("sleep", "time-go-bed") ??
-        TimeOfDay(hour: 0, minute: 0);
+        const TimeOfDay(hour: 0, minute: 0);
     TimeOfDay outBed = kvReadTimeOfDay("sleep", "time-out-bed") ??
-        TimeOfDay(hour: 0, minute: 0);
+        const TimeOfDay(hour: 0, minute: 0);
     int bedDuration = ((outBed.minute + outBed.hour * 60) -
             (goBed.minute + goBed.hour * 60)) %
         (24 * 60);
@@ -103,15 +103,10 @@ Future<void> scheduleSleepNotifications() async {
     int sleepLatency =
         ((pointsFallAsleep + howOftenAsleep30Minutes) / 2).ceil();
 
-    int sleepTimeMinutes = kvReadInt("sleep", "minutes-asleep") ?? 0;
-    Duration sleepTime = Duration(minutes: sleepTimeMinutes);
-    String sleepTimeText =
-        "${sleepTime.inHours} hours ${sleepTime.inMinutes.remainder(Duration.minutesPerHour)} minutes";
-
     TimeOfDay goBed = kvReadTimeOfDay("sleep", "time-go-bed") ??
-        TimeOfDay(hour: 0, minute: 0);
+        const TimeOfDay(hour: 0, minute: 0);
     TimeOfDay outBed = kvReadTimeOfDay("sleep", "time-out-bed") ??
-        TimeOfDay(hour: 0, minute: 0);
+        const TimeOfDay(hour: 0, minute: 0);
     int bedDuration = ((outBed.minute + outBed.hour * 60) -
             (goBed.minute + goBed.hour * 60)) %
         (24 * 60);

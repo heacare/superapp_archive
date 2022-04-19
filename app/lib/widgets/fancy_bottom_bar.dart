@@ -41,7 +41,7 @@ class _FancyBottomNavState extends State<FancyBottomNav>
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Stack(overflow: Overflow.visible, children: <Widget>[
+        child: Stack(clipBehavior: Clip.none, children: <Widget>[
       Container(
           child: const SizedBox(width: double.infinity, height: 70),
           decoration: const BoxDecoration(

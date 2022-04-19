@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class NavigableText extends StatelessWidget {
-  final onPressed;
+  final void Function() onPressed;
   final String text;
 
   const NavigableText({Key? key, required this.onPressed, required this.text})

@@ -27,8 +27,7 @@ class HealerServiceImpl implements HealerService {
         await api.get(ApiEndpoint.healerNearby, queryParams: queryParams);
     if (resp.statusCode == 200) {
       List rawHealers = jsonDecode(resp.body)["healers"];
-      return rawHealers.map((healer) => Healer.fromJson(healer)).toList()
-          as List<Healer>;
+      return rawHealers.map((healer) => Healer.fromJson(healer)).toList();
     } else {
       throw ApiManagerException(
           message: "Failure in getNearbyHealer: ${resp.statusCode}");

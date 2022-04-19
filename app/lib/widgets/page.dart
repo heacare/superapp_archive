@@ -71,49 +71,42 @@ class BasePage extends StatelessWidget {
                   child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        Container(
-                            //alignment: AlignmentDirectional.topCenter,
-                            child: IconButton(
-                                iconSize: 38,
-                                icon: FaIcon(FontAwesomeIcons.times,
-                                    color:
-                                        Theme.of(context).colorScheme.primary),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                })),
-                        SizedBox(width: 10.0),
+                        IconButton(
+                            iconSize: 38,
+                            icon: FaIcon(FontAwesomeIcons.times,
+                                color: Theme.of(context).colorScheme.primary),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            }),
+                        const SizedBox(width: 10.0),
                         Expanded(
                             child: Text(title,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 4,
                                 style: Theme.of(context).textTheme.headline2)),
                         if (prevPage != null)
-                          Container(
-                              //alignment: AlignmentDirectional.topCenter,
-                              child: IconButton(
-                                  iconSize: 24,
-                                  icon: FaIcon(FontAwesomeIcons.undo,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary),
-                                  onPressed: () {
-                                    Widget prev = prevPage!();
-                                    String? s = sleep.rlookup(prev.runtimeType);
-                                    debugPrint(s);
-                                    if (s != null) {
-                                      serviceLocator<SharedPreferences>()
-                                          .setString('sleep', s);
-                                    }
-                                    serviceLocator<LoggingService>()
-                                        .createLog('navigate', s);
-                                    serviceLocator<LoggingService>()
-                                        .createLog('sleep', kvDump("sleep"));
-                                    Navigator.of(context).pushReplacement(
-                                        MaterialPageRoute<void>(
-                                      builder: (BuildContext context) => prev,
-                                    ));
-                                    scheduleSleepNotifications();
-                                  })),
+                          IconButton(
+                              iconSize: 24,
+                              icon: FaIcon(FontAwesomeIcons.undo,
+                                  color: Theme.of(context).colorScheme.primary),
+                              onPressed: () {
+                                Widget prev = prevPage!();
+                                String? s = sleep.rlookup(prev.runtimeType);
+                                debugPrint(s);
+                                if (s != null) {
+                                  serviceLocator<SharedPreferences>()
+                                      .setString('sleep', s);
+                                }
+                                serviceLocator<LoggingService>()
+                                    .createLog('navigate', s);
+                                serviceLocator<LoggingService>()
+                                    .createLog('sleep', kvDump("sleep"));
+                                Navigator.of(context)
+                                    .pushReplacement(MaterialPageRoute<void>(
+                                  builder: (BuildContext context) => prev,
+                                ));
+                                scheduleSleepNotifications();
+                              }),
                       ])))),
       body: SingleChildScrollView(
           child: SafeArea(
@@ -121,7 +114,7 @@ class BasePage extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(18.0, 0.0, 18.0, 5.0),
           child: Column(children: [
             page,
-            SizedBox(height: 64.0),
+            const SizedBox(height: 64.0),
           ]),
         ),
       )),
@@ -188,7 +181,7 @@ abstract class MarkdownPage extends Page {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           if (image != null) image!,
-          if (image != null) SizedBox(height: 4.0),
+          if (image != null) const SizedBox(height: 4.0),
           MarkdownBody(
               data: markdown,
               extensionSet: md.ExtensionSet.gitHubFlavored,
@@ -214,13 +207,13 @@ abstract class OpenEndedPage extends Page {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           if (image != null) image!,
-          if (image != null) SizedBox(height: 4.0),
+          if (image != null) const SizedBox(height: 4.0),
           if (markdown != "")
             MarkdownBody(
                 data: markdown,
                 extensionSet: md.ExtensionSet.gitHubFlavored,
                 styleSheet: markdownStyleSheet),
-          if (markdown != "") SizedBox(height: 4.0),
+          if (markdown != "") const SizedBox(height: 4.0),
           TextFormField(
               initialValue: kvRead("sleep", valueName),
               onChanged: (String value) {
@@ -235,7 +228,7 @@ abstract class MultipleChoicePage extends StatefulWidget {
   abstract final Image? image;
 
   abstract final int maxChoice;
-  final int? minSelected = null;
+  abstract final int minSelected;
   abstract final List<SelectListItem<String>> choices;
   abstract final String valueName;
 
@@ -253,8 +246,8 @@ class MultipleChoicePageState extends State<MultipleChoicePage> {
   bool hideNext = false;
 
   bool canNext() {
-    int minLength = widget.minSelected ?? 1;
-    return kvReadStringList("sleep", widget.valueName).length >= minLength;
+    return kvReadStringList("sleep", widget.valueName).length >=
+        widget.minSelected;
   }
 
   @override
@@ -277,13 +270,13 @@ class MultipleChoicePageState extends State<MultipleChoicePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               if (widget.image != null) widget.image!,
-              if (widget.image != null) SizedBox(height: 4.0),
+              if (widget.image != null) const SizedBox(height: 4.0),
               if (widget.markdown != "")
                 MarkdownBody(
                     data: widget.markdown,
                     extensionSet: md.ExtensionSet.gitHubFlavored,
                     styleSheet: markdownStyleSheet),
-              if (widget.markdown != "") SizedBox(height: 4.0),
+              if (widget.markdown != "") const SizedBox(height: 4.0),
               SelectList(
                   items: widget.choices,
                   max: widget.maxChoice,
@@ -301,11 +294,12 @@ class MultipleChoicePageState extends State<MultipleChoicePage> {
 typedef TimePickerBlockOnChange = Function(TimeOfDay);
 
 class TimePickerBlock extends StatefulWidget {
-  TimePickerBlock({Key? key, required this.initialTime, required this.onChange})
+  const TimePickerBlock(
+      {Key? key, required this.initialTime, required this.onChange})
       : super(key: key);
 
-  TimeOfDay initialTime;
-  TimePickerBlockOnChange onChange;
+  final TimeOfDay initialTime;
+  final TimePickerBlockOnChange onChange;
 
   @override
   TimePickerBlockState createState() => TimePickerBlockState();
@@ -339,7 +333,7 @@ class TimePickerBlockState extends State<TimePickerBlock> {
     return ElevatedButton(
       child: Text(selectedTime.format(context),
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.w500,
             color: Color(0xFF414141),
             fontSize: 20.0,
@@ -348,7 +342,7 @@ class TimePickerBlockState extends State<TimePickerBlock> {
       style: TextButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
           primary: Colors.black,
-          backgroundColor: Color(0xFFF5F5F5),
+          backgroundColor: const Color(0xFFF5F5F5),
           elevation: 0.0),
     );
   }
@@ -372,7 +366,7 @@ class TimeRangePickerBlock extends StatefulWidget {
 
 class TimeRangePickerBlockState extends State<TimeRangePickerBlock> {
   TimeOfDayRange selectedRange = TimeOfDayRange(
-      TimeOfDay(hour: 0, minute: 0), TimeOfDay(hour: 0, minute: 0));
+      const TimeOfDay(hour: 0, minute: 0), const TimeOfDay(hour: 0, minute: 0));
 
   @override
   void initState() {
@@ -391,7 +385,7 @@ class TimeRangePickerBlockState extends State<TimeRangePickerBlock> {
   @override
   Widget build(BuildContext context) {
     return Row(children: [
-      Text("From"),
+      const Text("From"),
       TimePickerBlock(
           initialTime: selectedRange.start,
           onChange: (time) {
@@ -401,7 +395,7 @@ class TimeRangePickerBlockState extends State<TimeRangePickerBlock> {
               kvWriteTimeOfDayRange("sleep", widget.valueName, selectedRange);
             });
           }),
-      Text("to"),
+      const Text("to"),
       TimePickerBlock(
           initialTime: selectedRange.end,
           onChange: (time) {
@@ -435,13 +429,13 @@ abstract class TimePickerPage extends Page {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           if (image != null) image!,
-          if (image != null) SizedBox(height: 4.0),
+          if (image != null) const SizedBox(height: 4.0),
           if (markdown != "")
             MarkdownBody(
                 data: markdown,
                 extensionSet: md.ExtensionSet.gitHubFlavored,
                 styleSheet: markdownStyleSheet),
-          if (markdown != "") SizedBox(height: 4.0),
+          if (markdown != "") const SizedBox(height: 4.0),
           TimePickerBlock(
               initialTime: initialTime,
               onChange: (time) => kvWriteTimeOfDay("sleep", valueName, time)),
@@ -452,12 +446,12 @@ abstract class TimePickerPage extends Page {
 typedef DurationPickerBlockOnChange = Function(Duration);
 
 class DurationPickerBlock extends StatefulWidget {
-  DurationPickerBlock(
+  const DurationPickerBlock(
       {Key? key, required this.initialDuration, required this.onChange})
       : super(key: key);
 
-  Duration initialDuration;
-  DurationPickerBlockOnChange onChange;
+  final Duration initialDuration;
+  final DurationPickerBlockOnChange onChange;
 
   @override
   DurationPickerBlockState createState() => DurationPickerBlockState();
@@ -465,7 +459,7 @@ class DurationPickerBlock extends StatefulWidget {
 
 class DurationPickerBlockState extends State<DurationPickerBlock> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  Duration selectedDuration = Duration();
+  Duration selectedDuration = const Duration();
 
   @override
   void initState() {
@@ -479,7 +473,7 @@ class DurationPickerBlockState extends State<DurationPickerBlock> {
         key: _formKey,
         child: Column(children: [
           Row(children: [
-            Container(
+            SizedBox(
                 width: 72.0,
                 child: TextFormField(
                     keyboardType: TextInputType.number,
@@ -496,12 +490,12 @@ class DurationPickerBlockState extends State<DurationPickerBlock> {
                       });
                       widget.onChange(selectedDuration);
                     })),
-            SizedBox(width: 4.0),
-            Text('hours'),
+            const SizedBox(width: 4.0),
+            const Text('hours'),
           ]),
-          SizedBox(height: 4.0),
+          const SizedBox(height: 4.0),
           Row(children: [
-            Container(
+            SizedBox(
                 width: 72.0,
                 child: TextFormField(
                     keyboardType: TextInputType.number,
@@ -517,8 +511,8 @@ class DurationPickerBlockState extends State<DurationPickerBlock> {
                       });
                       widget.onChange(selectedDuration);
                     })),
-            SizedBox(width: 4.0),
-            Text('minutes'),
+            const SizedBox(width: 4.0),
+            const Text('minutes'),
           ]),
         ]));
   }
@@ -545,13 +539,13 @@ abstract class DurationPickerPage extends Page {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           if (image != null) image!,
-          if (image != null) SizedBox(height: 4.0),
+          if (image != null) const SizedBox(height: 4.0),
           if (markdown != "")
             MarkdownBody(
                 data: markdown,
                 extensionSet: md.ExtensionSet.gitHubFlavored,
                 styleSheet: markdownStyleSheet),
-          if (markdown != "") SizedBox(height: 4.0),
+          if (markdown != "") const SizedBox(height: 4.0),
           DurationPickerBlock(
               initialDuration: initialDuration,
               onChange: (duration) =>

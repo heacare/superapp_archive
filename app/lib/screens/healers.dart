@@ -22,7 +22,7 @@ import 'package:hea/services/healer_service.dart';
 import 'package:hea/services/service_locator.dart';
 
 class HealersScreen extends StatefulWidget {
-  HealersScreen({Key? key}) : super(key: key);
+  const HealersScreen({Key? key}) : super(key: key);
 
   @override
   State<HealersScreen> createState() => _HealersScreenState();
@@ -31,7 +31,6 @@ class HealersScreen extends StatefulWidget {
 class _HealersScreenState extends State<HealersScreen> {
   late GoogleMapController _mapController;
   String _mapStyle = "";
-  GlobalKey? _keyGoogleMap = GlobalKey();
   List<Healer> _nearestHealers = [];
   final Set<Marker> _markers = {};
   late BitmapDescriptor _markerIcon;
@@ -69,7 +68,7 @@ class _HealersScreenState extends State<HealersScreen> {
     setState(() {
       _nearestHealers = healers;
       _markers.clear();
-      _nearestHealers.forEach((healer) {
+      for (var healer in _nearestHealers) {
         // Add in the markers
         _markers.add(Marker(
             markerId: MarkerId(healer.id.toString()),
@@ -81,7 +80,7 @@ class _HealersScreenState extends State<HealersScreen> {
                 selectedHealer = healer;
               });
             }));
-      });
+      }
     });
   }
 
@@ -102,7 +101,7 @@ class _HealersScreenState extends State<HealersScreen> {
   }
 
   CameraPosition _getLocationTarget() {
-    var initialCameraPosition;
+    CameraPosition initialCameraPosition;
     if (Provider.of<MapProvider>(context, listen: false).currentLatLng !=
         null) {
       initialCameraPosition = CameraPosition(
@@ -116,7 +115,8 @@ class _HealersScreenState extends State<HealersScreen> {
         zoom: 0,
       );
     } else {
-      initialCameraPosition = CameraPosition(zoom: 0, target: LatLng(0, 0));
+      initialCameraPosition =
+          const CameraPosition(zoom: 0, target: LatLng(0, 0));
     }
     return initialCameraPosition;
   }
@@ -171,7 +171,7 @@ class _HealersScreenState extends State<HealersScreen> {
                           Text("Book time with our expert consultants",
                               style: Theme.of(context).textTheme.headline4),
                         ])),
-                    AvatarIcon(),
+                    const AvatarIcon(),
                   ])))),
       Positioned.fill(
           child: Align(
@@ -211,7 +211,7 @@ class _HealersScreenState extends State<HealersScreen> {
                       ])))),
       Positioned.fill(
           child: Container(
-              color: Color(0xA4FFFFFF),
+              color: const Color(0xA4FFFFFF),
               padding: const EdgeInsets.all(30.0),
               child: Center(
                   child: Text(
@@ -226,10 +226,11 @@ class _HealersScreenState extends State<HealersScreen> {
 }
 
 class MapIconButton extends StatelessWidget {
-  FaIcon icon;
-  void Function() onPressed;
+  final FaIcon icon;
+  final void Function() onPressed;
 
-  MapIconButton({Key? key, required this.icon, required this.onPressed});
+  const MapIconButton({Key? key, required this.icon, required this.onPressed})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -249,7 +250,7 @@ class MapIconButton extends StatelessWidget {
       ),
       child: IconButton(
         icon: icon,
-        color: Color(0xFF414141),
+        color: const Color(0xFF414141),
         onPressed: onPressed,
       ),
     );

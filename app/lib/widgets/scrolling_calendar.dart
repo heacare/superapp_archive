@@ -60,7 +60,7 @@ class ScrollingCalendarItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Border? border = null;
+    Border? border;
     if (selected) {
       border = Border.all(width: 3.0, color: const Color(0xFF5FD0F9));
     }
@@ -83,12 +83,12 @@ class ScrollingCalendarItem extends StatelessWidget {
       width: 25,
       height: 25,
       alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: const Color(0xFF5FD0F9),
-        borderRadius: const BorderRadius.all(Radius.circular(12.5)),
+      decoration: const BoxDecoration(
+        color: Color(0xFF5FD0F9),
+        borderRadius: BorderRadius.all(Radius.circular(12.5)),
       ),
       child: Text(available.toString(),
-          style: TextStyle(
+          style: const TextStyle(
               fontSize: 16.0,
               fontWeight: FontWeight.w600,
               height: 1.2,
@@ -107,14 +107,15 @@ class ScrollingCalendarItem extends StatelessWidget {
   }
 }
 
-void doNothing() {}
+doNothing(a) {}
 
 class ScrollingCalendar extends StatefulWidget {
-  ScrollingCalendar({Key? key, this.available, this.onChange = doNothing})
+  const ScrollingCalendar(
+      {Key? key, required this.available, this.onChange = doNothing})
       : super(key: key);
 
-  Map<DateTime, int>? available = Map();
-  Function onChange;
+  final Map<DateTime, int> available;
+  final Function(DateTime) onChange;
 
   @override
   _ScrollingCalendarState createState() => _ScrollingCalendarState();
@@ -135,7 +136,7 @@ class _ScrollingCalendarState extends State<ScrollingCalendar> {
     super.initState();
 
     selectedDate = null;
-    available = widget.available ?? {};
+    available = widget.available;
 
     final current = DateTime.now();
     currentMonth = current.month;

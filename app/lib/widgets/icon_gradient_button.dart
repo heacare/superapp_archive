@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class IconGradientButton extends StatelessWidget {
-  IconGradientButton({
+  const IconGradientButton({
     Key? key,
     required this.title,
     required this.text,
@@ -12,14 +12,14 @@ class IconGradientButton extends StatelessWidget {
     this.iconColor,
   }) : super(key: key);
 
-  String? title;
-  String? text;
-  Widget? icon;
-  VoidCallback? onPressed;
+  final String? title;
+  final String? text;
+  final Widget? icon;
+  final VoidCallback? onPressed;
 
-  Color? firstColor;
-  Color? secondColor;
-  Color? iconColor;
+  final Color? firstColor;
+  final Color? secondColor;
+  final Color? iconColor;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class IconGradientButton extends StatelessWidget {
     final iconColour = iconColor ?? Theme.of(context).colorScheme.primary;
 
     return ElevatedButton(
-        onPressed: this.onPressed,
+        onPressed: onPressed,
         child: Ink(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -67,12 +67,12 @@ class IconGradientButton extends StatelessWidget {
                               style: Theme.of(context)
                                   .textTheme
                                   .headline3
-                                  ?.copyWith(color: Color(0xFFFFFFFF))),
+                                  ?.copyWith(color: const Color(0xFFFFFFFF))),
                           Text(text,
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyText2
-                                  ?.copyWith(color: Color(0xFFFFFFFF)))
+                                  ?.copyWith(color: const Color(0xFFFFFFFF)))
                         ],
                       )),
                 ],

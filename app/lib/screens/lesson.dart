@@ -81,7 +81,7 @@ class _LessonScreenState extends State<LessonScreen> {
                               onPressed: () {
                                 Navigator.of(context).pop();
                               }),
-                          SizedBox(width: 10.0),
+                          const SizedBox(width: 10.0),
                           Expanded(
                               child: Text(widget.lesson.title,
                                   overflow: TextOverflow.ellipsis,

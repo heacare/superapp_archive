@@ -1,13 +1,10 @@
-import 'dart:developer';
 import 'package:health/health.dart';
 import 'package:get_it/get_it.dart';
 
 import 'package:hea/services/auth_service.dart';
-import 'package:hea/screens/error.dart';
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/services/user_service.dart';
 import 'package:flutter/material.dart';
-import 'package:hea/providers/auth.dart';
 import 'package:hea/models/user.dart';
 
 import 'package:hea/screens/home.dart';
@@ -31,9 +28,7 @@ enum OnboardingStep {
 }
 
 class OnboardingStepReturn {
-  OnboardingStepReturn(
-      {@required this.nextStep = OnboardingStep.end,
-      @required this.returnData = const <String, dynamic>{}});
+  OnboardingStepReturn({required this.nextStep, required this.returnData});
 
   OnboardingStep nextStep;
   Map<String, dynamic> returnData;
@@ -77,22 +72,22 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     late Widget nextScreen;
     switch (currentStep) {
       case OnboardingStep.health_sync:
-        nextScreen = HealthSetupScreen();
+        nextScreen = const HealthSetupScreen();
         break;
       case OnboardingStep.starter:
-        nextScreen = OnboardingStartScreen();
+        nextScreen = const OnboardingStartScreen();
         break;
       case OnboardingStep.basic_info:
-        nextScreen = OnboardingBasicInfoScreen();
+        nextScreen = const OnboardingBasicInfoScreen();
         break;
       case OnboardingStep.smoking:
-        nextScreen = OnboardingSmokingScreen();
+        nextScreen = const OnboardingSmokingScreen();
         break;
       case OnboardingStep.drinking:
-        nextScreen = OnboardingDrinkingScreen();
+        nextScreen = const OnboardingDrinkingScreen();
         break;
       case OnboardingStep.followups:
-        nextScreen = OnboardingFollowupScreen();
+        nextScreen = const OnboardingFollowupScreen();
         break;
       case OnboardingStep.end:
       default:
@@ -108,7 +103,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             (route) => false);
 
         return;
-        break;
     }
 
     WidgetsBinding.instance!.addPostFrameCallback((_) => Navigator.of(context)

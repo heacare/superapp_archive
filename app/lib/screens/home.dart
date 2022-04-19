@@ -52,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
         builder: (context, _) => HealersScreen());
       } else if (index == 2) {
       */
-      child = ProfileScreen();
+      child = const ProfileScreen();
     } else {
       // Should never hit this unless something goes horribly wrong
       child = const ErrorScreen();

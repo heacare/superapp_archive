@@ -9,7 +9,7 @@ import 'package:hea/screens/onboarding.dart';
 import 'package:hea/models/onboarding_types.dart';
 
 class OnboardingBasicInfoScreen extends StatefulWidget {
-  OnboardingBasicInfoScreen({Key? key}) : super(key: key);
+  const OnboardingBasicInfoScreen({Key? key}) : super(key: key);
 
   @override
   State<OnboardingBasicInfoScreen> createState() =>
@@ -97,7 +97,7 @@ class OnboardingBasicInfoScreenState extends State<OnboardingBasicInfoScreen> {
                                   ?.copyWith(
                                       fontWeight: FontWeight.w400,
                                       height: 1.4,
-                                      color: Color(0xFF414141))),
+                                      color: const Color(0xFF414141))),
                           const SizedBox(height: 8.0),
                           TextFormField(
                             controller: _name,
@@ -115,7 +115,7 @@ class OnboardingBasicInfoScreenState extends State<OnboardingBasicInfoScreen> {
                                   ?.copyWith(
                                       fontWeight: FontWeight.w400,
                                       height: 1.4,
-                                      color: Color(0xFF414141))),
+                                      color: const Color(0xFF414141))),
                           const SizedBox(height: 8.0),
                           DateTimePicker(
                             type: DateTimePickerType.date,
@@ -134,15 +134,15 @@ class OnboardingBasicInfoScreenState extends State<OnboardingBasicInfoScreen> {
                                   ?.copyWith(
                                       fontWeight: FontWeight.w400,
                                       height: 1.4,
-                                      color: Color(0xFF414141))),
+                                      color: const Color(0xFF414141))),
                           const SizedBox(height: 8.0),
                           SizedBox(
                               height: 50.0,
                               child: Ink(
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                     color: Color(0xFFF5F5F5),
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(3.0)),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(3.0)),
                                   ),
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 20.0),
@@ -159,7 +159,7 @@ class OnboardingBasicInfoScreenState extends State<OnboardingBasicInfoScreen> {
                                             ))
                                         .toList(),
                                     onChanged: (val) => setState(() {
-                                      gender = val != null ? val : '';
+                                      gender = val ?? '';
                                     }),
                                   ))),
                           const SizedBox(height: 24.0),
@@ -170,7 +170,7 @@ class OnboardingBasicInfoScreenState extends State<OnboardingBasicInfoScreen> {
                                   ?.copyWith(
                                       fontWeight: FontWeight.w400,
                                       height: 1.4,
-                                      color: Color(0xFF414141))),
+                                      color: const Color(0xFF414141))),
                           const SizedBox(height: 8.0),
                           Row(
                             children: [
@@ -192,7 +192,7 @@ class OnboardingBasicInfoScreenState extends State<OnboardingBasicInfoScreen> {
                                         ?.copyWith(
                                             fontWeight: FontWeight.w400,
                                             height: 1.4,
-                                            color: Color(0xFF414141)),
+                                            color: const Color(0xFF414141)),
                                     textAlign: TextAlign.center),
                               ),
                               Expanded(
@@ -215,7 +215,7 @@ class OnboardingBasicInfoScreenState extends State<OnboardingBasicInfoScreen> {
                                   ?.copyWith(
                                       fontWeight: FontWeight.w400,
                                       height: 1.4,
-                                      color: Color(0xFF414141))),
+                                      color: const Color(0xFF414141))),
                           const SizedBox(height: 8.0),
                           SizedBox(
                             height: 50.0,

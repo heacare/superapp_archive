@@ -48,6 +48,8 @@ Tell us a little about yourself. Choose as many as apply.
   @override
   final maxChoice = 0;
   @override
+  final minSelected = 1;
+  @override
   final valueName = "person";
   @override
   final List<SelectListItem<String>> choices = [
@@ -92,6 +94,8 @@ Please select the exact tool/device and model (if applicable) you’ll be using 
 
   @override
   final maxChoice = 1;
+  @override
+  final minSelected = 1;
   @override
   final valueName = "tracking-tool";
   @override

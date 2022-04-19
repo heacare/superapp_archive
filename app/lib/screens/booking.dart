@@ -10,11 +10,11 @@ import 'package:hea/services/service_locator.dart';
 import 'package:hea/services/healer_service.dart';
 
 class BookingScreen extends StatefulWidget {
-  BookingScreen({Key? key, required this.name, required this.healer})
+  const BookingScreen({Key? key, required this.name, required this.healer})
       : super(key: key);
 
-  String name;
-  Healer healer;
+  final String name;
+  final Healer healer;
 
   @override
   State<BookingScreen> createState() => _BookingScreenState();
@@ -27,6 +27,7 @@ class _BookingScreenState extends State<BookingScreen> {
 
   @override
   void initState() {
+    super.initState();
     selectedDate = null;
     selectedTime = null;
   }
@@ -40,7 +41,7 @@ class _BookingScreenState extends State<BookingScreen> {
 
     final Map<DateTime, int> availabilities = widget.healer.availabilities
         .map((availability) => availability.range.start)
-        .fold(Map<DateTime, int>(), (Map<DateTime, int> acc, DateTime dt) {
+        .fold(<DateTime, int>{}, (Map<DateTime, int> acc, DateTime dt) {
       DateTime k = DateUtils.dateOnly(dt);
       if (acc[k] != null) {
         acc[k] = acc[k]! + 1;
@@ -53,7 +54,7 @@ class _BookingScreenState extends State<BookingScreen> {
 
     List<Widget> formStack = [
       Text("Book an appointment", style: Theme.of(context).textTheme.headline2),
-      SizedBox(height: 8.0),
+      const SizedBox(height: 8.0),
       Text("Pick a time and date for your appointment",
           style: Theme.of(context).textTheme.headline4),
       const SizedBox(height: 24.0),
@@ -72,7 +73,7 @@ class _BookingScreenState extends State<BookingScreen> {
           .map((availability) => availability.range.start)
           .where((availability) =>
               DateUtils.isSameDay(availability, selectedDate!))
-          .fold(Map<DateTime, String>(),
+          .fold(<DateTime, String>{},
               (Map<DateTime, String> acc, DateTime val) {
         acc[val] = val.hour.toString().padLeft(2, '0') +
             ':' +
@@ -107,7 +108,8 @@ class _BookingScreenState extends State<BookingScreen> {
         text: "BOOK APPOINTMENT",
         onPressed: () async {
           var dtr = DateTimeRange(
-              start: selectedTime!, end: selectedTime!.add(Duration(hours: 1)));
+              start: selectedTime!,
+              end: selectedTime!.add(const Duration(hours: 1)));
           var slot = Availability(range: dtr, isHouseVisit: true);
           await serviceLocator<HealerService>().bookHealerAvailability(slot);
         },
@@ -133,16 +135,16 @@ class _BookingScreenState extends State<BookingScreen> {
                 // TODO remove hardcode
                 width: width,
                 height: height * 0.3,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                     gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [Color(0xFF00ABE9), Color(0xFF7FDDFF)],
                 )),
                 alignment: Alignment.centerRight,
-                padding: EdgeInsets.only(right: 5),
+                padding: const EdgeInsets.only(right: 5),
                 margin: EdgeInsets.only(bottom: height * (0.35 + 0.85 - 1)),
-                child: FaIcon(FontAwesomeIcons.solidMoon,
+                child: const FaIcon(FontAwesomeIcons.solidMoon,
                     color: Color(0x6CFFFFFF), size: 150.0),
               )),
           Positioned(
@@ -151,15 +153,15 @@ class _BookingScreenState extends State<BookingScreen> {
                   width: width,
                   height: height * 0.83,
                   padding: const EdgeInsets.all(30.0),
-                  decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.only(
+                  decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(20.0),
                           topRight: Radius.circular(20.0)),
                       color: Colors.white))),
           Positioned(
               top: height * 0.2,
               left: width * 0.05,
-              child: Container(
+              child: SizedBox(
                   width: width * 0.9,
                   height: height * 0.85,
                   child: Column(
@@ -167,10 +169,10 @@ class _BookingScreenState extends State<BookingScreen> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         HealerCard(healer: widget.healer),
-                        SizedBox(height: 24.0),
+                        const SizedBox(height: 24.0),
                         Expanded(
                             child: ListView(
-                                padding: EdgeInsets.all(0.0),
+                                padding: const EdgeInsets.all(0.0),
                                 children: formStack)),
                       ]))),
           Positioned(
@@ -182,8 +184,8 @@ class _BookingScreenState extends State<BookingScreen> {
                   },
                   child: SafeArea(
                       child: Container(
-                          margin: EdgeInsets.only(left: 10.0),
-                          child: Icon(Icons.arrow_back,
+                          margin: const EdgeInsets.only(left: 10.0),
+                          child: const Icon(Icons.arrow_back,
                               color: Colors.white, size: 45.0))))),
         ],
       ),

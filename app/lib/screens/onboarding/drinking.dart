@@ -13,7 +13,7 @@ final List<SelectListItem<String>> choices = [
 ];
 
 class OnboardingDrinkingScreen extends StatefulWidget {
-  OnboardingDrinkingScreen({Key? key}) : super(key: key);
+  const OnboardingDrinkingScreen({Key? key}) : super(key: key);
 
   @override
   State<OnboardingDrinkingScreen> createState() =>
@@ -21,7 +21,6 @@ class OnboardingDrinkingScreen extends StatefulWidget {
 }
 
 class OnboardingDrinkingScreenState extends State<OnboardingDrinkingScreen> {
-  final _formKey = GlobalKey<FormState>();
   String choice = choices[0].value;
 
   @override
@@ -48,7 +47,7 @@ class OnboardingDrinkingScreenState extends State<OnboardingDrinkingScreen> {
                       });
                     },
                   ),
-                  SizedBox(height: 24.0),
+                  const SizedBox(height: 24.0),
                   GradientButton(
                     text: "CONTINUE",
                     onPressed: () {

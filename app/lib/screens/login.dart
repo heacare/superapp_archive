@@ -16,7 +16,7 @@ const svgAssetName = "assets/svg/login.svg";
 enum LoginChoice { unselected, login, signUp }
 
 class LoginScreen extends StatefulWidget {
-  LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -71,12 +71,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (!userOnboarded) {
       await Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => OnboardingScreen()),
+          MaterialPageRoute(builder: (context) => const OnboardingScreen()),
           (route) => false);
     } else {
       // User already finished onboarding
       await Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => HomeScreen()),
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
           (route) => false);
     }
   }
@@ -104,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 style: Theme.of(context).textTheme.headline2?.copyWith(
                     fontWeight: FontWeight.w400,
                     height: 1.4,
-                    color: Color(0xFF707070))),
+                    color: const Color(0xFF707070))),
             const SizedBox(height: 24.0),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -120,17 +120,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     onTap: () =>
                         setState(() => _loginChoice = LoginChoice.signUp),
                     child: Ink(
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Color(0xFFF4F4F4),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(15.0)),
+                        borderRadius: BorderRadius.all(Radius.circular(15.0)),
                       ),
                       child: Container(
                         constraints: const BoxConstraints(
                             minWidth: 88.0, minHeight: 36.0),
                         alignment: Alignment.center,
-                        child: Text("JOIN US",
-                            style: const TextStyle(
+                        child: const Text("JOIN US",
+                            style: TextStyle(
                                 fontFamily: "Poppins",
                                 letterSpacing: 1.0,
                                 fontSize: 20.0,

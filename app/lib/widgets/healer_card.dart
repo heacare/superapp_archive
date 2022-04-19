@@ -3,10 +3,11 @@ import 'package:hea/models/healer.dart';
 import 'package:hea/widgets/avatar_icon.dart';
 
 class HealerCard extends StatelessWidget {
-  Healer healer;
-  VoidCallback? onTap;
+  final Healer healer;
+  final VoidCallback? onTap;
 
-  HealerCard({Key? key, required this.healer, this.onTap});
+  const HealerCard({Key? key, required this.healer, this.onTap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,14 +25,14 @@ class HealerCard extends StatelessWidget {
                 )
               ],
             ),
-            padding: EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(20.0),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Row(children: <Widget>[
-                    AvatarIcon(),
-                    SizedBox(width: 15.0),
+                    const AvatarIcon(),
+                    const SizedBox(width: 15.0),
                     Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
@@ -42,7 +43,7 @@ class HealerCard extends StatelessWidget {
                               style: Theme.of(context).textTheme.bodyText1),
                         ])
                   ]),
-                  SizedBox(height: 15.0),
+                  const SizedBox(height: 15.0),
                   Text(healer.description,
                       style: Theme.of(context).textTheme.bodyText2),
                 ])));

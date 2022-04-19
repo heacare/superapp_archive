@@ -13,7 +13,7 @@ import 'package:hea/services/content_service.dart';
 import 'package:hea/services/service_locator.dart';
 
 class LessonsScreen extends StatefulWidget {
-  LessonsScreen(
+  const LessonsScreen(
       {Key? key,
       required this.title,
       required this.gradient1,
@@ -77,8 +77,8 @@ class _LessonsScreenState extends State<LessonsScreen> {
           child: Stack(children: <Widget>[
             Align(
                 alignment: Alignment.bottomRight,
-                child:
-                    FaIcon(widget.icon, size: 200, color: Color(0x4DFFFFFF))),
+                child: FaIcon(widget.icon,
+                    size: 200, color: const Color(0x4DFFFFFF))),
             SafeArea(
                 child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 30.0),
@@ -88,7 +88,7 @@ class _LessonsScreenState extends State<LessonsScreen> {
                         children: <Widget>[
                           IconButton(
                               iconSize: 38,
-                              icon: FaIcon(FontAwesomeIcons.arrowLeft,
+                              icon: const FaIcon(FontAwesomeIcons.arrowLeft,
                                   color: Colors.white),
                               onPressed: () {
                                 Navigator.of(context).pop();
@@ -133,7 +133,7 @@ class LessonListItem extends StatelessWidget {
   final Color gradient1;
   final Color gradient2;
 
-  LessonListItem(
+  const LessonListItem(
       {Key? key,
       required this.gradient1,
       required this.gradient2,
@@ -165,9 +165,9 @@ class LessonListItem extends StatelessWidget {
                         margin: const EdgeInsets.only(right: 15.0),
                         height: 50,
                         width: 50,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             borderRadius:
-                                const BorderRadius.all(Radius.circular(16.0)),
+                                BorderRadius.all(Radius.circular(16.0)),
                             color: Color(0x19000000))),
                     Expanded(
                         child: Column(
@@ -180,7 +180,7 @@ class LessonListItem extends StatelessWidget {
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyText2
-                                  ?.copyWith(color: Color(0xFF707070)))
+                                  ?.copyWith(color: const Color(0xFF707070)))
                         ])),
                     const FaIcon(FontAwesomeIcons.arrowRight,
                         color: Color(0xFF868686), size: 18.0),

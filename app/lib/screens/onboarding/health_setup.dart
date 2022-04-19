@@ -132,7 +132,7 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
                       style: Theme.of(context).textTheme.headline2?.copyWith(
                           fontWeight: FontWeight.w400,
                           height: 1.4,
-                          color: Color(0xFF707070))),
+                          color: const Color(0xFF707070))),
                   Padding(
                       child: GradientButton(
                         text: "SYNC DATA",

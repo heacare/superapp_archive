@@ -16,7 +16,7 @@ class SelectListItem<T> {
 typedef SelectListOnChange<T> = Function(List<T>);
 
 class SelectList<T> extends StatefulWidget {
-  SelectList(
+  const SelectList(
       {Key? key,
       required this.items,
       this.defaultSelected = const [],
@@ -24,10 +24,10 @@ class SelectList<T> extends StatefulWidget {
       required this.onChange})
       : super(key: key);
 
-  List<SelectListItem<T>> items;
-  List<T> defaultSelected;
-  int max;
-  SelectListOnChange<T> onChange;
+  final List<SelectListItem<T>> items;
+  final List<T> defaultSelected;
+  final int max;
+  final SelectListOnChange<T> onChange;
 
   @override
   SelectListState<T> createState() => SelectListState<T>();
@@ -39,8 +39,8 @@ class SelectListState<T> extends State<SelectList<T>> {
   @override
   void initState() {
     super.initState();
-    widget.items = widget.items.toSet().toList(); // Deduplicate
-    List<T> values = widget.items.map((item) => item.value).toList();
+    List<T> values =
+        widget.items.toSet().toList().map((item) => item.value).toList();
     selected =
         widget.defaultSelected.where((sel) => values.contains(sel)).toList();
   }
@@ -73,7 +73,7 @@ class SelectListState<T> extends State<SelectList<T>> {
       return ElevatedButton(
         child: Text(item.text,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               fontWeight: FontWeight.w500,
               color: Color(0xFF414141),
               fontSize: 20.0,
@@ -91,7 +91,7 @@ class SelectListState<T> extends State<SelectList<T>> {
             padding:
                 const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
             primary: Colors.black,
-            backgroundColor: Color(0xFFF5F5F5),
+            backgroundColor: const Color(0xFFF5F5F5),
             elevation: 0.0),
       );
     }

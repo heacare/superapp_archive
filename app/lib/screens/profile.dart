@@ -13,7 +13,7 @@ import 'package:hea/widgets/gradient_button.dart';
 import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatefulWidget {
-  ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({Key? key}) : super(key: key);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -26,7 +26,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) {
-      return LoginScreen();
+      return const LoginScreen();
     }), (route) => false);
   }
 
@@ -108,8 +108,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             preferredSize: const Size.fromHeight(150),
             child: SafeArea(
                 child: Container(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10.0, horizontal: 30.0),
                     child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
@@ -121,12 +121,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 Text("Settings",
                                     style:
                                         Theme.of(context).textTheme.headline1),
-                                SizedBox(height: 4.0),
+                                const SizedBox(height: 4.0),
                                 Text("Modify your preferences",
                                     style:
                                         Theme.of(context).textTheme.headline4),
                               ])),
-                          AvatarIcon(),
+                          const AvatarIcon(),
                         ])))),
         body: Padding(
             padding: const EdgeInsets.all(30.0),

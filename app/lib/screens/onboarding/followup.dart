@@ -4,7 +4,7 @@ import 'package:hea/screens/onboarding.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class OnboardingFollowupScreen extends StatelessWidget {
-  OnboardingFollowupScreen({Key? key}) : super(key: key);
+  const OnboardingFollowupScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class OnboardingFollowupScreen extends StatelessWidget {
                 style: Theme.of(context).textTheme.headline2?.copyWith(
                     fontWeight: FontWeight.w400,
                     height: 1.4,
-                    color: Color(0xFF707070))),
+                    color: const Color(0xFF707070))),
             Expanded(
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -34,11 +34,11 @@ class OnboardingFollowupScreen extends StatelessWidget {
                   IconGradientButton(
                     title: "Sleep & Recovery",
                     text: "Survey review of sleep health",
-                    icon:
-                        FaIcon(FontAwesomeIcons.solidMoon, color: Colors.white),
-                    iconColor: Color(0x0C000000),
-                    firstColor: Color(0xFF00ABE9),
-                    secondColor: Color(0xFF7FDDFF),
+                    icon: const FaIcon(FontAwesomeIcons.solidMoon,
+                        color: Colors.white),
+                    iconColor: const Color(0x0C000000),
+                    firstColor: const Color(0xFF00ABE9),
+                    secondColor: const Color(0xFF7FDDFF),
                     onPressed: () {
                       // TODO: onboarding stuff
                     },
@@ -47,11 +47,11 @@ class OnboardingFollowupScreen extends StatelessWidget {
                   IconGradientButton(
                     title: "Psychosocial Health",
                     text: "Survey review of mental health",
-                    icon: FaIcon(FontAwesomeIcons.peopleArrows,
+                    icon: const FaIcon(FontAwesomeIcons.peopleArrows,
                         color: Colors.white),
-                    iconColor: Color(0x0C000000),
-                    firstColor: Color(0xFFFFC498),
-                    secondColor: Color(0xFFFF7A60),
+                    iconColor: const Color(0x0C000000),
+                    firstColor: const Color(0xFFFFC498),
+                    secondColor: const Color(0xFFFF7A60),
                     onPressed: () {
                       // TODO: onboarding stuff
                     },
@@ -69,7 +69,7 @@ class OnboardingFollowupScreen extends StatelessWidget {
                         ));
                       },
                       style: TextButton.styleFrom(
-                          primary: Color(0xFF414141),
+                          primary: const Color(0xFF414141),
                           backgroundColor: Colors.grey[200],
                           elevation: 0.0),
                     ),

@@ -51,7 +51,7 @@ class NowTimeGoneBed extends TimePickerPage {
   @override
   final valueName = "time-go-bed";
   @override
-  final defaultTime = TimeOfDay(hour: 23, minute: 00);
+  final defaultTime = const TimeOfDay(hour: 23, minute: 00);
 }
 
 class NowMinutesFallAsleep extends MultipleChoicePage {
@@ -74,6 +74,8 @@ How many minutes does it usually take you to fall asleep?
 
   @override
   final maxChoice = 1;
+  @override
+  final minSelected = 1;
   @override
   final valueName = "points-fall-asleep";
   @override
@@ -104,7 +106,7 @@ class NowTimeOutBed extends TimePickerPage {
   @override
   final valueName = "time-out-bed";
   @override
-  final defaultTime = TimeOfDay(hour: 7, minute: 00);
+  final defaultTime = const TimeOfDay(hour: 7, minute: 00);
 }
 
 class NowGetSleep extends DurationPickerPage {
@@ -150,9 +152,9 @@ class NowHowEfficientSleep extends Page {
         p: Theme.of(context).textTheme.bodyText1,
         h1: Theme.of(context).textTheme.headline3);
     TimeOfDay goBed = kvReadTimeOfDay("sleep", "time-go-bed") ??
-        TimeOfDay(hour: 0, minute: 0);
+        const TimeOfDay(hour: 0, minute: 0);
     TimeOfDay outBed = kvReadTimeOfDay("sleep", "time-out-bed") ??
-        TimeOfDay(hour: 0, minute: 0);
+        const TimeOfDay(hour: 0, minute: 0);
     int bedDuration = ((outBed.minute + outBed.hour * 60) -
             (goBed.minute + goBed.hour * 60)) %
         (24 * 60);
@@ -161,8 +163,8 @@ class NowHowEfficientSleep extends Page {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          if (image != null) image,
-          if (image != null) SizedBox(height: 4.0),
+          image,
+          const SizedBox(height: 4.0),
           MarkdownBody(
               data: """
 Here's a sneak insight!
@@ -202,6 +204,7 @@ class NowHowEfficientSleep2 extends MarkdownPage {
 
   @override
   final title = "How efficient is your sleep?";
+  @override
   final image = Image.asset("assets/images/sleep/ch02-good-morning.gif");
 
   @override
@@ -232,6 +235,8 @@ How often were you unable to fall asleep within 30 minutes?
 
   @override
   final maxChoice = 1;
+  @override
+  final minSelected = 1;
   @override
   final valueName = "how-often-asleep-30-minutes";
   @override
@@ -283,6 +288,8 @@ How often have you had trouble sleeping because you woke up in the middle of the
   @override
   final maxChoice = 1;
   @override
+  final minSelected = 1;
+  @override
   final valueName = "how-often-wake-up";
   @override
   final List<SelectListItem<String>> choices = [
@@ -313,6 +320,8 @@ How often have you had trouble sleeping because you got up to use the bathroom?
 
   @override
   final maxChoice = 1;
+  @override
+  final minSelected = 1;
   @override
   final valueName = "how-often-bathroom";
   @override
@@ -345,6 +354,8 @@ How often have you had trouble sleeping because you couldn’t breathe comfortab
   @override
   final maxChoice = 1;
   @override
+  final minSelected = 1;
+  @override
   final valueName = "how-often-breath";
   @override
   final List<SelectListItem<String>> choices = [
@@ -375,6 +386,8 @@ How often have you had trouble sleeping because you snored?
 
   @override
   final maxChoice = 1;
+  @override
+  final minSelected = 1;
   @override
   final valueName = "how-often-snore";
   @override
@@ -407,6 +420,8 @@ How often have you had trouble sleeping because you felt too cold?
   @override
   final maxChoice = 1;
   @override
+  final minSelected = 1;
+  @override
   final valueName = "how-often-cold";
   @override
   final List<SelectListItem<String>> choices = [
@@ -437,6 +452,8 @@ How often have you had trouble sleeping because you felt too hot?
 
   @override
   final maxChoice = 1;
+  @override
+  final minSelected = 1;
   @override
   final valueName = "how-often-hot";
   @override
@@ -469,6 +486,8 @@ How often have you had trouble sleeping because you had bad dreams?
   @override
   final maxChoice = 1;
   @override
+  final minSelected = 1;
+  @override
   final valueName = "how-often-bad-dreams";
   @override
   final List<SelectListItem<String>> choices = [
@@ -500,6 +519,8 @@ How often have you had trouble sleeping because you had pain?
   @override
   final maxChoice = 1;
   @override
+  final minSelected = 1;
+  @override
   final valueName = "how-often-pain";
   @override
   final List<SelectListItem<String>> choices = [
@@ -520,7 +541,6 @@ class NowOtherFactors extends Page {
 
   @override
   final title = "Other sleep disturbances";
-  @override
   final image =
       Image.asset("assets/images/sleep/ch02-wake-up-are-you-awake.gif");
 
@@ -532,14 +552,14 @@ class NowOtherFactors extends Page {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          if (image != null) image,
-          if (image != null) SizedBox(height: 4.0),
+          image,
+          const SizedBox(height: 4.0),
           if (markdown != "")
             MarkdownBody(
                 data: markdown,
                 extensionSet: md.ExtensionSet.gitHubFlavored,
                 styleSheet: markdownStyleSheet),
-          if (markdown != "") SizedBox(height: 4.0),
+          if (markdown != "") const SizedBox(height: 4.0),
           TextFormField(
               initialValue: kvRead("sleep", valueName + "-reason"),
               onChanged: (String value) {
@@ -550,7 +570,7 @@ class NowOtherFactors extends Page {
                 data: markdown2,
                 extensionSet: md.ExtensionSet.gitHubFlavored,
                 styleSheet: markdownStyleSheet),
-          if (markdown2 != "") SizedBox(height: 4.0),
+          if (markdown2 != "") const SizedBox(height: 4.0),
           SelectList(
               items: choices,
               max: maxChoice,
@@ -562,21 +582,16 @@ class NowOtherFactors extends Page {
         ]);
   }
 
-  @override
   final markdown = """
 What other factors might have disturbed your sleep?
 """;
 
-  @override
   final markdown2 = """
 How often during the past month have you had trouble sleeping because of this?
 """;
 
-  @override
   final maxChoice = 1;
-  @override
   final valueName = "how-often-other";
-  @override
   final List<SelectListItem<String>> choices = [
     SelectListItem(text: "Not during the past month", value: "0"),
     SelectListItem(text: "Less than once a week", value: "1"),
@@ -605,6 +620,8 @@ During the past month, how would you rate your sleep quality overall?
 
   @override
   final maxChoice = 1;
+  @override
+  final minSelected = 1;
   @override
   final valueName = "overall-quality";
   @override
@@ -638,6 +655,8 @@ During the past month, how often have you taken medicine (prescribed or “over 
   @override
   final maxChoice = 1;
   @override
+  final minSelected = 1;
+  @override
   final valueName = "how-sleep-medication";
   @override
   final List<SelectListItem<String>> choices = [
@@ -670,6 +689,8 @@ How often have you had trouble staying awake while working/studying, eating, wat
 
   @override
   final maxChoice = 1;
+  @override
+  final minSelected = 1;
   @override
   final valueName = "how-fatigue";
   @override
@@ -715,9 +736,9 @@ class NowScore extends Page {
         "${sleepTime.inHours} hours ${sleepTime.inMinutes.remainder(Duration.minutesPerHour)} minutes";
 
     TimeOfDay goBed = kvReadTimeOfDay("sleep", "time-go-bed") ??
-        TimeOfDay(hour: 0, minute: 0);
+        const TimeOfDay(hour: 0, minute: 0);
     TimeOfDay outBed = kvReadTimeOfDay("sleep", "time-out-bed") ??
-        TimeOfDay(hour: 0, minute: 0);
+        const TimeOfDay(hour: 0, minute: 0);
     int bedDuration = ((outBed.minute + outBed.hour * 60) -
             (goBed.minute + goBed.hour * 60)) %
         (24 * 60);
@@ -770,7 +791,7 @@ class NowScore extends Page {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           if (image != null) image!,
-          if (image != null) SizedBox(height: 4.0),
+          if (image != null) const SizedBox(height: 4.0),
           Center(
             child: Text(
               "$overallScore",

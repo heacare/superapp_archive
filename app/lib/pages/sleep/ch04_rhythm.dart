@@ -132,10 +132,8 @@ class RhythmFeels1 extends Page {
 
   @override
   final title = "Setting the course of action";
-  @override
   final image = Image.asset("assets/images/sleep/ch04-action.jpg");
 
-  @override
   final markdown = """
 When in the day do you usually feel your best?
 """;
@@ -148,15 +146,15 @@ When in the day do you usually feel your best?
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          if (image != null) image,
-          if (image != null) SizedBox(height: 4.0),
+          image,
+          const SizedBox(height: 4.0),
           if (markdown != "")
             MarkdownBody(
                 data: markdown,
                 extensionSet: md.ExtensionSet.gitHubFlavored,
                 styleSheet: markdownStyleSheet),
-          if (markdown != "") SizedBox(height: 4.0),
-          TimeRangePickerBlock(valueName: "feel-best-range"),
+          if (markdown != "") const SizedBox(height: 4.0),
+          const TimeRangePickerBlock(valueName: "feel-best-range"),
         ]);
   }
 }
@@ -171,10 +169,8 @@ class RhythmFeels2 extends Page {
 
   @override
   final title = "Setting the course of action";
-  @override
   final image = Image.asset("assets/images/sleep/ch04-action.jpg");
 
-  @override
   final markdown = """
 When in the middle of your day do you feel least productive?
 """;
@@ -187,15 +183,15 @@ When in the middle of your day do you feel least productive?
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          if (image != null) image,
-          if (image != null) SizedBox(height: 4.0),
+          image,
+          const SizedBox(height: 4.0),
           if (markdown != "")
             MarkdownBody(
                 data: markdown,
                 extensionSet: md.ExtensionSet.gitHubFlavored,
                 styleSheet: markdownStyleSheet),
-          if (markdown != "") SizedBox(height: 4.0),
-          TimeRangePickerBlock(valueName: "feel-least-productive-range"),
+          if (markdown != "") const SizedBox(height: 4.0),
+          const TimeRangePickerBlock(valueName: "feel-least-productive-range"),
         ]);
   }
 }
@@ -210,10 +206,8 @@ class RhythmFeels3 extends Page {
 
   @override
   final title = "Setting the course of action";
-  @override
   final image = Image.asset("assets/images/sleep/ch04-action.jpg");
 
-  @override
   final markdown = """
 When towards the end of your day you feel sleepy?
 """;
@@ -226,15 +220,15 @@ When towards the end of your day you feel sleepy?
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          if (image != null) image,
-          if (image != null) SizedBox(height: 4.0),
+          image,
+          const SizedBox(height: 4.0),
           if (markdown != "")
             MarkdownBody(
                 data: markdown,
                 extensionSet: md.ExtensionSet.gitHubFlavored,
                 styleSheet: markdownStyleSheet),
-          if (markdown != "") SizedBox(height: 4.0),
-          TimeRangePickerBlock(valueName: "feel-sleepy-range"),
+          if (markdown != "") const SizedBox(height: 4.0),
+          const TimeRangePickerBlock(valueName: "feel-sleepy-range"),
         ]);
   }
 }
@@ -249,7 +243,6 @@ class RhythmSettingCourseIntro extends Page {
 
   @override
   final title = "Activity: Setting the course of action";
-  @override
   final image = Image.asset("assets/images/sleep/ch04-action.jpg");
 
   @override
@@ -258,9 +251,9 @@ class RhythmSettingCourseIntro extends Page {
         p: Theme.of(context).textTheme.bodyText1,
         h1: Theme.of(context).textTheme.headline3);
     TimeOfDay goBed = kvReadTimeOfDay("sleep", "time-go-bed") ??
-        TimeOfDay(hour: 0, minute: 0);
+        const TimeOfDay(hour: 0, minute: 0);
     TimeOfDay outBed = kvReadTimeOfDay("sleep", "time-out-bed") ??
-        TimeOfDay(hour: 0, minute: 0);
+        const TimeOfDay(hour: 0, minute: 0);
     int sleepTimeMinutes = kvReadInt("sleep", "minutes-asleep") ?? 0;
     Duration sleepTime = Duration(minutes: sleepTimeMinutes);
     String sleepTimeText =
@@ -268,8 +261,8 @@ class RhythmSettingCourseIntro extends Page {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          if (image != null) image,
-          if (image != null) SizedBox(height: 4.0),
+          image,
+          const SizedBox(height: 4.0),
           MarkdownBody(
               data: """
 Your body needs time to shift gears to prepare for sleep. The brain has to orchestrate sleep. A series of physiological bodily functions need to take place in the right sequence.
@@ -282,7 +275,7 @@ Let’s review how you’re currently sleeping:
 """,
               extensionSet: md.ExtensionSet.gitHubFlavored,
               styleSheet: markdownStyleSheet),
-          SizedBox(height: 4.0),
+          const SizedBox(height: 4.0),
         ]);
   }
 }
@@ -305,7 +298,7 @@ class RhythmSettingCourse extends Page {
     int duration = kvReadInt("sleep", valueName) ?? defaultDuration;
     Duration initialDuration = Duration(minutes: duration);
     return Container(
-        padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 0.0),
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0.0),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
             prefix + "",
@@ -322,7 +315,7 @@ class RhythmSettingCourse extends Page {
       TimeOfDay defaultTime, String prefix) {
     TimeOfDay initialTime = kvReadTimeOfDay("sleep", valueName) ?? defaultTime;
     return Container(
-        padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 0.0),
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0.0),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
             prefix + "",
@@ -343,7 +336,7 @@ class RhythmSettingCourse extends Page {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           if (image != null) image!,
-          if (image != null) SizedBox(height: 4.0),
+          if (image != null) const SizedBox(height: 4.0),
           MarkdownBody(
               data: """
 Now, let’s set some specific goals:
@@ -354,16 +347,22 @@ A key to forming successful habits is taking small do-able steps. For example, i
 """,
               extensionSet: md.ExtensionSet.gitHubFlavored,
               styleSheet: markdownStyleSheet),
-          SizedBox(height: 4.0),
+          const SizedBox(height: 4.0),
           buildDuration(context, "goals-sleep-duration", 0,
               "I would like to sleep for at least"),
-          SizedBox(height: 4.0),
-          buildTime(context, "goals-wake-time", TimeOfDay(hour: 0, minute: 0),
+          const SizedBox(height: 4.0),
+          buildTime(
+              context,
+              "goals-wake-time",
+              const TimeOfDay(hour: 0, minute: 0),
               "I would like to wake up by"),
-          SizedBox(height: 4.0),
-          buildTime(context, "goals-sleep-time", TimeOfDay(hour: 0, minute: 0),
+          const SizedBox(height: 4.0),
+          buildTime(
+              context,
+              "goals-sleep-time",
+              const TimeOfDay(hour: 0, minute: 0),
               "This means I would need to sleep by"),
-          SizedBox(height: 4.0),
+          const SizedBox(height: 4.0),
           MarkdownBody(
               data: """
 **So how are we going to get you there?**

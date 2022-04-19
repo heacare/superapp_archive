@@ -3,7 +3,7 @@ import 'package:hea/widgets/gradient_button.dart';
 import 'package:hea/screens/onboarding.dart';
 
 class OnboardingStartScreen extends StatelessWidget {
-  OnboardingStartScreen({Key? key}) : super(key: key);
+  const OnboardingStartScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class OnboardingStartScreen extends StatelessWidget {
                       style: Theme.of(context).textTheme.headline2?.copyWith(
                           fontWeight: FontWeight.w400,
                           height: 1.4,
-                          color: Color(0xFF707070))),
+                          color: const Color(0xFF707070))),
                   const SizedBox(height: 24.0),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4.0),

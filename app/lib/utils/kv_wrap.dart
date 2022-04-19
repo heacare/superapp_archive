@@ -7,18 +7,14 @@ import 'package:hea/services/service_locator.dart';
 dynamic kvDump(String module) {
   String? json =
       serviceLocator<SharedPreferences>().getString('data-' + module);
-  if (json == null) {
-    json = "{}";
-  }
+  json ??= "{}";
   return jsonDecode(json);
 }
 
 kvWrite<T>(String module, String key, T value) {
   String? json =
       serviceLocator<SharedPreferences>().getString('data-' + module);
-  if (json == null) {
-    json = "{}";
-  }
+  json ??= "{}";
   Map object = jsonDecode(json);
   object[key] = value;
   json = jsonEncode(object);
@@ -28,9 +24,7 @@ kvWrite<T>(String module, String key, T value) {
 T kvRead<T>(String module, String key) {
   String? json =
       serviceLocator<SharedPreferences>().getString('data-' + module);
-  if (json == null) {
-    json = "{}";
-  }
+  json ??= "{}";
   Map object = jsonDecode(json);
   return object[key];
 }

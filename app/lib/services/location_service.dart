@@ -35,7 +35,7 @@ class LocationService {
         }
       }
     } on PlatformException catch (e) {
-      debugPrint("${e.code}");
+      debugPrint(e.code);
     }
   }
 
