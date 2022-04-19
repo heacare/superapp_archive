@@ -23,5 +23,7 @@ jobs:
           key: ${{ runner.os }}-flutter-${{ hashFiles('app/**/pubspec.lock') }}
           restore-keys: |
             ${{ runner.os }}-flutter-
+      - run: flutter pub get
+        working-directory: app
       - run: flutter analyze app --no-fatal-infos
       - run: flutter format app --output none --set-exit-if-changed
