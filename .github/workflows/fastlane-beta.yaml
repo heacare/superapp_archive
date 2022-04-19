@@ -36,10 +36,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ios]
     steps:
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '2.10'
-          channel: 'stable'
       - uses: actions/checkout@v2
         with:
           path: hea
