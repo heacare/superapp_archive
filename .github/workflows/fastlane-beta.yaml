@@ -34,6 +34,8 @@ jobs:
 
   android:
     runs-on: ubuntu-latest
+    env:
+      CODE_SIGNING_REPO: ${{ github.workspace }}/code-signing
     steps:
       - uses: subosito/flutter-action@v2
         with:
@@ -60,4 +62,4 @@ jobs:
           working-directory: hea/app
       - run: bundle exec fastlane android beta
         env:
-          GOOGLE_APPLICATION_CREDENTIALS: ../code-signing/android/firebase-app-distribution.json
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ env.CODE_SIGNING_REPO }}/code-signing/android/firebase-app-distribution.json
