@@ -17,12 +17,11 @@ jobs:
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: "stable"
-      - name: Set up problem matcher
-        run: echo "::add-matcher::.github/matcher-flutter.json"
-        working-directory: .
       - uses: actions/checkout@v2
         with:
           path: hea
+      - name: Set up problem matcher
+        run: echo "::add-matcher::.github/matcher-flutter.json"
       - uses: actions/cache@v3
         with:
           path: ${{ env.PUB_CACHE }}
