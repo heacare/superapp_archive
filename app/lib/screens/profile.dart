@@ -102,6 +102,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final country = user.country;
     final gender = user.gender;
     final icon = user.icon;
+    final int unused = "";
 
     return Scaffold(
         appBar: PreferredSize(
