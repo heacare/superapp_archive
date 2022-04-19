@@ -21,7 +21,7 @@ jobs:
         with:
           path: hea
       - name: Set up problem matcher
-        run: echo "::add-matcher::.github/matcher-flutter.json"
+        run: echo "::add-matcher::hea/.github/matcher-flutter.json"
       - uses: actions/cache@v3
         with:
           path: ${{ env.PUB_CACHE }}
