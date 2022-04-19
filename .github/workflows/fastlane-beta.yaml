@@ -39,6 +39,11 @@ jobs:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           MATCH_GIT_PRIVATE_KEY: ${{ secrets.CODE_SIGNING_REPO_SSH }}
           CONNECT_API_KEY: ${{ secrets.CONNECT_API_KEY }}
+      - name: Upload IPA
+        uses: actions/upload-artifact@v3
+        with:
+          name: Runner.ipa
+          path: hea/app/Runner.ipa
 
   ios-distribute:
     runs-on: ubuntu-latest
@@ -94,3 +99,8 @@ jobs:
       - run: bundle exec fastlane android beta
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ env.CODE_SIGNING_REPO }}/android/firebase-app-distribution.json
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-release.apk
+          path: hea/app/build/app/outputs/flutter-apk/app-release.apk
