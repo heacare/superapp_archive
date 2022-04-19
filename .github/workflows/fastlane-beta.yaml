@@ -77,4 +77,4 @@ jobs:
           working-directory: hea/app
       - run: bundle exec fastlane android beta
         env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ env.CODE_SIGNING_REPO }}/code-signing/android/firebase-app-distribution.json
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ env.CODE_SIGNING_REPO }}/android/firebase-app-distribution.json
