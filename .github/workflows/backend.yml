@@ -2,6 +2,10 @@ name: backend
 
 on:
   push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    paths: ["backend/**"]
 
 defaults:
   run:

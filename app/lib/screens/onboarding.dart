@@ -1,3 +1,4 @@
+// ignore_for_file: constant_identifier_names
 import 'package:health/health.dart';
 import 'package:get_it/get_it.dart';
 

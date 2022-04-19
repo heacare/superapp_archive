@@ -2,6 +2,10 @@ name: app
 
 on:
   push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    paths: ["app/**"]
 
 env:
   FLUTTER_VERSION: 2.10
@@ -26,5 +30,5 @@ jobs:
             ${{ runner.os }}-flutter-
       - run: flutter pub get
         working-directory: app
-      - run: flutter analyze app --no-fatal-infos
+      - run: flutter analyze app --no-fatal-infos | sed 's/^   info/warning/g'
       - run: flutter format app --output none --set-exit-if-changed

@@ -96,11 +96,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget loaded(User user) {
+    // ignore: unused_local_variable
     final name = user.name;
+    // ignore: unused_local_variable
     final height = user.height.toString() + "m";
+    // ignore: unused_local_variable
     final weight = user.weight.toString() + "kg";
+    // ignore: unused_local_variable
     final country = user.country;
+    // ignore: unused_local_variable
     final gender = user.gender;
+    // ignore: unused_local_variable
     final icon = user.icon;
 
     return Scaffold(
