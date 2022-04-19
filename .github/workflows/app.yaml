@@ -32,3 +32,25 @@ jobs:
         working-directory: app
       - run: flutter analyze app --no-fatal-infos | sed 's/^   info/warning/g'
       - run: flutter format app --output none --set-exit-if-changed
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: "stable"
+          cache: true
+      - uses: actions/checkout@v2
+      - name: Set up problem matcher
+        run: echo "::add-matcher::.github/matcher-flutter.json"
+      - uses: actions/cache@v3
+        with:
+          path: ${{ env.PUB_CACHE }}
+          key: ${{ runner.os }}-flutter-${{ hashFiles('app/**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-flutter-
+      - run: flutter pub get
+        working-directory: app
+      - run: flutter test
+        working-directory: app
