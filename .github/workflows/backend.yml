@@ -8,7 +8,6 @@ defaults:
     working-directory: backend
 
 jobs:
-
   lint:
     runs-on: ubuntu-latest
     strategy:
@@ -20,8 +19,8 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-          cache-dependency-path: '**/package-lock.json'
+          cache: "npm"
+          cache-dependency-path: "**/package-lock.json"
       - name: Install npm dependencies
         run: npm ci
       - name: Lint check
@@ -40,8 +39,8 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-          cache-dependency-path: '**/package-lock.json'
+          cache: "npm"
+          cache-dependency-path: "**/package-lock.json"
       - name: Install npm dependencies
         run: npm ci
       - name: Build
@@ -66,8 +65,8 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-          cache-dependency-path: '**/package-lock.json'
+          cache: "npm"
+          cache-dependency-path: "**/package-lock.json"
       - name: Install npm dependencies
         run: npm ci
       - name: Build
