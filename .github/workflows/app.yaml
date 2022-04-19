@@ -20,7 +20,7 @@ jobs:
       - uses: actions/cache@v3
         with:
           path: ${{ env.PUB_CACHE }}
-          key: ${{ runner.os }}-flutter-${{ hashFiles('hea/app/**/pubspec.lock') }}
+          key: ${{ runner.os }}-flutter-${{ hashFiles('app/**/pubspec.lock') }}
           restore-keys: |
             ${{ runner.os }}-flutter-
       - run: flutter analyze app --no-fatal-infos
