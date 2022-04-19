@@ -18,7 +18,8 @@ pubspec_write_version(version)
 git_add(["pubspec.yaml"])
 git_commit(f"chore: Release {version}")
 # Perform Git tag
-git_tag(f"v{version}")
+tag = f"v{version}"
+git_tag(tag)
 # Perform Git push
 input("Press enter to push")
 git_push(["main", tag])
