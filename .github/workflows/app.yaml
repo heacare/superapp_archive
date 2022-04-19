@@ -3,9 +3,6 @@ name: app
 on:
   push:
 
-defaults:
-  run:
-    working-directory: hea/app
 env:
   FLUTTER_VERSION: 2.10
 
@@ -18,14 +15,13 @@ jobs:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: "stable"
       - uses: actions/checkout@v2
-        with:
-          path: hea
       - name: Set up problem matcher
-        run: echo "::add-matcher::hea/.github/matcher-flutter.json"
+        run: echo "::add-matcher::.github/matcher-flutter.json"
       - uses: actions/cache@v3
         with:
           path: ${{ env.PUB_CACHE }}
           key: ${{ runner.os }}-flutter-${{ hashFiles('hea/app/**/pubspec.lock') }}
           restore-keys: |
             ${{ runner.os }}-flutter-
-      - run: flutter analyze
+      - run: flutter analyze app --no-fatal-infos
+      - run: flutter format app --output none --set-exit-if-changed
