@@ -62,5 +62,6 @@ jobs:
       - name: Report code coverage (when pull request)
         uses: zgosalvez/github-actions-report-lcov@v1
         with:
-          coverage-files: coverage/lcov.info
+          coverage-files: app/coverage/lcov.info
           working-directory: app
+        if: ${{ github.event_name == 'pull_request' }}
