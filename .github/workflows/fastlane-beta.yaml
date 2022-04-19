@@ -6,7 +6,7 @@ on:
 
 defaults:
   run:
-    working-directory: app
+    working-directory: hea/app
 
 jobs:
 
@@ -18,10 +18,12 @@ jobs:
           flutter-version: '2.10'
           channel: 'stable'
       - uses: actions/checkout@v2
+        with:
+          path: hea
       - uses: actions/cache@v3
         with:
-          path: ios/Pods
-          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          path: hea/app/ios/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('hea/app/**/Podfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-pods-
       - run: fastlane ios beta
@@ -32,19 +34,19 @@ jobs:
 
   android:
     runs-on: ubuntu-latest
-    env:
-      CODE_SIGNING_REPO: ${{ github.workspace }}/code-signing
     steps:
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '2.10'
           channel: 'stable'
       - uses: actions/checkout@v2
+        with:
+          path: hea
       - uses: actions/checkout@v2
         with:
           repository: happilyeveraftercorp/code-signing
           ssh-key: ${{ secrets.CODE_SIGNING_REPO_SSH }}
-          path: ${{ env.CODE_SIGNING_REPO }}
+          path: code-signing
       - name: Configure keystore
         run: |
           echo "storeFile=${{ env.CODE_SIGNING_REPO }}/android/release.keystore" >> android/key.properties
@@ -55,7 +57,7 @@ jobs:
         with:
           ruby-version: 3.1
           bundler-cache: true
-          working-directory: app
+          working-directory: hea/app
       - run: bundle exec fastlane android beta
         env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ env.CODE_SIGNING_REPO }}/android/firebase-app-distribution.json
+          GOOGLE_APPLICATION_CREDENTIALS: ../code-signing/android/firebase-app-distribution.json
