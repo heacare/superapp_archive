@@ -86,7 +86,7 @@ class BasePage extends StatelessWidget {
                             child: Text(title,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 4,
-                                style: Theme.of(context).textTheme.headline1)),
+                                style: Theme.of(context).textTheme.headline2)),
                         if (prevPage != null)
                           Container(
                               //alignment: AlignmentDirectional.topCenter,
@@ -351,6 +351,67 @@ class TimePickerBlockState extends State<TimePickerBlock> {
           backgroundColor: Color(0xFFF5F5F5),
           elevation: 0.0),
     );
+  }
+}
+
+class TimeRangePickerBlock extends StatefulWidget {
+  const TimeRangePickerBlock(
+      {this.defaultStartTime = const TimeOfDay(hour: 0, minute: 0),
+      this.defaultEndTime = const TimeOfDay(hour: 0, minute: 0),
+      required this.valueName,
+      Key? key})
+      : super(key: key);
+
+  final TimeOfDay defaultStartTime;
+  final TimeOfDay defaultEndTime;
+  final String valueName;
+
+  @override
+  TimeRangePickerBlockState createState() => TimeRangePickerBlockState();
+}
+
+class TimeRangePickerBlockState extends State<TimeRangePickerBlock> {
+  TimeOfDayRange selectedRange = TimeOfDayRange(
+      TimeOfDay(hour: 0, minute: 0), TimeOfDay(hour: 0, minute: 0));
+
+  @override
+  void initState() {
+    super.initState();
+    selectedRange = kvReadTimeOfDayRange("sleep", widget.valueName) ??
+        TimeOfDayRange(widget.defaultStartTime, widget.defaultEndTime);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    debugPrint("timerangesave");
+    kvWriteTimeOfDayRange("sleep", widget.valueName, selectedRange);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(children: [
+      Text("From"),
+      TimePickerBlock(
+          initialTime: selectedRange.start,
+          onChange: (time) {
+            setState(() {
+              selectedRange = TimeOfDayRange(time, selectedRange.end);
+              debugPrint("timerangesave");
+              kvWriteTimeOfDayRange("sleep", widget.valueName, selectedRange);
+            });
+          }),
+      Text("to"),
+      TimePickerBlock(
+          initialTime: selectedRange.end,
+          onChange: (time) {
+            setState(() {
+              selectedRange = TimeOfDayRange(selectedRange.start, time);
+              debugPrint("timerangesave");
+              kvWriteTimeOfDayRange("sleep", widget.valueName, selectedRange);
+            });
+          }),
+    ]);
   }
 }
 

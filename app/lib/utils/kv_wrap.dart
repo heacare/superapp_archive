@@ -57,18 +57,51 @@ List<String> kvReadStringList(String module, String key) {
 }
 
 kvWriteTimeOfDay(String module, String key, TimeOfDay value) {
-  kvWrite(module, key, {
-    "hour": value.hour,
-    "minute": value.minute,
-  });
+  kvWrite(module, key, _TimeOfDay.from(value).toJSON());
 }
 
 TimeOfDay? kvReadTimeOfDay(String module, String key) {
   dynamic v = kvRead(module, key);
-  if (v is Map) {
-    if (v["hour"] is int && v["minute"] is int) {
-      return TimeOfDay(hour: v["hour"], minute: v["minute"]);
-    }
+  if (v is Map<String, dynamic>) {
+    return _TimeOfDay.fromJSON(v);
+  }
+  return null;
+}
+
+kvWriteTimeOfDayRange(String module, String key, TimeOfDayRange value) {
+  kvWrite(module, key, value.toJSON());
+}
+
+class _TimeOfDay extends TimeOfDay {
+  _TimeOfDay.from(TimeOfDay timeOfDay)
+      : super(hour: timeOfDay.hour, minute: timeOfDay.minute);
+  _TimeOfDay.fromJSON(Map<String, dynamic> json)
+      : super(hour: json["hour"], minute: json["minute"]);
+  toJSON() => {
+        "hour": hour,
+        "minute": minute,
+      };
+}
+
+class TimeOfDayRange {
+  final _TimeOfDay start;
+  final _TimeOfDay end;
+  TimeOfDayRange(TimeOfDay start, TimeOfDay end)
+      : start = _TimeOfDay.from(start),
+        end = _TimeOfDay.from(end);
+  TimeOfDayRange.fromJSON(Map<String, dynamic> json)
+      : start = _TimeOfDay.fromJSON(json["start"]),
+        end = _TimeOfDay.fromJSON(json["end"]);
+  toJSON() => {
+        "start": start.toJSON(),
+        "end": end.toJSON(),
+      };
+}
+
+TimeOfDayRange? kvReadTimeOfDayRange(String module, String key) {
+  dynamic v = kvRead(module, key);
+  if (v is Map<String, dynamic>) {
+    return TimeOfDayRange.fromJSON(v);
   }
   return null;
 }

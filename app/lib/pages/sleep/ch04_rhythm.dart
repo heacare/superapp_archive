@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart' hide Page;
+import 'package:markdown/markdown.dart' as md;
+import 'package:flutter_markdown/flutter_markdown.dart';
 
+import 'package:hea/utils/kv_wrap.dart';
 import 'package:hea/widgets/page.dart';
 import 'ch03_goals.dart';
 import 'ch05_owning.dart';
@@ -100,7 +103,7 @@ class RhythmPeaksAndDips2 extends MarkdownPage {
   RhythmPeaksAndDips2({Key? key}) : super(key: key);
 
   @override
-  final nextPage = () => OwningRoutine();
+  final nextPage = () => RhythmFeels1();
   @override
   final prevPage = () => RhythmPeaksAndDips1();
 
@@ -117,4 +120,259 @@ The interplay of these two processes creates peaks of high energy and dips of lo
 
 When these peaks and dips will happen depend on our sleep and wake times - a highly personal choice by each of us.
 """;
+}
+
+class RhythmFeels1 extends Page {
+  RhythmFeels1({Key? key}) : super(key: key);
+
+  @override
+  final nextPage = () => RhythmFeels2();
+  @override
+  final prevPage = () => RhythmPeaksAndDips2();
+
+  @override
+  final title = "Setting the course of action";
+  @override
+  final image = Image.asset("assets/images/sleep/ch04-action.jpg");
+
+  @override
+  final markdown = """
+When in the day do you usually feel your best?
+""";
+
+  @override
+  Widget buildPage(BuildContext context) {
+    final markdownStyleSheet = MarkdownStyleSheet(
+        p: Theme.of(context).textTheme.bodyText1,
+        h1: Theme.of(context).textTheme.headline3);
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          if (image != null) image,
+          if (image != null) SizedBox(height: 4.0),
+          if (markdown != "")
+            MarkdownBody(
+                data: markdown,
+                extensionSet: md.ExtensionSet.gitHubFlavored,
+                styleSheet: markdownStyleSheet),
+          if (markdown != "") SizedBox(height: 4.0),
+          TimeRangePickerBlock(valueName: "feel-best-range"),
+        ]);
+  }
+}
+
+class RhythmFeels2 extends Page {
+  RhythmFeels2({Key? key}) : super(key: key);
+
+  @override
+  final nextPage = () => RhythmFeels3();
+  @override
+  final prevPage = () => RhythmFeels1();
+
+  @override
+  final title = "Setting the course of action";
+  @override
+  final image = Image.asset("assets/images/sleep/ch04-action.jpg");
+
+  @override
+  final markdown = """
+When in the middle of your day do you feel least productive?
+""";
+
+  @override
+  Widget buildPage(BuildContext context) {
+    final markdownStyleSheet = MarkdownStyleSheet(
+        p: Theme.of(context).textTheme.bodyText1,
+        h1: Theme.of(context).textTheme.headline3);
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          if (image != null) image,
+          if (image != null) SizedBox(height: 4.0),
+          if (markdown != "")
+            MarkdownBody(
+                data: markdown,
+                extensionSet: md.ExtensionSet.gitHubFlavored,
+                styleSheet: markdownStyleSheet),
+          if (markdown != "") SizedBox(height: 4.0),
+          TimeRangePickerBlock(valueName: "feel-least-productive-range"),
+        ]);
+  }
+}
+
+class RhythmFeels3 extends Page {
+  RhythmFeels3({Key? key}) : super(key: key);
+
+  @override
+  final nextPage = () => RhythmSettingCourseIntro();
+  @override
+  final prevPage = () => RhythmFeels2();
+
+  @override
+  final title = "Setting the course of action";
+  @override
+  final image = Image.asset("assets/images/sleep/ch04-action.jpg");
+
+  @override
+  final markdown = """
+When towards the end of your day you feel sleepy?
+""";
+
+  @override
+  Widget buildPage(BuildContext context) {
+    final markdownStyleSheet = MarkdownStyleSheet(
+        p: Theme.of(context).textTheme.bodyText1,
+        h1: Theme.of(context).textTheme.headline3);
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          if (image != null) image,
+          if (image != null) SizedBox(height: 4.0),
+          if (markdown != "")
+            MarkdownBody(
+                data: markdown,
+                extensionSet: md.ExtensionSet.gitHubFlavored,
+                styleSheet: markdownStyleSheet),
+          if (markdown != "") SizedBox(height: 4.0),
+          TimeRangePickerBlock(valueName: "feel-sleepy-range"),
+        ]);
+  }
+}
+
+class RhythmSettingCourseIntro extends Page {
+  RhythmSettingCourseIntro({Key? key}) : super(key: key);
+
+  @override
+  final nextPage = () => RhythmSettingCourse();
+  @override
+  final prevPage = () => RhythmFeels3();
+
+  @override
+  final title = "Activity: Setting the course of action";
+  @override
+  final image = Image.asset("assets/images/sleep/ch04-action.jpg");
+
+  @override
+  Widget buildPage(BuildContext context) {
+    final markdownStyleSheet = MarkdownStyleSheet(
+        p: Theme.of(context).textTheme.bodyText1,
+        h1: Theme.of(context).textTheme.headline3);
+    TimeOfDay goBed = kvReadTimeOfDay("sleep", "time-go-bed") ??
+        TimeOfDay(hour: 0, minute: 0);
+    TimeOfDay outBed = kvReadTimeOfDay("sleep", "time-out-bed") ??
+        TimeOfDay(hour: 0, minute: 0);
+    int sleepTimeMinutes = kvReadInt("sleep", "minutes-asleep") ?? 0;
+    Duration sleepTime = Duration(minutes: sleepTimeMinutes);
+    String sleepTimeText =
+        "${sleepTime.inHours} hours ${sleepTime.inMinutes.remainder(Duration.minutesPerHour)} minutes";
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          if (image != null) image,
+          if (image != null) SizedBox(height: 4.0),
+          MarkdownBody(
+              data: """
+Your body needs time to shift gears to prepare for sleep. The brain has to orchestrate sleep. A series of physiological bodily functions need to take place in the right sequence.
+
+Let’s review how you’re currently sleeping:
+
+- Usually go to bed at: ${goBed.format(context)}
+- Usually get out of bed at: ${outBed.format(context)}
+- Average sleep duration: $sleepTimeText
+""",
+              extensionSet: md.ExtensionSet.gitHubFlavored,
+              styleSheet: markdownStyleSheet),
+          SizedBox(height: 4.0),
+        ]);
+  }
+}
+
+class RhythmSettingCourse extends Page {
+  RhythmSettingCourse({Key? key}) : super(key: key);
+
+  @override
+  final nextPage = () => OwningRoutine();
+  @override
+  final prevPage = () => RhythmSettingCourseIntro();
+
+  @override
+  final title = "Let's review";
+
+  final Image? image = Image.asset("assets/images/sleep/ch04-action.jpg");
+
+  Widget buildDuration(BuildContext context, String valueName,
+      int defaultDuration, String prefix) {
+    int duration = kvReadInt("sleep", valueName) ?? defaultDuration;
+    Duration initialDuration = Duration(minutes: duration);
+    return Container(
+        padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 0.0),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(
+            prefix + "",
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+          DurationPickerBlock(
+              initialDuration: initialDuration,
+              onChange: (duration) =>
+                  kvWrite("sleep", valueName, duration.inMinutes)),
+        ]));
+  }
+
+  Widget buildTime(BuildContext context, String valueName,
+      TimeOfDay defaultTime, String prefix) {
+    TimeOfDay initialTime = kvReadTimeOfDay("sleep", valueName) ?? defaultTime;
+    return Container(
+        padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 0.0),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(
+            prefix + "",
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+          TimePickerBlock(
+              initialTime: initialTime,
+              onChange: (time) => kvWriteTimeOfDay("sleep", valueName, time)),
+        ]));
+  }
+
+  @override
+  Widget buildPage(BuildContext context) {
+    final markdownStyleSheet = MarkdownStyleSheet(
+        p: Theme.of(context).textTheme.bodyText1,
+        h1: Theme.of(context).textTheme.headline3);
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          if (image != null) image!,
+          if (image != null) SizedBox(height: 4.0),
+          MarkdownBody(
+              data: """
+Now, let’s set some specific goals:
+
+Remember, when your peaks and dips happen depends on your wake and sleep times.
+
+A key to forming successful habits is taking small do-able steps. For example, if your average sleep time is 6 hours, aim to increase it by 15 to 30 minutes
+""",
+              extensionSet: md.ExtensionSet.gitHubFlavored,
+              styleSheet: markdownStyleSheet),
+          SizedBox(height: 4.0),
+          buildDuration(context, "goals-sleep-duration", 0,
+              "I would like to sleep for at least"),
+          SizedBox(height: 4.0),
+          buildTime(context, "goals-wake-time", TimeOfDay(hour: 0, minute: 0),
+              "I would like to wake up by"),
+          SizedBox(height: 4.0),
+          buildTime(context, "goals-sleep-time", TimeOfDay(hour: 0, minute: 0),
+              "This means I would need to sleep by"),
+          SizedBox(height: 4.0),
+          MarkdownBody(
+              data: """
+**So how are we going to get you there?**
+
+It starts with a calming wind-down routine, otherwise known as a bedtime routine.
+""",
+              extensionSet: md.ExtensionSet.gitHubFlavored,
+              styleSheet: markdownStyleSheet),
+        ]);
+    // TODO: Read default responses
+  }
 }

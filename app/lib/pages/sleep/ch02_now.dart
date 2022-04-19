@@ -685,7 +685,7 @@ class NowScore extends Page {
   NowScore({Key? key}) : super(key: key);
 
   @override
-  final nextPage = () => GoalsSleepNeeds();
+  final nextPage = () => GoalsSetting();
   @override
   final prevPage = () => NowFatigue();
 

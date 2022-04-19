@@ -27,5 +27,11 @@ for m in Path('lib', 'pages').iterdir():
         f.write("\n".join(lookup))
         f.write("\n")
 
+    # Copy-paste code
+
+    # For sleep_notifications.dart
+    for item in pagedefs:
+        print(f's == "{item}" ||')
+
 
 # vim: set et ts=4 sw=4:

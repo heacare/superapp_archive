@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart' hide Page;
-import 'package:markdown/markdown.dart' as md;
-import 'package:flutter_markdown/flutter_markdown.dart';
 
-import 'package:hea/utils/kv_wrap.dart';
 import 'package:hea/widgets/page.dart';
 import 'package:hea/widgets/select_list.dart';
 import 'ch03_goals.dart';
@@ -15,7 +12,7 @@ class OwningRoutine extends MarkdownPage {
   @override
   final nextPage = () => OwningZeitgebers();
   @override
-  final prevPage = () => RhythmPeaksAndDips2();
+  final prevPage = () => RhythmSettingCourse();
 
   @override
   final title = "Rhythm is Life and routine";
@@ -36,7 +33,7 @@ class OwningZeitgebers extends MarkdownPage {
   OwningZeitgebers({Key? key}) : super(key: key);
 
   @override
-  final nextPage = () => OwningSettingCourseIntro();
+  final nextPage = () => OwningRoutineActivities1();
   @override
   final prevPage = () => OwningRoutine();
 
@@ -58,161 +55,13 @@ Exposure to these cues encourage mental and behavioural changes that support ale
 """;
 }
 
-class OwningSettingCourseIntro extends MarkdownPage {
-  OwningSettingCourseIntro({Key? key}) : super(key: key);
+class OwningRoutineActivities1 extends MultipleChoicePage {
+  OwningRoutineActivities1({Key? key}) : super(key: key);
 
   @override
-  final nextPage = () => OwningSettingCourse();
+  final nextPage = () => OwningRoutineActivities2();
   @override
   final prevPage = () => OwningZeitgebers();
-
-  @override
-  final title = "Activity: Setting the course of action";
-  @override
-  final image = Image.asset("assets/images/sleep/ch05-action.jpg");
-
-  @override
-  final markdown = """
-Your body needs time to shift gears to prepare for sleep. The brain has to orchestrate sleep. A series of physiological bodily functions need to take place in the right sequence.
-
-Let’s review how you’re currently sleeping:
-
-- Usually go to bed at: TODO
-- Usually get out of bed at: TODO
-- Average sleep duration: TODO
-""";
-}
-
-class OwningSettingCourse extends Page {
-  OwningSettingCourse({Key? key}) : super(key: key);
-
-  @override
-  final nextPage = () => OwningHaveRoutine();
-  @override
-  final prevPage = () => OwningSettingCourseIntro();
-
-  @override
-  final title = "Let's review";
-
-  final Image? image = Image.asset("assets/images/sleep/ch05-action.jpg");
-
-  Widget buildDuration(BuildContext context, String valueName,
-      int defaultDuration, String prefix) {
-    int duration = kvReadInt("sleep", valueName) ?? defaultDuration;
-    Duration initialDuration = Duration(minutes: duration);
-    return Container(
-        padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 0.0),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
-            prefix + "",
-            style: Theme.of(context).textTheme.bodyLarge,
-          ),
-          DurationPickerBlock(
-              initialDuration: initialDuration,
-              onChange: (duration) =>
-                  kvWrite("sleep", valueName, duration.inMinutes)),
-        ]));
-  }
-
-  Widget buildTime(BuildContext context, String valueName,
-      TimeOfDay defaultTime, String prefix) {
-    TimeOfDay initialTime = kvReadTimeOfDay("sleep", valueName) ?? defaultTime;
-    return Container(
-        padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 0.0),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
-            prefix + "",
-            style: Theme.of(context).textTheme.bodyLarge,
-          ),
-          TimePickerBlock(
-              initialTime: initialTime,
-              onChange: (time) => kvWriteTimeOfDay("sleep", valueName, time)),
-        ]));
-  }
-
-  @override
-  Widget buildPage(BuildContext context) {
-    final markdownStyleSheet = MarkdownStyleSheet(
-        p: Theme.of(context).textTheme.bodyText1,
-        h1: Theme.of(context).textTheme.headline3);
-    return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          if (image != null) image!,
-          if (image != null) SizedBox(height: 4.0),
-          MarkdownBody(
-              data: """
-Now, let’s set some specific goals:
-
-A key to forming successful habits is taking small do-able steps. For example, if your average sleep time is 6 hours, aim to increase it by 15 to 30 minutes
-""",
-              extensionSet: md.ExtensionSet.gitHubFlavored,
-              styleSheet: markdownStyleSheet),
-          SizedBox(height: 4.0),
-          buildDuration(context, "goals-sleep-duration", 0,
-              "I would like to sleep for at least"),
-          SizedBox(height: 4.0),
-          buildTime(context, "goals-wake-time", TimeOfDay(hour: 0, minute: 0),
-              "I would like to wake up by"),
-          SizedBox(height: 4.0),
-          buildTime(context, "goals-sleep-time", TimeOfDay(hour: 0, minute: 0),
-              "This means I would need to sleep by"),
-          SizedBox(height: 4.0),
-          MarkdownBody(
-              data: """
-**So how are we going to get you there?**
-
-It starts with a calming wind-down routine, otherwise known as a bedtime routine.
-""",
-              extensionSet: md.ExtensionSet.gitHubFlavored,
-              styleSheet: markdownStyleSheet),
-        ]);
-    // TODO: Read default responses
-  }
-}
-
-class OwningHaveRoutine extends MultipleChoicePage {
-  OwningHaveRoutine({Key? key}) : super(key: key);
-
-  @override
-  final nextPage = () {
-    String choice = kvReadStringList("sleep", "have-routine")[0];
-    if (choice == "yes") {
-      return OwniningRoutineActivities1();
-    }
-    return OwningRoutineStart();
-  };
-  @override
-  final prevPage = () => OwningSettingCourse();
-
-  @override
-  final title = "Existing routine";
-  @override
-  final image = null;
-
-  @override
-  final markdown = """
-Do you have a bedtime routine?
-""";
-
-  @override
-  final maxChoice = 1;
-  @override
-  final valueName = "have-routine";
-  @override
-  final List<SelectListItem<String>> choices = [
-    SelectListItem(text: "Yes", value: "yes"),
-    SelectListItem(text: "No", value: "no"),
-  ];
-}
-
-class OwniningRoutineActivities1 extends MultipleChoicePage {
-  OwniningRoutineActivities1({Key? key}) : super(key: key);
-
-  @override
-  final nextPage = () => OwniningRoutineActivities2();
-  @override
-  final prevPage = () => OwningHaveRoutine();
 
   @override
   final title = "Existing routine";
@@ -236,13 +85,13 @@ Select the appropriate habits that happen under each time section accordingly. I
   final List<SelectListItem<String>> choices = activityChoices;
 }
 
-class OwniningRoutineActivities2 extends MultipleChoicePage {
-  OwniningRoutineActivities2({Key? key}) : super(key: key);
+class OwningRoutineActivities2 extends MultipleChoicePage {
+  OwningRoutineActivities2({Key? key}) : super(key: key);
 
   @override
-  final nextPage = () => OwniningRoutineActivities3();
+  final nextPage = () => OwningRoutineActivities3();
   @override
-  final prevPage = () => OwniningRoutineActivities1();
+  final prevPage = () => OwningRoutineActivities1();
 
   @override
   final title = "Existing routine";
@@ -266,13 +115,13 @@ Select the appropriate habits that happen under each time section accordingly. I
   final List<SelectListItem<String>> choices = activityChoices;
 }
 
-class OwniningRoutineActivities3 extends MultipleChoicePage {
-  OwniningRoutineActivities3({Key? key}) : super(key: key);
+class OwningRoutineActivities3 extends MultipleChoicePage {
+  OwningRoutineActivities3({Key? key}) : super(key: key);
 
   @override
   final nextPage = () => OwningStarter();
   @override
-  final prevPage = () => OwniningRoutineActivities2();
+  final prevPage = () => OwningRoutineActivities2();
 
   @override
   final title = "Existing routine";
@@ -302,7 +151,7 @@ class OwningRoutineStart extends MarkdownPage {
   @override
   final nextPage = () => OwningStarter();
   @override
-  final prevPage = () => OwningHaveRoutine();
+  final prevPage = () => OwningRoutineActivities3();
 
   @override
   final title = "Setting a routine";
@@ -321,13 +170,7 @@ class OwningStarter extends MarkdownPage {
   @override
   final nextPage = () => OwningBeforeBedtime();
   @override
-  final prevPage = () {
-    String choice = kvReadStringList("sleep", "have-routine")[0];
-    if (choice == "yes") {
-      return OwniningRoutineActivities3();
-    }
-    return OwningRoutineStart();
-  };
+  final prevPage = () => OwningRoutineStart();
 
   @override
   final title = "Routine is a habit";

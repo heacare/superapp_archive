@@ -8,34 +8,13 @@ import 'package:hea/widgets/select_list.dart';
 import 'ch02_now.dart';
 import 'ch04_rhythm.dart';
 
-class GoalsSleepNeeds extends MarkdownPage {
-  GoalsSleepNeeds({Key? key}) : super(key: key);
-
-  @override
-  final nextPage = () => GoalsSetting();
-  @override
-  final prevPage = () => NowScore();
-
-  @override
-  final title = "Your sleep needs";
-  @override
-  final image = Image.asset("assets/images/sleep/ch03-i-really-need-it.gif");
-
-  @override
-  final markdown = """
-By now, you’ve begun to gain a better understanding of sleep.
-
-In this chapter, we’ll build your sleep profile.
-""";
-}
-
 class GoalsSetting extends MultipleChoicePage {
   GoalsSetting({Key? key}) : super(key: key);
 
   @override
   final nextPage = () => GoalsTimeToSleep();
   @override
-  final prevPage = () => GoalsSleepNeeds();
+  final prevPage = () => NowScore();
 
   @override
   final title = "Visualising your ideal sleep";

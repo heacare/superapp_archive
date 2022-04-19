@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart' show TimeOfDay;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:hea/services/service_locator.dart';
@@ -24,8 +25,6 @@ Future<void> scheduleSleepNotifications() async {
       s == "NowGetSleep") {
     // Set #2
     // Objective: user to get sleep efficiency score <take user to begin Chp 2>
-    int count =
-        serviceLocator<SharedPreferences>().getInt("now-efficiency") ?? 0;
     await serviceLocator<NotificationService>().showContentReminder(
         baseId + 2 * 10 + 1,
         "sleep_content",
@@ -42,7 +41,266 @@ Future<void> scheduleSleepNotifications() async {
         baseId + 2 * 10 + 3,
         "sleep_content",
         "Sleep quality check",
-        "We miss you ☹️. Do you need some help? Feel free to contact us directly",
+        "We miss you ☹️.  If you need some help, feel free to contact us directly.",
+        minHoursLater: firstReminder + nextReminder * 2);
+  } else if (s == "NowHowEfficientSleep" ||
+      s == "NowHowEfficientSleep2" ||
+      s == "NowDifficultySleeping" ||
+      s == "NowSleepDisturbances" ||
+      s == "NowTroubleSleepingWakeUp" ||
+      s == "NowTroubleSleepingBathroom" ||
+      s == "NowTroubleSleepingBreath" ||
+      s == "NowTroubleSleepingSnore" ||
+      s == "NowTroubleSleepingCold" ||
+      s == "NowTroubleSleepingHot" ||
+      s == "NowTroubleSleepingBadDreams" ||
+      s == "NowTroubleSleepingPain" ||
+      s == "NowOtherFactors" ||
+      s == "NowOverallQuality" ||
+      s == "NowSleepMedication" ||
+      s == "NowFatigue" ||
+      s == "NowScore") {
+    // Set #3
+    // Objective: finish baseline survey <chp 2 pg 4>
+    TimeOfDay goBed = kvReadTimeOfDay("sleep", "time-go-bed") ??
+        TimeOfDay(hour: 0, minute: 0);
+    TimeOfDay outBed = kvReadTimeOfDay("sleep", "time-out-bed") ??
+        TimeOfDay(hour: 0, minute: 0);
+    int bedDuration = ((outBed.minute + outBed.hour * 60) -
+            (goBed.minute + goBed.hour * 60)) %
+        (24 * 60);
+    int sleepDuration = kvReadInt("sleep", "minutes-asleep") ?? 0;
+    int sleepEfficiencyPercent = ((sleepDuration / bedDuration) * 100).round();
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 3 * 10 + 1,
+        "sleep_content",
+        "Discovering your sleep",
+        "You've scored $sleepEfficiencyPercent% on your sleep efficiency. What else can you find out about your sleep?",
+        minHoursLater: firstReminder);
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 3 * 10 + 2,
+        "sleep_content",
+        "Discovering your sleep",
+        "Complete your sleep baseline to get a better insight about your sleep.",
+        minHoursLater: firstReminder + nextReminder);
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 3 * 10 + 3,
+        "sleep_content",
+        "Sleep quality check",
+        "We miss you ☹️.  If you need some help, feel free to contact us directly.",
+        minHoursLater: firstReminder + nextReminder * 2);
+  } else if (s == "GoalsSetting") {
+    // Set #4
+    // Objective: start visualising ideal sleep <take user to Chp 3 page 1>
+    int subjectiveSleepQuality =
+        int.tryParse(kvReadStringList("sleep", "overall-quality")[0]) ?? 0;
+
+    int pointsFallAsleep =
+        int.tryParse(kvReadStringList("sleep", "points-fall-asleep")[0]) ?? 0;
+    int howOftenAsleep30Minutes = int.tryParse(
+            kvReadStringList("sleep", "how-often-asleep-30-minutes")[0]) ??
+        0;
+    int sleepLatency =
+        ((pointsFallAsleep + howOftenAsleep30Minutes) / 2).ceil();
+
+    int sleepTimeMinutes = kvReadInt("sleep", "minutes-asleep") ?? 0;
+    Duration sleepTime = Duration(minutes: sleepTimeMinutes);
+    String sleepTimeText =
+        "${sleepTime.inHours} hours ${sleepTime.inMinutes.remainder(Duration.minutesPerHour)} minutes";
+
+    TimeOfDay goBed = kvReadTimeOfDay("sleep", "time-go-bed") ??
+        TimeOfDay(hour: 0, minute: 0);
+    TimeOfDay outBed = kvReadTimeOfDay("sleep", "time-out-bed") ??
+        TimeOfDay(hour: 0, minute: 0);
+    int bedDuration = ((outBed.minute + outBed.hour * 60) -
+            (goBed.minute + goBed.hour * 60)) %
+        (24 * 60);
+    int sleepDuration = kvReadInt("sleep", "minutes-asleep") ?? 0;
+    int sleepEfficiencyPercent = ((sleepDuration / bedDuration) * 100).round();
+    int sleepEfficiency = 0;
+    if (sleepEfficiencyPercent < 65) {
+      sleepEfficiency = 3;
+    } else if (sleepEfficiencyPercent < 75) {
+      sleepEfficiency = 2;
+    } else if (sleepEfficiencyPercent < 85) {
+      sleepEfficiency = 1;
+    }
+
+    const List<String> keys = [
+      "how-often-wake-up",
+      "how-often-bathroom",
+      "how-often-breath",
+      "how-often-snore",
+      "how-often-cold",
+      "how-often-hot",
+      "how-often-bad-dreams",
+      "how-often-pain",
+      "how-often-other"
+    ];
+    int pointsDisturbance = 0;
+    for (String key in keys) {
+      List<String> values = kvReadStringList("sleep", key);
+      if (values.length != 1) {
+        continue;
+      }
+      pointsDisturbance += int.tryParse(values[0]) ?? 0;
+    }
+    int sleepDisturbances = (pointsDisturbance / keys.length).ceil();
+
+    int sleepMedication =
+        int.tryParse(kvReadStringList("sleep", "how-sleep-medication")[0]) ?? 0;
+
+    int pointsFatigue =
+        int.tryParse(kvReadStringList("sleep", "how-fatigue")[0]) ?? 0;
+    int daytimeDysfunction = pointsFatigue;
+
+    int overallScore = sleepLatency +
+        sleepEfficiency +
+        sleepDisturbances +
+        subjectiveSleepQuality +
+        sleepMedication +
+        daytimeDysfunction;
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 4 * 10 + 1,
+        "sleep_content",
+        "Setting sleep goals",
+        "Your sleep score of $overallScore and last 7 days of how you sleep have revealed how much you can improve it. Ready to set some goals?",
+        minHoursLater: firstReminder);
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 4 * 10 + 2,
+        "sleep_content",
+        "Setting sleep goals",
+        "You’ve got your sleep score and 7-day observation at baseline. Ready to set some sleep goals?",
+        minHoursLater: firstReminder + nextReminder);
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 4 * 10 + 3,
+        "sleep_content",
+        "Setting sleep goals",
+        "We miss you ☹️.  If you need some help, feel free to contact us directly.",
+        minHoursLater: firstReminder + nextReminder * 2);
+  } else if (s == "GoalsTimeToSleep" ||
+      s == "GoalsDoingBeforeBed" ||
+      s == "GoalsCalmingActivities") {
+    // Set #5
+    // Objective: finish Priorities and Procrastination <take user to Chp 3 page 2>
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 5 * 10 + 1,
+        "sleep_content",
+        "Setting sleep goals",
+        "Well done on setting your sleep goals. What’s been holding you back from realising them?",
+        minHoursLater: firstReminder);
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 5 * 10 + 2,
+        "sleep_content",
+        "Setting sleep goals",
+        "What do you do before bedtime? How much do you procrastinate bedtime?",
+        minHoursLater: firstReminder + nextReminder);
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 5 * 10 + 3,
+        "sleep_content",
+        "Setting sleep goals",
+        "We miss you ☹️.  If you need some help, feel free to contact us directly.",
+        minHoursLater: firstReminder + nextReminder * 2);
+  } else if (s == "GoalsEmbraceAndManifest") {
+    // Set #6
+    // Objective: finish embrace and manifest <take user to Chp 3 page 4>
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 6 * 10 + 1,
+        "sleep_content",
+        "Reviewing your sleep",
+        "Goals set, barriers noted. Now let’s review how you are sleeping.",
+        minHoursLater: firstReminder);
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 6 * 10 + 2,
+        "sleep_content",
+        "Reviewing your sleep",
+        "You can do this! Let’s review your sleep goals and where you are.",
+        minHoursLater: firstReminder + nextReminder);
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 6 * 10 + 3,
+        "sleep_content",
+        "Reviewing your sleep",
+        "We miss you ☹️.  If you need some help, feel free to contact us directly.",
+        minHoursLater: firstReminder + nextReminder * 2);
+  } else if (s == "RhythmConsistency" ||
+      s == "RhythmWhy" ||
+      s == "RhythmHow" ||
+      s == "RhythmPeaksAndDips1" ||
+      s == "RhythmPeaksAndDips2") {
+    // Set #7
+    // Objective: User to finish edu content on rhythm <until Chp 4, pg 4>
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 7 * 10 + 1,
+        "sleep_content",
+        "Consistency is key",
+        "You’re now more aware about your sleep habits and where you want to be. Next, let’s learn about rhythms and consistency.",
+        minHoursLater: firstReminder);
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 7 * 10 + 2,
+        "sleep_content",
+        "Consistency is key",
+        "Use your newly earned awareness to find your rhythm. Ready?",
+        minHoursLater: firstReminder + nextReminder);
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 7 * 10 + 3,
+        "sleep_content",
+        "Consistency is key",
+        "We miss you ☹️.  If you need some help, feel free to contact us directly.",
+        minHoursLater: firstReminder + nextReminder * 2);
+  } else if (s == "RhythmFeels1" ||
+      s == "RhythmFeels2" ||
+      s == "RhythmFeels3" ||
+      s == "RhythmSettingCourseIntro" ||
+      s == "RhythmSettingCourse") {
+    // Set #8
+    // Objective: User to finish activity: setting course of action <Chp 4, page 5>
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 8 * 10 + 1,
+        "sleep_content",
+        "When are you awake",
+        "Now that you know more about sleep and wakefulness, when are you usually most awake or sleepy?",
+        minHoursLater: firstReminder);
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 8 * 10 + 2,
+        "sleep_content",
+        "When are you awake",
+        "Ready to identify your peaks and dips? This will help you set better sleep and wake times for you.",
+        minHoursLater: firstReminder + nextReminder);
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 8 * 10 + 3,
+        "sleep_content",
+        "When are you awake",
+        "We miss you ☹️.  If you need some help, feel free to contact us directly.",
+        minHoursLater: firstReminder + nextReminder * 2);
+  } else if (s == "OwningRoutine" ||
+      s == "OwningZeitgebers" ||
+      s == "OwningRoutineActivities1" ||
+      s == "OwningRoutineActivities2" ||
+      s == "OwningRoutineActivities3" ||
+      s == "OwningRoutineStart" ||
+      s == "OwningStarter" ||
+      s == "OwningBeforeBedtime" ||
+      s == "OwningTheDaySupporting" ||
+      s == "OwningTheDayNegative") {
+    // Set #9
+    // Objective: User to finish activity: what’s my current routine? <chp 5, pg 4>
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 9 * 10 + 1,
+        "sleep_content",
+        "Review your routine",
+        "Great work on setting new sleep/wake times. Now, let’s work these times into your current habits",
+        minHoursLater: firstReminder);
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 9 * 10 + 2,
+        "sleep_content",
+        "Review your routine",
+        "Our current activities before bed can affect our sleep. Find out how you can better manage your routine",
+        minHoursLater: firstReminder + nextReminder);
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 9 * 10 + 3,
+        "sleep_content",
+        "Review your routine",
+        "We miss you ☹️.  If you need some help, feel free to contact us directly.",
         minHoursLater: firstReminder + nextReminder * 2);
   }
 }
