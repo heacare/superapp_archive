@@ -45,6 +45,10 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+# Ruby/Bundler related
+/vendor/
+/.bundle/
+
 # Code-signing related
 /android/key.properties
 
