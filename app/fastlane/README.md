@@ -55,6 +55,14 @@ Synchronise code-signing certificates for App Store
 
 Push a new beta build to TestFlight
 
+### ios beta_distribute
+
+```sh
+[bundle exec] fastlane ios beta_distribute
+```
+
+Distribute the TestFlight beta build
+
 ----
 
 

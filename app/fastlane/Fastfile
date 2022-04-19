@@ -61,6 +61,20 @@ platform :ios do
       skip_waiting_for_build_processing: is_ci,
     )
   end
+
+  desc "Distribute the TestFlight beta build"
+  lane :beta_distribute do
+    api_key = app_store_connect_api_key(
+      key_id: "C47A4TCR5G",
+      issuer_id: "21c4a1c9-9d05-4413-b76d-10fca3021b3f",
+      key_content: ENV['CONNECT_API_KEY'],
+    )
+    upload_to_testflight(
+      api_key: api_key,
+      distribute_only: true,
+      changelog: "We don't have changelogs yet",
+    )
+  end
 end
 
 platform :android do
@@ -73,6 +87,7 @@ platform :android do
       app: "1:825250749124:android:721cb5ab745db555090791",
       android_artifact_path: "build/app/outputs/flutter-apk/app-release.apk",
       groups: "automatic",
+      release_notes: "We don't have release notes yet",
     )
   end
 
