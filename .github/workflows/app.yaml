@@ -61,11 +61,17 @@ jobs:
         with:
           name: coverage
           path: app/coverage/lcov*.info
-      - name: Report code coverage (when pull request)
-        uses: zgosalvez/github-actions-report-lcov@v1
+      - name: Comment code coverage (Pull request)
+        uses: romeovs/lcov-reporter-action@v0.3.1
         with:
-          artifact-name: coverage-report
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          coverage-files: app/coverage/lcov*.info
-          working-directory: app
+          lcov-file: ./coverage/lcov.info
+          filter-changed-files: true
+          delete-old-comments: true
         if: ${{ github.event_name == 'pull_request' }}
+      - name: Comment code coverage (Commit)
+        uses: romeovs/lcov-reporter-action@v0.3.1
+        with:
+          lcov-file: ./coverage/lcov.info
+          filter-changed-files: false
+          delete-old-comments: true
+        if: ${{ github.event_name == 'push' }}
