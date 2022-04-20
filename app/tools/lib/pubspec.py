@@ -8,8 +8,7 @@ def pubspec_read_version() -> str:
     # Discover previous version number
     matches = re.findall("^version: .+$", pubspec, flags=re.MULTILINE)
     assert len(matches) == 1
-    version_line = matches[0]
-    return version_line.split(":")[1].strip()
+    return matches[0].split(":")[1].strip()
 
 
 def pubspec_write_version(version: str) -> str:
@@ -19,12 +18,21 @@ def pubspec_write_version(version: str) -> str:
     # Discover previous version number
     matches = re.findall("^version: .+$", pubspec, flags=re.MULTILINE)
     assert len(matches) == 1
-    version_line = matches[0]
     # Replace version number
-    pubspec = pubspec.replace(version_line, f"version: {version}")
+    pubspec = pubspec.replace(matches[0], f"version: {version}")
     # Write file
     with open("pubspec.yaml", "w") as f:
         f.write(pubspec)
+
+
+def pubspec_read_name() -> str:
+    # Read file
+    with open("pubspec.yaml", "r") as f:
+        pubspec = f.read()
+    # Discover package name
+    matches = re.findall("^name: .+$", pubspec, flags=re.MULTILINE)
+    assert len(matches) == 1
+    return matches[0].split(":")[1].strip()
 
 
 # vim: set et ts=4 sw=4:
