@@ -297,5 +297,154 @@ Future<void> scheduleSleepNotifications() async {
         "Review your routine",
         "We miss you ☹️.  If you need some help, feel free to contact us directly.",
         minHoursLater: firstReminder + nextReminder * 2);
+  } else if (s == "OwningTheDayNote" ||
+      s == "OwningWhy" ||
+      s == "OwningWhatsNext") {
+    // Set #10
+    // Objective: User to finish activity: what’s your why? <chp 5, pg 5>
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 10 * 10 + 1,
+        "sleep_content",
+        "Understanding why",
+        "Why is sleeping better important to you? Share your “why” for motivation.",
+        minHoursLater: firstReminder);
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 10 * 10 + 2,
+        "sleep_content",
+        "Understanding why",
+        "Good sleep has many benefits. Just think about how bad sleep affects you. Are you ready to share?",
+        minHoursLater: firstReminder + nextReminder);
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 10 * 10 + 3,
+        "sleep_content",
+        "Understanding why",
+        "We miss you ☹️.  If you need some help, feel free to contact us directly.",
+        minHoursLater: firstReminder + nextReminder * 2);
+  } else if (s == "RoutineIntro" || s == "RoutineActivities") {
+    // Set #11
+    // Objective: User finish activity:  Winding down for the day…<Chp 6, pg3>
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 11 * 10 + 1,
+        "sleep_content",
+        "Winding down",
+        "Great work identifying your current routine and motivation. Ready to see how you can improve your wind down for sleep?",
+        minHoursLater: firstReminder);
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 11 * 10 + 2,
+        "sleep_content",
+        "Winding down",
+        "Routine helps build good habits. Having a wind-down before bedtime is important. Ready to explore new ways of winding down?",
+        minHoursLater: firstReminder + nextReminder);
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 11 * 10 + 3,
+        "sleep_content",
+        "Understanding why",
+        "We miss you ☹️.  If you need some help, feel free to contact us directly.",
+        minHoursLater: firstReminder + nextReminder * 2);
+  } else if (s == "RoutineCalmingActivities1" ||
+      s == "RoutineCalmingActivities2" ||
+      s == "RoutineCalmingActivities3" ||
+      s == "RoutineCalmingActivitiesNote") {
+// Set #12
+// Objective: User to finish activity: planning my bedtime routine <Chp 6 pg 4>
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 12 * 10 + 1,
+        "sleep_content",
+        "Refining your routine",
+        "Great choice of wind-down routines. Now let’s refine your current routine.",
+        minHoursLater: firstReminder);
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 12 * 10 + 2,
+        "sleep_content",
+        "Refining your routine",
+        "Finding  a new routine daunting? Don’t worry, you can start with just one new activity for it.",
+        minHoursLater: firstReminder + nextReminder);
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 12 * 10 + 3,
+        "sleep_content",
+        "Refining your routine",
+        "We miss you ☹️.  If you need some help, feel free to contact us directly.",
+        minHoursLater: firstReminder + nextReminder * 2);
+  } else if (s == "RoutineReminders") {
+// Set #13
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 13 * 10 + 1,
+        "sleep_content",
+        "Winding down helps sleep",
+        "So, you’d like to start winding down before bed. What time would you like to start winding down?",
+        minHoursLater: firstReminder);
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 13 * 10 + 2,
+        "sleep_content",
+        "Winding down helps sleep",
+        "You are in control of your time. Set reminders to protect your wind-down time.",
+        minHoursLater: firstReminder + nextReminder);
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 13 * 10 + 3,
+        "sleep_content",
+        "Winding down helps sleep",
+        "We miss you ☹️.  If you need some help, feel free to contact us directly.",
+        minHoursLater: firstReminder + nextReminder * 2);
+  } else if (s == "RoutineOptInGroup") {
+// Set #14
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 14 * 10 + 1,
+        "sleep_content",
+        "Choose your experience",
+        "Now that you have an improved bedtime routine, here are two ways to experience it.",
+        minHoursLater: firstReminder);
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 14 * 10 + 2,
+        "sleep_content",
+        "Choose your experience",
+        "Can’t decide to go alone or join a team? You can change your mind after trying it. It’s important to just get started..",
+        minHoursLater: firstReminder + nextReminder);
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 14 * 10 + 3,
+        "sleep_content",
+        "Choose your experience",
+        "We miss you ☹️.  If you need some help, feel free to contact us directly.",
+        minHoursLater: firstReminder + nextReminder * 2);
+  } else if (s == "RoutinePledgeIntro" || s == "RoutinePledge") {
+// Set #15
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 15 * 10 + 1,
+        "sleep_content",
+        "Making your pledge",
+        "Let’s review and make a pledge to sleep better. Sharing this can get you more support and motivate others to join you!",
+        minHoursLater: firstReminder);
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 15 * 10 + 2,
+        "sleep_content",
+        "Making your pledge",
+        "You’ve come this far, keep up the momentum! Let’s review what you’ve achieved.",
+        minHoursLater: firstReminder + nextReminder);
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 15 * 10 + 3,
+        "sleep_content",
+        "Making your pledge",
+        "We miss you ☹️.  If you need some help, feel free to contact us directly.",
+        minHoursLater: firstReminder + nextReminder * 2);
+  } else if (s == "DiaryReminders") {
+// Set #16
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 16 * 10 + 1,
+        "sleep_content",
+        "Start your 7-day challenge",
+        "You’ve pledged to commit to better sleep - yay! Ready to start your first 7-day challenge?",
+        minHoursLater: firstReminder);
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 16 * 10 + 2,
+        "sleep_content",
+        "Start your 7-day challenge",
+        "Your 7-day challenge awaits. Let’s personalise your reminders.",
+        minHoursLater: firstReminder + nextReminder);
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 16 * 10 + 3,
+        "sleep_content",
+        "Start your 7-day challenge",
+        "We miss you ☹️.  If you need some help, feel free to contact us directly.",
+        minHoursLater: firstReminder + nextReminder * 2);
   }
+// TODO: Sleep logging reminders
 }

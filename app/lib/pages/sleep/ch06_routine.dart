@@ -257,7 +257,7 @@ class RoutineCalmingActivitiesNote extends MarkdownPage {
   RoutineCalmingActivitiesNote({Key? key}) : super(key: key);
 
   @override
-  final nextPage = () => RoutineOptInGroup();
+  final nextPage = () => RoutineReminders();
   @override
   final prevPage = () => RoutineCalmingActivities3();
 
@@ -272,13 +272,39 @@ Test out your bedtime routine for a week. You can always fine tune it to work be
 """;
 }
 
+class RoutineReminders extends TimePickerPage {
+  RoutineReminders({Key? key}) : super(key: key);
+
+  @override
+  final nextPage = () => RoutinePledgeIntro();
+  @override
+  final prevPage = () => RoutineCalmingActivitiesNote();
+
+  @override
+  final title = "Let's help with reminders";
+  @override
+  final image = Image.asset("assets/images/sleep/ch06-reminder-self-care.gif");
+
+  @override
+  final markdown = """
+Remember, consistency is key. Winding down at the same time before bed signals your body to prepare for sleep. We’re here to help by sending you a daily reminder. 
+
+Noting that you wish to start winding down at least <1 hour / 30 mins / 15 mins> before bed.  When would you like to be reminded to start winding down for sleep? 
+""";
+
+  @override
+  final defaultTime = const TimeOfDay(hour: 22, minute: 00);
+  @override
+  final valueName = "routine-reminder-times";
+}
+
 class RoutineOptInGroup extends MultipleChoicePage {
   RoutineOptInGroup({Key? key}) : super(key: key);
 
   @override
   final nextPage = () => RoutinePledgeIntro();
   @override
-  final prevPage = () => RoutineCalmingActivitiesNote();
+  final prevPage = () => RoutineReminders();
 
   @override
   final title = "Want to improve your sleep with others like you?";
@@ -332,7 +358,7 @@ Over the next week, we’ll help you commit to a routine to improve your sleep. 
 }
 
 class RoutinePledge extends StatefulWidget {
-  final PageBuilder? nextPage = () => RoutineReminders();
+  final PageBuilder? nextPage = () => DiaryReminders();
   final PageBuilder? prevPage = () => RoutinePledgeIntro();
 
   final String title = "Activity: Take action!";
@@ -446,30 +472,4 @@ String formatList(List<String> l) {
     text += item;
   }
   return text;
-}
-
-class RoutineReminders extends TimePickerPage {
-  RoutineReminders({Key? key}) : super(key: key);
-
-  @override
-  final nextPage = () => DiaryReminders();
-  @override
-  final prevPage = () => RoutineOptInGroup();
-
-  @override
-  final title = "Let's help with reminders";
-  @override
-  final image = Image.asset("assets/images/sleep/ch06-reminder-self-care.gif");
-
-  @override
-  final markdown = """
-Remember, consistency is key. Winding down at the same time before bed signals your body to prepare for sleep. We’re here to help by sending you a daily reminder. 
-
-Noting that you wish to start winding down at least <1 hour / 30 mins / 15 mins> before bed.  When would you like to be reminded to start winding down for sleep? 
-""";
-
-  @override
-  final defaultTime = const TimeOfDay(hour: 22, minute: 00);
-  @override
-  final valueName = "routine-reminder-times";
 }
