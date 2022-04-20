@@ -1,4 +1,3 @@
-
 # Happily Ever After
 
 [![backend](https://github.com/happilyeveraftercorp/hea/actions/workflows/backend.yml/badge.svg)](https://github.com/happilyeveraftercorp/hea/actions/workflows/backend.yml)
@@ -54,10 +53,10 @@
      avdmanager create avd --name flutter_emulator --package "system-images;android-31;google_apis_playstore;x86_64" --device pixel_5
      flutter emulators --launch flutter_emulator
      ```
-	 - You might want to enable hardware keyboard by setting this property in `~/.android/avd/flutter_emulator.avd/config.ini`:
-	   ```
-	   hw.keyboard = yes
-       ```
+   - You might want to enable hardware keyboard by setting this property in `~/.android/avd/flutter_emulator.avd/config.ini`:
+     ```
+     hw.keyboard = yes
+     ```
    - (iOS) [Start Simulator](https://docs.flutter.dev/get-started/install/macos#set-up-the-ios-simulator)
      ```
      flutter emulators --launch apple_ios_simulator
@@ -112,13 +111,14 @@ You only need to do this to change the Firebase project
        development Firebase project
 2. `flutterfire configure --project happily-ever-after-4b2fe --ios-bundle-id care.hea.app --android-app-id care.hea.app`
 
-| Firebase project | Purpose |
-|-|-|
+| Firebase project         | Purpose                                 |
+| ------------------------ | --------------------------------------- |
 | happily-ever-after-4b2fe | Development, testing and inital version |
 
 ### Google Maps and Google Fit
 
 Current API keys:
+
 - Google Fit
   - Relies on the app's certificate, so the debug keystore SHA-1 needs to be [registered in CGP](https://console.cloud.google.com/apis/credentials?project=happily-ever-after-4b2fe)
   - Ambrose owns an already-registered debug keystore file.

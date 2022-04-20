@@ -13,7 +13,16 @@ env:
 jobs:
   ios:
     runs-on: macos-latest
+    outputs:
+      deployment_id: ${{ steps.deployment.outputs.deployment_id }}
     steps:
+      - name: Create deployment
+        uses: chrnorm/deployment-action@releases/v1
+        id: deployment
+        with:
+          token: "${{ github.token }}"
+          environment: ios-beta
+          initial_status: pending
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
@@ -60,9 +69,24 @@ jobs:
       - run: bundle exec fastlane ios beta_distribute
         env:
           CONNECT_API_KEY: ${{ secrets.CONNECT_API_KEY }}
+      - name: Update deployment status (success)
+        uses: chrnorm/deployment-status@releases/v1
+        with:
+          token: ${{ github.token }}
+          state: success
+          deployment_id: ${{ needs.ios.outputs.deployment_id }}
+      - name: Update deployment status (failure)
+        uses: chrnorm/deployment-status@releases/v1
+        with:
+          token: ${{ github.token }}
+          state: failure
+          deployment_id: ${{ needs.ios.outputs.deployment_id }}
+        if: ${{ failure() }}
 
   android:
     runs-on: ubuntu-latest
+    environment:
+      name: android-beta
     env:
       CODE_SIGNING_REPO: ${{ github.workspace }}/code-signing
     steps:
