@@ -31,6 +31,8 @@
 .pub/
 /build/
 /coverage/
+# Flutter testing related
+/test/full_coverage_test.dart
 
 # Web related
 lib/generated_plugin_registrant.dart

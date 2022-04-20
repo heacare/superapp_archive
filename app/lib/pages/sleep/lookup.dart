@@ -68,9 +68,10 @@ Lesson sleep = Lesson([
   PageDef(RoutineCalmingActivities2, () => RoutineCalmingActivities2()),
   PageDef(RoutineCalmingActivities3, () => RoutineCalmingActivities3()),
   PageDef(RoutineCalmingActivitiesNote, () => RoutineCalmingActivitiesNote()),
+  PageDef(RoutineReminders, () => RoutineReminders()),
   PageDef(RoutineOptInGroup, () => RoutineOptInGroup()),
   PageDef(RoutinePledgeIntro, () => RoutinePledgeIntro()),
-  PageDef(RoutineReminders, () => RoutineReminders()),
+  PageDef(RoutinePledge, () => RoutinePledge()),
   PageDef(DiaryReminders, () => DiaryReminders()),
   PageDef(DiaryStart, () => DiaryStart()),
 ]);
