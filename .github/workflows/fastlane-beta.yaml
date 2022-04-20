@@ -12,7 +12,8 @@ env:
 
 jobs:
   ios:
-    runs-on: macos-latest
+    #runs-on: macos-latest
+    runs-on: [self-hosted, macos-latest]
     outputs:
       deployment_id: ${{ steps.deployment.outputs.deployment_id }}
     steps:

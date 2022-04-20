@@ -75,28 +75,3 @@ jobs:
           filter-changed-files: false
           delete-old-comments: false
         if: ${{ github.event_name == 'push' }}
-
-  test-macos:
-    runs-on: [self-hosted, macos-latest]
-    continue-on-error: true
-    steps:
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ env.FLUTTER_VERSION }}
-          channel: "stable"
-          cache: true
-      - uses: actions/checkout@v2
-      - name: Set up problem matcher
-        run: echo "::add-matcher::.github/matcher-flutter.json"
-      - uses: actions/cache@v3
-        with:
-          path: ${{ env.PUB_CACHE }}
-          key: ${{ runner.os }}-flutter-${{ hashFiles('app/**/pubspec.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-flutter-
-      - run: flutter pub get
-        working-directory: app
-      - run: python tools/generate_full_coverage.py
-        working-directory: app
-      - run: flutter test --reporter expanded --coverage
-        working-directory: app
