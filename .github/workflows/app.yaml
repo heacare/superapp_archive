@@ -73,5 +73,5 @@ jobs:
         with:
           lcov-file: app/coverage/lcov.info
           filter-changed-files: false
-          delete-old-comments: true
+          delete-old-comments: false
         if: ${{ github.event_name == 'push' }}
