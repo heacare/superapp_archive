@@ -18,19 +18,19 @@ jobs:
       deployment_id: ${{ steps.deployment.outputs.deployment_id }}
     steps:
       - name: Create deployment
-        uses: chrnorm/deployment-action@releases/v1
+        uses: chrnorm/deployment-action@9fea95f56f4cd87321ff4ec22dea1ffaaed2c902
         id: deployment
         with:
           token: "${{ github.token }}"
           environment: ios-beta
       - name: Update deployment status (in_progress)
-        uses: chrnorm/deployment-status@releases/v1
+        uses: chrnorm/deployment-status@15b9298912c2b84635561a68d35c84d43e3d6c94
         with:
           token: ${{ github.token }}
           state: in_progress
-          log_url: ${{ github.server_url }}/${{ github.repository }}/runs/${{ github.run_id }}?check_suite_focus=true
+          target_url: ${{ github.server_url }}/${{ github.repository }}/runs/${{ github.run_id }}?check_suite_focus=true
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-      - uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@d8687e6979e8ef66d2b2970e2c92c1d8e801d7bf
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: "stable"
@@ -58,14 +58,15 @@ jobs:
       - name: Upload IPA
         uses: actions/upload-artifact@v3
         with:
-          name: Runner.ipa
+          name: ios
           path: hea/app/Runner.ipa
+          retention-days: 30
       - name: Update deployment status (failure)
-        uses: chrnorm/deployment-status@releases/v1
+        uses: chrnorm/deployment-status@15b9298912c2b84635561a68d35c84d43e3d6c94
         with:
           token: ${{ github.token }}
           state: failure
-          log_url: ${{ github.server_url }}/${{ github.repository }}/runs/${{ github.run_id }}?check_suite_focus=true
+          target_url: ${{ github.server_url }}/${{ github.repository }}/runs/${{ github.run_id }}?check_suite_focus=true
           deployment_id: ${{ steps.deployment.outputs.deployment_id }}
         if: ${{ failure() }}
 
@@ -85,18 +86,18 @@ jobs:
         env:
           CONNECT_API_KEY: ${{ secrets.CONNECT_API_KEY }}
       - name: Update deployment status (success)
-        uses: chrnorm/deployment-status@releases/v1
+        uses: chrnorm/deployment-status@15b9298912c2b84635561a68d35c84d43e3d6c94
         with:
           token: ${{ github.token }}
           state: success
-          log_url: ${{ github.server_url }}/${{ github.repository }}/runs/${{ github.run_id }}?check_suite_focus=true
+          target_url: ${{ github.server_url }}/${{ github.repository }}/runs/${{ github.run_id }}?check_suite_focus=true
           deployment_id: ${{ needs.ios.outputs.deployment_id }}
       - name: Update deployment status (failure)
-        uses: chrnorm/deployment-status@releases/v1
+        uses: chrnorm/deployment-status@15b9298912c2b84635561a68d35c84d43e3d6c94
         with:
           token: ${{ github.token }}
           state: failure
-          log_url: ${{ github.server_url }}/${{ github.repository }}/runs/${{ github.run_id }}?check_suite_focus=true
+          target_url: ${{ github.server_url }}/${{ github.repository }}/runs/${{ github.run_id }}?check_suite_focus=true
           deployment_id: ${{ needs.ios.outputs.deployment_id }}
         if: ${{ failure() }}
 
@@ -107,7 +108,7 @@ jobs:
     env:
       CODE_SIGNING_REPO: ${{ github.workspace }}/code-signing
     steps:
-      - uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@d8687e6979e8ef66d2b2970e2c92c1d8e801d7bf
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: "stable"
@@ -143,5 +144,6 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v3
         with:
-          name: app-release.apk
+          name: android
           path: hea/app/build/app/outputs/flutter-apk/app-release.apk
+          retention-days: 30
