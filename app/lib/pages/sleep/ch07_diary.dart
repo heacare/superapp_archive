@@ -9,7 +9,7 @@ class DiaryReminders extends TimePickerPage {
   @override
   final nextPage = () => DiaryStart();
   @override
-  final prevPage = () => RoutineReminders();
+  final prevPage = () => RoutinePledge();
 
   @override
   final title = "Log your sleep";

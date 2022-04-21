@@ -39,15 +39,14 @@ class SelectListState<T> extends State<SelectList<T>> {
   @override
   void initState() {
     super.initState();
-    List<T> values =
-        widget.items.toSet().map((item) => item.value).toList();
-	  debugPrint(widget.defaultSelected.runtimeType.toString());
-	  if (widget.defaultSelected.isNotEmpty) {
-		selected =
-			widget.defaultSelected.where((sel) => values.contains(sel)).toList();
-	  }	
-	  // DART BUG: When calling where() on a const List<Never>, .where.toList()
-	  // also returns a const List<Never>. This causes .add() to fail.
+    List<T> values = widget.items.toSet().map((item) => item.value).toList();
+    debugPrint(widget.defaultSelected.runtimeType.toString());
+    if (widget.defaultSelected.isNotEmpty) {
+      selected =
+          widget.defaultSelected.where((sel) => values.contains(sel)).toList();
+    }
+    // DART BUG: When calling where() on a const List<Never>, .where.toList()
+    // also returns a const List<Never>. This causes .add() to fail.
   }
 
   Widget getButton(BuildContext context, SelectListItem<T> item) {
@@ -85,12 +84,12 @@ class SelectListState<T> extends State<SelectList<T>> {
             )),
         onPressed: () {
           setState(() {
-		  debugPrint(selected.toString());
-		  debugPrint(item.value.runtimeType.toString());
-		  debugPrint(item.runtimeType.toString());
-		  debugPrint(selected.runtimeType.toString());
+            debugPrint(selected.toString());
+            debugPrint(item.value.runtimeType.toString());
+            debugPrint(item.runtimeType.toString());
+            debugPrint(selected.runtimeType.toString());
             selected.add(item.value);
-		  debugPrint(selected.toString());
+            debugPrint(selected.toString());
             while (widget.max != 0 && selected.length > widget.max) {
               selected.removeAt(0);
             }

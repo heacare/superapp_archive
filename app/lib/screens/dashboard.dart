@@ -435,8 +435,8 @@ class ModuleCheckinItem extends StatelessWidget {
                   margin: const EdgeInsets.only(right: 15.0),
                   height: 50,
                   width: 50,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(16.0)),
                     gradient: LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
@@ -445,7 +445,7 @@ class ModuleCheckinItem extends StatelessWidget {
                           Color(0xFF7FDDFF),
                         ]),
                   ),
-                  child: Center(
+                  child: const Center(
                       child: FaIcon(FontAwesomeIcons.solidMoon,
                           color: Colors.white))),
               Expanded(
