@@ -13,7 +13,7 @@ class SelectListItem<T> {
   bool otherMultiple; // requires other to be true
 }
 
-typedef SelectListOnChange<T> = Function(List<T>);
+typedef SelectListOnChange<T> = void Function(List<T>);
 
 class SelectList<T> extends StatefulWidget {
   const SelectList(
@@ -40,12 +40,17 @@ class SelectListState<T> extends State<SelectList<T>> {
   void initState() {
     super.initState();
     List<T> values =
-        widget.items.toSet().toList().map((item) => item.value).toList();
-    selected =
-        widget.defaultSelected.where((sel) => values.contains(sel)).toList();
+        widget.items.toSet().map((item) => item.value).toList();
+	  debugPrint(widget.defaultSelected.runtimeType.toString());
+	  if (widget.defaultSelected.isNotEmpty) {
+		selected =
+			widget.defaultSelected.where((sel) => values.contains(sel)).toList();
+	  }	
+	  // DART BUG: When calling where() on a const List<Never>, .where.toList()
+	  // also returns a const List<Never>. This causes .add() to fail.
   }
 
-  Widget getButton(BuildContext context, SelectListItem item) {
+  Widget getButton(BuildContext context, SelectListItem<T> item) {
     if (selected.contains(item.value)) {
       return ElevatedButton(
         child: Text(item.other ? "Other (TODO)" : item.text,
@@ -80,7 +85,12 @@ class SelectListState<T> extends State<SelectList<T>> {
             )),
         onPressed: () {
           setState(() {
+		  debugPrint(selected.toString());
+		  debugPrint(item.value.runtimeType.toString());
+		  debugPrint(item.runtimeType.toString());
+		  debugPrint(selected.runtimeType.toString());
             selected.add(item.value);
+		  debugPrint(selected.toString());
             while (widget.max != 0 && selected.length > widget.max) {
               selected.removeAt(0);
             }

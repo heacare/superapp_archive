@@ -464,7 +464,6 @@ Future<void> scheduleSleepNotifications() async {
   }
   TimeOfDay? diaryReminderTimes =
       kvReadTimeOfDay("sleep", "diary-reminder-times");
-  debugPrint("${diaryReminderTimes}");
   if (diaryReminderTimes != null) {
     // TODO: Check if today's check-in has been done
     int day = kvReadInt("sleep", "day") ?? 0;

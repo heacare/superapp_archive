@@ -39,12 +39,14 @@ class NotificationService {
       era: 1,
       hour: timeOfDay.hour % 24,
       minute: timeOfDay.minute % 60,
+      second: 0,
     );
     if (kDebugMode) {
       schedule = NotificationCalendar(
         repeats: true,
         era: 1,
         minute: timeOfDay.hour % 60,
+        second: 0,
       );
     }
     notifications.createNotification(
@@ -74,12 +76,14 @@ class NotificationService {
       era: 1,
       hour: timeOfDay.hour % 24,
       minute: timeOfDay.minute % 60,
+      second: 0,
     );
     if (kDebugMode) {
       schedule = NotificationCalendar(
         repeats: true,
         era: 1,
         minute: timeOfDay.hour % 60,
+        second: 0,
       );
     }
     notifications.createNotification(
@@ -123,20 +127,25 @@ class NotificationService {
         later = DateTime(later.year, later.month, later.day, 8);
       }
       schedule = NotificationCalendar(
+        era: 1,
+        year: later.year,
+        month: later.month,
+        day: later.day,
+        hour: later.hour,
+        minute: 0,
+        second: 0,
+      );
+      if (kDebugMode) {
+        later = DateTime.now().add(Duration(minutes: minHoursLater));
+        schedule = NotificationCalendar(
           era: 1,
           year: later.year,
           month: later.month,
           day: later.day,
-          hour: later.hour);
-      if (kDebugMode) {
-        later = DateTime.now().add(Duration(minutes: minHoursLater));
-        schedule = NotificationCalendar(
-            era: 1,
-            year: later.year,
-            month: later.month,
-            day: later.day,
-            hour: later.hour,
-            minute: later.minute);
+          hour: later.hour,
+          minute: later.minute,
+          second: 0,
+        );
       }
     }
     notifications.createNotification(

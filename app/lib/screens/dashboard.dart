@@ -13,6 +13,8 @@ import 'package:hea/services/service_locator.dart';
 import 'package:hea/services/logging_service.dart';
 import 'package:hea/widgets/avatar_icon.dart';
 import 'package:hea/widgets/page.dart';
+import 'package:hea/screens/sleep_checkin.dart';
+import 'package:hea/utils/kv_wrap.dart';
 
 import 'package:hea/pages/sleep/lookup.dart';
 
@@ -94,6 +96,13 @@ class DashboardPage extends StatelessWidget {
       },
     );
 
+    Widget moduleCheckinListView = const Text("Not available");
+    TimeOfDay? diaryReminderTimes =
+        kvReadTimeOfDay("sleep", "diary-reminder-times");
+    if (diaryReminderTimes != null) {
+      moduleCheckinListView = const ModuleCheckinItem();
+    }
+
     return Scaffold(
         appBar: PreferredSize(
             preferredSize: const Size.fromHeight(150),
@@ -133,6 +142,10 @@ class DashboardPage extends StatelessWidget {
                 Text("Modules", style: Theme.of(context).textTheme.headline3),
                 const SizedBox(height: 10.0),
                 moduleListView,
+                const SizedBox(height: 30.0),
+                Text("Check-ins", style: Theme.of(context).textTheme.headline3),
+                const SizedBox(height: 10.0),
+                moduleCheckinListView,
                 const SizedBox(height: 30.0),
               ],
             ),
@@ -391,6 +404,59 @@ class ModuleListItem extends StatelessWidget {
                     Text(title, style: Theme.of(context).textTheme.headline3),
                     const SizedBox(height: 5.0),
                     Text(description,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText2
+                            ?.copyWith(color: const Color(0xFF707070)))
+                  ])),
+            ])));
+  }
+}
+
+class ModuleCheckinItem extends StatelessWidget {
+  const ModuleCheckinItem({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+        onTap: () {
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const SleepCheckin()));
+        },
+        child: Container(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
+            decoration: const BoxDecoration(
+              color: Color(0xFFF5F5F5),
+              borderRadius: BorderRadius.all(Radius.circular(20.0)),
+            ),
+            child: Row(children: <Widget>[
+              Container(
+                  margin: const EdgeInsets.only(right: 15.0),
+                  height: 50,
+                  width: 50,
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                    gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color(0xFF00ABE9),
+                          Color(0xFF7FDDFF),
+                        ]),
+                  ),
+                  child: Center(
+                      child: FaIcon(FontAwesomeIcons.solidMoon,
+                          color: Colors.white))),
+              Expanded(
+                  child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                    Text("Sleep check-in",
+                        style: Theme.of(context).textTheme.headline3),
+                    const SizedBox(height: 5.0),
+                    Text("Keep track of how you slept last night",
                         style: Theme.of(context)
                             .textTheme
                             .bodyText2

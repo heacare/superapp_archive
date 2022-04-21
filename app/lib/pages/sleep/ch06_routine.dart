@@ -5,7 +5,6 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:hea/utils/kv_wrap.dart';
 import 'package:hea/widgets/page.dart';
 import 'package:hea/widgets/select_list.dart';
-import 'ch03_goals.dart';
 import 'ch05_owning.dart';
 import 'ch07_diary.dart';
 
