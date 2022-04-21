@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart'
-    show Color, BuildContext, Navigator, MaterialPageRoute;
+    show Color, BuildContext, Navigator, MaterialPageRoute, TimeOfDay;
 import 'package:flutter/foundation.dart' show debugPrint, kDebugMode;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
@@ -23,13 +23,92 @@ class NotificationService {
     notifications.cancelAllSchedules();
   }
 
+  Future<void> cancelSchedulesByChannelKey(String channelKey) async {
+    notifications.cancelSchedulesByChannelKey(channelKey);
+  }
+
+  Future<void> showSimpleReminder(
+    int id,
+    String channelKey,
+    String title,
+    String body,
+    TimeOfDay timeOfDay,
+  ) async {
+    NotificationSchedule? schedule = NotificationCalendar(
+      repeats: true,
+      era: 1,
+      hour: timeOfDay.hour % 24,
+      minute: timeOfDay.minute % 60,
+    );
+    if (kDebugMode) {
+      schedule = NotificationCalendar(
+        repeats: true,
+        era: 1,
+        minute: timeOfDay.hour % 60,
+      );
+    }
+    notifications.createNotification(
+        schedule: schedule,
+        content: NotificationContent(
+          id: id,
+          channelKey: channelKey,
+          category: NotificationCategory.Reminder,
+          title: title,
+          body: body,
+          notificationLayout: NotificationLayout.BigText,
+        ));
+  }
+
+  Future<void> showDailyReminder(
+    int id,
+    String channelKey,
+    String title,
+    String body,
+    TimeOfDay timeOfDay, {
+    String action = "Let's go",
+    Map<String, String>? payload,
+    String remindAction = "Remind me later",
+  }) async {
+    NotificationSchedule? schedule = NotificationCalendar(
+      repeats: true,
+      era: 1,
+      hour: timeOfDay.hour % 24,
+      minute: timeOfDay.minute % 60,
+    );
+    if (kDebugMode) {
+      schedule = NotificationCalendar(
+        repeats: true,
+        era: 1,
+        minute: timeOfDay.hour % 60,
+      );
+    }
+    notifications.createNotification(
+        schedule: schedule,
+        content: NotificationContent(
+          id: id,
+          channelKey: channelKey,
+          category: NotificationCategory.Reminder,
+          title: title,
+          body: body,
+          payload: payload,
+          notificationLayout: NotificationLayout.BigText,
+        ),
+        actionButtons: [
+          NotificationActionButton(
+            buttonType: ActionButtonType.Default,
+            key: "continue",
+            label: action,
+          ),
+        ]);
+  }
+
   Future<void> showContentReminder(
     int id,
     String channelKey,
     String title,
     String body, {
     String action = "Continue",
-    Map<String, String>? payload,
+    Map<String, String>? payload = const {"jump_to": "sleep_content"},
     String remindAction = "Remind me later",
     int minHoursLater = 0,
   }) async {
@@ -77,11 +156,13 @@ class NotificationService {
             key: "continue",
             label: action,
           ),
+          /*
           NotificationActionButton(
             buttonType: ActionButtonType.KeepOnTop,
             key: "remind-later",
             label: remindAction,
           ),
+		  */
         ]);
   }
 
@@ -89,14 +170,28 @@ class NotificationService {
 
   Future<void> _recieved(ReceivedNotification receivedNotification) async {
     debugPrint("${receivedNotification.id}");
+    debugPrint("${receivedNotification.payload}");
     if (receivedNotification is ReceivedAction) {
       debugPrint(receivedNotification.buttonKeyPressed);
+      return;
     }
-    String? s = serviceLocator<SharedPreferences>().getString('sleep');
-    PageBuilder resume = sleep.lookup(s);
-    serviceLocator<LoggingService>().createLog('notification-navigate', s);
-    Navigator.of(context!)
-        .push(MaterialPageRoute(builder: (context) => resume()));
+    if (receivedNotification.payload == null) {
+      return;
+    }
+    String jumpTo = receivedNotification.payload!["jump_to"] ?? "";
+    if (jumpTo == "sleep_content") {
+      String? s = serviceLocator<SharedPreferences>().getString('sleep');
+      PageBuilder resume = sleep.lookup(s);
+      serviceLocator<LoggingService>().createLog('notification-navigate', s);
+      Navigator.of(context!)
+          .push(MaterialPageRoute(builder: (context) => resume()));
+    } else if (jumpTo == "sleep_checkin") {
+      debugPrint("TODO jump to sleep checkin");
+      /*
+      Navigator.of(context!)
+      .push(MaterialPageRoute(builder: (context) => null));
+      */
+    }
   }
 
   bool actionStreamAttached = false;

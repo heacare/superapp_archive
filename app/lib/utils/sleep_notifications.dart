@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart' show TimeOfDay;
+import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:hea/services/service_locator.dart';
@@ -16,8 +17,8 @@ const int baseId = 100;
 
 Future<void> scheduleSleepNotifications() async {
   String? s = serviceLocator<SharedPreferences>().getString('sleep');
-  //Map sleepData = kvDump("sleep");
-  await serviceLocator<NotificationService>().cancelAllSchedules();
+  await serviceLocator<NotificationService>()
+      .cancelSchedulesByChannelKey("sleep_content");
   if (s == "NowFirstThingsFirst" ||
       s == "NowTimeGoneBed" ||
       s == "NowMinutesFallAsleep" ||
@@ -446,5 +447,70 @@ Future<void> scheduleSleepNotifications() async {
         "We miss you ☹️.  If you need some help, feel free to contact us directly.",
         minHoursLater: firstReminder + nextReminder * 2);
   }
-// TODO: Sleep logging reminders
+
+  // Sleep logging reminders
+  await serviceLocator<NotificationService>()
+      .cancelSchedulesByChannelKey("sleep_reminders");
+  TimeOfDay? routineReminderTimes =
+      kvReadTimeOfDay("sleep", "routine-reminder-times");
+  if (routineReminderTimes != null) {
+    await serviceLocator<NotificationService>().showSimpleReminder(
+      baseId + 50 * 10 + 1,
+      "sleep_reminders",
+      "Wind-down reminder",
+      "Remember to wind-down before going to bed. Your activities are TODO",
+      routineReminderTimes,
+    );
+  }
+  TimeOfDay? diaryReminderTimes =
+      kvReadTimeOfDay("sleep", "diary-reminder-times");
+  debugPrint("${diaryReminderTimes}");
+  if (diaryReminderTimes != null) {
+    // TODO: Check if today's check-in has been done
+    int day = kvReadInt("sleep", "day") ?? 0;
+    if (day == 0) {
+      day = 1;
+      kvWrite("sleep", "day", day);
+    }
+    int dayTotal = kvReadInt("sleep", "day-total") ?? 0;
+    if (dayTotal == 0) {
+      dayTotal = 7;
+      kvWrite("sleep", "day-total", dayTotal);
+    }
+    await serviceLocator<NotificationService>().showDailyReminder(
+      baseId + 51 * 10 + 1,
+      "sleep_reminders",
+      "Daily sleep check-in",
+      "Day $day of $dayTotal: How did you sleep last night?",
+      diaryReminderTimes,
+      payload: const {"jump_to": "sleep_checkin"},
+    );
+    await serviceLocator<NotificationService>().showDailyReminder(
+      baseId + 51 * 10 + 2,
+      "sleep_reminders",
+      "Daily sleep check-in",
+      "Day $day of $dayTotal: How did you sleep last night? Memory serves you better closer to your wake time.",
+      TimeOfDay(
+          hour: diaryReminderTimes.hour + 1, minute: diaryReminderTimes.minute),
+      payload: const {"jump_to": "sleep_checkin"},
+    );
+    await serviceLocator<NotificationService>().showDailyReminder(
+      baseId + 51 * 10 + 3,
+      "sleep_reminders",
+      "Daily sleep check-in",
+      "Day $day of $dayTotal: Can’t recall how you slept? Skipped your sleep routine? Don’t worry, simply note what happened.",
+      TimeOfDay(
+          hour: diaryReminderTimes.hour + 3, minute: diaryReminderTimes.minute),
+      payload: const {"jump_to": "sleep_checkin"},
+    );
+    await serviceLocator<NotificationService>().showDailyReminder(
+      baseId + 51 * 10 + 4,
+      "sleep_reminders",
+      "Daily sleep check-in",
+      "Day $day of $dayTotal: Can’t recall how you slept? Skipped your sleep routine? Don’t worry, simply note what happened.",
+      TimeOfDay(
+          hour: diaryReminderTimes.hour + 6, minute: diaryReminderTimes.minute),
+      payload: const {"jump_to": "sleep_checkin"},
+    );
+  }
 }

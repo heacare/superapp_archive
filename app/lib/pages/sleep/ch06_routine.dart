@@ -53,7 +53,7 @@ Check as many as you wish to include in your routine:
   @override
   final maxChoice = 0;
   @override
-  final minSelected = 0;
+  final minSelected = 1;
   @override
   final valueName = "included-activities";
   @override
@@ -116,13 +116,25 @@ abstract class RoutineCalmingActivities extends Page {
         p: Theme.of(context).textTheme.bodyText1,
         h1: Theme.of(context).textTheme.headline3);
     var defaultSelectedRemove = kvReadStringList("sleep", valueNameRemove);
+    /*
     if (defaultSelectedRemove.isEmpty) {
       defaultSelectedRemove = kvReadStringList("sleep", valueNameRemoveDefault);
     }
+	*/
+    List<SelectListItem<String>> selectedActivities =
+        kvReadStringList("sleep", valueNameRemoveDefault)
+            .map((s) => SelectListItem(text: s, value: s))
+            .toList();
     var defaultSelectedAdd = kvReadStringList("sleep", valueNameAdd);
+    /*
     if (defaultSelectedAdd.isEmpty) {
       defaultSelectedAdd = kvReadStringList("sleep", valueNameAddDefault);
     }
+	*/
+    List<SelectListItem<String>> selectedCalmActivities =
+        kvReadStringList("sleep", valueNameAddDefault)
+            .map((s) => SelectListItem(text: s, value: s))
+            .toList();
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -138,7 +150,7 @@ abstract class RoutineCalmingActivities extends Page {
             style: Theme.of(context).textTheme.bodyLarge,
           ),
           SelectList(
-              items: activityChoices,
+              items: selectedActivities,
               max: 0,
               defaultSelected: defaultSelectedRemove,
               onChange: (List<String> c) {
@@ -150,7 +162,7 @@ abstract class RoutineCalmingActivities extends Page {
             style: Theme.of(context).textTheme.bodyLarge,
           ),
           SelectList(
-              items: calmActivityChoices,
+              items: selectedCalmActivities,
               max: 0,
               defaultSelected: defaultSelectedAdd,
               onChange: (List<String> c) {
