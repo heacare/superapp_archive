@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hea/services/sleep_checkin_service.dart';
 import 'package:health/health.dart';
 
 import 'package:hea/screens/login.dart';
@@ -151,8 +152,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       onPressed: sendPastHealthData),
                   const SizedBox(height: 8.0),
                   GradientButton(
-                      text: "Schedule Demo Notification",
-                      onPressed: scheduleDemoNotification)
+                      text: "Reset daily check-in",
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                  title: const Text(
+                                      "Are you sure you want to reset daily check-in"),
+                                  actions: [
+                                    TextButton(
+                                        child: const Text("No"),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        }),
+                                    TextButton(
+                                        child: const Text("Yes"),
+                                        onPressed: () {
+                                          serviceLocator<SleepCheckinService>()
+                                              .reset();
+                                          Navigator.of(context).pop();
+                                        }),
+                                  ]);
+                            });
+                      }),
+                  const SizedBox(height: 8.0),
                 ])));
   }
 }

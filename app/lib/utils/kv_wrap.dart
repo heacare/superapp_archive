@@ -21,20 +21,30 @@ kvWrite<T>(String module, String key, T value) {
   serviceLocator<SharedPreferences>().setString('data-' + module, json);
 }
 
-T kvRead<T>(String module, String key) {
+T? kvDelete<T>(String module, String key) {
   String? json =
       serviceLocator<SharedPreferences>().getString('data-' + module);
   json ??= "{}";
   Map object = jsonDecode(json);
-  return object[key];
+  object.remove(key);
+  json = jsonEncode(object);
+  serviceLocator<SharedPreferences>().setString('data-' + module, json);
 }
 
-int? kvReadInt(String module, String key) {
-  dynamic v = kvRead(module, key);
-  if (v is int) {
+T? kvRead<T>(String module, String key) {
+  String? json =
+      serviceLocator<SharedPreferences>().getString('data-' + module);
+  json ??= "{}";
+  Map object = jsonDecode(json);
+  dynamic v = object[key];
+  if (v is T) {
     return v;
   }
   return null;
+}
+
+int? kvReadInt(String module, String key) {
+  return kvRead<int>(module, key);
 }
 
 List<String> kvReadStringList(String module, String key) {
@@ -51,13 +61,13 @@ List<String> kvReadStringList(String module, String key) {
 }
 
 kvWriteTimeOfDay(String module, String key, TimeOfDay value) {
-  kvWrite(module, key, _TimeOfDay.from(value).toJSON());
+  kvWrite(module, key, JTimeOfDay.from(value).toJSON());
 }
 
 TimeOfDay? kvReadTimeOfDay(String module, String key) {
   dynamic v = kvRead(module, key);
   if (v is Map<String, dynamic>) {
-    return _TimeOfDay.fromJSON(v);
+    return JTimeOfDay.fromJSON(v);
   }
   return null;
 }
@@ -66,10 +76,10 @@ kvWriteTimeOfDayRange(String module, String key, TimeOfDayRange value) {
   kvWrite(module, key, value.toJSON());
 }
 
-class _TimeOfDay extends TimeOfDay {
-  _TimeOfDay.from(TimeOfDay timeOfDay)
+class JTimeOfDay extends TimeOfDay {
+  JTimeOfDay.from(TimeOfDay timeOfDay)
       : super(hour: timeOfDay.hour, minute: timeOfDay.minute);
-  _TimeOfDay.fromJSON(Map<String, dynamic> json)
+  JTimeOfDay.fromJSON(Map<String, dynamic> json)
       : super(hour: json["hour"], minute: json["minute"]);
   toJSON() => {
         "hour": hour,
@@ -78,14 +88,14 @@ class _TimeOfDay extends TimeOfDay {
 }
 
 class TimeOfDayRange {
-  final _TimeOfDay start;
-  final _TimeOfDay end;
+  final JTimeOfDay start;
+  final JTimeOfDay end;
   TimeOfDayRange(TimeOfDay start, TimeOfDay end)
-      : start = _TimeOfDay.from(start),
-        end = _TimeOfDay.from(end);
+      : start = JTimeOfDay.from(start),
+        end = JTimeOfDay.from(end);
   TimeOfDayRange.fromJSON(Map<String, dynamic> json)
-      : start = _TimeOfDay.fromJSON(json["start"]),
-        end = _TimeOfDay.fromJSON(json["end"]);
+      : start = JTimeOfDay.fromJSON(json["start"]),
+        end = JTimeOfDay.fromJSON(json["end"]);
   toJSON() => {
         "start": start.toJSON(),
         "end": end.toJSON(),

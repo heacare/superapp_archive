@@ -5,6 +5,7 @@ import 'package:flutter/material.dart'
 import 'package:flutter/foundation.dart' show debugPrint, kDebugMode;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:hea/screens/sleep_checkin.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:hea/services/service_locator.dart';
@@ -195,11 +196,8 @@ class NotificationService {
       Navigator.of(context!)
           .push(MaterialPageRoute(builder: (context) => resume()));
     } else if (jumpTo == "sleep_checkin") {
-      debugPrint("TODO jump to sleep checkin");
-      /*
       Navigator.of(context!)
-      .push(MaterialPageRoute(builder: (context) => null));
-      */
+          .push(MaterialPageRoute(builder: (context) => const SleepCheckin()));
     }
   }
 

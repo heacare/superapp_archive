@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hea/widgets/page.dart';
 
+import 'package:hea/services/service_locator.dart';
+import 'package:hea/services/sleep_checkin_service.dart';
+import 'package:hea/widgets/page.dart';
 import 'package:hea/widgets/pill_select.dart';
 import 'package:hea/widgets/select_list.dart';
 import 'package:hea/utils/kv_wrap.dart';
@@ -14,7 +16,7 @@ class SleepCheckin extends StatefulWidget {
 }
 
 class SleepCheckinState extends State<SleepCheckin> {
-  String didWindDown = "yes";
+  SleepCheckinData data = SleepCheckinData();
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +24,8 @@ class SleepCheckinState extends State<SleepCheckin> {
         kvReadStringList("sleep", "included-activities")
             .map((s) => SelectListItem(text: s, value: s))
             .toList();
+    SleepCheckinProgress progress =
+        serviceLocator<SleepCheckinService>().getProgress();
     return Scaffold(
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(154),
@@ -42,7 +46,8 @@ class SleepCheckinState extends State<SleepCheckin> {
                             }),
                         const SizedBox(width: 10.0),
                         Expanded(
-                            child: Text("Sleep check-in",
+                            child: Text(
+                                "Sleep check-in day ${progress.day} of ${progress.total}",
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 4,
                                 style: Theme.of(context).textTheme.headline2)),
@@ -58,8 +63,8 @@ class SleepCheckinState extends State<SleepCheckin> {
                   style: Theme.of(context).textTheme.titleLarge),
               PillSelect(
                   items: const {"yes": "Yes", "partly": "Partly", "no": "No"},
-                  onChange: (String selection) {
-                    debugPrint(selection);
+                  onChange: (String value) {
+                    data.didWindDown = value;
                   }),
               const SizedBox(height: 64.0),
               Text("How did you do for your bedtime routine",
@@ -67,33 +72,36 @@ class SleepCheckinState extends State<SleepCheckin> {
               const Text("Select those that you managed to accomplish"),
               SelectList(
                   items: selectedCalmActivities,
+                  defaultSelected: data.didCalmActivities,
                   max: 0,
-                  onChange: (List<String> selection) {
-                    debugPrint(selection.join(","));
+                  onChange: (List<String> value) {
+                    data.didCalmActivities = value;
                   }),
               const SizedBox(height: 64.0),
               Text(
                   "Did you have any unexpected interruptions to wind-down or any insights to your sleep?",
                   style: Theme.of(context).textTheme.titleLarge),
-              TextFormField(onChanged: (String value) {
-                debugPrint(value);
-              }),
+              TextFormField(
+                  initialValue: data.interruptions,
+                  onChanged: (String value) {
+                    data.interruptions = value;
+                  }),
               const SizedBox(height: 64.0),
               Text("What time did you get into bed?",
                   style: Theme.of(context).textTheme.titleLarge),
               const Text("Note: This is not the time you fell asleep."),
               TimePickerBlock(
-                  initialTime: const TimeOfDay(hour: 20, minute: 0),
+                  initialTime: data.timeGoBed,
                   onChange: (TimeOfDay value) {
-                    debugPrint(value.toString());
+                    data.timeGoBed = value;
                   }),
               const SizedBox(height: 64.0),
               Text("What time did you fall asleep?",
                   style: Theme.of(context).textTheme.titleLarge),
               TimePickerBlock(
-                  initialTime: const TimeOfDay(hour: 20, minute: 30),
+                  initialTime: data.timeAsleepBed,
                   onChange: (TimeOfDay value) {
-                    debugPrint(value.toString());
+                    data.timeAsleepBed = value;
                   }),
               const Text("(Time taken to fall asleep: N minutes)"),
               const SizedBox(height: 64.0),
@@ -104,11 +112,13 @@ class SleepCheckinState extends State<SleepCheckin> {
                 Text("Very easy"),
               ], mainAxisAlignment: MainAxisAlignment.spaceBetween),
               Slider(
-                value: 0,
+                value: data.easyAsleep.toDouble(),
                 max: 4,
                 divisions: 4,
                 onChanged: (double value) {
-                  debugPrint(value.toString());
+                  setState(() {
+                    data.easyAsleep = value.toInt();
+                  });
                 },
               ),
               const SizedBox(height: 64.0),
@@ -116,9 +126,9 @@ class SleepCheckinState extends State<SleepCheckin> {
                   style: Theme.of(context).textTheme.titleLarge),
               const Text("Note: This is not necessarily the time you woke up."),
               TimePickerBlock(
-                  initialTime: const TimeOfDay(hour: 20, minute: 30),
+                  initialTime: data.timeOutBed,
                   onChange: (TimeOfDay value) {
-                    debugPrint(value.toString());
+                    data.timeOutBed = value;
                   }),
               const SizedBox(height: 64.0),
               Text("You slept: N hours",
@@ -135,11 +145,13 @@ class SleepCheckinState extends State<SleepCheckin> {
                 Text("Difficult"),
               ], mainAxisAlignment: MainAxisAlignment.spaceBetween),
               Slider(
-                value: 0,
+                value: data.easyWake.toDouble(),
                 max: 4,
                 divisions: 4,
                 onChanged: (double value) {
-                  debugPrint(value.toString());
+                  setState(() {
+                    data.easyWake = value.toInt();
+                  });
                 },
               ),
               const SizedBox(height: 64.0),
@@ -149,7 +161,8 @@ class SleepCheckinState extends State<SleepCheckin> {
         ),
       )),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
+          await serviceLocator<SleepCheckinService>().add(data);
           Navigator.of(context).pop();
         },
         tooltip: 'Done',
