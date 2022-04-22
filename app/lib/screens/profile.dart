@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hea/services/sleep_checkin_service.dart';
 import 'package:health/health.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:hea/services/sleep_checkin_service.dart';
 import 'package:hea/screens/login.dart';
 import 'package:hea/models/user.dart';
 import 'package:hea/services/api_manager.dart';
@@ -159,7 +160,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             builder: (BuildContext context) {
                               return AlertDialog(
                                   title: const Text(
-                                      "Are you sure you want to reset daily check-in"),
+                                      "Are you sure you want to reset daily check-in?"),
                                   actions: [
                                     TextButton(
                                         child: const Text("No"),
@@ -171,6 +172,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         onPressed: () {
                                           serviceLocator<SleepCheckinService>()
                                               .reset();
+                                          Navigator.of(context).pop();
+                                        }),
+                                  ]);
+                            });
+                      }),
+                  const SizedBox(height: 8.0),
+                  GradientButton(
+                      text: "Jump to start of content",
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                  title: const Text(
+                                      "Are you sure you want to jump to start of content?"),
+                                  actions: [
+                                    TextButton(
+                                        child: const Text("No"),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        }),
+                                    TextButton(
+                                        child: const Text("Yes"),
+                                        onPressed: () {
+                                          serviceLocator<SharedPreferences>()
+                                              .remove('sleep');
                                           Navigator.of(context).pop();
                                         }),
                                   ]);

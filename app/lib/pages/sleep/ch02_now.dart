@@ -671,7 +671,7 @@ class NowFatigue extends MultipleChoicePage {
   NowFatigue({Key? key}) : super(key: key);
 
   @override
-  final nextPage = () => NowScore();
+  final nextPage = () => NowEnthusiasm();
   @override
   final prevPage = () => NowSleepMedication();
 
@@ -695,10 +695,45 @@ How often have you had trouble staying awake while working/studying, eating, wat
   final valueName = "how-fatigue";
   @override
   final List<SelectListItem<String>> choices = [
-    SelectListItem(text: "Never", value: "0"),
-    SelectListItem(text: "Once or twice", value: "1"),
-    SelectListItem(text: "Once or twice each week", value: "2"),
-    SelectListItem(text: "Three or more times each week", value: "3"),
+    SelectListItem(text: "Not during the past month", value: "0"),
+    SelectListItem(text: "Less than once a week", value: "1"),
+    SelectListItem(text: "Once or twice a week", value: "2"),
+    SelectListItem(text: "Three or more times a week", value: "3"),
+  ];
+}
+
+class NowEnthusiasm extends MultipleChoicePage {
+  NowEnthusiasm({Key? key}) : super(key: key);
+
+  @override
+  final nextPage = () => NowScore();
+  @override
+  final prevPage = () => NowFatigue();
+
+  @override
+  final title = "Fatigue, energy and enthusiasm";
+  @override
+  final image = Image.asset("assets/images/sleep/ch02-clapping-sleeping.gif");
+
+  @override
+  final markdown = """
+During the past month...
+
+During the past month, how much of a problem has it been for you to keep up enough enthusiasm to get things done?
+""";
+
+  @override
+  final maxChoice = 1;
+  @override
+  final minSelected = 1;
+  @override
+  final valueName = "how-enthusiasm";
+  @override
+  final List<SelectListItem<String>> choices = [
+    SelectListItem(text: "Not during the past month", value: "0"),
+    SelectListItem(text: "Less than once a week", value: "1"),
+    SelectListItem(text: "Once or twice a week", value: "2"),
+    SelectListItem(text: "Three or more times a week", value: "3"),
   ];
 }
 
@@ -708,7 +743,7 @@ class NowScore extends Page {
   @override
   final nextPage = () => GoalsSetting();
   @override
-  final prevPage = () => NowFatigue();
+  final prevPage = () => NowEnthusiasm();
 
   @override
   final title = "How's your sleep score?";
@@ -779,7 +814,9 @@ class NowScore extends Page {
 
     int pointsFatigue =
         int.tryParse(kvReadStringList("sleep", "how-fatigue")[0]) ?? 0;
-    int daytimeDysfunction = pointsFatigue;
+    int pointsEnthusiasm =
+        int.tryParse(kvReadStringList("sleep", "how-enthusiasm")[0]) ?? 0;
+    int daytimeDysfunction = pointsFatigue + pointsEnthusiasm;
 
     int overallScore = sleepLatency +
         sleepEfficiency +
@@ -803,15 +840,15 @@ class NowScore extends Page {
               data: """
 Wonderful work diving into your sleep. Here’s how your score adds up. We hope the breakdown gives a clearer picture on which area of sleep you can improve.
 
-| Areas of your sleep | Score |
+| Areas of your sleep | # of issues |
 |-|-|
-| How do you feel about your sleep (Subjective Sleep Quality) | $subjectiveSleepQuality |
-| Average time taken to fall asleep (Sleep latency) | $sleepLatency |
-| Average sleep time | $sleepTimeText |
-| How efficiently you’re sleeping (Sleep Efficiency) | $sleepEfficiency |
-| How often your sleep is disturbed (Sleep Disturbances) | $sleepDisturbances |
-| Dependency of sleep medication | $sleepMedication |
-| Energy and enthusiasm when you’re awake (Daytime Dysfunction) | $daytimeDysfunction |
+| Sleep quality | $subjectiveSleepQuality |
+| Sleep latency | $sleepLatency |
+| Sleep duration | $sleepTimeText |
+| Sleep efficiency | $sleepEfficiency |
+| Sleep disturbances | $sleepDisturbances |
+| Sleep medication depedency | $sleepMedication |
+| Energy / Enthusiasm | $daytimeDysfunction |
 | Total Sleep Quality score | $overallScore |
 """,
               extensionSet: md.ExtensionSet.gitHubFlavored,

@@ -32,6 +32,7 @@ Lesson sleep = Lesson([
   PageDef(NowOverallQuality, () => NowOverallQuality()),
   PageDef(NowSleepMedication, () => NowSleepMedication()),
   PageDef(NowFatigue, () => NowFatigue()),
+  PageDef(NowEnthusiasm, () => NowEnthusiasm()),
   PageDef(NowScore, () => NowScore()),
   PageDef(GoalsSetting, () => GoalsSetting()),
   PageDef(GoalsTimeToSleep, () => GoalsTimeToSleep()),
