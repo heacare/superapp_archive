@@ -29,6 +29,7 @@ T? kvDelete<T>(String module, String key) {
   object.remove(key);
   json = jsonEncode(object);
   serviceLocator<SharedPreferences>().setString('data-' + module, json);
+  return null;
 }
 
 T? kvRead<T>(String module, String key) {

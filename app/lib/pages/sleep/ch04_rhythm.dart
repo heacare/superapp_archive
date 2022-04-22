@@ -280,18 +280,23 @@ Let’s review how you’re currently sleeping:
   }
 }
 
-class RhythmSettingCourse extends Page {
+class RhythmSettingCourse extends StatefulWidget {
   RhythmSettingCourse({Key? key}) : super(key: key);
 
-  @override
   final nextPage = () => OwningRoutine();
-  @override
   final prevPage = () => RhythmSettingCourseIntro();
 
-  @override
   final title = "Let's review";
 
   final Image? image = Image.asset("assets/images/sleep/ch04-action.jpg");
+
+  @override
+  RhythmSettingCourseState createState() => RhythmSettingCourseState();
+}
+
+class RhythmSettingCourseState extends State<RhythmSettingCourse> {
+  TimeOfDay wakeTime = const TimeOfDay(hour: 0, minute: 0);
+  TimeOfDay sleepTime = const TimeOfDay(hour: 0, minute: 0);
 
   Widget buildDuration(BuildContext context, String valueName,
       int defaultDuration, String prefix) {
@@ -314,6 +319,12 @@ class RhythmSettingCourse extends Page {
   Widget buildTime(BuildContext context, String valueName,
       TimeOfDay defaultTime, String prefix) {
     TimeOfDay initialTime = kvReadTimeOfDay("sleep", valueName) ?? defaultTime;
+    if (valueName == "goals-wake-time") {
+      wakeTime = initialTime;
+    }
+    if (valueName == "goals-sleep-time") {
+      sleepTime = initialTime;
+    }
     return Container(
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0.0),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -323,11 +334,28 @@ class RhythmSettingCourse extends Page {
           ),
           TimePickerBlock(
               initialTime: initialTime,
-              onChange: (time) => kvWriteTimeOfDay("sleep", valueName, time)),
+              onChange: (time) {
+                kvWriteTimeOfDay("sleep", valueName, time);
+                setState(() {
+                  if (valueName == "goals-wake-time") {
+                    wakeTime = time;
+                  }
+                  if (valueName == "goals-sleep-time") {
+                    sleepTime = time;
+                  }
+                });
+              }),
         ]));
   }
 
-  @override
+  String get sleepFor {
+    int sleepForMinutes = ((wakeTime.minute + wakeTime.hour * 60) -
+            (sleepTime.minute + sleepTime.hour * 60)) %
+        (24 * 60);
+    Duration sleepFor = Duration(minutes: sleepForMinutes);
+    return "${sleepFor.inHours} hours ${sleepFor.inMinutes.remainder(Duration.minutesPerHour)} minutes";
+  }
+
   Widget buildPage(BuildContext context) {
     final markdownStyleSheet = MarkdownStyleSheet(
         p: Theme.of(context).textTheme.bodyText1,
@@ -335,8 +363,8 @@ class RhythmSettingCourse extends Page {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          if (image != null) image!,
-          if (image != null) const SizedBox(height: 4.0),
+          if (widget.image != null) widget.image!,
+          if (widget.image != null) const SizedBox(height: 4.0),
           MarkdownBody(
               data: """
 Now, let’s set some specific goals:
@@ -347,9 +375,6 @@ A key to forming successful habits is taking small do-able steps. For example, i
 """,
               extensionSet: md.ExtensionSet.gitHubFlavored,
               styleSheet: markdownStyleSheet),
-          const SizedBox(height: 4.0),
-          buildDuration(context, "goals-sleep-duration", 0,
-              "I would like to sleep for at least"),
           const SizedBox(height: 4.0),
           buildTime(
               context,
@@ -365,6 +390,10 @@ A key to forming successful habits is taking small do-able steps. For example, i
           const SizedBox(height: 4.0),
           MarkdownBody(
               data: """
+Based on these times, I will be sleeping for **$sleepFor**
+
+--- 
+
 **So how are we going to get you there?**
 
 It starts with a calming wind-down routine, otherwise known as a bedtime routine.
@@ -373,5 +402,15 @@ It starts with a calming wind-down routine, otherwise known as a bedtime routine
               styleSheet: markdownStyleSheet),
         ]);
     // TODO: Read default responses
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BasePage(
+      title: widget.title,
+      nextPage: widget.nextPage,
+      prevPage: widget.prevPage,
+      page: buildPage(context),
+    );
   }
 }

@@ -15,6 +15,7 @@ import 'package:hea/screens/onboarding/basic_info.dart';
 import 'package:hea/screens/onboarding/smoking.dart';
 import 'package:hea/screens/onboarding/drinking.dart';
 import 'package:hea/screens/onboarding/followup.dart';
+import 'package:hea/main.dart';
 
 final getIt = GetIt.instance;
 
@@ -102,6 +103,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => const HomeScreen()),
             (route) => false);
+
+        // HACK: Restart app because currently the homescreen ends up stuck on
+        // a spinner.
+        App.of(context).restart();
 
         return;
     }

@@ -80,29 +80,29 @@ When it is time to sleep, I
   @override
   final List<SelectListItem<String>> choices = [
     SelectListItem(
-        text: "Still do other things", value: "Still do other things"),
+        text: "Still do other things", value: "still do other things"),
     SelectListItem(
         text: "Get easily distracted by other things",
-        value: "Get easily distracted by other things"),
+        value: "get easily distracted by other things"),
     SelectListItem(
         text: "Can easily stop with my activities when it is time to go to bed",
         value:
-            "Can easily stop with my activities when it is time to go to bed"),
+            "can easily stop with my activities when it is time to go to bed"),
     SelectListItem(
         text: "Do not want to go to bed on time",
-        value: "Do not want to go to bed on time"),
+        value: "do not want to go to bed on time"),
     SelectListItem(
         text: "Want to go to bed on time but I just don't",
-        value: "Want to go to bed on time but I just don't"),
+        value: "want to go to bed on time but I just don't"),
     SelectListItem(
         text: "Go to bed early if I have to get up early in the morning",
-        value: "Go to bed early if I have to get up early in the morning"),
+        value: "go to bed early if I have to get up early in the morning"),
     SelectListItem(
         text: "Turn off the lights at night I do it immediately",
-        value: "Turn off the lights at night I do it immediately"),
+        value: "turn off the lights at night I do it immediately"),
     SelectListItem(
         text: "Have a regular bedtime which I keep to",
-        value: "Have a regular bedtime which I keep to"),
+        value: "have a regular bedtime which I keep to"),
   ];
 }
 
@@ -183,32 +183,13 @@ class GoalsEmbraceAndManifest extends Page {
   final Image? image =
       Image.asset("assets/images/sleep/ch03-baby-yoda-grogu.gif");
 
-  Widget buildLine(BuildContext context, String valueName, String prefix) {
-    return Container(
-        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0.0),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
-            prefix + "",
-            style: Theme.of(context).textTheme.bodyLarge,
-          ),
-          TextFormField(
-              maxLines: null,
-              initialValue: kvRead("sleep", valueName),
-              onChanged: (String value) {
-                kvWrite<String>("sleep", valueName, value);
-              })
-        ]));
-    /*
-    return TextFormField(
-        maxLines: null,
-        decoration: InputDecoration(
-          prefix: Text(prefix + " "),
-        ),
-        initialValue: kvRead("sleep", valueName),
-        onChanged: (String value) {
-          kvWrite<String>("sleep", valueName, value);
-        });
-	*/
+  Widget buildLine(BuildContext context, MarkdownStyleSheet markdownStyleSheet,
+      String prefix, List<String> items) {
+    String what = items.join(", ");
+    return MarkdownBody(
+        data: "**$prefix** $what.",
+        extensionSet: md.ExtensionSet.gitHubFlavored,
+        styleSheet: markdownStyleSheet);
   }
 
   @override
@@ -228,13 +209,23 @@ Knowing and accepting where you are is the first step to making change.
               extensionSet: md.ExtensionSet.gitHubFlavored,
               styleSheet: markdownStyleSheet),
           const SizedBox(height: 4.0),
-          buildLine(context, "bedtime", "When it is time to go to bed, I"),
+          buildLine(
+              context,
+              markdownStyleSheet,
+              "When it is time to go to bed, I",
+              kvReadStringList("sleep", "time-to-sleep")),
           const SizedBox(height: 4.0),
-          buildLine(context, "bedtime-end-up-doing",
-              "Instead of going to bed, I end up"),
+          buildLine(
+              context,
+              markdownStyleSheet,
+              "Instead of going to bed, I end up",
+              kvReadStringList("sleep", "doing-before-bed")),
           const SizedBox(height: 4.0),
-          buildLine(context, "would-like-to",
-              "To get better sleep from hereon, I would like to"),
+          buildLine(
+              context,
+              markdownStyleSheet,
+              "To get better sleep from hereon, I would like to",
+              kvReadStringList("sleep", "sleep-goals")),
           const SizedBox(height: 4.0),
         ]);
   }
