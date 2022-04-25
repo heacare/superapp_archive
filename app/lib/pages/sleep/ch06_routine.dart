@@ -484,3 +484,22 @@ String formatList(List<String> l) {
   }
   return text;
 }
+
+String groupInstructions = """
+You’ve chosen to be part of a team. Wonderful! Humans are social creatures. Having encouraging sleep buddies can make a huge difference.
+
+To keep things cosy, a team will never have more than 4 people. You can leave your team whenever. New sleep buddies may also join if a spot opens. 
+
+We’ll be matching you with the best sleep buddies based on your sleep profile, goals and challenges on WhatsApp/Telegram.
+
+Meanwhile, to create a safe environment for all sleep buddies, please read and agree to the following community practices to proceed: 
+
+# Rules of Engagement 
+
+1. Keep it relevant, constructive and inclusive
+2. No hate speech or bullying
+3. Be respectful of different opinions
+4. Refrain from giving medical advice
+5. Do help to moderate discussions
+6. Refrain from promotion or solicitation of products or services
+""";

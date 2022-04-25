@@ -473,7 +473,7 @@ class ModuleCheckinItem extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                         Text(
-                            "Sleep check-in day ${progress.day} of ${progress.total}",
+                            "Sleep check-in day ${progress.dayCounter} of ${progress.total}",
                             style: Theme.of(context).textTheme.headline3),
                         const SizedBox(height: 5.0),
                         Text("Keep track of how you slept last night",

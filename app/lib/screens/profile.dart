@@ -179,6 +179,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       }),
                   const SizedBox(height: 8.0),
                   GradientButton(
+                      text: "Skip 1 day of daily check-in",
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                  title: const Text(
+                                      "Are you sure you want to skip 1 day of daily check-in?"),
+                                  actions: [
+                                    TextButton(
+                                        child: const Text("No"),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        }),
+                                    TextButton(
+                                        child: const Text("Yes"),
+                                        onPressed: () {
+                                          serviceLocator<SleepCheckinService>()
+                                              .add(SleepCheckinData());
+                                          Navigator.of(context).pop();
+                                        }),
+                                  ]);
+                            });
+                      }),
+                  const SizedBox(height: 8.0),
+                  GradientButton(
                       text: "Jump to start of content",
                       onPressed: () {
                         showDialog(

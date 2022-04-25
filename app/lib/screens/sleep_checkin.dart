@@ -47,7 +47,7 @@ class SleepCheckinState extends State<SleepCheckin> {
                         const SizedBox(width: 10.0),
                         Expanded(
                             child: Text(
-                                "Sleep check-in day ${progress.day} of ${progress.total}",
+                                "Sleep check-in day ${progress.dayCounter} of ${progress.total}",
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 4,
                                 style: Theme.of(context).textTheme.headline2)),
@@ -138,7 +138,7 @@ class SleepCheckinState extends State<SleepCheckin> {
                   "Note: This is different from the amount of time you spent in bed"),
               const SizedBox(height: 64.0),
               Text(
-                  "How easily did you shift from sleep to feeling fully awake?",
+                  "How easily did you shift from feeling groggy after waking to feeling fully awake?",
                   style: Theme.of(context).textTheme.titleLarge),
               Row(children: const [
                 Text("Easy"),

@@ -223,6 +223,8 @@ abstract class OpenEndedPage extends Page {
   }
 }
 
+typedef StringListPageBuilder = Widget Function(List<String>);
+
 abstract class MultipleChoicePage extends StatefulWidget {
   abstract final String markdown;
   abstract final Image? image;
@@ -240,10 +242,16 @@ abstract class MultipleChoicePage extends StatefulWidget {
 
   @override
   State<MultipleChoicePage> createState() => MultipleChoicePageState();
+
+  bool hasNextPageStringList() => false;
+  Widget nextPageStringList(List<String> data) {
+    return Container();
+  }
 }
 
 class MultipleChoicePageState extends State<MultipleChoicePage> {
   bool hideNext = false;
+  List<String> selected = [""];
 
   bool canNext() {
     return kvReadStringList("sleep", widget.valueName).length >=
@@ -261,9 +269,12 @@ class MultipleChoicePageState extends State<MultipleChoicePage> {
     final markdownStyleSheet = MarkdownStyleSheet(
         p: Theme.of(context).textTheme.bodyText1,
         h1: Theme.of(context).textTheme.headline3);
+    selected = kvReadStringList("sleep", widget.valueName);
     return BasePage(
         title: widget.title,
-        nextPage: widget.nextPage,
+        nextPage: widget.hasNextPageStringList()
+            ? () => widget.nextPageStringList(selected)
+            : widget.nextPage,
         prevPage: widget.prevPage,
         hideNext: hideNext,
         page: Column(
@@ -280,8 +291,9 @@ class MultipleChoicePageState extends State<MultipleChoicePage> {
               SelectList(
                   items: widget.choices,
                   max: widget.maxChoice,
-                  defaultSelected: kvReadStringList("sleep", widget.valueName),
+                  defaultSelected: selected,
                   onChange: (List<String> c) {
+                    selected = c;
                     kvWrite<List<String>>("sleep", widget.valueName, c);
                     setState(() {
                       hideNext = !canNext();

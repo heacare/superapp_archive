@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart' hide Page;
 
 import 'package:hea/widgets/page.dart';
+import 'package:hea/services/sleep_checkin_service.dart';
+import 'package:hea/services/service_locator.dart';
 import 'ch06_routine.dart';
+import 'ch09_done.dart';
 
 class DiaryReminders extends TimePickerPage {
   DiaryReminders({Key? key}) : super(key: key);
@@ -35,7 +38,14 @@ class DiaryStart extends MarkdownPage {
   DiaryStart({Key? key}) : super(key: key);
 
   @override
-  final nextPage = null;
+  final nextPage = () {
+    SleepCheckinProgress progress =
+        serviceLocator<SleepCheckinService>().getProgress();
+    if (progress.allDone) {
+      return Done();
+    }
+    return DiaryStart();
+  };
   @override
   final prevPage = () => DiaryReminders();
 

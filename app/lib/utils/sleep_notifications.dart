@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/services/notification_service.dart';
+import 'package:hea/services/sleep_checkin_service.dart';
 import 'package:hea/utils/kv_wrap.dart';
 
 // Hours
@@ -464,51 +465,49 @@ Future<void> scheduleSleepNotifications() async {
   TimeOfDay? diaryReminderTimes =
       kvReadTimeOfDay("sleep", "diary-reminder-times");
   if (diaryReminderTimes != null) {
-    // TODO: Check if today's check-in has been done
-    int day = kvReadInt("sleep", "day") ?? 0;
-    if (day == 0) {
-      day = 1;
-      kvWrite("sleep", "day", day);
+    SleepCheckinProgress progress =
+        serviceLocator<SleepCheckinService>().getProgress();
+    if (!progress.todayDone) {
+      int day = progress.dayCounter;
+      int dayTotal = progress.total;
+      await serviceLocator<NotificationService>().showDailyReminder(
+        baseId + 51 * 10 + 1,
+        "sleep_reminders",
+        "Daily sleep check-in",
+        "Day $day of $dayTotal: How did you sleep last night?",
+        diaryReminderTimes,
+        payload: const {"jump_to": "sleep_checkin"},
+      );
+      await serviceLocator<NotificationService>().showDailyReminder(
+        baseId + 51 * 10 + 2,
+        "sleep_reminders",
+        "Daily sleep check-in",
+        "Day $day of $dayTotal: How did you sleep last night? Memory serves you better closer to your wake time.",
+        TimeOfDay(
+            hour: diaryReminderTimes.hour + 1,
+            minute: diaryReminderTimes.minute),
+        payload: const {"jump_to": "sleep_checkin"},
+      );
+      await serviceLocator<NotificationService>().showDailyReminder(
+        baseId + 51 * 10 + 3,
+        "sleep_reminders",
+        "Daily sleep check-in",
+        "Day $day of $dayTotal: Can’t recall how you slept? Skipped your sleep routine? Don’t worry, simply note what happened.",
+        TimeOfDay(
+            hour: diaryReminderTimes.hour + 3,
+            minute: diaryReminderTimes.minute),
+        payload: const {"jump_to": "sleep_checkin"},
+      );
+      await serviceLocator<NotificationService>().showDailyReminder(
+        baseId + 51 * 10 + 4,
+        "sleep_reminders",
+        "Daily sleep check-in",
+        "Day $day of $dayTotal: Can’t recall how you slept? Skipped your sleep routine? Don’t worry, simply note what happened.",
+        TimeOfDay(
+            hour: diaryReminderTimes.hour + 6,
+            minute: diaryReminderTimes.minute),
+        payload: const {"jump_to": "sleep_checkin"},
+      );
     }
-    int dayTotal = kvReadInt("sleep", "day-total") ?? 0;
-    if (dayTotal == 0) {
-      dayTotal = 7;
-      kvWrite("sleep", "day-total", dayTotal);
-    }
-    await serviceLocator<NotificationService>().showDailyReminder(
-      baseId + 51 * 10 + 1,
-      "sleep_reminders",
-      "Daily sleep check-in",
-      "Day $day of $dayTotal: How did you sleep last night?",
-      diaryReminderTimes,
-      payload: const {"jump_to": "sleep_checkin"},
-    );
-    await serviceLocator<NotificationService>().showDailyReminder(
-      baseId + 51 * 10 + 2,
-      "sleep_reminders",
-      "Daily sleep check-in",
-      "Day $day of $dayTotal: How did you sleep last night? Memory serves you better closer to your wake time.",
-      TimeOfDay(
-          hour: diaryReminderTimes.hour + 1, minute: diaryReminderTimes.minute),
-      payload: const {"jump_to": "sleep_checkin"},
-    );
-    await serviceLocator<NotificationService>().showDailyReminder(
-      baseId + 51 * 10 + 3,
-      "sleep_reminders",
-      "Daily sleep check-in",
-      "Day $day of $dayTotal: Can’t recall how you slept? Skipped your sleep routine? Don’t worry, simply note what happened.",
-      TimeOfDay(
-          hour: diaryReminderTimes.hour + 3, minute: diaryReminderTimes.minute),
-      payload: const {"jump_to": "sleep_checkin"},
-    );
-    await serviceLocator<NotificationService>().showDailyReminder(
-      baseId + 51 * 10 + 4,
-      "sleep_reminders",
-      "Daily sleep check-in",
-      "Day $day of $dayTotal: Can’t recall how you slept? Skipped your sleep routine? Don’t worry, simply note what happened.",
-      TimeOfDay(
-          hour: diaryReminderTimes.hour + 6, minute: diaryReminderTimes.minute),
-      payload: const {"jump_to": "sleep_checkin"},
-    );
   }
 }

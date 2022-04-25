@@ -42,8 +42,8 @@ class SelectListState<T> extends State<SelectList<T>> {
     List<T> values = widget.items.toSet().map((item) => item.value).toList();
     debugPrint(widget.defaultSelected.runtimeType.toString());
     if (widget.defaultSelected.isNotEmpty) {
-      selected =
-          widget.defaultSelected.where((sel) => values.contains(sel)).toList();
+      selected = List<T>.from(
+          widget.defaultSelected.where((sel) => values.contains(sel)));
     }
     // DART BUG: When calling where() on a const List<Never>, .where.toList()
     // also returns a const List<Never>. This causes .add() to fail.
