@@ -1,10 +1,17 @@
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Page;
+import 'package:hea/services/logging_service.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:hea/widgets/gradient_button.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_markdown/flutter_markdown.dart';
 
 import 'package:hea/widgets/page.dart';
 import 'package:hea/widgets/select_list.dart';
 import 'package:hea/services/sleep_checkin_service.dart';
+import 'package:hea/services/user_service.dart';
+import 'package:hea/models/user.dart';
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/utils/kv_wrap.dart';
 import 'ch07_diary.dart';
@@ -295,7 +302,45 @@ class DoneEnd extends MarkdownPage {
   final markdown = """
 Thank you so much for taking part in our pilot test. We’ll be checking-in with you again in a month’s time, through the app and via email. By the way, how did it go for you?
 
-Please do [fill up this survey form](https://2b0snealkkz.typeform.com/to/IMGRUIJt) to let us know that you have completed the program.
+Please do fill up the following survey form to let us know that you have completed the program.
 """;
 // TODO: Embed the survey form
+
+  @override
+  Widget buildPage(BuildContext context) {
+    final markdownStyleSheet = MarkdownStyleSheet(
+        p: Theme.of(context).textTheme.bodyText1,
+        h1: Theme.of(context).textTheme.headline3);
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          if (image != null) image!,
+          if (image != null) const SizedBox(height: 4.0),
+          MarkdownBody(
+              data: markdown,
+              extensionSet: md.ExtensionSet.gitHubFlavored,
+              styleSheet: markdownStyleSheet),
+          GradientButton(
+              text: "Complete Program",
+              onPressed: () async {
+                User user =
+                    await serviceLocator<UserService>().getCurrentUser();
+                Uri uri =
+                    Uri.parse('https://2b0snealkkz.typeform.com/to/IMGRUIJt');
+                if (kDebugMode) {
+                  uri =
+                      Uri.parse('https://2b0snealkkz.typeform.com/to/T7NdL2JC');
+                }
+                uri =
+                    uri.replace(queryParameters: {"utm_content": user.authId});
+                LaunchMode mode = LaunchMode.platformDefault;
+                if (Platform.isAndroid) {
+                  mode = LaunchMode.externalApplication;
+                }
+                bool okay =
+                    await launchUrl(uri, mode: LaunchMode.externalApplication);
+                serviceLocator<LoggingService>().createLog("open-survey", okay);
+              }),
+        ]);
+  }
 }

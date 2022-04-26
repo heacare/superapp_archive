@@ -42,4 +42,10 @@
                    android:value="@string/default_notification_channel_id" />
     </application>
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
+        </intent>
+    </queries>
 </manifest>
