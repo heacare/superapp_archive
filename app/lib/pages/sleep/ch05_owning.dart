@@ -17,7 +17,7 @@ class OwningRoutine extends MarkdownPage {
   @override
   final title = "Rhythm is Life and routine";
   @override
-  final image = Image.asset("assets/images/sleep/ch05-daily-routine.gif");
+  final image = Image.asset("assets/images/sleep/ch05-daily-routine.webp");
 
   @override
   final markdown = """
@@ -41,7 +41,7 @@ class OwningZeitgebers extends MarkdownPage {
   final title = "Zeitgebers";
   @override
   final image =
-      Image.asset("assets/images/sleep/ch05-cim-circadian-clock-kyoung.png");
+      Image.asset("assets/images/sleep/ch05-cim-circadian-clock-kyoung.webp");
 
   @override
   final markdown = """
@@ -70,11 +70,11 @@ class OwningRoutineActivities1 extends MultipleChoicePage {
 
   @override
   final markdown = """
-How does your routine look like before bedtime? Let’s review. 
+What do you usually do, up to an hour before bedtime could contribute to forming your bedtime routine and affect your quality of sleep.
 
-Select the appropriate habits that happen under each time section accordingly. If none, leave blank.
+Select the activities that you usually do before bed under each time section accordingly.
 
-1 hour before bedtime
+1 hour before bedtime, I usually find myself:
 """;
 
   @override
@@ -102,11 +102,11 @@ class OwningRoutineActivities2 extends MultipleChoicePage {
 
   @override
   final markdown = """
-How does your routine look like before bedtime? Let’s review. 
+What do you usually do, up to an hour before bedtime could contribute to forming your bedtime routine and affect your quality of sleep.
 
-Select the appropriate habits that happen under each time section accordingly. If none, leave blank.
+Select the activities that you usually do before bed under each time section accordingly.
 
-30 minutes before bedtime
+30 minutes before bedtime, I usually find myself:
 """;
 
   @override
@@ -123,7 +123,7 @@ class OwningRoutineActivities3 extends MultipleChoicePage {
   OwningRoutineActivities3({Key? key}) : super(key: key);
 
   @override
-  final nextPage = () => OwningStarter();
+  final nextPage = () => OwningRoutineStart();
   @override
   final prevPage = () => OwningRoutineActivities2();
 
@@ -134,11 +134,11 @@ class OwningRoutineActivities3 extends MultipleChoicePage {
 
   @override
   final markdown = """
-How does your routine look like before bedtime? Let’s review. 
+What do you usually do, up to an hour before bedtime could contribute to forming your bedtime routine and affect your quality of sleep.
 
-Select the appropriate habits that happen under each time section accordingly. If none, leave blank.
+Select the activities that you usually do before bed under each time section accordingly.
 
-15 minutes before bedtime
+15 minutes before bedtime, I usually find myself:
 """;
 
   @override
@@ -155,7 +155,7 @@ class OwningRoutineStart extends MarkdownPage {
   OwningRoutineStart({Key? key}) : super(key: key);
 
   @override
-  final nextPage = () => OwningStarter();
+  final nextPage = () => OwningTheDaySupporting();
   @override
   final prevPage = () => OwningRoutineActivities3();
 
@@ -166,52 +166,7 @@ class OwningRoutineStart extends MarkdownPage {
 
   @override
   final markdown = """
-Let's see how we can start now
-""";
-}
-
-class OwningStarter extends MarkdownPage {
-  OwningStarter({Key? key}) : super(key: key);
-
-  @override
-  final nextPage = () => OwningBeforeBedtime();
-  @override
-  final prevPage = () => OwningRoutineStart();
-
-  @override
-  final title = "Routine is a habit";
-  @override
-  final image = Image.asset("assets/images/sleep/ch05-ok-right.gif");
-
-  @override
-  final markdown = """
-  We are going to use our understanding of the Circadian Rhythm and Zeitgebers to form/improve your bedtime routine. 
-
-You make your habits and your habits make you. 
-""";
-  // TODO: Conditional formatting
-}
-
-class OwningBeforeBedtime extends MarkdownPage {
-  OwningBeforeBedtime({Key? key}) : super(key: key);
-
-  @override
-  final nextPage = () => OwningTheDaySupporting();
-  @override
-  final prevPage = () => OwningStarter();
-
-  @override
-  final title = "Before 'bedtime', there is 'get ready for bedtime'";
-  @override
-  final image = Image.asset("assets/images/sleep/ch05-fake-sleep.gif");
-
-  @override
-  final markdown = """
-Before you sleep, the brain’s sleep-wake mechanism is already releasing chemicals that prepare your body for sleep. Use this buffering period to mentally and physically separate yourself from activities that might keep you awake. 
-
-This means stopping any stressful or stimulating work, worries and daytime drama. Mindful practices can help with this. 
-
-You can set a 'get ready for bedtime’ reminder. This is not the time you get into bed to sleep. This is a winding down period. It can start from as early as sunset to some minutes before bed. 
+What you do during the day may also be helping or ‘sabo-ing’ (disrupting) your sleep! Let’s do a quick awareness check on this next. 
 """;
 }
 
@@ -221,18 +176,16 @@ class OwningTheDaySupporting extends MultipleChoicePage {
   @override
   final nextPage = () => OwningTheDayNegative();
   @override
-  final prevPage = () => OwningBeforeBedtime();
+  final prevPage = () => OwningRoutineStart();
 
   @override
-  final title = "What else are you doing in the day";
+  final title = "Activity: What else could be affecting your sleep?";
   @override
-  final image = null;
+  final image = Image.asset("assets/images/sleep/ch05-checkpoint.webp");
 
   @override
   final markdown = """
-What you do during the day may also be helping or ‘sabo-ing’ (disrupting) your sleep!
-
-Check all that applies to you
+Which of these applies to you? Check all that applies.
 
 Things that support sleep:
 """;
@@ -263,15 +216,13 @@ class OwningTheDayNegative extends MultipleChoicePage {
   final prevPage = () => OwningTheDaySupporting();
 
   @override
-  final title = "What else are you doing in the day";
+  final title = "Activity: What else could be affecting your sleep?";
   @override
-  final image = null;
+  final image = Image.asset("assets/images/sleep/ch05-checkpoint.webp");
 
   @override
   final markdown = """
-What you do during the day may also be helping or ‘sabo-ing’ (disrupting) your sleep!
-
-Check all that applies to you
+Which of these applies to you? Check all that applies.
 
 Things that may 'sabo' sleep:
 """;
@@ -307,62 +258,17 @@ class OwningTheDayNote extends MarkdownPage {
   OwningTheDayNote({Key? key}) : super(key: key);
 
   @override
-  final nextPage = () => OwningWhy();
+  final nextPage = () => RoutineBeforeBedtime();
   @override
   final prevPage = () => OwningTheDayNegative();
 
   @override
-  final title = "What else are you doing in the day";
-  @override
-  final image = null;
-
-  @override
-  final markdown = """
-Now that you are aware of the need for good sleep and what could be tripping it up, what’s your reason for getting your sleep right?
-""";
-}
-
-class OwningWhy extends OpenEndedPage {
-  OwningWhy({Key? key}) : super(key: key);
-
-  @override
-  final nextPage = () => OwningWhatsNext();
-  @override
-  final prevPage = () => OwningTheDayNote();
-
-  @override
   final title = "What's your why";
   @override
-  final image = Image.asset("assets/images/sleep/ch05-think-want-get-it.gif");
-
-  @override
-  final markdown = """
-What’s your motivation? A clear  “why” will help you keep going, and to pick yourself up when you stumble. 
-
-List the reasons why better sleep is desirable for you. State these reasons in positive terms. e.g. “I aim to level up at work”, not “I don’t want to be fired from my job.”
-
-Why I want to sleep better:
-""";
-
-  @override
-  final valueName = "why-sleep-better";
-}
-
-class OwningWhatsNext extends MarkdownPage {
-  OwningWhatsNext({Key? key}) : super(key: key);
-
-  @override
-  final nextPage = () => RoutineIntro();
-  @override
-  final prevPage = () => OwningWhy();
-
-  @override
-  final title = "What else are you doing in the day";
-  @override
   final image = null;
 
   @override
   final markdown = """
-Now that you know your why, what’s next?
+Now that you are aware of the need for good sleep lets use our understanding of the Circadian Rhythm and Zeitgebers to a bedtime routine. 
 """;
 }

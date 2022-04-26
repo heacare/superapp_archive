@@ -218,7 +218,8 @@ Future<void> scheduleSleepNotifications() async {
         "Reviewing your sleep",
         "We miss you ☹️.  If you need some help, feel free to contact us directly.",
         minHoursLater: firstReminder + nextReminder * 2);
-  } else if (s == "RhythmConsistency" ||
+  } else if (s == "GoalsGettingThere" ||
+      s == "RhythmConsistency" ||
       s == "RhythmWhy" ||
       s == "RhythmHow" ||
       s == "RhythmPeaksAndDips1" ||
@@ -274,8 +275,6 @@ Future<void> scheduleSleepNotifications() async {
       s == "OwningRoutineActivities2" ||
       s == "OwningRoutineActivities3" ||
       s == "OwningRoutineStart" ||
-      s == "OwningStarter" ||
-      s == "OwningBeforeBedtime" ||
       s == "OwningTheDaySupporting" ||
       s == "OwningTheDayNegative") {
     // Set #9
@@ -299,29 +298,9 @@ Future<void> scheduleSleepNotifications() async {
         "We miss you ☹️.  If you need some help, feel free to contact us directly.",
         minHoursLater: firstReminder + nextReminder * 2);
   } else if (s == "OwningTheDayNote" ||
-      s == "OwningWhy" ||
-      s == "OwningWhatsNext") {
-    // Set #10
-    // Objective: User to finish activity: what’s your why? <chp 5, pg 5>
-    await serviceLocator<NotificationService>().showContentReminder(
-        baseId + 10 * 10 + 1,
-        "sleep_content",
-        "Understanding why",
-        "Why is sleeping better important to you? Share your “why” for motivation.",
-        minHoursLater: firstReminder);
-    await serviceLocator<NotificationService>().showContentReminder(
-        baseId + 10 * 10 + 2,
-        "sleep_content",
-        "Understanding why",
-        "Good sleep has many benefits. Just think about how bad sleep affects you. Are you ready to share?",
-        minHoursLater: firstReminder + nextReminder);
-    await serviceLocator<NotificationService>().showContentReminder(
-        baseId + 10 * 10 + 3,
-        "sleep_content",
-        "Understanding why",
-        "We miss you ☹️.  If you need some help, feel free to contact us directly.",
-        minHoursLater: firstReminder + nextReminder * 2);
-  } else if (s == "RoutineIntro" || s == "RoutineActivities") {
+      s == "RoutineBeforeBedtime" ||
+      s == "RoutineIntro" ||
+      s == "RoutineActivities") {
     // Set #11
     // Objective: User finish activity:  Winding down for the day…<Chp 6, pg3>
     await serviceLocator<NotificationService>().showContentReminder(
@@ -386,7 +365,7 @@ Future<void> scheduleSleepNotifications() async {
         "Winding down helps sleep",
         "We miss you ☹️.  If you need some help, feel free to contact us directly.",
         minHoursLater: firstReminder + nextReminder * 2);
-  } else if (s == "RoutineOptInGroup") {
+  } else if (s == "RoutineOptInGroup" || s == "RoutineGroupInstructions") {
 // Set #14
     await serviceLocator<NotificationService>().showContentReminder(
         baseId + 14 * 10 + 1,
@@ -464,50 +443,67 @@ Future<void> scheduleSleepNotifications() async {
   }
   TimeOfDay? diaryReminderTimes =
       kvReadTimeOfDay("sleep", "diary-reminder-times");
-  if (diaryReminderTimes != null) {
-    SleepCheckinProgress progress =
-        serviceLocator<SleepCheckinService>().getProgress();
-    if (!progress.todayDone) {
-      int day = progress.dayCounter;
-      int dayTotal = progress.total;
-      await serviceLocator<NotificationService>().showDailyReminder(
-        baseId + 51 * 10 + 1,
-        "sleep_reminders",
+  SleepCheckinProgress progress =
+      serviceLocator<SleepCheckinService>().getProgress();
+  int day = progress.dayCounter;
+  int dayTotal = progress.total;
+  if (diaryReminderTimes != null && progress.todayDone) {
+    // Set #17
+    await serviceLocator<NotificationService>().showDailyReminder(
+      baseId + 51 * 10 + 1,
+      "sleep_reminders",
+      "Daily sleep check-in",
+      "Day $day of $dayTotal: How did you sleep last night?",
+      diaryReminderTimes,
+      payload: const {"jump_to": "sleep_checkin"},
+    );
+    await serviceLocator<NotificationService>().showDailyReminder(
+      baseId + 51 * 10 + 2,
+      "sleep_reminders",
+      "Daily sleep check-in",
+      "Day $day of $dayTotal: How did you sleep last night? Memory serves you better closer to your wake time.",
+      TimeOfDay(
+          hour: diaryReminderTimes.hour + 1, minute: diaryReminderTimes.minute),
+      payload: const {"jump_to": "sleep_checkin"},
+    );
+    await serviceLocator<NotificationService>().showDailyReminder(
+      baseId + 51 * 10 + 3,
+      "sleep_reminders",
+      "Daily sleep check-in",
+      "Day $day of $dayTotal: Can’t recall how you slept? Skipped your sleep routine? Don’t worry, simply note what happened.",
+      TimeOfDay(
+          hour: diaryReminderTimes.hour + 3, minute: diaryReminderTimes.minute),
+      payload: const {"jump_to": "sleep_checkin"},
+    );
+    await serviceLocator<NotificationService>().showDailyReminder(
+      baseId + 51 * 10 + 4,
+      "sleep_reminders",
+      "Daily sleep check-in",
+      "Day $day of $dayTotal: Can’t recall how you slept? Skipped your sleep routine? Don’t worry, simply note what happened.",
+      TimeOfDay(
+          hour: diaryReminderTimes.hour + 6, minute: diaryReminderTimes.minute),
+      payload: const {"jump_to": "sleep_checkin"},
+    );
+  }
+  if (diaryReminderTimes != null && progress.allDone) {
+    // Set #18
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 18 * 10 + 1,
+        "sleep_content",
         "Daily sleep check-in",
-        "Day $day of $dayTotal: How did you sleep last night?",
-        diaryReminderTimes,
-        payload: const {"jump_to": "sleep_checkin"},
-      );
-      await serviceLocator<NotificationService>().showDailyReminder(
-        baseId + 51 * 10 + 2,
-        "sleep_reminders",
+        "You did it! What's next for you?",
+        minHoursLater: firstReminder);
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 18 * 10 + 2,
+        "sleep_content",
         "Daily sleep check-in",
-        "Day $day of $dayTotal: How did you sleep last night? Memory serves you better closer to your wake time.",
-        TimeOfDay(
-            hour: diaryReminderTimes.hour + 1,
-            minute: diaryReminderTimes.minute),
-        payload: const {"jump_to": "sleep_checkin"},
-      );
-      await serviceLocator<NotificationService>().showDailyReminder(
-        baseId + 51 * 10 + 3,
-        "sleep_reminders",
+        "Don’t give up now. You can change your routine, get an accountability boost with a team, or get a coach.",
+        minHoursLater: firstReminder + nextReminder);
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 18 * 10 + 3,
+        "sleep_content",
         "Daily sleep check-in",
-        "Day $day of $dayTotal: Can’t recall how you slept? Skipped your sleep routine? Don’t worry, simply note what happened.",
-        TimeOfDay(
-            hour: diaryReminderTimes.hour + 3,
-            minute: diaryReminderTimes.minute),
-        payload: const {"jump_to": "sleep_checkin"},
-      );
-      await serviceLocator<NotificationService>().showDailyReminder(
-        baseId + 51 * 10 + 4,
-        "sleep_reminders",
-        "Daily sleep check-in",
-        "Day $day of $dayTotal: Can’t recall how you slept? Skipped your sleep routine? Don’t worry, simply note what happened.",
-        TimeOfDay(
-            hour: diaryReminderTimes.hour + 6,
-            minute: diaryReminderTimes.minute),
-        payload: const {"jump_to": "sleep_checkin"},
-      );
-    }
+        "We miss you ☹️.  If you need some help, feel free to contact us directly.",
+        minHoursLater: firstReminder + nextReminder * 2);
   }
 }

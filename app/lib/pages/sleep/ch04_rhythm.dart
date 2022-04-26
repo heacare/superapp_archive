@@ -18,7 +18,7 @@ class RhythmConsistency extends MarkdownPage {
   @override
   final title = "Consistency is key";
   @override
-  final image = Image.asset("assets/images/sleep/ch04-consistency-is-key.png");
+  final image = Image.asset("assets/images/sleep/ch04-consistency-is-key.webp");
 
   @override
   final markdown = """
@@ -41,7 +41,7 @@ class RhythmWhy extends MarkdownPage {
   @override
   final title = "It's all about rhythm";
   @override
-  final image = Image.asset("assets/images/sleep/ch04-hannah-mumby.gif");
+  final image = Image.asset("assets/images/sleep/ch04-hannah-mumby.webp");
 
   @override
   final markdown = """
@@ -64,7 +64,7 @@ class RhythmHow extends MarkdownPage {
   @override
   final title = "The circadian clock";
   @override
-  final image = Image.asset("assets/images/sleep/ch04-digg-body-clock.gif");
+  final image = Image.asset("assets/images/sleep/ch04-digg-body-clock.webp");
 
   @override
   final markdown = """
@@ -132,7 +132,7 @@ class RhythmFeels1 extends Page {
 
   @override
   final title = "Setting the course of action";
-  final image = Image.asset("assets/images/sleep/ch04-action.jpg");
+  final image = Image.asset("assets/images/sleep/ch04-action.webp");
 
   final markdown = """
 When in the day do you usually feel your best?
@@ -169,7 +169,7 @@ class RhythmFeels2 extends Page {
 
   @override
   final title = "Setting the course of action";
-  final image = Image.asset("assets/images/sleep/ch04-action.jpg");
+  final image = Image.asset("assets/images/sleep/ch04-action.webp");
 
   final markdown = """
 When in the middle of your day do you feel least productive?
@@ -206,7 +206,7 @@ class RhythmFeels3 extends Page {
 
   @override
   final title = "Setting the course of action";
-  final image = Image.asset("assets/images/sleep/ch04-action.jpg");
+  final image = Image.asset("assets/images/sleep/ch04-action.webp");
 
   final markdown = """
 When towards the end of your day you feel sleepy?
@@ -243,7 +243,7 @@ class RhythmSettingCourseIntro extends Page {
 
   @override
   final title = "Activity: Setting the course of action";
-  final image = Image.asset("assets/images/sleep/ch04-action.jpg");
+  final image = Image.asset("assets/images/sleep/ch04-action.webp");
 
   @override
   Widget buildPage(BuildContext context) {
@@ -288,7 +288,7 @@ class RhythmSettingCourse extends StatefulWidget {
 
   final title = "Let's review";
 
-  final Image? image = Image.asset("assets/images/sleep/ch04-action.jpg");
+  final Image? image = Image.asset("assets/images/sleep/ch04-action.webp");
 
   @override
   RhythmSettingCourseState createState() => RhythmSettingCourseState();

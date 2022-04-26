@@ -20,7 +20,7 @@ class NowFirstThingsFirst extends MarkdownPage {
   final title = "First things first";
   @override
   final image =
-      Image.asset("assets/images/sleep/ch02-how-do-you-sleep-sam-smith.gif");
+      Image.asset("assets/images/sleep/ch02-how-do-you-sleep-sam-smith.webp");
 
   @override
   final markdown = """
@@ -144,7 +144,7 @@ class NowHowEfficientSleep extends Page {
 
   @override
   final title = "How efficient is your sleep?";
-  final image = Image.asset("assets/images/sleep/ch02-good-morning.gif");
+  final image = Image.asset("assets/images/sleep/ch02-good-morning.webp");
 
   @override
   Widget buildPage(BuildContext context) {
@@ -205,7 +205,7 @@ class NowHowEfficientSleep2 extends MarkdownPage {
   @override
   final title = "How efficient is your sleep?";
   @override
-  final image = Image.asset("assets/images/sleep/ch02-good-morning.gif");
+  final image = Image.asset("assets/images/sleep/ch02-good-morning.webp");
 
   @override
   final markdown = """
@@ -259,7 +259,7 @@ class NowSleepDisturbances extends MarkdownPage {
   @override
   final title = "Sleep disturbances";
   @override
-  final image = Image.asset("assets/images/sleep/ch02-insomnia-sleepy.gif");
+  final image = Image.asset("assets/images/sleep/ch02-insomnia-sleepy.webp");
 
   @override
   final markdown = """
@@ -410,7 +410,7 @@ class NowTroubleSleepingCold extends MultipleChoicePage {
   @override
   final title = "Sleep disturbances";
   @override
-  final image = Image.asset("assets/images/sleep/ch02-monster-under-bed.jpg");
+  final image = Image.asset("assets/images/sleep/ch02-monster-under-bed.webp");
 
   @override
   final markdown = """
@@ -443,7 +443,7 @@ class NowTroubleSleepingHot extends MultipleChoicePage {
   @override
   final title = "Sleep disturbances";
   @override
-  final image = Image.asset("assets/images/sleep/ch02-monster-under-bed.jpg");
+  final image = Image.asset("assets/images/sleep/ch02-monster-under-bed.webp");
 
   @override
   final markdown = """
@@ -476,7 +476,7 @@ class NowTroubleSleepingBadDreams extends MultipleChoicePage {
   @override
   final title = "Sleep disturbances";
   @override
-  final image = Image.asset("assets/images/sleep/ch02-monster-under-bed.jpg");
+  final image = Image.asset("assets/images/sleep/ch02-monster-under-bed.webp");
 
   @override
   final markdown = """
@@ -509,7 +509,7 @@ class NowTroubleSleepingPain extends MultipleChoicePage {
   @override
   final title = "Sleep disturbances";
   @override
-  final image = Image.asset("assets/images/sleep/ch02-monster-under-bed.jpg");
+  final image = Image.asset("assets/images/sleep/ch02-monster-under-bed.webp");
 
   @override
   final markdown = """
@@ -542,7 +542,7 @@ class NowOtherFactors extends Page {
   @override
   final title = "Other sleep disturbances";
   final image =
-      Image.asset("assets/images/sleep/ch02-wake-up-are-you-awake.gif");
+      Image.asset("assets/images/sleep/ch02-wake-up-are-you-awake.webp");
 
   @override
   Widget buildPage(BuildContext context) {
@@ -611,7 +611,7 @@ class NowOverallQuality extends MultipleChoicePage {
   @override
   final title = "Overall sleep quality";
   @override
-  final image = Image.asset("assets/images/sleep/ch02-did-you-sleep-well.gif");
+  final image = Image.asset("assets/images/sleep/ch02-did-you-sleep-well.webp");
 
   @override
   final markdown = """
@@ -645,7 +645,7 @@ class NowSleepMedication extends MultipleChoicePage {
   final title = "Sleep disturbances";
   @override
   final image =
-      Image.asset("assets/images/sleep/ch02-ambien-sleeping-pills.gif");
+      Image.asset("assets/images/sleep/ch02-ambien-sleeping-pills.webp");
 
   @override
   final markdown = """
@@ -678,7 +678,7 @@ class NowFatigue extends MultipleChoicePage {
   @override
   final title = "Fatigue, energy and enthusiasm";
   @override
-  final image = Image.asset("assets/images/sleep/ch02-clapping-sleeping.gif");
+  final image = Image.asset("assets/images/sleep/ch02-clapping-sleeping.webp");
 
   @override
   final markdown = """
@@ -713,7 +713,7 @@ class NowEnthusiasm extends MultipleChoicePage {
   @override
   final title = "Fatigue, energy and enthusiasm";
   @override
-  final image = Image.asset("assets/images/sleep/ch02-clapping-sleeping.gif");
+  final image = Image.asset("assets/images/sleep/ch02-clapping-sleeping.webp");
 
   @override
   final markdown = """
@@ -747,7 +747,7 @@ class NowScore extends Page {
 
   @override
   final title = "How's your sleep score?";
-  final Image? image = Image.asset("assets/images/sleep/ch02-boss-gatsby.gif");
+  final Image? image = Image.asset("assets/images/sleep/ch02-boss-gatsby.webp");
 
   @override
   Widget buildPage(BuildContext context) {

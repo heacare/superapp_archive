@@ -19,7 +19,7 @@ class GoalsSetting extends MultipleChoicePage {
   @override
   final title = "Visualising your ideal sleep";
   @override
-  final image = Image.asset("assets/images/sleep/ch03-sleeping-ideal.jpg");
+  final image = Image.asset("assets/images/sleep/ch03-sleeping-ideal.webp");
 
   @override
   final markdown = """
@@ -64,7 +64,7 @@ class GoalsTimeToSleep extends MultipleChoicePage {
   @override
   final title = "Priorities and procrastination";
   @override
-  final image = Image.asset("assets/images/sleep/ch03-now-now-now.gif");
+  final image = Image.asset("assets/images/sleep/ch03-now-now-now.webp");
 
   @override
   final markdown = """
@@ -117,7 +117,7 @@ class GoalsDoingBeforeBed extends MultipleChoicePage {
   @override
   final title = "Priorities and procrastination";
   @override
-  final image = Image.asset("assets/images/sleep/ch03-now-now-now.gif");
+  final image = Image.asset("assets/images/sleep/ch03-now-now-now.webp");
 
   @override
   final markdown = """
@@ -161,7 +161,7 @@ class GoalsCalmingActivities extends MarkdownPage {
   @override
   final title = "Priorities and procrastination";
   @override
-  final image = Image.asset("assets/images/sleep/ch03-now-now-now.gif");
+  final image = Image.asset("assets/images/sleep/ch03-now-now-now.webp");
 
   @override
   final markdown = """
@@ -181,7 +181,7 @@ class GoalsEmbraceAndManifest extends Page {
   final title = "Embrace and manifest";
 
   final Image? image =
-      Image.asset("assets/images/sleep/ch03-baby-yoda-grogu.gif");
+      Image.asset("assets/images/sleep/ch03-baby-yoda-grogu.webp");
 
   Widget buildLine(BuildContext context, MarkdownStyleSheet markdownStyleSheet,
       String prefix, List<String> items) {
@@ -244,7 +244,7 @@ class GoalsGettingThere extends MarkdownPage {
   @override
   final title = "Priorities and procrastination";
   @override
-  final image = Image.asset("assets/images/sleep/ch03-now-now-now.gif");
+  final image = Image.asset("assets/images/sleep/ch03-baby-yoda-grogu.webp");
 
   @override
   final markdown = """

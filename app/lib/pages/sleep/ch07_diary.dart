@@ -15,17 +15,23 @@ class DiaryReminders extends TimePickerPage {
   final prevPage = () => RoutinePledge();
 
   @override
-  final title = "Log your sleep";
+  final title = "What is a sleep diary?";
   @override
-  final image = Image.asset("assets/images/sleep/ch07-brain-to-paper.jpg");
+  final image = Image.asset("assets/images/sleep/ch07-brain-to-paper.webp");
 
   @override
   final markdown = """
-To log your commitment, you’ll be using a digital sleep diary. Keeping a record of how you’re sleeping builds deeper awareness on factors influencing sleep quality. It may reveal patterns that explain sleeping problems and how it affects your waking hours. 
+You had a taste of logging your sleep before starting the intervention. But why is it important?
 
-Whether we meet our goals or not in this first week, knowing where we are with the help of a sleep diary can also help encourage progress. 
+Keeping a record of how you’re sleeping builds deeper awareness on factors influencing sleep quality. It may reveal patterns that explain sleeping problems and how it affects your waking hours. 
 
-To help build consistency, missing a day or two with your diary will bring you back to Day One. If you did not manage to accomplish your task, that’s okay - just note what happened. You’ll receive a reminder each morning to log your sleep. What time would you like us to remind you?
+Whether we meet our goals or not, knowing where we are with the help of a sleep diary can also help encourage progress. If you do not have sleep data that night or follow your bedtime routine at your set time, it’s okay! we never know what life has in store for us - just note what happened. 
+
+You’ll receive reminders at your preferred time to log your sleep. 
+
+> Tip: The closer to your wake time, the more accurately you’ll remember how you slept.”
+
+**What time would you like us to remind you?**
 """;
 
   @override
@@ -52,10 +58,12 @@ class DiaryStart extends MarkdownPage {
   @override
   final title = "Log your sleep";
   @override
-  final image = Image.asset("assets/images/sleep/ch07-brain-to-paper.jpg");
+  final image = Image.asset("assets/images/sleep/ch07-brain-to-paper.webp");
 
   @override
   final markdown = """
 Great! We'll check in with you before and after you sleep at your given times. See you then!
+
+When you're done with 7 days of daily check-ins, come back here and continue the program.
 """;
 }

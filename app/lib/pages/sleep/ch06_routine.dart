@@ -8,18 +8,41 @@ import 'package:hea/widgets/select_list.dart';
 import 'ch05_owning.dart';
 import 'ch07_diary.dart';
 
+class RoutineBeforeBedtime extends MarkdownPage {
+  RoutineBeforeBedtime({Key? key}) : super(key: key);
+
+  @override
+  final nextPage = () => RoutineIntro();
+  @override
+  final prevPage = () => OwningTheDayNote();
+
+  @override
+  final title = "Before 'bedtime', there is 'get ready for bedtime'";
+  @override
+  final image = Image.asset("assets/images/sleep/ch06-fake-sleep.webp");
+
+  @override
+  final markdown = """
+Before you sleep, the brain’s sleep-wake mechanism is already releasing chemicals that **prepare your body for sleep**. Use this buffering period to mentally and physically separate yourself from activities that might keep you awake. 
+
+This means stopping any stressful or stimulating work, worries and daytime drama. Mindful practices can help with this. 
+
+You can set a 'get ready for bedtime’ reminder. This is not the time you get into bed to sleep. This is a winding down period. It can start from as early as sunset to some minutes before bed. 
+""";
+}
+
 class RoutineIntro extends MarkdownPage {
   RoutineIntro({Key? key}) : super(key: key);
 
   @override
   final nextPage = () => RoutineActivities();
   @override
-  final prevPage = () => OwningWhatsNext();
+  final prevPage = () => RoutineBeforeBedtime();
 
   @override
   final title = "Activity: Winding down for the day";
   @override
-  final image = Image.asset("assets/images/sleep/ch06-time-to-wind-down.gif");
+  final image = Image.asset("assets/images/sleep/ch06-time-to-wind-down.webp");
 
   @override
   final markdown = """
@@ -196,7 +219,7 @@ class RoutineCalmingActivities1 extends RoutineCalmingActivities {
 
   @override
   final markdown = """
-Let’s see how you can remove/swap activating items for more calming ones.
+Routine is a habit. You make your habits and your habits make you. Let’s see how you can remove/swap activating items for more calming ones.
 
 **1 hour before bedtime**
 """;
@@ -227,7 +250,7 @@ class RoutineCalmingActivities2 extends RoutineCalmingActivities {
 
   @override
   final markdown = """
-Let’s see how you can remove/swap activating items for more calming ones.
+Routine is a habit. You make your habits and your habits make you. Let’s see how you can remove/swap activating items for more calming ones.
 
 **30 minutes before bedtime**
 """;
@@ -258,7 +281,7 @@ class RoutineCalmingActivities3 extends RoutineCalmingActivities {
 
   @override
   final markdown = """
-Let’s see how you can remove/swap activating items for more calming ones.
+Routine is a habit. You make your habits and your habits make you. Let’s see how you can remove/swap activating items for more calming ones.
 
 **15 minutes before bedtime**
 """;
@@ -275,7 +298,7 @@ class RoutineCalmingActivitiesNote extends MarkdownPage {
   @override
   final title = "Activity: Winding down for the day";
   @override
-  final image = Image.asset("assets/images/sleep/ch06-time-to-wind-down.gif");
+  final image = Image.asset("assets/images/sleep/ch06-time-to-wind-down.webp");
 
   @override
   final markdown = """
@@ -283,18 +306,20 @@ Test out your bedtime routine for a week. You can always fine tune it to work be
 """;
 }
 
+// Chapter 7
+
 class RoutineReminders extends TimePickerPage {
   RoutineReminders({Key? key}) : super(key: key);
 
   @override
-  final nextPage = () => RoutinePledgeIntro();
+  final nextPage = () => RoutineOptInGroup();
   @override
   final prevPage = () => RoutineCalmingActivitiesNote();
 
   @override
   final title = "Let's help with reminders";
   @override
-  final image = Image.asset("assets/images/sleep/ch06-reminder-self-care.gif");
+  final image = Image.asset("assets/images/sleep/ch06-reminder-self-care.webp");
 
   @override
   final markdown = """
@@ -313,14 +338,20 @@ class RoutineOptInGroup extends MultipleChoicePage {
   RoutineOptInGroup({Key? key}) : super(key: key);
 
   @override
-  final nextPage = () => RoutinePledgeIntro();
+  final nextPage = () {
+    String g = kvReadStringList("sleep", "opt-in-group")[0];
+    if (g == "yes") {
+      return RoutineGroupInstructions();
+    }
+    return RoutinePledgeIntro();
+  };
   @override
   final prevPage = () => RoutineReminders();
 
   @override
   final title = "Want to improve your sleep with others like you?";
   @override
-  final image = Image.asset("assets/images/sleep/ch06-bus-buddies-omori.gif");
+  final image = Image.asset("assets/images/sleep/ch06-bus-buddies-omori.webp");
 
   @override
   final markdown = """
@@ -347,6 +378,56 @@ You’ll be added into a chat group of up to four people with one of our HEAlers
   ];
 }
 
+class RoutineGroupInstructions extends MultipleChoicePage {
+  RoutineGroupInstructions({Key? key}) : super(key: key);
+
+  @override
+  final nextPage = () => RoutinePledgeIntro();
+  @override
+  final prevPage = () => RoutineOptInGroup();
+
+  @override
+  final title = "Join sleep buddies";
+  @override
+  final image = null;
+
+  @override
+  final markdown = """
+$groupInstructions
+""";
+
+  @override
+  final maxChoice = 1;
+  @override
+  final minSelected = 1;
+  @override
+  final valueName = "group-accept";
+  @override
+  final List<SelectListItem<String>> choices = [
+    SelectListItem(text: "Agree", value: "yes"),
+    SelectListItem(text: "Cancel", value: "no"),
+  ];
+}
+
+String groupInstructions = """
+You’ve chosen to be part of a team. Wonderful! Humans are social creatures. Having encouraging sleep buddies can make a huge difference.
+
+To keep things cosy, a team will never have more than 4 people. You can leave your team whenever. New sleep buddies may also join if a spot opens. 
+
+We’ll be matching you with the best sleep buddies based on your sleep profile, goals and challenges on WhatsApp/Telegram.
+
+Meanwhile, to create a safe environment for all sleep buddies, please read and agree to the following community practices to proceed: 
+
+# Rules of Engagement 
+
+1. Keep it relevant, constructive and inclusive
+2. No hate speech or bullying
+3. Be respectful of different opinions
+4. Refrain from giving medical advice
+5. Do help to moderate discussions
+6. Refrain from promotion or solicitation of products or services
+""";
+
 class RoutinePledgeIntro extends MarkdownPage {
   RoutinePledgeIntro({Key? key}) : super(key: key);
 
@@ -356,9 +437,9 @@ class RoutinePledgeIntro extends MarkdownPage {
   final prevPage = () => RoutineOptInGroup();
 
   @override
-  final title = "Activity: Take action!";
+  final title = "Activity: My commitment to sleep";
   @override
-  final image = Image.asset("assets/images/sleep/ch06-my-sleep-pledge.gif");
+  final image = Image.asset("assets/images/sleep/ch06-my-sleep-pledge.webp");
 
   @override
   final markdown = """
@@ -372,9 +453,9 @@ class RoutinePledge extends StatefulWidget {
   final PageBuilder? nextPage = () => DiaryReminders();
   final PageBuilder? prevPage = () => RoutinePledgeIntro();
 
-  final String title = "Activity: Take action!";
+  final String title = "Activity: My commitment to sleep";
   final Image? image =
-      Image.asset("assets/images/sleep/ch06-my-sleep-pledge.gif");
+      Image.asset("assets/images/sleep/ch06-my-sleep-pledge.webp");
 
   final int maxChoice = 1;
   final int? minSelected = null;
@@ -406,15 +487,7 @@ class RoutinePledgeState extends State<RoutinePledge> {
         h1: Theme.of(context).textTheme.headline3);
     List<String> goals = kvReadStringList("sleep", "sleep-goals");
     String goalsText = formatList(goals);
-    Duration goalsSleepDuration =
-        Duration(minutes: kvReadInt("sleep", "goals-sleep-duration") ?? 0);
-    int goalsSleepDurationMinutes =
-        goalsSleepDuration.inMinutes.remainder(Duration.minutesPerHour);
-    int goalsSleepDurationHours = goalsSleepDuration.inHours;
-    String goalsSleepDurationText = "$goalsSleepDurationHours hours";
-    if (goalsSleepDurationMinutes > 0) {
-      goalsSleepDurationText += " and $goalsSleepDurationMinutes minutes";
-    }
+
     TimeOfDay goalsWakeTime = kvReadTimeOfDay("sleep", "goals-wake-time") ??
         const TimeOfDay(hour: 0, minute: 0);
     String goalsWakeTimeText = goalsWakeTime.format(context);
@@ -423,6 +496,12 @@ class RoutinePledgeState extends State<RoutinePledge> {
     String goalsSleepTimeText = goalsSleepTime.format(context);
     List<String> doingBeforeBed = kvReadStringList("sleep", "doing-before-bed");
     String doingBeforeBedText = formatList(doingBeforeBed);
+
+    int sleepForMinutes = ((goalsWakeTime.minute + goalsWakeTime.hour * 60) -
+            (goalsSleepTime.minute + goalsSleepTime.hour * 60)) %
+        (24 * 60);
+    Duration sleepFor = Duration(minutes: sleepForMinutes);
+    String goalsSleepDurationText = "${sleepFor.inHours} hours and ${sleepFor.inMinutes.remainder(Duration.minutesPerHour)} minutes";
 
     List<String> includedActivities =
         kvReadStringList("sleep", "included-activities");
@@ -484,22 +563,3 @@ String formatList(List<String> l) {
   }
   return text;
 }
-
-String groupInstructions = """
-You’ve chosen to be part of a team. Wonderful! Humans are social creatures. Having encouraging sleep buddies can make a huge difference.
-
-To keep things cosy, a team will never have more than 4 people. You can leave your team whenever. New sleep buddies may also join if a spot opens. 
-
-We’ll be matching you with the best sleep buddies based on your sleep profile, goals and challenges on WhatsApp/Telegram.
-
-Meanwhile, to create a safe environment for all sleep buddies, please read and agree to the following community practices to proceed: 
-
-# Rules of Engagement 
-
-1. Keep it relevant, constructive and inclusive
-2. No hate speech or bullying
-3. Be respectful of different opinions
-4. Refrain from giving medical advice
-5. Do help to moderate discussions
-6. Refrain from promotion or solicitation of products or services
-""";

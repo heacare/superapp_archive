@@ -94,7 +94,7 @@ class DoneIncreased extends MultipleChoicePage {
   @override
   final title = "You did great";
   @override
-  final image = Image.asset("assets/images/sleep/ch09-you-did-great.png");
+  final image = Image.asset("assets/images/sleep/ch09-you-did-great.webp");
 
   @override
   final markdown = """
@@ -129,7 +129,7 @@ class DoneDecreased extends MultipleChoicePage {
   @override
   final title = "Keep it going";
   @override
-  final image = Image.asset("assets/images/sleep/ch09-keep-it-going.png");
+  final image = Image.asset("assets/images/sleep/ch09-keep-it-going.webp");
 
   @override
   final markdown = """
@@ -166,7 +166,7 @@ class DoneContinue extends MultipleChoicePage {
   @override
   final title = "Keep it going";
   @override
-  final image = Image.asset("assets/images/sleep/ch09-keep-it-going.png");
+  final image = Image.asset("assets/images/sleep/ch09-keep-it-going.webp");
 
   @override
   final markdown = """
@@ -233,7 +233,7 @@ We'll let a sleep coach know you need help, and they'll get in contact with you 
 """;
 }
 
-class DoneWithTeam extends MarkdownPage {
+class DoneWithTeam extends MultipleChoicePage {
   DoneWithTeam({Key? key}) : super(key: key);
 
   @override
@@ -248,10 +248,22 @@ class DoneWithTeam extends MarkdownPage {
 
   @override
   final markdown = """
-$groupInstructions
+After reading the following, you can continue the program while we connect you to a team.
 
-In the meantime, you can continue with what you can
+$groupInstructions
 """;
+
+  @override
+  final maxChoice = 1;
+  @override
+  final minSelected = 1;
+  @override
+  final valueName = "group-accept";
+  @override
+  final List<SelectListItem<String>> choices = [
+    SelectListItem(text: "Agree", value: "yes"),
+    SelectListItem(text: "Cancel", value: "no"),
+  ];
 }
 
 Widget continuePage(String? choice) {

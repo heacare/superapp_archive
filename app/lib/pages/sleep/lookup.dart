@@ -6,6 +6,7 @@ import 'ch04_rhythm.dart';
 import 'ch05_owning.dart';
 import 'ch06_routine.dart';
 import 'ch07_diary.dart';
+import 'ch09_done.dart';
 
 Lesson sleep = Lesson([
   PageDef(IntroductionWelcome, () => IntroductionWelcome()),
@@ -56,13 +57,10 @@ Lesson sleep = Lesson([
   PageDef(OwningRoutineActivities2, () => OwningRoutineActivities2()),
   PageDef(OwningRoutineActivities3, () => OwningRoutineActivities3()),
   PageDef(OwningRoutineStart, () => OwningRoutineStart()),
-  PageDef(OwningStarter, () => OwningStarter()),
-  PageDef(OwningBeforeBedtime, () => OwningBeforeBedtime()),
   PageDef(OwningTheDaySupporting, () => OwningTheDaySupporting()),
   PageDef(OwningTheDayNegative, () => OwningTheDayNegative()),
   PageDef(OwningTheDayNote, () => OwningTheDayNote()),
-  PageDef(OwningWhy, () => OwningWhy()),
-  PageDef(OwningWhatsNext, () => OwningWhatsNext()),
+  PageDef(RoutineBeforeBedtime, () => RoutineBeforeBedtime()),
   PageDef(RoutineIntro, () => RoutineIntro()),
   PageDef(RoutineActivities, () => RoutineActivities()),
   PageDef(RoutineCalmingActivities1, () => RoutineCalmingActivities1()),
@@ -71,8 +69,16 @@ Lesson sleep = Lesson([
   PageDef(RoutineCalmingActivitiesNote, () => RoutineCalmingActivitiesNote()),
   PageDef(RoutineReminders, () => RoutineReminders()),
   PageDef(RoutineOptInGroup, () => RoutineOptInGroup()),
+  PageDef(RoutineGroupInstructions, () => RoutineGroupInstructions()),
   PageDef(RoutinePledgeIntro, () => RoutinePledgeIntro()),
   PageDef(RoutinePledge, () => RoutinePledge()),
   PageDef(DiaryReminders, () => DiaryReminders()),
   PageDef(DiaryStart, () => DiaryStart()),
+  PageDef(Done, () => Done()),
+  PageDef(DoneIncreased, () => DoneIncreased()),
+  PageDef(DoneDecreased, () => DoneDecreased()),
+  PageDef(DoneContinue, () => DoneContinue()),
+  PageDef(DoneWithHealer, () => DoneWithHealer()),
+  PageDef(DoneWithTeam, () => DoneWithTeam()),
+  PageDef(DoneEnd, () => DoneEnd()),
 ]);

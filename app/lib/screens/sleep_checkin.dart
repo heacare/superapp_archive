@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import 'package:hea/services/notification_service.dart';
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/services/sleep_checkin_service.dart';
+import 'package:hea/utils/sleep_notifications.dart';
 import 'package:hea/widgets/page.dart';
 import 'package:hea/widgets/pill_select.dart';
 import 'package:hea/widgets/select_list.dart';
@@ -164,6 +166,16 @@ class SleepCheckinState extends State<SleepCheckin> {
         onPressed: () async {
           await serviceLocator<SleepCheckinService>().add(data);
           Navigator.of(context).pop();
+		scheduleSleepNotifications();
+          if (progress.allDone) {
+            // Set #18
+            await serviceLocator<NotificationService>().showContentReminder(
+                100 + 18 * 10 + 1,
+                "sleep_content",
+                "Daily sleep check-in",
+                "You did it! What's next for you?",
+                minHoursLater: 0);
+          }
         },
         tooltip: 'Done',
         backgroundColor: Theme.of(context).colorScheme.primary,
