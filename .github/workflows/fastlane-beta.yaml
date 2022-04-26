@@ -55,12 +55,12 @@ jobs:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           MATCH_GIT_PRIVATE_KEY: ${{ secrets.CODE_SIGNING_REPO_SSH }}
           CONNECT_API_KEY: ${{ secrets.CONNECT_API_KEY }}
-      - name: Upload IPA
-        uses: actions/upload-artifact@v3
-        with:
-          name: ios
-          path: hea/app/Runner.ipa
-          retention-days: 30
+      #- name: Upload IPA
+      #  uses: actions/upload-artifact@v3
+      #  with:
+      #    name: ios
+      #    path: hea/app/Runner.ipa
+      #    retention-days: 30
       - name: Update deployment status (failure)
         uses: chrnorm/deployment-status@15b9298912c2b84635561a68d35c84d43e3d6c94
         with:
@@ -141,9 +141,9 @@ jobs:
       - run: bundle exec fastlane android beta
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ env.CODE_SIGNING_REPO }}/android/firebase-app-distribution.json
-      - name: Upload APK
-        uses: actions/upload-artifact@v3
-        with:
-          name: android
-          path: hea/app/build/app/outputs/flutter-apk/app-release.apk
-          retention-days: 30
+      #- name: Upload APK
+      #  uses: actions/upload-artifact@v3
+      #  with:
+      #    name: android
+      #    path: hea/app/build/app/outputs/flutter-apk/app-release.apk
+      #    retention-days: 30
