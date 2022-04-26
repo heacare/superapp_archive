@@ -19,7 +19,30 @@ Future<void> scheduleSleepNotifications() async {
   String s = serviceLocator<SharedPreferences>().getString('sleep') ?? "";
   await serviceLocator<NotificationService>()
       .cancelSchedulesByChannelKey("sleep_content");
-  if (s == "NowFirstThingsFirst" ||
+  if (s == "IntroductionWelcome" ||
+      s == "IntroductionGettingToKnowYou" ||
+      s == "IntroductionHowTrackHealth" ||
+      s == "IntroductionHowTrackSleep") {
+    // Set #1
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 1 * 10 + 1,
+        "sleep_content",
+        "Get started",
+        "To get started, tell us how you’ll be getting your sleep and health data.",
+        minHoursLater: firstReminder);
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 1 * 10 + 2,
+        "sleep_content",
+        "Get started",
+        "Ready to continue?",
+        minHoursLater: firstReminder + nextReminder);
+    await serviceLocator<NotificationService>().showContentReminder(
+        baseId + 1 * 10 + 3,
+        "sleep_content",
+        "Get started",
+        "Do you need help moving on? If you need some help, feel free to contact us directly.",
+        minHoursLater: firstReminder + nextReminder * 2);
+  } else if (s == "NowFirstThingsFirst" ||
       s == "NowTimeGoneBed" ||
       s == "NowMinutesFallAsleep" ||
       s == "NowTimeOutBed" ||

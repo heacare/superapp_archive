@@ -74,22 +74,58 @@ Tell us a little about yourself. Choose as many as apply.
   ];
 }
 
+class IntroductionHowTrackHealth extends MultipleChoicePage {
+  IntroductionHowTrackHealth({Key? key}) : super(key: key);
+
+  @override
+  final nextPage = () => IntroductionHowTrackSleep();
+  @override
+  final prevPage = () => IntroductionGettingToKnowYou();
+
+  @override
+  final title = "How are you tracking sleep and health?";
+  @override
+  final image = null;
+
+  @override
+  final markdown = """
+Which of these other health aspects would you like to improve on?
+
+> Tip: You can skip questions by pressing the next button if none apply to you.
+""";
+
+  @override
+  final maxChoice = 0;
+  @override
+  final minSelected = 0;
+  @override
+  final valueName = "other-health-aspects";
+  @override
+  final List<SelectListItem<String>> choices = [
+    SelectListItem(text: "Stress", value: "stress"),
+    SelectListItem(text: "Diet", value: "diet"),
+    SelectListItem(text: "Exercise", value: "exercise"),
+  ];
+}
+
 class IntroductionHowTrackSleep extends MultipleChoicePage {
   IntroductionHowTrackSleep({Key? key}) : super(key: key);
 
   @override
   final nextPage = () => NowFirstThingsFirst();
   @override
-  final prevPage = () => IntroductionGettingToKnowYou();
+  final prevPage = () => IntroductionHowTrackHealth();
 
   @override
-  final title = "How are you tracking your sleep?";
+  final title = "How are you tracking sleep and health?";
   @override
   final image = null;
 
   @override
   final markdown = """
-Please select the exact tool/device and model (if applicable) you’ll be using to track your sleep during this program. If ‘Other’ please specify.
+Which tool/device and model (if applicable) are you using to track your sleep and health during this program? 
+
+You can select more than one. If ‘Others’ please specify.
 """;
 
   @override
@@ -100,11 +136,15 @@ Please select the exact tool/device and model (if applicable) you’ll be using 
   final valueName = "tracking-tool";
   @override
   final List<SelectListItem<String>> choices = [
-    SelectListItem(text: "A clock and diary", value: "ClockPaper"),
     SelectListItem(text: "Apple Watch", value: "AppleWatch"),
-    SelectListItem(text: "Fitbit", value: "Fitbit"),
     SelectListItem(text: "Garmin", value: "Garmin"),
-    SelectListItem(text: "Apple Health Application", value: "AppleHealth"),
+    SelectListItem(text: "Fitbit", value: "Fitbit"),
+    SelectListItem(text: "Oura Ring", value: "Oura Ring"),
+    SelectListItem(text: "Whoop", value: "Whoop"),
+    SelectListItem(text: "Withings", value: "Withings"),
+    SelectListItem(text: "Apple Health (App)", value: "AppleHealth"),
+    SelectListItem(text: "Google Fit (App)", value: "GoogleFit"),
+    SelectListItem(text: "Pen and paper", value: "PenPaper"),
     SelectListItem(text: "Other", value: "Other", other: true),
   ];
 }
