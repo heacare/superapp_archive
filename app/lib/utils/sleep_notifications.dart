@@ -16,7 +16,7 @@ const String channel = "sleep_content";
 const int baseId = 100;
 
 Future<void> scheduleSleepNotifications() async {
-  String? s = serviceLocator<SharedPreferences>().getString('sleep');
+  String s = serviceLocator<SharedPreferences>().getString('sleep') ?? "";
   await serviceLocator<NotificationService>()
       .cancelSchedulesByChannelKey("sleep_content");
   if (s == "NowFirstThingsFirst" ||
@@ -432,7 +432,7 @@ Future<void> scheduleSleepNotifications() async {
       .cancelSchedulesByChannelKey("sleep_reminders");
   TimeOfDay? routineReminderTimes =
       kvReadTimeOfDay("sleep", "routine-reminder-times");
-  if (routineReminderTimes != null) {
+  if (!s.startsWith("Done") && routineReminderTimes != null) {
     await serviceLocator<NotificationService>().showSimpleReminder(
       baseId + 50 * 10 + 1,
       "sleep_reminders",
@@ -447,7 +447,7 @@ Future<void> scheduleSleepNotifications() async {
       serviceLocator<SleepCheckinService>().getProgress();
   int day = progress.dayCounter;
   int dayTotal = progress.total;
-  if (diaryReminderTimes != null && progress.todayDone) {
+  if (!s.startsWith("Done") && diaryReminderTimes != null && progress.todayDone) {
     // Set #17
     await serviceLocator<NotificationService>().showDailyReminder(
       baseId + 51 * 10 + 1,
@@ -485,7 +485,7 @@ Future<void> scheduleSleepNotifications() async {
       payload: const {"jump_to": "sleep_checkin"},
     );
   }
-  if (diaryReminderTimes != null && progress.allDone) {
+  if (s != "DoneEnd" && diaryReminderTimes != null && progress.allDone) {
     // Set #18
     await serviceLocator<NotificationService>().showContentReminder(
         baseId + 18 * 10 + 1,
