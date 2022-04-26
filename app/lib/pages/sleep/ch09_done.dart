@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Page;
 import 'package:hea/services/logging_service.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 import 'package:hea/widgets/gradient_button.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -333,13 +333,8 @@ Please do fill up the following survey form to let us know that you have complet
                 }
                 uri =
                     uri.replace(queryParameters: {"utm_content": user.authId});
-                LaunchMode mode = LaunchMode.platformDefault;
-                if (Platform.isAndroid) {
-                  mode = LaunchMode.externalApplication;
-                }
-                bool okay =
-                    await launchUrl(uri, mode: LaunchMode.externalApplication);
-                serviceLocator<LoggingService>().createLog("open-survey", okay);
+                await launch(uri.toString());
+                serviceLocator<LoggingService>().createLog("open-survey", true);
               }),
         ]);
   }
