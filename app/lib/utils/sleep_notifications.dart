@@ -447,7 +447,9 @@ Future<void> scheduleSleepNotifications() async {
       serviceLocator<SleepCheckinService>().getProgress();
   int day = progress.dayCounter;
   int dayTotal = progress.total;
-  if (!s.startsWith("Done") && diaryReminderTimes != null && progress.todayDone) {
+  if (!s.startsWith("Done") &&
+      diaryReminderTimes != null &&
+      progress.todayDone) {
     // Set #17
     await serviceLocator<NotificationService>().showDailyReminder(
       baseId + 51 * 10 + 1,

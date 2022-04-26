@@ -166,7 +166,7 @@ class SleepCheckinState extends State<SleepCheckin> {
         onPressed: () async {
           await serviceLocator<SleepCheckinService>().add(data);
           Navigator.of(context).pop();
-		scheduleSleepNotifications();
+          scheduleSleepNotifications();
           if (progress.allDone) {
             // Set #18
             await serviceLocator<NotificationService>().showContentReminder(

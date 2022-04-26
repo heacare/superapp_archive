@@ -501,7 +501,8 @@ class RoutinePledgeState extends State<RoutinePledge> {
             (goalsSleepTime.minute + goalsSleepTime.hour * 60)) %
         (24 * 60);
     Duration sleepFor = Duration(minutes: sleepForMinutes);
-    String goalsSleepDurationText = "${sleepFor.inHours} hours and ${sleepFor.inMinutes.remainder(Duration.minutesPerHour)} minutes";
+    String goalsSleepDurationText =
+        "${sleepFor.inHours} hours and ${sleepFor.inMinutes.remainder(Duration.minutesPerHour)} minutes";
 
     List<String> includedActivities =
         kvReadStringList("sleep", "included-activities");
