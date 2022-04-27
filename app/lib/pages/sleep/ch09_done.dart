@@ -331,8 +331,7 @@ Please do fill up the following survey form to let us know that you have complet
                   uri =
                       Uri.parse('https://2b0snealkkz.typeform.com/to/T7NdL2JC');
                 }
-                uri =
-                    uri.replace(queryParameters: {"utm_content": user.authId});
+                uri = uri.replace(queryParameters: {"user": user.authId});
                 await launch(uri.toString());
                 serviceLocator<LoggingService>().createLog("open-survey", true);
               }),
