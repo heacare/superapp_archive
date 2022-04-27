@@ -31,7 +31,7 @@ class IntroductionGettingToKnowYou extends MultipleChoicePage {
   IntroductionGettingToKnowYou({Key? key}) : super(key: key);
 
   @override
-  final nextPage = () => IntroductionHowTrackSleep();
+  final nextPage = () => IntroductionHowTrackHealth();
   @override
   final prevPage = () => IntroductionWelcome();
 
