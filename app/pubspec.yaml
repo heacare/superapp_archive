@@ -47,6 +47,7 @@ dependencies:
   shared_preferences: ^2.0.13
 
   # UI
+  intl: ^0.17.0
   flutter_markdown: ^0.6.6
   url_launcher: ^6.0.12
   flutter_custom_tabs: ^1.0.4

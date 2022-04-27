@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 
 import 'package:hea/services/notification_service.dart';
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/services/sleep_checkin_service.dart';
+import 'package:hea/services/health_service.dart';
 import 'package:hea/utils/sleep_notifications.dart';
 import 'package:hea/widgets/page.dart';
 import 'package:hea/widgets/pill_select.dart';
@@ -19,6 +21,7 @@ class SleepCheckin extends StatefulWidget {
 
 class SleepCheckinState extends State<SleepCheckin> {
   SleepCheckinData data = SleepCheckinData();
+  String? autofillMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +31,26 @@ class SleepCheckinState extends State<SleepCheckin> {
             .toList();
     SleepCheckinProgress progress =
         serviceLocator<SleepCheckinService>().getProgress();
+    () async {
+      SleepAutofill? sleepAutofill =
+          await serviceLocator<HealthService>().autofillRead1Day();
+      if (sleepAutofill == null) {
+        return;
+      }
+      DateTime lastNight =
+          sleepAutofill.awake.subtract(const Duration(days: 1));
+      String date = DateFormat.yMd().format(lastNight);
+      setState(() {
+        if (sleepAutofill.inBed != null) {
+          data.timeGoBed = TimeOfDay.fromDateTime(sleepAutofill.inBed!);
+        }
+        if (sleepAutofill.asleep != null) {
+          data.timeAsleepBed = TimeOfDay.fromDateTime(sleepAutofill.asleep!);
+        }
+        data.timeOutBed = TimeOfDay.fromDateTime(sleepAutofill.awake);
+        autofillMessage = "Data has been autofilled from last night ($date)";
+      });
+    }();
     return Scaffold(
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(154),
