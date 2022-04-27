@@ -45,11 +45,12 @@ for m in Path('lib', 'pages').iterdir():
                     if "};" in line:
                         prevPage = "".join(prevPage)
                 if (line.startswith("class ") and "State<" not in line) or (line.startswith("Widget") and "Page(" in line):
-                    pagedefs.append((
-                        name,
-                        nextPage,
-                        prevPage,
-                    ))
+                    if name is not None:
+                        pagedefs.append((
+                            name,
+                            nextPage,
+                            prevPage,
+                        ))
                     name = line.split(" ")[1]
                     name = name.split("(")[0]
                     nextPage = None
@@ -66,6 +67,8 @@ for m in Path('lib', 'pages').iterdir():
     lookup.append("")
     lookup.append(f"Lesson {m.name} = Lesson([")
     for item, nextPage, prevPage in pagedefs:
+        if "Page" in item:
+            continue
         lookup.append(f"  PageDef({item}, () => {item}()),")
     lookup.append("]);")
 

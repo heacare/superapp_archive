@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:health/health.dart';
 
 import 'package:hea/widgets/gradient_button.dart';
+import 'package:hea/services/health_service.dart';
+import 'package:hea/services/service_locator.dart';
 import 'package:hea/screens/onboarding.dart';
 
 const svgAssetName = "assets/svg/health_sync.svg";
@@ -27,52 +29,24 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
   AppState _state = AppState.DATA_NOT_FETCHED;
 
   Future fetchData() async {
-    HealthFactory health = HealthFactory();
-
-    // Define the types to get
-    List<HealthDataType> types = [
-      HealthDataType.WEIGHT,
-      HealthDataType.HEIGHT,
-      HealthDataType.BODY_FAT_PERCENTAGE,
-      HealthDataType.BODY_MASS_INDEX,
-    ];
-
     setState(() => _state = AppState.FETCHING_DATA);
 
-    // OAuth request authorization to data
-    bool accessWasGranted = await health.requestAuthorization(types);
-    if (!accessWasGranted) {
+    if (!await serviceLocator<HealthService>().request()) {
       debugPrint("Authorization not granted");
       setState(() => _state = AppState.DATA_NOT_FETCHED);
-
       return;
     }
 
-    // TODO On Android requires Google Fit to be installed or data will be empty
-    try {
-      // Fetch data from 1st Jan 2000 till current date
-      DateTime startDate = DateTime(2000);
-      DateTime endDate = DateTime.now();
-      List<HealthDataPoint> healthData =
-          await health.getHealthDataFromTypes(startDate, endDate, types);
+    _healthDataList = await serviceLocator<HealthService>().get60Days();
 
-      _healthDataList.addAll(healthData);
+    setState(() => _state = AppState.DATA_READY);
 
-      // Filter out duplicates
-      _healthDataList = HealthFactory.removeDuplicates(_healthDataList);
-      for (var h in _healthDataList) {
-        debugPrint("${h.typeString}: ${h.value} [${h.unitString}]");
-      }
-
-      Navigator.of(context, rootNavigator: true).pop(OnboardingStepReturn(
-        nextStep: OnboardingStep.starter,
-        returnData: <String, dynamic>{
-          "healthData": _healthDataList.map((e) => e.toJson()).toList(),
-        },
-      ));
-    } catch (e) {
-      debugPrint("Caught exception in getHealthDataFromTypes: $e");
-    }
+    Navigator.of(context, rootNavigator: true).pop(OnboardingStepReturn(
+      nextStep: OnboardingStep.starter,
+      returnData: <String, dynamic>{
+        "healthData": _healthDataList.map((e) => e.toJson()).toList(),
+      },
+    ));
   }
 
   Widget _contentFetchingData() {

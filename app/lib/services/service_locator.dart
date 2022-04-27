@@ -9,6 +9,7 @@ import 'package:hea/services/healer_service.dart';
 import 'package:hea/services/logging_service.dart';
 import 'package:hea/services/notification_service.dart';
 import 'package:hea/services/sleep_checkin_service.dart';
+import 'package:hea/services/health_service.dart';
 
 GetIt serviceLocator = GetIt.instance;
 
@@ -23,6 +24,7 @@ void setupServiceLocator() {
   serviceLocator.registerSingleton<LoggingService>(LoggingServiceImpl());
   serviceLocator
       .registerSingleton<SleepCheckinService>(SleepCheckinServiceImpl());
+  serviceLocator.registerSingleton<HealthService>(HealthService());
 
   serviceLocator.registerSingletonAsync<SharedPreferences>(
       () => SharedPreferences.getInstance());

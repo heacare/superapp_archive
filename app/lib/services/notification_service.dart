@@ -124,7 +124,7 @@ class NotificationService {
         // Ensure arrives after 7am
         later = DateTime(later.year, later.month, later.day, 8);
       } else if (later.hour >= 22) {
-	    // Ensure arrives before 10pm
+        // Ensure arrives before 10pm
         later = later.add(const Duration(days: 1));
         later = DateTime(later.year, later.month, later.day, 8);
       }

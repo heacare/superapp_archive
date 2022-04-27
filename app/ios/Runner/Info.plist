@@ -32,6 +32,10 @@
 	<string>We use your health data to curate a personalized program for you</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>We use your health data to curate a personalized program for you</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>We use your location data to help you find HEAlers</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>We use your location data to help you find HEAlers</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

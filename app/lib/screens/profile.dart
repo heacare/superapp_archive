@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:health/health.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:hea/services/sleep_checkin_service.dart';
@@ -8,6 +7,7 @@ import 'package:hea/models/user.dart';
 import 'package:hea/services/api_manager.dart';
 import 'package:hea/services/auth_service.dart';
 import 'package:hea/services/notification_service.dart';
+import 'package:hea/services/health_service.dart';
 import 'package:hea/services/logging_service.dart';
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/widgets/avatar_icon.dart';
@@ -32,49 +32,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }), (route) => false);
   }
 
-  Future<void> sendPastHealthData() async {
-    HealthFactory health = HealthFactory();
-
-    // Define the types to get
-    List<HealthDataType> types = [
-      HealthDataType.WEIGHT,
-      HealthDataType.HEIGHT,
-      HealthDataType.BLOOD_GLUCOSE,
-      HealthDataType.BLOOD_OXYGEN,
-      HealthDataType.BODY_FAT_PERCENTAGE,
-      HealthDataType.BODY_MASS_INDEX,
-      HealthDataType.HEART_RATE,
-      HealthDataType.STEPS,
-      //HealthDataType.SLEEP_IN_BED,
-      HealthDataType.SLEEP_ASLEEP,
-      HealthDataType.SLEEP_AWAKE,
-    ];
-
-    // OAuth request authorization to data
-    bool accessWasGranted = await health.requestAuthorization(types);
-    if (!accessWasGranted) {
-      debugPrint("Authorization not granted");
+  Future<void> send60DaysHealthData() async {
+    if (!await serviceLocator<HealthService>().request()) {
       return;
     }
-
-    // TODO On Android requires Google Fit to be installed or data will be empty
-    try {
-      // Fetch data from 1st Jan 2000 till current date
-      DateTime startDate = DateTime(2000);
-      DateTime endDate = DateTime.now();
-      List<HealthDataPoint> healthData =
-          await health.getHealthDataFromTypes(startDate, endDate, types);
-
-      List<HealthDataPoint> _healthDataList = [];
-      _healthDataList.addAll(healthData);
-
-      // Filter out duplicates
-      _healthDataList = HealthFactory.removeDuplicates(_healthDataList);
-      await serviceLocator<LoggingService>()
-          .createLog('past-health-data', _healthDataList);
-    } catch (e) {
-      debugPrint("Caught exception in getHealthDataFromTypes: $e");
-    }
+    await serviceLocator<HealthService>().log60Days();
+    SleepAutofill? day =
+        await serviceLocator<HealthService>().autofillRead1Day();
+    await serviceLocator<LoggingService>().createLog("sleep-autofill", day);
   }
 
   Future<void> scheduleDemoNotification() async {
@@ -142,15 +107,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   GradientButton(
-                      text: "Notification Preferences",
+                      text: "Notification preferences",
                       onPressed: () => serviceLocator<NotificationService>()
                           .showPreferences()),
                   const SizedBox(height: 8.0),
                   GradientButton(text: "Logout", onPressed: logout),
                   const SizedBox(height: 32.0),
                   GradientButton(
-                      text: "Send Past Health Data",
-                      onPressed: sendPastHealthData),
+                      text: "Send 60 days health data",
+                      onPressed: () async {
+                        try {
+                          await send60DaysHealthData();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("Health data sent")));
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(e.toString())));
+                        }
+                      }),
                   const SizedBox(height: 8.0),
                   GradientButton(
                       text: "Reset all content state",
