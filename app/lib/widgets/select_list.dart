@@ -14,6 +14,7 @@ class SelectListItem<T> {
 }
 
 typedef SelectListOnChange<T> = void Function(List<T>);
+typedef SelectListOtherOnChange<T> = void Function(String);
 
 class SelectList<T> extends StatefulWidget {
   const SelectList(
@@ -21,13 +22,17 @@ class SelectList<T> extends StatefulWidget {
       required this.items,
       this.defaultSelected = const [],
       this.max = 1,
-      required this.onChange})
+      required this.onChange,
+      this.defaultOther,
+      this.onChangeOther})
       : super(key: key);
 
   final List<SelectListItem<T>> items;
   final List<T> defaultSelected;
   final int max;
   final SelectListOnChange<T> onChange;
+  final String? defaultOther;
+  final SelectListOtherOnChange<T>? onChangeOther;
 
   @override
   SelectListState<T> createState() => SelectListState<T>();
@@ -35,84 +40,78 @@ class SelectList<T> extends StatefulWidget {
 
 class SelectListState<T> extends State<SelectList<T>> {
   List<T> selected = [];
+  List<T> values = [];
 
   @override
   void initState() {
     super.initState();
-    List<T> values = widget.items.toSet().map((item) => item.value).toList();
-    debugPrint(widget.defaultSelected.runtimeType.toString());
-    if (widget.defaultSelected.isNotEmpty) {
-      selected = List<T>.from(
-          widget.defaultSelected.where((sel) => values.contains(sel)));
-    }
-    // DART BUG: When calling where() on a const List<Never>, .where.toList()
-    // also returns a const List<Never>. This causes .add() to fail.
+    values = widget.items.map((item) => item.value).toList();
+    debugPrint(widget.defaultSelected.toString());
+// If there's no "other" option, drop the other values
+    selected = List<T>.from(
+        widget.defaultSelected.where((sel) => values.contains(sel)));
   }
 
-  Widget getButton(BuildContext context, SelectListItem<T> item) {
-    if (selected.contains(item.value)) {
-      return ElevatedButton(
-        child: Text(item.other ? "Other (TODO)" : item.text,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              color: Theme.of(context).colorScheme.primary,
-              fontSize: 20.0,
-            )),
-        onPressed: () {
-          setState(() {
+  Widget getButton(BuildContext context, bool select, SelectListItem<T> item) {
+    return ElevatedButton(
+      child: Text(item.text,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            color: select
+                ? Theme.of(context).colorScheme.primary
+                : const Color(0xFF414141),
+            fontSize: 20.0,
+          )),
+      onPressed: () {
+        setState(() {
+          if (select) {
             selected.remove(item.value);
-          });
-          widget.onChange(selected);
-        },
-        style: TextButton.styleFrom(
-            padding:
-                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-            primary: Colors.black,
-            backgroundColor:
-                Theme.of(context).colorScheme.primary.withAlpha(0x30),
-            elevation: 0.0),
-      );
-    } else {
-      return ElevatedButton(
-        child: Text(item.text,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontWeight: FontWeight.w500,
-              color: Color(0xFF414141),
-              fontSize: 20.0,
-            )),
-        onPressed: () {
-          setState(() {
-            debugPrint(selected.toString());
-            debugPrint(item.value.runtimeType.toString());
-            debugPrint(item.runtimeType.toString());
-            debugPrint(selected.runtimeType.toString());
+            if (item.other && widget.onChangeOther != null) {
+              widget.onChangeOther!("");
+            }
+          } else {
             selected.add(item.value);
-            debugPrint(selected.toString());
             while (widget.max != 0 && selected.length > widget.max) {
               selected.removeAt(0);
             }
-          });
-          widget.onChange(selected);
-        },
-        style: TextButton.styleFrom(
-            padding:
-                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-            primary: Colors.black,
-            backgroundColor: const Color(0xFFF5F5F5),
-            elevation: 0.0),
-      );
-    }
+          }
+        });
+        widget.onChange(selected);
+      },
+      style: TextButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+          primary: Colors.black,
+          backgroundColor: select
+              ? Theme.of(context).colorScheme.primary.withAlpha(0x30)
+              : const Color(0xFFF5F5F5),
+          elevation: 0.0),
+    );
+  }
+
+  Widget getOther(BuildContext context, SelectListItem<T> item) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      const SizedBox(height: 11.0),
+      TextFormField(
+          decoration: const InputDecoration(labelText: "Type your option here"),
+          initialValue: widget.defaultOther,
+          onChanged: (String value) {
+            if (widget.onChangeOther != null) {
+              widget.onChangeOther!(value);
+            }
+          }),
+    ]);
   }
 
   @override
   Widget build(BuildContext context) {
     List<Widget> buttons = widget.items
         .map((item) {
-          Widget button = getButton(context, item);
+          bool select = selected.contains(item.value);
+          Widget button = getButton(context, select, item);
           return [
             button,
+            if (select && item.other) getOther(context, item),
             const SizedBox(height: 11.0),
           ];
         })

@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:developer';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/services/auth_service.dart';
@@ -12,7 +12,7 @@ const apiBaseUrl = "api.alpha.hea.care";
 class ApiManagerException implements Exception {
   final String message;
   ApiManagerException({required this.message}) {
-    log(message);
+    debugPrint(message);
   }
 }
 
@@ -58,7 +58,7 @@ class ApiManager {
         throw ApiManagerException(message: "Expected JWT token");
       }
       _jwtToken = jsonDecode(response.body)["jwt"];
-      log("JWT Token: $_jwtToken");
+      debugPrint("JWT Token: $_jwtToken");
     } else {
       throw ApiManagerException(message: "Failed to obtain JWT token");
     }

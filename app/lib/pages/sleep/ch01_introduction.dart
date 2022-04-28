@@ -70,7 +70,7 @@ Tell us a little about yourself. Choose as many as apply.
     SelectListItem(text: "Hobbyist", value: "Hobbyist"),
     SelectListItem(text: "Sports team member", value: "SportsTeamMember"),
     SelectListItem(text: "Active volunteer", value: "ActiveVolunteer"),
-    SelectListItem(text: "Other", value: "Other", other: true),
+    SelectListItem(text: "Other", value: "", other: true),
   ];
 }
 
@@ -145,6 +145,6 @@ You can select more than one. If ‘Others’ please specify.
     SelectListItem(text: "Apple Health (App)", value: "AppleHealth"),
     SelectListItem(text: "Google Fit (App)", value: "GoogleFit"),
     SelectListItem(text: "Pen and paper", value: "PenPaper"),
-    SelectListItem(text: "Other", value: "Other", other: true),
+    SelectListItem(text: "Other", value: "", other: true),
   ];
 }

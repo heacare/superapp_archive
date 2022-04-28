@@ -439,7 +439,7 @@ class RoutinePledgeIntro extends MarkdownPage {
   @override
   final title = "Activity: My commitment to sleep";
   @override
-  final image = Image.asset("assets/images/sleep/ch06-my-sleep-pledge.webp");
+  final image = Image.asset("assets/images/sleep/ch06-my-sleep-pledge.gif");
 
   @override
   final markdown = """
@@ -455,7 +455,7 @@ class RoutinePledge extends StatefulWidget {
 
   final String title = "Activity: My commitment to sleep";
   final Image? image =
-      Image.asset("assets/images/sleep/ch06-my-sleep-pledge.webp");
+      Image.asset("assets/images/sleep/ch06-my-sleep-pledge.gif");
 
   final int maxChoice = 1;
   final int? minSelected = null;

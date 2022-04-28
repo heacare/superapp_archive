@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hea/utils/sleep_notifications.dart';
@@ -41,7 +42,7 @@ class Lesson {
 }
 
 class BasePage extends StatelessWidget {
-  const BasePage(
+  BasePage(
       {Key? key,
       required this.title,
       this.nextPage,
@@ -57,9 +58,14 @@ class BasePage extends StatelessWidget {
   final Widget page;
   final bool hideNext;
 
+  Timer? _timer;
+
   @override
   Widget build(BuildContext context) {
-    scheduleSleepNotifications();
+    if (_timer != null) {
+      _timer!.cancel();
+    }
+    _timer = Timer(const Duration(seconds: 5), scheduleSleepNotifications);
     return Scaffold(
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(154),
@@ -251,7 +257,10 @@ abstract class MultipleChoicePage extends StatefulWidget {
 
 class MultipleChoicePageState extends State<MultipleChoicePage> {
   bool hideNext = false;
-  List<String> selected = [""];
+  List<String> selected = [];
+  List<String> values = [];
+  SelectListItem<String>? otherItem;
+  String other = "";
 
   bool canNext() {
     return kvReadStringList("sleep", widget.valueName).length >=
@@ -262,6 +271,21 @@ class MultipleChoicePageState extends State<MultipleChoicePage> {
   void initState() {
     super.initState();
     hideNext = !canNext();
+    values = widget.choices.map((item) => item.value).toList();
+    Iterable<SelectListItem<String>> otherItems =
+        widget.choices.where((sel) => sel.other);
+    if (otherItems.isNotEmpty) {
+      otherItem = otherItems.first;
+    }
+  }
+
+  List<String> get savedValues {
+    List<String> selectedWithoutOther =
+        selected.where((sel) => otherItem?.value != sel).toList();
+    if (other != "") {
+      selectedWithoutOther.add(other);
+    }
+    return selectedWithoutOther;
   }
 
   @override
@@ -270,6 +294,25 @@ class MultipleChoicePageState extends State<MultipleChoicePage> {
         p: Theme.of(context).textTheme.bodyText1,
         h1: Theme.of(context).textTheme.headline3);
     selected = kvReadStringList("sleep", widget.valueName);
+    List<String> otherList = [];
+    selected.removeWhere((sel) {
+      if (values.contains(sel)) {
+        return false;
+      }
+      otherList.add(sel);
+      return true;
+    });
+    if (otherList.isNotEmpty && otherItem != null) {
+      selected.add(otherItem!.value);
+    }
+    other = otherList.join(", ");
+    String notice = "";
+    if (widget.maxChoice == 0) {
+      notice = "(Select all that apply)";
+    }
+    if (widget.maxChoice > 1) {
+      notice = "(Select up to ${widget.maxChoice})";
+    }
     return BasePage(
         title: widget.title,
         nextPage: widget.hasNextPageStringList()
@@ -277,29 +320,40 @@ class MultipleChoicePageState extends State<MultipleChoicePage> {
             : widget.nextPage,
         prevPage: widget.prevPage,
         hideNext: hideNext,
-        page: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              if (widget.image != null) widget.image!,
-              if (widget.image != null) const SizedBox(height: 4.0),
-              if (widget.markdown != "")
-                MarkdownBody(
-                    data: widget.markdown,
-                    extensionSet: md.ExtensionSet.gitHubFlavored,
-                    styleSheet: markdownStyleSheet),
-              if (widget.markdown != "") const SizedBox(height: 4.0),
-              SelectList(
-                  items: widget.choices,
-                  max: widget.maxChoice,
-                  defaultSelected: selected,
-                  onChange: (List<String> c) {
-                    selected = c;
-                    kvWrite<List<String>>("sleep", widget.valueName, c);
-                    setState(() {
-                      hideNext = !canNext();
-                    });
-                  }),
-            ]));
+        page: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
+            Widget>[
+          if (widget.image != null) widget.image!,
+          if (widget.image != null) const SizedBox(height: 4.0),
+          if (widget.markdown != "")
+            MarkdownBody(
+                data: widget.markdown,
+                extensionSet: md.ExtensionSet.gitHubFlavored,
+                styleSheet: markdownStyleSheet),
+          if (widget.markdown != "") const SizedBox(height: 4.0),
+          if (notice != "")
+            Text(notice, style: Theme.of(context).textTheme.labelSmall),
+          SelectList(
+              items: widget.choices,
+              max: widget.maxChoice,
+              defaultSelected: selected,
+              defaultOther: other,
+              onChange: (List<String> c) {
+                selected = c;
+                kvWrite<List<String>>("sleep", widget.valueName, savedValues);
+                setState(() {
+                  hideNext = !canNext();
+                });
+              },
+              onChangeOther: (String c) {
+                other = c;
+                kvWrite<List<String>>("sleep", widget.valueName, savedValues);
+                debugPrint(
+                    kvReadStringList("sleep", widget.valueName).join("..."));
+                setState(() {
+                  hideNext = !canNext();
+                });
+              }),
+        ]));
   }
 }
 

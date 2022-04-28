@@ -127,6 +127,10 @@ class HealthService {
   }
 
   Future<SleepAutofill?> autofillRead30Day() async {
+    if (!await request()) {
+      return null;
+    }
+
     DateTime now = DateTime.now();
     DateTime thisMorning = DateTime(now.year, now.month, now.day, 0, 0);
     DateTime startDate =
@@ -186,6 +190,10 @@ class HealthService {
   }
 
   Future<SleepAutofill?> autofillRead1Day() async {
+    if (!await request()) {
+      return null;
+    }
+
     DateTime now = DateTime.now();
     DateTime thisMorning = DateTime(now.year, now.month, now.day, 0, 0);
     DateTime startDate = thisMorning.subtract(const Duration(hours: 12));
