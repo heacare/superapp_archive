@@ -98,6 +98,16 @@ class SleepCheckinData {
             (24 * 60));
   }
 
+  Duration get latency {
+    if (timeAsleepBed == null || timeGoBed == null) {
+      return const Duration();
+    }
+    return Duration(
+        minutes: ((timeAsleepBed!.minute + timeAsleepBed!.hour * 60) -
+                (timeGoBed!.minute + timeGoBed!.hour * 60)) %
+            (24 * 60));
+  }
+
   toJson() => {
         "did-wind-down": didWindDown,
         "did-calm-activities": didCalmActivities,

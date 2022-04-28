@@ -173,14 +173,18 @@ class SleepCheckinState extends State<SleepCheckin> {
                   onChange: (TimeOfDay value) {
                     data.timeAsleepBed = value;
                   }),
-              const Text("(Time taken to fall asleep: N minutes)"),
               Text(autofillMessageAsleepBed ?? "",
                   style: Theme.of(context)
                       .textTheme
                       .bodyMedium!
                       .copyWith(color: const Color(0xFFD15319))),
               const SizedBox(height: 64.0),
-              Text("How easy did you fall asleep?",
+              Text("Time taken to fall asleep (sleep latency):",
+                  style: Theme.of(context).textTheme.titleLarge),
+              Text("${data.latency.inMinutes} minutes",
+                  style: Theme.of(context).textTheme.displayMedium),
+              const SizedBox(height: 64.0),
+              Text("How easily did you fall asleep?",
                   style: Theme.of(context).textTheme.titleLarge),
               Row(children: const [
                 Text("Not easy"),
@@ -212,10 +216,11 @@ class SleepCheckinState extends State<SleepCheckin> {
                       .bodyMedium!
                       .copyWith(color: const Color(0xFFD15319))),
               const SizedBox(height: 64.0),
+              Text("You slept (sleep duration):",
+                  style: Theme.of(context).textTheme.titleLarge),
               Text(
-                  "You slept: ${data.slept.inHours} hours ${data.slept.inMinutes.remainder(Duration.minutesPerHour)} minutes",
-                  style: Theme.of(context).textTheme.titleLarge,
-                  textAlign: TextAlign.center),
+                  "${data.slept.inHours} hours ${data.slept.inMinutes.remainder(Duration.minutesPerHour)} minutes",
+                  style: Theme.of(context).textTheme.displayMedium),
               const Text(
                   "Note: This is different from the amount of time you spent in bed"),
               const SizedBox(height: 64.0),
