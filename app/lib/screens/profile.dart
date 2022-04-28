@@ -51,24 +51,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         minHoursLater: 1);
   }
 
-  SleepAutofill? sleep;
-  SleepAutofill? sleep30;
-
   @override
   Widget build(BuildContext context) {
     serviceLocator<ApiManager>().get("/"); // What is this for?
-
-    serviceLocator<HealthService>().autofillRead1Day().then((data) {
-      setState(() {
-        sleep = data;
-      });
-    });
-    serviceLocator<HealthService>().autofillRead30Day().then((data) {
-      setState(() {
-        sleep30 = data;
-      });
-    });
-
     return Consumer<User?>(builder: (context, user, _) {
       if (user == null) {
         return const Center(child: CircularProgressIndicator());
@@ -253,10 +238,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             });
                       }),
                   const SizedBox(height: 8.0),
-                  Text(
-                      "1 Day: In-bed: ${sleep?.inBed} Asleep: ${sleep?.asleep} Awake: ${sleep?.awake}"),
-                  Text(
-                      "30 Day: In-bed: ${sleep30?.inBed} Asleep: ${sleep30?.asleep} Awake: ${sleep30?.awake}"),
+                  GradientButton(
+                      text: "Show autofill sleep data",
+                      onPressed: () async {
+                        var sleep = await serviceLocator<HealthService>()
+                            .autofillRead1Day();
+                        var sleep30 = await serviceLocator<HealthService>()
+                            .autofillRead30Day();
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                  title: const Text("Autofill sleep data"),
+                                  content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text("1-day",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleLarge),
+                                        Text(
+                                            "In-bed: ${sleep?.inBed}\nAsleep: ${sleep?.asleep}\nAwake: ${sleep?.awake}"),
+                                        Text("30-day",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleLarge),
+                                        Text(
+                                            "In-bed: ${sleep30?.inBed}\nAsleep: ${sleep30?.asleep}\nAwake: ${sleep30?.awake}"),
+                                      ]),
+                                  actions: [
+                                    TextButton(
+                                        child: const Text("Close"),
+                                        onPressed: () {
+                                          serviceLocator<SleepCheckinService>()
+                                              .add(SleepCheckinData());
+                                          Navigator.of(context).pop();
+                                        }),
+                                  ]);
+                            });
+                      }),
+                  const SizedBox(height: 8.0),
                 ])));
   }
 }
