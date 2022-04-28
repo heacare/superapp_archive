@@ -90,6 +90,22 @@ class SleepCheckinState extends State<SleepCheckin> {
         autofillMessage = "Data has been autofilled from last night ($date)";
       });
     }();
+
+    List<String> otherHealthAspects =
+        kvReadStringList("sleep", "other-health-aspects");
+    bool stress = false;
+    bool diet = false;
+    bool exercise = false;
+    if (otherHealthAspects.contains("stress")) {
+      stress = true;
+    }
+    if (otherHealthAspects.contains("diet")) {
+      diet = true;
+    }
+    if (otherHealthAspects.contains("exercise")) {
+      exercise = true;
+    }
+
     return Scaffold(
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(154),
@@ -242,6 +258,66 @@ class SleepCheckinState extends State<SleepCheckin> {
                 },
               ),
               const SizedBox(height: 64.0),
+              if (stress)
+                Text("Was today a stressful day for you?",
+                    style: Theme.of(context).textTheme.titleLarge),
+              if (stress)
+                Row(children: const [
+                  Text("Not at all"),
+                  Text("Very"),
+                ], mainAxisAlignment: MainAxisAlignment.spaceBetween),
+              if (stress)
+                Slider(
+                  value: data.stressScore.toDouble(),
+                  max: 4,
+                  divisions: 4,
+                  onChanged: (double value) {
+                    setState(() {
+                      data.stressScore = value.toInt();
+                    });
+                  },
+                ),
+              if (stress) const SizedBox(height: 64.0),
+              if (diet)
+                Text("How did you feel about your meal choices yesterday?",
+                    style: Theme.of(context).textTheme.titleLarge),
+              if (diet)
+                Row(children: const [
+                  Text("Very dissatisfied"),
+                  Text("Very satisfied"),
+                ], mainAxisAlignment: MainAxisAlignment.spaceBetween),
+              if (diet)
+                Slider(
+                  value: data.dietScore.toDouble(),
+                  max: 4,
+                  divisions: 4,
+                  onChanged: (double value) {
+                    setState(() {
+                      data.dietScore = value.toInt();
+                    });
+                  },
+                ),
+              if (diet) const SizedBox(height: 64.0),
+              if (exercise)
+                Text("Did you do any exercise yesterday?",
+                    style: Theme.of(context).textTheme.titleLarge),
+              if (exercise)
+                Row(children: const [
+                  Text("None"),
+                  Text("More than enough"),
+                ], mainAxisAlignment: MainAxisAlignment.spaceBetween),
+              if (exercise)
+                Slider(
+                  value: data.exerciseScore.toDouble(),
+                  max: 4,
+                  divisions: 4,
+                  onChanged: (double value) {
+                    setState(() {
+                      data.exerciseScore = value.toInt();
+                    });
+                  },
+                ),
+              if (exercise) const SizedBox(height: 64.0),
             ],
             crossAxisAlignment: CrossAxisAlignment.start,
           ),

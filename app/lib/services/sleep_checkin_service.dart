@@ -88,6 +88,10 @@ class SleepCheckinData {
   TimeOfDay? timeOutBed;
   int easyWake = 2;
 
+  int stressScore = 2;
+  int dietScore = 2;
+  int exerciseScore = 2;
+
   Duration get slept {
     if (timeOutBed == null || timeAsleepBed == null) {
       return const Duration();
