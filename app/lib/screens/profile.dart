@@ -120,7 +120,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           await send60DaysHealthData();
                           ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                  content: const Text("Health data sent")));
+                                  content: Text("Health data sent")));
                         } catch (e) {
                           ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text(e.toString())));

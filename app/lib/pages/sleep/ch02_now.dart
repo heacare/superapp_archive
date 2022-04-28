@@ -5,6 +5,8 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:hea/utils/kv_wrap.dart';
 import 'package:hea/widgets/page.dart';
 import 'package:hea/widgets/select_list.dart';
+import 'package:hea/services/service_locator.dart';
+import 'package:hea/services/health_service.dart';
 import 'ch01_introduction.dart';
 import 'ch03_goals.dart';
 
@@ -24,7 +26,7 @@ class NowFirstThingsFirst extends MarkdownPage {
 
   @override
   final markdown = """
-Before we begin our journey to better sleep, how have you been sleeping in the last 30 days?
+Before we begin our journey to better sleep, how have you been sleeping in the last 30 dayss?
 
 Let’s find out your sleep score. We will take you on a reflective process to help you become more aware of your own sleep. Your sleep score will be helpful to show how your sleep improves later. There are 20 questions in this process. Start by getting comfortable. If you need more time, pause and continue later. There’s no need to rush.
 
@@ -52,6 +54,16 @@ class NowTimeGoneBed extends TimePickerPage {
   final valueName = "time-go-bed";
   @override
   final defaultTime = const TimeOfDay(hour: 23, minute: 00);
+  @override
+  Future<TimeOfDay?> getInitialTime(Function(String) setAutofillMessage) async {
+    SleepAutofill? sleep =
+        await serviceLocator<HealthService>().autofillRead30Day();
+    if (sleep != null && sleep.inBed != null) {
+      setAutofillMessage("Was autofilled using data from the last 30 days");
+      return TimeOfDay.fromDateTime(sleep.inBed!);
+    }
+    return null;
+  }
 }
 
 class NowMinutesFallAsleep extends MultipleChoicePage {
@@ -107,6 +119,16 @@ class NowTimeOutBed extends TimePickerPage {
   final valueName = "time-out-bed";
   @override
   final defaultTime = const TimeOfDay(hour: 7, minute: 00);
+  @override
+  Future<TimeOfDay?> getInitialTime(Function(String) setAutofillMessage) async {
+    SleepAutofill? sleep =
+        await serviceLocator<HealthService>().autofillRead30Day();
+    if (sleep != null) {
+      setAutofillMessage("Was autofilled using data from the last 30 days");
+      return TimeOfDay.fromDateTime(sleep.awake);
+    }
+    return null;
+  }
 }
 
 class NowGetSleep extends DurationPickerPage {
@@ -131,7 +153,15 @@ On average, how many hours of sleep do you get at night?
   @override
   final valueName = "minutes-asleep";
   @override
-  final defaultMinutes = 8 * 60;
+  Future<int?> getInitialMinutes(Function(String) setAutofillMessage) async {
+    SleepAutofill? sleep =
+        await serviceLocator<HealthService>().autofillRead30Day();
+    if (sleep != null && sleep.sleepMinutes > 0) {
+      setAutofillMessage("Was autofilled using data from the last 30 days");
+      return sleep.sleepMinutes;
+    }
+    return null;
+  }
 }
 
 class NowHowEfficientSleep extends Page {

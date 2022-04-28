@@ -71,22 +71,29 @@ class SleepCheckinProgress extends ChangeNotifier {
     recalculate();
     notifyListeners();
   }
+
+  start() {
+    notifyListeners();
+  }
 }
 
 class SleepCheckinData {
   String didWindDown = "";
   List<String> didCalmActivities = [];
   String interruptions = "";
-  TimeOfDay timeGoBed = const TimeOfDay(hour: 20, minute: 0);
-  TimeOfDay timeAsleepBed = const TimeOfDay(hour: 21, minute: 0);
+  TimeOfDay? timeGoBed;
+  TimeOfDay? timeAsleepBed;
   int easyAsleep = 2;
-  TimeOfDay timeOutBed = const TimeOfDay(hour: 9, minute: 0);
+  TimeOfDay? timeOutBed;
   int easyWake = 2;
 
   Duration get slept {
+    if (timeOutBed == null || timeAsleepBed == null) {
+      return const Duration();
+    }
     return Duration(
-        minutes: ((timeOutBed.minute + timeOutBed.hour * 60) -
-                (timeAsleepBed.minute + timeAsleepBed.hour * 60)) %
+        minutes: ((timeOutBed!.minute + timeOutBed!.hour * 60) -
+                (timeAsleepBed!.minute + timeAsleepBed!.hour * 60)) %
             (24 * 60));
   }
 
@@ -94,10 +101,12 @@ class SleepCheckinData {
         "did-wind-down": didWindDown,
         "did-calm-activities": didCalmActivities,
         "interruptions": interruptions,
-        "time-go-bed": JTimeOfDay.from(timeGoBed),
-        "time-asleep-bed": JTimeOfDay.from(timeAsleepBed),
+        "time-go-bed": timeGoBed == null ? null : JTimeOfDay.from(timeGoBed!),
+        "time-asleep-bed":
+            timeAsleepBed == null ? null : JTimeOfDay.from(timeAsleepBed!),
         "easy-asleep": easyAsleep,
-        "time-out-bed": JTimeOfDay.from(timeOutBed),
+        "time-out-bed":
+            timeOutBed == null ? null : JTimeOfDay.from(timeOutBed!),
         "easy-wake": easyWake,
       };
 
@@ -108,10 +117,16 @@ class SleepCheckinData {
     s.didWindDown = data["did-wind-down"];
     s.didCalmActivities = List.from(data["did-calm-activities"].map((s) => s));
     s.interruptions = data["interruptions"];
-    s.timeGoBed = JTimeOfDay.fromJson(data["time-go-bed"]);
-    s.timeAsleepBed = JTimeOfDay.fromJson(data["time-asleep-bed"]);
+    s.timeGoBed = data["time-go-bed"] == null
+        ? null
+        : JTimeOfDay.fromJson(data["time-go-bed"]);
+    s.timeAsleepBed = data["time-asleep-bed"] == null
+        ? null
+        : JTimeOfDay.fromJson(data["time-asleep-bed"]);
     s.easyAsleep = data["easy-asleep"];
-    s.timeOutBed = JTimeOfDay.fromJson(data["time-out-bed"]);
+    s.timeOutBed = data["time-out-bed"] == null
+        ? null
+        : JTimeOfDay.fromJson(data["time-out-bed"]);
     s.easyWake = data["easy-wake"];
     return s;
   }

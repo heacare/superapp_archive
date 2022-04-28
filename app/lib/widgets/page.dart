@@ -307,11 +307,16 @@ typedef TimePickerBlockOnChange = Function(TimeOfDay);
 
 class TimePickerBlock extends StatefulWidget {
   const TimePickerBlock(
-      {Key? key, required this.initialTime, this.time, required this.onChange})
+      {Key? key,
+      required this.defaultTime,
+      this.initialTime,
+      this.time,
+      required this.onChange})
       : super(key: key);
 
-  final TimeOfDay initialTime;
-  final TimeOfDay? time;
+  final TimeOfDay defaultTime; // Time to show in the picker dialog
+  final TimeOfDay? initialTime; // Time to show at the start
+  final TimeOfDay? time; // Time to always show
   final TimePickerBlockOnChange onChange;
 
   @override
@@ -319,7 +324,7 @@ class TimePickerBlock extends StatefulWidget {
 }
 
 class TimePickerBlockState extends State<TimePickerBlock> {
-  TimeOfDay selectedTime = TimeOfDay.now();
+  TimeOfDay? selectedTime;
 
   @override
   void initState() {
@@ -331,24 +336,27 @@ class TimePickerBlockState extends State<TimePickerBlock> {
     FocusScope.of(context).requestFocus(FocusNode());
     TimeOfDay? time = await showTimePicker(
       context: context,
-      initialTime: widget.time ?? selectedTime,
+      initialTime: widget.time ?? selectedTime ?? widget.defaultTime,
     );
     if (time != null) {
       setState(() {
         selectedTime = time;
       });
-      widget.onChange(selectedTime);
+      widget.onChange(time);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    TimeOfDay? showTime = widget.time ?? selectedTime;
     return ElevatedButton(
-      child: Text((widget.time ?? selectedTime).format(context),
+      child: Text(showTime != null ? showTime.format(context) : "00:00",
           textAlign: TextAlign.center,
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.w500,
-            color: Color(0xFF414141),
+            color: showTime != null
+                ? const Color(0xFF414141)
+                : const Color(0xFFDDDDDD),
             fontSize: 20.0,
           )),
       onPressed: () => onTap(context),
@@ -378,21 +386,21 @@ class TimeRangePickerBlock extends StatefulWidget {
 }
 
 class TimeRangePickerBlockState extends State<TimeRangePickerBlock> {
-  TimeOfDayRange selectedRange = TimeOfDayRange(
-      const TimeOfDay(hour: 0, minute: 0), const TimeOfDay(hour: 0, minute: 0));
+  TimeOfDayRange? selectedRange;
 
   @override
   void initState() {
     super.initState();
-    selectedRange = kvReadTimeOfDayRange("sleep", widget.valueName) ??
-        TimeOfDayRange(widget.defaultStartTime, widget.defaultEndTime);
+    selectedRange = kvReadTimeOfDayRange("sleep", widget.valueName);
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     debugPrint("timerangesave");
-    kvWriteTimeOfDayRange("sleep", widget.valueName, selectedRange);
+    if (selectedRange != null) {
+      kvWriteTimeOfDayRange("sleep", widget.valueName, selectedRange!);
+    }
   }
 
   @override
@@ -400,29 +408,36 @@ class TimeRangePickerBlockState extends State<TimeRangePickerBlock> {
     return Row(children: [
       const Text("From"),
       TimePickerBlock(
-          initialTime: selectedRange.start,
+          defaultTime: widget.defaultStartTime,
+          time: selectedRange?.start,
           onChange: (time) {
             setState(() {
-              selectedRange = TimeOfDayRange(time, selectedRange.end);
-              debugPrint("timerangesave");
-              kvWriteTimeOfDayRange("sleep", widget.valueName, selectedRange);
+              selectedRange = TimeOfDayRange(time, selectedRange?.end ?? time);
+              debugPrint("timerangesavefrom");
+              kvWriteTimeOfDayRange("sleep", widget.valueName, selectedRange!);
             });
           }),
       const Text("to"),
       TimePickerBlock(
-          initialTime: selectedRange.end,
+          defaultTime: widget.defaultEndTime,
+          time: selectedRange?.end,
           onChange: (time) {
             setState(() {
-              selectedRange = TimeOfDayRange(selectedRange.start, time);
-              debugPrint("timerangesave");
-              kvWriteTimeOfDayRange("sleep", widget.valueName, selectedRange);
+              selectedRange =
+                  TimeOfDayRange(selectedRange?.start ?? time, time);
+              debugPrint("timerangesaveto");
+              kvWriteTimeOfDayRange("sleep", widget.valueName, selectedRange!);
             });
           }),
     ]);
   }
 }
 
-abstract class TimePickerPage extends Page {
+abstract class TimePickerPage extends StatefulWidget {
+  abstract final String title;
+  abstract final PageBuilder? nextPage;
+  abstract final PageBuilder? prevPage;
+
   abstract final String markdown;
   abstract final Image? image;
 
@@ -431,28 +446,72 @@ abstract class TimePickerPage extends Page {
 
   const TimePickerPage({Key? key}) : super(key: key);
 
+  Future<TimeOfDay?> getInitialTime(Function(String) setAutofillMessage) async {
+    return null;
+  }
+
   @override
-  Widget buildPage(BuildContext context) {
+  TimePickerPageState createState() => TimePickerPageState();
+}
+
+class TimePickerPageState extends State<TimePickerPage> {
+  TimeOfDay? time;
+  bool canNext = false;
+  String autofillMessage = "";
+
+  @override
+  void initState() {
+    super.initState();
+    time = kvReadTimeOfDay("sleep", widget.valueName);
+    canNext = kvReadTimeOfDay("sleep", widget.valueName) != null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final markdownStyleSheet = MarkdownStyleSheet(
         p: Theme.of(context).textTheme.bodyText1,
         h1: Theme.of(context).textTheme.headline3);
-    TimeOfDay initialTime = kvReadTimeOfDay("sleep", valueName) ?? defaultTime;
-    kvWriteTimeOfDay("sleep", valueName, initialTime);
-    return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          if (image != null) image!,
-          if (image != null) const SizedBox(height: 4.0),
-          if (markdown != "")
-            MarkdownBody(
-                data: markdown,
-                extensionSet: md.ExtensionSet.gitHubFlavored,
-                styleSheet: markdownStyleSheet),
-          if (markdown != "") const SizedBox(height: 4.0),
-          TimePickerBlock(
-              initialTime: initialTime,
-              onChange: (time) => kvWriteTimeOfDay("sleep", valueName, time)),
-        ]);
+    return FutureBuilder<TimeOfDay?>(future: widget.getInitialTime((s) {
+      autofillMessage = s;
+    }), builder: (context, snapshot) {
+      if (time == null && snapshot.data != null) {
+        time = snapshot.data;
+        kvWriteTimeOfDay("sleep", widget.valueName, time!);
+        canNext = true;
+      }
+      return BasePage(
+          title: widget.title,
+          nextPage: widget.nextPage,
+          prevPage: widget.prevPage,
+          hideNext: !canNext,
+          page: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                if (widget.image != null) widget.image!,
+                if (widget.image != null) const SizedBox(height: 4.0),
+                if (widget.markdown != "")
+                  MarkdownBody(
+                      data: widget.markdown,
+                      extensionSet: md.ExtensionSet.gitHubFlavored,
+                      styleSheet: markdownStyleSheet),
+                if (widget.markdown != "") const SizedBox(height: 4.0),
+                TimePickerBlock(
+                    defaultTime: widget.defaultTime,
+                    time: time,
+                    onChange: (time) {
+                      setState(() {
+                        canNext = true;
+                        this.time = time;
+                      });
+                      kvWriteTimeOfDay("sleep", widget.valueName, time);
+                    }),
+                Text(autofillMessage,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium!
+                        .copyWith(color: const Color(0xFFD15319))),
+              ]));
+    });
   }
 }
 
@@ -463,7 +522,7 @@ class DurationPickerBlock extends StatefulWidget {
       {Key? key, required this.initialDuration, required this.onChange})
       : super(key: key);
 
-  final Duration initialDuration;
+  final Duration? initialDuration;
   final DurationPickerBlockOnChange onChange;
 
   @override
@@ -477,7 +536,7 @@ class DurationPickerBlockState extends State<DurationPickerBlock> {
   @override
   void initState() {
     super.initState();
-    selectedDuration = widget.initialDuration;
+    selectedDuration = widget.initialDuration ?? const Duration();
   }
 
   @override
@@ -536,7 +595,10 @@ abstract class DurationPickerPage extends Page {
   abstract final Image? image;
 
   abstract final String valueName;
-  abstract final int defaultMinutes;
+
+  Future<int?> getInitialMinutes(Function(String) setAutofillMessage) async {
+    return null;
+  }
 
   const DurationPickerPage({Key? key}) : super(key: key);
 
@@ -545,24 +607,37 @@ abstract class DurationPickerPage extends Page {
     final markdownStyleSheet = MarkdownStyleSheet(
         p: Theme.of(context).textTheme.bodyText1,
         h1: Theme.of(context).textTheme.headline3);
-    int duration = kvReadInt("sleep", valueName) ?? defaultMinutes;
-    Duration initialDuration = Duration(minutes: duration);
-    kvWrite("sleep", valueName, initialDuration.inMinutes);
-    return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          if (image != null) image!,
-          if (image != null) const SizedBox(height: 4.0),
-          if (markdown != "")
-            MarkdownBody(
-                data: markdown,
-                extensionSet: md.ExtensionSet.gitHubFlavored,
-                styleSheet: markdownStyleSheet),
-          if (markdown != "") const SizedBox(height: 4.0),
-          DurationPickerBlock(
-              initialDuration: initialDuration,
-              onChange: (duration) =>
-                  kvWrite("sleep", valueName, duration.inMinutes)),
-        ]);
+    int? duration = kvReadInt("sleep", valueName);
+    Duration? initialDuration =
+        duration == null ? null : Duration(minutes: duration);
+    String autofillMessage = "";
+    return FutureBuilder<int?>(future: getInitialMinutes((s) {
+      autofillMessage = s;
+    }), builder: (context, snapshot) {
+      if (duration == null && snapshot.data != null) {
+        initialDuration = Duration(minutes: snapshot.data!);
+      }
+      return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            if (image != null) image!,
+            if (image != null) const SizedBox(height: 4.0),
+            if (markdown != "")
+              MarkdownBody(
+                  data: markdown,
+                  extensionSet: md.ExtensionSet.gitHubFlavored,
+                  styleSheet: markdownStyleSheet),
+            if (markdown != "") const SizedBox(height: 4.0),
+            DurationPickerBlock(
+                initialDuration: initialDuration,
+                onChange: (duration) =>
+                    kvWrite("sleep", valueName, duration.inMinutes)),
+            Text(autofillMessage,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(color: const Color(0xFFD15319))),
+          ]);
+    });
   }
 }

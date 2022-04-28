@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:math';
-import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:flutter/material.dart' show TimeOfDay;
 import 'package:health/health.dart';
 
@@ -19,6 +18,16 @@ class SleepAutofill {
         "asleep": asleep?.toIso8601String(),
         "awake": awake.toIso8601String(),
       };
+
+  int get sleepMinutes {
+    if (asleep == null) {
+      return 0;
+    }
+    return ((awake.minute + awake.hour * 60) -
+            (asleep!.minute + asleep!.hour * 60)) %
+        24 *
+        60;
+  }
 }
 
 class HealthService {
@@ -130,7 +139,7 @@ class HealthService {
     ]);
 
     List<SleepAutofill> entries = [];
-    DateTime periodEnd = startDate.add(Duration(days: 1));
+    DateTime periodEnd = startDate.add(const Duration(days: 1));
     while (periodEnd.isBefore(endDate)) {
       DateTime periodStart = periodEnd.subtract(const Duration(days: 1));
       List<HealthDataPoint> nightData = [];

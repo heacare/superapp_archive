@@ -295,8 +295,8 @@ class RhythmSettingCourse extends StatefulWidget {
 }
 
 class RhythmSettingCourseState extends State<RhythmSettingCourse> {
-  TimeOfDay wakeTime = const TimeOfDay(hour: 0, minute: 0);
-  TimeOfDay sleepTime = const TimeOfDay(hour: 0, minute: 0);
+  TimeOfDay? wakeTime;
+  TimeOfDay? sleepTime;
 
   Widget buildDuration(BuildContext context, String valueName,
       int defaultDuration, String prefix) {
@@ -318,7 +318,7 @@ class RhythmSettingCourseState extends State<RhythmSettingCourse> {
 
   Widget buildTime(BuildContext context, String valueName,
       TimeOfDay defaultTime, String prefix) {
-    TimeOfDay initialTime = kvReadTimeOfDay("sleep", valueName) ?? defaultTime;
+    TimeOfDay? initialTime = kvReadTimeOfDay("sleep", valueName);
     if (valueName == "goals-wake-time") {
       wakeTime = initialTime;
     }
@@ -333,6 +333,7 @@ class RhythmSettingCourseState extends State<RhythmSettingCourse> {
             style: Theme.of(context).textTheme.bodyLarge,
           ),
           TimePickerBlock(
+              defaultTime: defaultTime,
               initialTime: initialTime,
               onChange: (time) {
                 kvWriteTimeOfDay("sleep", valueName, time);
@@ -349,8 +350,11 @@ class RhythmSettingCourseState extends State<RhythmSettingCourse> {
   }
 
   String get sleepFor {
-    int sleepForMinutes = ((wakeTime.minute + wakeTime.hour * 60) -
-            (sleepTime.minute + sleepTime.hour * 60)) %
+    if (wakeTime == null || sleepTime == null) {
+      return "unknown";
+    }
+    int sleepForMinutes = ((wakeTime!.minute + wakeTime!.hour * 60) -
+            (sleepTime!.minute + sleepTime!.hour * 60)) %
         (24 * 60);
     Duration sleepFor = Duration(minutes: sleepForMinutes);
     return "${sleepFor.inHours} hours ${sleepFor.inMinutes.remainder(Duration.minutesPerHour)} minutes";

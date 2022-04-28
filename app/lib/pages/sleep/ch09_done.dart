@@ -49,17 +49,23 @@ class Done extends StatelessWidget {
     List<SleepCheckinData> list =
         serviceLocator<SleepCheckinService>().storageRead().sublist(0, 7);
     double sleepEfficiencyWeek = 0;
+    int days = 0;
     for (SleepCheckinData data in list) {
-      int bedDuration = ((data.timeOutBed.minute + data.timeOutBed.hour * 60) -
-              (data.timeGoBed.minute + data.timeGoBed.hour * 60)) %
-          (24 * 60);
-      int sleepDuration =
-          ((data.timeOutBed.minute + data.timeOutBed.hour * 60) -
-                  (data.timeAsleepBed.minute + data.timeAsleepBed.hour * 60)) %
+      if (data.timeOutBed == null || data.timeGoBed == null) {
+        continue;
+      }
+      int bedDuration =
+          ((data.timeOutBed!.minute + data.timeOutBed!.hour * 60) -
+                  (data.timeGoBed!.minute + data.timeGoBed!.hour * 60)) %
               (24 * 60);
+      int sleepDuration = ((data.timeOutBed!.minute +
+                  data.timeOutBed!.hour * 60) -
+              (data.timeAsleepBed!.minute + data.timeAsleepBed!.hour * 60)) %
+          (24 * 60);
       sleepEfficiencyWeek += sleepDuration / bedDuration;
+      days += 1;
     }
-    int weekAverage = ((sleepEfficiencyWeek / 7) * 100).round();
+    int weekAverage = ((sleepEfficiencyWeek / days) * 100).round();
 
     String changed = "remained the same";
     if (weekAverage < baseline) {
@@ -81,7 +87,7 @@ class Done extends StatelessWidget {
                   data: """
 You managed to check in on your sleep for ${progress.day} days so far.
 
-Based on your self-reported results, your sleep efficiency $changed from $baseline% to $weekAverage%.
+Based on your self-reported results for the last $days days, your sleep efficiency $changed from $baseline% to $weekAverage%.
 """,
                   extensionSet: md.ExtensionSet.gitHubFlavored,
                   styleSheet: markdownStyleSheet),

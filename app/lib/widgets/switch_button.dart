@@ -7,8 +7,8 @@ class SwitchButton extends StatefulWidget {
   SwitchButton({Key? key, this.selected = false, required this.onChange})
       : super(key: key);
 
-  bool selected;
-  Function onChange;
+  final bool selected;
+  final Function onChange;
 
   @override
   SwitchButtonState createState() => SwitchButtonState();

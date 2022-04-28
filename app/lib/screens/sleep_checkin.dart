@@ -28,10 +28,26 @@ class SleepCheckinState extends State<SleepCheckin> {
   bool validate(BuildContext context) {
     if (data.didWindDown == "") {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: const Text(
+          content: Text(
               "Please indicate whether you managed to wind-down before bedtime")));
       return false;
     }
+    if (data.timeGoBed == null) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Please indicate the time you went to bed")));
+      return false;
+    }
+    if (data.timeAsleepBed == null) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Please indicate the time you fell asleep")));
+      return false;
+    }
+    if (data.timeOutBed == null) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Please indicate the time you woke up")));
+      return false;
+    }
+
     return true;
   }
 
@@ -135,7 +151,7 @@ class SleepCheckinState extends State<SleepCheckin> {
                   style: Theme.of(context).textTheme.titleLarge),
               const Text("Note: This is not the time you fell asleep."),
               TimePickerBlock(
-                  initialTime: data.timeGoBed,
+                  defaultTime: const TimeOfDay(hour: 20, minute: 0),
                   time: data.timeGoBed,
                   onChange: (TimeOfDay value) {
                     data.timeGoBed = value;
@@ -149,7 +165,7 @@ class SleepCheckinState extends State<SleepCheckin> {
               Text("What time did you fall asleep?",
                   style: Theme.of(context).textTheme.titleLarge),
               TimePickerBlock(
-                  initialTime: data.timeAsleepBed,
+                  defaultTime: const TimeOfDay(hour: 21, minute: 0),
                   time: data.timeAsleepBed,
                   onChange: (TimeOfDay value) {
                     data.timeAsleepBed = value;
@@ -182,7 +198,7 @@ class SleepCheckinState extends State<SleepCheckin> {
                   style: Theme.of(context).textTheme.titleLarge),
               const Text("Note: This is not necessarily the time you woke up."),
               TimePickerBlock(
-                  initialTime: data.timeOutBed,
+                  defaultTime: const TimeOfDay(hour: 9, minute: 0),
                   time: data.timeOutBed,
                   onChange: (TimeOfDay value) {
                     data.timeOutBed = value;

@@ -10,7 +10,12 @@ class DiaryReminders extends TimePickerPage {
   DiaryReminders({Key? key}) : super(key: key);
 
   @override
-  final nextPage = () => DiaryStart();
+  final nextPage = () {
+    SleepCheckinProgress progress =
+        serviceLocator<SleepCheckinService>().getProgress();
+    progress.start();
+    return DiaryStart();
+  };
   @override
   final prevPage = () => RoutinePledge();
 
