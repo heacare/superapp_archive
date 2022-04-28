@@ -74,7 +74,7 @@ class SleepCheckinProgress extends ChangeNotifier {
 }
 
 class SleepCheckinData {
-  String didWindDown = "yes";
+  String didWindDown = "";
   List<String> didCalmActivities = [];
   String interruptions = "";
   TimeOfDay timeGoBed = const TimeOfDay(hour: 20, minute: 0);
@@ -82,6 +82,13 @@ class SleepCheckinData {
   int easyAsleep = 2;
   TimeOfDay timeOutBed = const TimeOfDay(hour: 9, minute: 0);
   int easyWake = 2;
+
+  Duration get slept {
+    return Duration(
+        minutes: ((timeOutBed.minute + timeOutBed.hour * 60) -
+                (timeAsleepBed.minute + timeAsleepBed.hour * 60)) %
+            (24 * 60));
+  }
 
   toJson() => {
         "did-wind-down": didWindDown,

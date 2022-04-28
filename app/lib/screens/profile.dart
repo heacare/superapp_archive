@@ -51,9 +51,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
         minHoursLater: 1);
   }
 
+  SleepAutofill? sleep;
+
   @override
   Widget build(BuildContext context) {
-    serviceLocator<ApiManager>().get("/");
+    serviceLocator<ApiManager>().get("/"); // What is this for?
+
+    serviceLocator<HealthService>().autofillRead1Day().then((data) {
+      setState(() {
+        sleep = data;
+      });
+    });
+
     return Consumer<User?>(builder: (context, user, _) {
       if (user == null) {
         return const Center(child: CircularProgressIndicator());
@@ -119,7 +128,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         try {
                           await send60DaysHealthData();
                           ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text("Health data sent")));
+                              const SnackBar(
+                                  content: const Text("Health data sent")));
                         } catch (e) {
                           ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text(e.toString())));
@@ -237,6 +247,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             });
                       }),
                   const SizedBox(height: 8.0),
+                  Text(
+                      "In-bed: ${sleep?.inBed} Asleep: ${sleep?.asleep} Awake: ${sleep?.awake}"),
                 ])));
   }
 }

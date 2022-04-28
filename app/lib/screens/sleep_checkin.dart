@@ -21,7 +21,19 @@ class SleepCheckin extends StatefulWidget {
 
 class SleepCheckinState extends State<SleepCheckin> {
   SleepCheckinData data = SleepCheckinData();
+  String? autofillMessageGoBed;
+  String? autofillMessageAsleepBed;
   String? autofillMessage;
+
+  bool validate(BuildContext context) {
+    if (data.didWindDown == "") {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: const Text(
+              "Please indicate whether you managed to wind-down before bedtime")));
+      return false;
+    }
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +55,17 @@ class SleepCheckinState extends State<SleepCheckin> {
       setState(() {
         if (sleepAutofill.inBed != null) {
           data.timeGoBed = TimeOfDay.fromDateTime(sleepAutofill.inBed!);
+          autofillMessageGoBed =
+              "Data has been autofilled from last night ($date)";
+        } else {
+          autofillMessageGoBed = "No autofill data available";
         }
         if (sleepAutofill.asleep != null) {
           data.timeAsleepBed = TimeOfDay.fromDateTime(sleepAutofill.asleep!);
+          autofillMessageAsleepBed =
+              "Data has been autofilled from last night ($date)";
+        } else {
+          autofillMessageAsleepBed = "No autofill data available";
         }
         data.timeOutBed = TimeOfDay.fromDateTime(sleepAutofill.awake);
         autofillMessage = "Data has been autofilled from last night ($date)";
@@ -83,7 +103,6 @@ class SleepCheckinState extends State<SleepCheckin> {
           padding: const EdgeInsets.fromLTRB(18.0, 0.0, 18.0, 5.0),
           child: Column(
             children: [
-              const Text("(WORK-IN-PROGRESS)"),
               Text("Did you manage to wind-down before bedtime?",
                   style: Theme.of(context).textTheme.titleLarge),
               PillSelect(
@@ -117,18 +136,30 @@ class SleepCheckinState extends State<SleepCheckin> {
               const Text("Note: This is not the time you fell asleep."),
               TimePickerBlock(
                   initialTime: data.timeGoBed,
+                  time: data.timeGoBed,
                   onChange: (TimeOfDay value) {
                     data.timeGoBed = value;
                   }),
+              Text(autofillMessageGoBed ?? "",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium!
+                      .copyWith(color: const Color(0xFFD15319))),
               const SizedBox(height: 64.0),
               Text("What time did you fall asleep?",
                   style: Theme.of(context).textTheme.titleLarge),
               TimePickerBlock(
                   initialTime: data.timeAsleepBed,
+                  time: data.timeAsleepBed,
                   onChange: (TimeOfDay value) {
                     data.timeAsleepBed = value;
                   }),
               const Text("(Time taken to fall asleep: N minutes)"),
+              Text(autofillMessageAsleepBed ?? "",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium!
+                      .copyWith(color: const Color(0xFFD15319))),
               const SizedBox(height: 64.0),
               Text("How easy did you fall asleep?",
                   style: Theme.of(context).textTheme.titleLarge),
@@ -152,11 +183,18 @@ class SleepCheckinState extends State<SleepCheckin> {
               const Text("Note: This is not necessarily the time you woke up."),
               TimePickerBlock(
                   initialTime: data.timeOutBed,
+                  time: data.timeOutBed,
                   onChange: (TimeOfDay value) {
                     data.timeOutBed = value;
                   }),
+              Text(autofillMessage ?? "",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium!
+                      .copyWith(color: const Color(0xFFD15319))),
               const SizedBox(height: 64.0),
-              Text("You slept: N hours",
+              Text(
+                  "You slept: ${data.slept.inHours} hours ${data.slept.inMinutes.remainder(Duration.minutesPerHour)} minutes",
                   style: Theme.of(context).textTheme.titleLarge,
                   textAlign: TextAlign.center),
               const Text(
@@ -187,17 +225,19 @@ class SleepCheckinState extends State<SleepCheckin> {
       )),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          await serviceLocator<SleepCheckinService>().add(data);
-          Navigator.of(context).pop();
-          scheduleSleepNotifications();
-          if (progress.allDone) {
-            // Set #18
-            await serviceLocator<NotificationService>().showContentReminder(
-                100 + 18 * 10 + 1,
-                "sleep_content",
-                "Daily sleep check-in",
-                "You did it! What's next for you?",
-                minHoursLater: 0);
+          if (validate(context)) {
+            await serviceLocator<SleepCheckinService>().add(data);
+            Navigator.of(context).pop();
+            scheduleSleepNotifications();
+            if (progress.allDone) {
+              // Set #18
+              await serviceLocator<NotificationService>().showContentReminder(
+                  100 + 18 * 10 + 1,
+                  "sleep_content",
+                  "Daily sleep check-in",
+                  "You did it! What's next for you?",
+                  minHoursLater: 0);
+            }
           }
         },
         tooltip: 'Done',

@@ -307,10 +307,11 @@ typedef TimePickerBlockOnChange = Function(TimeOfDay);
 
 class TimePickerBlock extends StatefulWidget {
   const TimePickerBlock(
-      {Key? key, required this.initialTime, required this.onChange})
+      {Key? key, required this.initialTime, this.time, required this.onChange})
       : super(key: key);
 
   final TimeOfDay initialTime;
+  final TimeOfDay? time;
   final TimePickerBlockOnChange onChange;
 
   @override
@@ -330,7 +331,7 @@ class TimePickerBlockState extends State<TimePickerBlock> {
     FocusScope.of(context).requestFocus(FocusNode());
     TimeOfDay? time = await showTimePicker(
       context: context,
-      initialTime: selectedTime,
+      initialTime: widget.time ?? selectedTime,
     );
     if (time != null) {
       setState(() {
@@ -343,7 +344,7 @@ class TimePickerBlockState extends State<TimePickerBlock> {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      child: Text(selectedTime.format(context),
+      child: Text((widget.time ?? selectedTime).format(context),
           textAlign: TextAlign.center,
           style: const TextStyle(
             fontWeight: FontWeight.w500,

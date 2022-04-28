@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Page;
 import 'package:hea/services/logging_service.dart';
@@ -326,7 +325,7 @@ Please do fill up the following survey form to let us know that you have complet
                 User user =
                     await serviceLocator<UserService>().getCurrentUser();
                 Uri uri =
-                    Uri.parse('https://2b0snealkkz.typeform.com/to/IMGRUIJt');
+                    Uri.parse('https://2b0snealkkz.typeform.com/to/a8UHkaNd');
                 if (kDebugMode) {
                   uri =
                       Uri.parse('https://2b0snealkkz.typeform.com/to/T7NdL2JC');

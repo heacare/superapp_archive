@@ -59,32 +59,59 @@ class HealthService {
     DateTime startDate = thisMorning.subtract(const Duration(hours: 12));
     DateTime endDate = DateTime.now();
     List<HealthDataPoint> healthData =
-        await health.getHealthDataFromTypes(startDate, endDate, types);
+        await health.getHealthDataFromTypes(startDate, endDate, [
+      HealthDataType.SLEEP_IN_BED,
+      HealthDataType.SLEEP_ASLEEP,
+    ]);
     DateTime? inBed;
     DateTime? asleep;
     DateTime? awake;
+
+    DateTime earliest(DateTime? a, DateTime b) {
+      if (a == null) {
+        return b;
+      }
+      if (a.isAfter(b)) {
+        return b;
+      }
+      return a;
+    }
+
+    DateTime latest(DateTime? a, DateTime b) {
+      if (a == null) {
+        return b;
+      }
+      if (a.isBefore(b)) {
+        return b;
+      }
+      return a;
+    }
+
     if (Platform.isIOS) {
       for (var data in healthData) {
         if (data.type == HealthDataType.SLEEP_IN_BED) {
-          awake = data.dateTo;
-          inBed = data.dateFrom;
-        }
-      }
-      for (var data in healthData) {
-        if (data.type == HealthDataType.SLEEP_ASLEEP) {
-          awake = data.dateTo;
-          asleep = data.dateFrom;
+          awake = latest(awake, data.dateTo);
+          inBed = earliest(inBed, data.dateFrom);
+        } else if (data.type == HealthDataType.SLEEP_ASLEEP) {
+          awake = latest(awake, data.dateTo);
+          inBed = earliest(inBed, data.dateFrom);
+          asleep = earliest(asleep, data.dateFrom);
         }
       }
     } else if (Platform.isAndroid) {
       for (var data in healthData) {
         if (data.type == HealthDataType.SLEEP_ASLEEP) {
-          awake = data.dateTo;
+          awake = latest(awake, data.dateTo);
           if (data.sourceName == "com.northcube.sleepcycle") {
-            inBed = data.dateFrom;
+            // SleepCycle has actual "asleep" data but only registers the time
+            // in bed with Google Fit
+            inBed = earliest(inBed, data.dateFrom);
           } else {
-            asleep = data.dateFrom;
+            asleep = earliest(asleep, data.dateFrom);
           }
+        } else if (data.type == HealthDataType.SLEEP_IN_BED) {
+          awake = latest(awake, data.dateTo);
+          inBed = earliest(inBed, data.dateFrom);
         }
       }
     }
