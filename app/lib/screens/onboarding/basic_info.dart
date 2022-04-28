@@ -120,7 +120,8 @@ class OnboardingBasicInfoScreenState extends State<OnboardingBasicInfoScreen> {
                           DateTimePicker(
                             type: DateTimePickerType.date,
                             dateLabelText: '19/02/1973',
-                            firstDate: DateTime(2000),
+                            firstDate: DateTime.now()
+                                .subtract(const Duration(years: 150)),
                             lastDate: DateTime.now(),
                             onChanged: (val) => setState(() {
                               birthdate = val;
