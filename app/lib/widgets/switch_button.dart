@@ -4,7 +4,7 @@ Color selectedColor = Colors.white;
 Color nonselectedColor = Colors.black;
 
 class SwitchButton extends StatefulWidget {
-  SwitchButton({Key? key, this.selected = false, required this.onChange})
+  const SwitchButton({Key? key, this.selected = false, required this.onChange})
       : super(key: key);
 
   final bool selected;
@@ -18,6 +18,7 @@ class SwitchButtonState extends State<SwitchButton> {
   Color aColor = selectedColor;
   Color bColor = nonselectedColor;
   double xAlign = 1.0;
+  bool selected = false;
 
   @override
   void initState() {
@@ -26,6 +27,7 @@ class SwitchButtonState extends State<SwitchButton> {
     xAlign = 1;
     aColor = selectedColor;
     bColor = nonselectedColor;
+    selected = widget.selected;
   }
 
   @override
@@ -33,7 +35,7 @@ class SwitchButtonState extends State<SwitchButton> {
     double width = MediaQuery.of(context).size.width;
     double height = 50.0;
 
-    if (widget.selected) {
+    if (selected) {
       xAlign = -1;
       aColor = selectedColor;
       bColor = nonselectedColor;
@@ -79,8 +81,8 @@ class SwitchButtonState extends State<SwitchButton> {
           GestureDetector(
             onTap: () {
               setState(() {
-                widget.selected = true;
-                widget.onChange(widget.selected);
+                selected = true;
+                widget.onChange(selected);
               });
             },
             child: Align(
@@ -103,8 +105,8 @@ class SwitchButtonState extends State<SwitchButton> {
           GestureDetector(
             onTap: () {
               setState(() {
-                widget.selected = false;
-                widget.onChange(widget.selected);
+                selected = false;
+                widget.onChange(selected);
               });
             },
             child: Align(
