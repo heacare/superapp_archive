@@ -79,6 +79,7 @@ class SleepCheckinProgress extends ChangeNotifier {
 }
 
 class SleepCheckinData {
+  DateTime time = DateTime.now();
   String didWindDown = "";
   List<String> didCalmActivities = [];
   String interruptions = "";
@@ -113,6 +114,7 @@ class SleepCheckinData {
   }
 
   toJson() => {
+        "time": time.toIso8601String(),
         "did-wind-down": didWindDown,
         "did-calm-activities": didCalmActivities,
         "interruptions": interruptions,
@@ -123,12 +125,16 @@ class SleepCheckinData {
         "time-out-bed":
             timeOutBed == null ? null : JTimeOfDay.from(timeOutBed!),
         "easy-wake": easyWake,
+        "stress-score": stressScore,
+        "diet-score": dietScore,
+        "exercise-score": exerciseScore,
       };
 
-  SleepCheckinData();
+  SleepCheckinData() : time = DateTime.now();
 
   factory SleepCheckinData.fromJson(Map<String, dynamic> data) {
     SleepCheckinData s = SleepCheckinData();
+    s.time = DateTime.parse(data["time"]);
     s.didWindDown = data["did-wind-down"];
     s.didCalmActivities = List.from(data["did-calm-activities"].map((s) => s));
     s.interruptions = data["interruptions"];
@@ -143,6 +149,9 @@ class SleepCheckinData {
         ? null
         : JTimeOfDay.fromJson(data["time-out-bed"]);
     s.easyWake = data["easy-wake"];
+    s.stressScore = data["stress-score"];
+    s.dietScore = data["diet-score"];
+    s.exerciseScore = data["exercise-score"];
     return s;
   }
 }
@@ -165,12 +174,10 @@ class SleepCheckinServiceImpl implements SleepCheckinService {
 
   @override
   Future<void> add(SleepCheckinData data) async {
-    Map<String, dynamic> log = {
-      "data": data.toJson(),
-      "previous-check-in": kvRead<String>("sleep", "last-check-in"),
-    };
-    await serviceLocator<LoggingService>().createLog("sleep-checkin", log);
     storageAppend(data);
+    List<SleepCheckinData> list = storageRead();
+    await serviceLocator<LoggingService>()
+        .createLog("sleep-checkin", list.map((d) => d.toJson()).toList());
     SleepCheckinProgress progress = getProgress();
     progress.addDay();
   }
@@ -196,6 +203,7 @@ class SleepCheckinServiceImpl implements SleepCheckinService {
       "reset": true,
     };
     serviceLocator<LoggingService>().createLog("sleep-checkin", log);
+    serviceLocator<SharedPreferences>().remove('checkin-sleep');
     SleepCheckinProgress progress = getProgress();
     progress.reset();
   }
