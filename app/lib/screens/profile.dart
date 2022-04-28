@@ -52,6 +52,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   SleepAutofill? sleep;
+  SleepAutofill? sleep30;
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +61,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     serviceLocator<HealthService>().autofillRead1Day().then((data) {
       setState(() {
         sleep = data;
+      });
+    });
+    serviceLocator<HealthService>().autofillRead30Day().then((data) {
+      setState(() {
+        sleep30 = data;
       });
     });
 
@@ -248,7 +254,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       }),
                   const SizedBox(height: 8.0),
                   Text(
-                      "In-bed: ${sleep?.inBed} Asleep: ${sleep?.asleep} Awake: ${sleep?.awake}"),
+                      "1 Day: In-bed: ${sleep?.inBed} Asleep: ${sleep?.asleep} Awake: ${sleep?.awake}"),
+                  Text(
+                      "30 Day: In-bed: ${sleep30?.inBed} Asleep: ${sleep30?.asleep} Awake: ${sleep30?.awake}"),
                 ])));
   }
 }
