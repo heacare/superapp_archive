@@ -68,6 +68,9 @@ class SleepCheckinState extends State<SleepCheckin> {
       DateTime lastNight =
           sleepAutofill.awake.subtract(const Duration(days: 1));
       String date = DateFormat.yMd().format(lastNight);
+      if (!mounted) {
+        return;
+      }
       setState(() {
         if (sleepAutofill.inBed != null) {
           data.timeGoBed = TimeOfDay.fromDateTime(sleepAutofill.inBed!);

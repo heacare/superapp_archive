@@ -128,6 +128,14 @@ class BasePage extends StatelessWidget {
           ? null
           : FloatingActionButton(
               onPressed: () {
+                if (hideNext) {
+                  // TODO: Ensure valid before moving to the next page. Because
+                  // the user can uncheck a select list and immediately press
+                  // the next button, they can bypass a page without completing
+                  // it, which can put the app in an undefined state. This is a
+                  // FAILED attempt to fix it.
+                  return;
+                }
                 Widget next = nextPage!();
                 String? s = sleep.rlookup(next.runtimeType);
                 debugPrint(s);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hea/utils/kv_wrap.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:hea/services/sleep_checkin_service.dart';
@@ -101,7 +102,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ])),
                           const AvatarIcon(),
                         ])))),
-        body: Padding(
+        body: SingleChildScrollView(
             padding: const EdgeInsets.all(30.0),
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -232,6 +233,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         onPressed: () {
                                           serviceLocator<SharedPreferences>()
                                               .remove('sleep');
+                                          Navigator.of(context).pop();
+                                        }),
+                                  ]);
+                            });
+                      }),
+                  const SizedBox(height: 8.0),
+                  GradientButton(
+                      text: "Disable daily check-in",
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                  title: const Text(
+                                      "Are you sure you want to disable daily check-ins?"),
+                                  actions: [
+                                    TextButton(
+                                        child: const Text("No"),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        }),
+                                    TextButton(
+                                        child: const Text("Yes"),
+                                        onPressed: () {
+                                          kvDelete(
+                                              "sleep", "diary-reminder-times");
                                           Navigator.of(context).pop();
                                         }),
                                   ]);
