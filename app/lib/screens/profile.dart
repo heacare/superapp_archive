@@ -23,6 +23,8 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  bool developerExpanded = false;
+
   Future logout() async {
     await serviceLocator<LoggingService>().createLog('logout', '');
     await serviceLocator<AuthService>().logout();
@@ -127,186 +129,212 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               SnackBar(content: Text(e.toString())));
                         }
                       }),
-                  const SizedBox(height: 8.0),
+                  const SizedBox(height: 32.0),
                   GradientButton(
-                      text: "Reset all content state",
+                      text:
+                          "${developerExpanded ? "Hide" : "Show"} developer options",
                       onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                  title: const Text(
-                                      "Are you sure you want to reset all content state?"),
-                                  actions: [
-                                    TextButton(
-                                        child: const Text("No"),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        }),
-                                    TextButton(
-                                        child: const Text("Yes"),
-                                        onPressed: () {
-                                          serviceLocator<SleepCheckinService>()
-                                              .reset();
-                                          serviceLocator<SharedPreferences>()
-                                              .remove('data-sleep');
-                                          serviceLocator<LoggingService>()
-                                              .createLog(
-                                                  "sleep", {"reset": true});
-                                          serviceLocator<SharedPreferences>()
-                                              .remove('sleep');
-                                          Navigator.of(context).pop();
-                                        }),
-                                  ]);
-                            });
+                        setState(() {
+                          developerExpanded = !developerExpanded;
+                        });
                       }),
-                  const SizedBox(height: 8.0),
-                  GradientButton(
-                      text: "Reset daily check-in",
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                  title: const Text(
-                                      "Are you sure you want to reset daily check-in?"),
-                                  actions: [
-                                    TextButton(
-                                        child: const Text("No"),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        }),
-                                    TextButton(
-                                        child: const Text("Yes"),
-                                        onPressed: () {
-                                          serviceLocator<SleepCheckinService>()
-                                              .reset();
-                                          Navigator.of(context).pop();
-                                        }),
-                                  ]);
-                            });
-                      }),
-                  const SizedBox(height: 8.0),
-                  GradientButton(
-                      text: "Skip 1 day of daily check-in",
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                  title: const Text(
-                                      "Are you sure you want to skip 1 day of daily check-in?"),
-                                  actions: [
-                                    TextButton(
-                                        child: const Text("No"),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        }),
-                                    TextButton(
-                                        child: const Text("Yes"),
-                                        onPressed: () {
-                                          serviceLocator<SleepCheckinService>()
-                                              .add(SleepCheckinData());
-                                          Navigator.of(context).pop();
-                                        }),
-                                  ]);
-                            });
-                      }),
-                  const SizedBox(height: 8.0),
-                  GradientButton(
-                      text: "Jump to start of content",
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                  title: const Text(
-                                      "Are you sure you want to jump to start of content?"),
-                                  actions: [
-                                    TextButton(
-                                        child: const Text("No"),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        }),
-                                    TextButton(
-                                        child: const Text("Yes"),
-                                        onPressed: () {
-                                          serviceLocator<SharedPreferences>()
-                                              .remove('sleep');
-                                          Navigator.of(context).pop();
-                                        }),
-                                  ]);
-                            });
-                      }),
-                  const SizedBox(height: 8.0),
-                  GradientButton(
-                      text: "Disable daily check-in",
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                  title: const Text(
-                                      "Are you sure you want to disable daily check-ins?"),
-                                  actions: [
-                                    TextButton(
-                                        child: const Text("No"),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        }),
-                                    TextButton(
-                                        child: const Text("Yes"),
-                                        onPressed: () {
-                                          kvDelete(
-                                              "sleep", "diary-reminder-times");
-                                          Navigator.of(context).pop();
-                                        }),
-                                  ]);
-                            });
-                      }),
-                  const SizedBox(height: 8.0),
-                  GradientButton(
-                      text: "Show autofill sleep data",
-                      onPressed: () async {
-                        var sleep = await serviceLocator<HealthService>()
-                            .autofillRead1Day();
-                        var sleep30 = await serviceLocator<HealthService>()
-                            .autofillRead30Day();
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                  title: const Text("Autofill sleep data"),
-                                  content: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text("1-day",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleLarge),
-                                        Text(
-                                            "In-bed: ${sleep?.inBed}\nAsleep: ${sleep?.asleep}\nAwake: ${sleep?.awake}"),
-                                        Text("30-day",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleLarge),
-                                        Text(
-                                            "In-bed: ${sleep30?.inBed}\nAsleep: ${sleep30?.asleep}\nAwake: ${sleep30?.awake}"),
-                                      ]),
-                                  actions: [
-                                    TextButton(
-                                        child: const Text("Close"),
-                                        onPressed: () {
-                                          serviceLocator<SleepCheckinService>()
-                                              .add(SleepCheckinData());
-                                          Navigator.of(context).pop();
-                                        }),
-                                  ]);
-                            });
-                      }),
-                  const SizedBox(height: 8.0),
+                  if (developerExpanded)
+                    Column(children: [
+                      const SizedBox(height: 8.0),
+                      GradientButton(
+                          text: "Reset all content state",
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                      title: const Text(
+                                          "Are you sure you want to reset all content state?"),
+                                      actions: [
+                                        TextButton(
+                                            child: const Text("No"),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            }),
+                                        TextButton(
+                                            child: const Text("Yes"),
+                                            onPressed: () {
+                                              serviceLocator<
+                                                      SleepCheckinService>()
+                                                  .reset();
+                                              serviceLocator<
+                                                      SharedPreferences>()
+                                                  .remove('data-sleep');
+                                              serviceLocator<LoggingService>()
+                                                  .createLog(
+                                                      "sleep", {"reset": true});
+                                              serviceLocator<
+                                                      SharedPreferences>()
+                                                  .remove('sleep');
+                                              Navigator.of(context).pop();
+                                            }),
+                                      ]);
+                                });
+                          }),
+                      const SizedBox(height: 8.0),
+                      GradientButton(
+                          text: "Reset daily check-in",
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                      title: const Text(
+                                          "Are you sure you want to reset daily check-in?"),
+                                      actions: [
+                                        TextButton(
+                                            child: const Text("No"),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            }),
+                                        TextButton(
+                                            child: const Text("Yes"),
+                                            onPressed: () {
+                                              serviceLocator<
+                                                      SleepCheckinService>()
+                                                  .reset();
+                                              Navigator.of(context).pop();
+                                            }),
+                                      ]);
+                                });
+                          }),
+                      const SizedBox(height: 8.0),
+                      GradientButton(
+                          text: "Skip 1 day of daily check-in",
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                      title: const Text(
+                                          "Are you sure you want to skip 1 day of daily check-in?"),
+                                      actions: [
+                                        TextButton(
+                                            child: const Text("No"),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            }),
+                                        TextButton(
+                                            child: const Text("Yes"),
+                                            onPressed: () {
+                                              var s = SleepCheckinData();
+                                              s.timeGoBed = TimeOfDay(
+                                                  hour: 23, minute: 59);
+                                              s.timeAsleepBed =
+                                                  TimeOfDay(hour: 0, minute: 0);
+                                              s.timeOutBed =
+                                                  TimeOfDay(hour: 0, minute: 1);
+                                              serviceLocator<
+                                                      SleepCheckinService>()
+                                                  .add(s);
+                                              Navigator.of(context).pop();
+                                            }),
+                                      ]);
+                                });
+                          }),
+                      const SizedBox(height: 8.0),
+                      GradientButton(
+                          text: "Jump to start of content",
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                      title: const Text(
+                                          "Are you sure you want to jump to start of content?"),
+                                      actions: [
+                                        TextButton(
+                                            child: const Text("No"),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            }),
+                                        TextButton(
+                                            child: const Text("Yes"),
+                                            onPressed: () {
+                                              serviceLocator<
+                                                      SharedPreferences>()
+                                                  .remove('sleep');
+                                              Navigator.of(context).pop();
+                                            }),
+                                      ]);
+                                });
+                          }),
+                      const SizedBox(height: 8.0),
+                      GradientButton(
+                          text: "Disable daily check-in",
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                      title: const Text(
+                                          "Are you sure you want to disable daily check-ins?"),
+                                      actions: [
+                                        TextButton(
+                                            child: const Text("No"),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            }),
+                                        TextButton(
+                                            child: const Text("Yes"),
+                                            onPressed: () {
+                                              kvDelete("sleep",
+                                                  "diary-reminder-times");
+                                              Navigator.of(context).pop();
+                                            }),
+                                      ]);
+                                });
+                          }),
+                      const SizedBox(height: 8.0),
+                      GradientButton(
+                          text: "Show autofill sleep data",
+                          onPressed: () async {
+                            var sleep = await serviceLocator<HealthService>()
+                                .autofillRead1Day();
+                            var sleep30 = await serviceLocator<HealthService>()
+                                .autofillRead30Day();
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                      title: const Text("Autofill sleep data"),
+                                      content: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text("1-day",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleLarge),
+                                            Text(
+                                                "In-bed: ${sleep?.inBed}\nAsleep: ${sleep?.asleep}\nAwake: ${sleep?.awake}"),
+                                            Text("30-day",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleLarge),
+                                            Text(
+                                                "In-bed: ${sleep30?.inBed}\nAsleep: ${sleep30?.asleep}\nAwake: ${sleep30?.awake}"),
+                                          ]),
+                                      actions: [
+                                        TextButton(
+                                            child: const Text("Close"),
+                                            onPressed: () {
+                                              serviceLocator<
+                                                      SleepCheckinService>()
+                                                  .add(SleepCheckinData());
+                                              Navigator.of(context).pop();
+                                            }),
+                                      ]);
+                                });
+                          }),
+                      const SizedBox(height: 8.0),
+                    ])
                 ])));
   }
 }

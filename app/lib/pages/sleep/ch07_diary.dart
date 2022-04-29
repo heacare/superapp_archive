@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart' hide Page;
+import 'package:markdown/markdown.dart' as md;
+import 'package:flutter_markdown/flutter_markdown.dart';
 
 import 'package:hea/widgets/page.dart';
 import 'package:hea/services/sleep_checkin_service.dart';
@@ -6,16 +8,11 @@ import 'package:hea/services/service_locator.dart';
 import 'ch06_routine.dart';
 import 'ch09_done.dart';
 
-class DiaryReminders extends TimePickerPage {
+class DiaryReminders extends MarkdownPage {
   DiaryReminders({Key? key}) : super(key: key);
 
   @override
-  final nextPage = () {
-    SleepCheckinProgress progress =
-        serviceLocator<SleepCheckinService>().getProgress();
-    progress.start();
-    return DiaryStart();
-  };
+  final nextPage = () => DiaryRemindersTime();
   @override
   final prevPage = () => RoutinePledge();
 
@@ -30,10 +27,32 @@ You had a taste of logging your sleep before starting the intervention. But why 
 
 Keeping a record of how you’re sleeping builds deeper awareness on factors influencing sleep quality. It may reveal patterns that explain sleeping problems and how it affects your waking hours. 
 
-Whether we meet our goals or not, knowing where we are with the help of a sleep diary can also help encourage progress. If you do not have sleep data that night or follow your bedtime routine at your set time, it’s okay! we never know what life has in store for us - just note what happened. 
+Whether we meet our goals or not, knowing where we are with the help of a sleep diary can also help encourage progress. If you do not have sleep data that night or follow your bedtime routine at your set time, **it’s okay! we never know what life has in store for us** - just note what happened. 
 
-You’ll receive reminders at your preferred time to log your sleep. 
+Continue to the next page to set your preferred reminder timings.
+""";
+}
 
+class DiaryRemindersTime extends TimePickerPage {
+  DiaryRemindersTime({Key? key}) : super(key: key);
+
+  @override
+  final nextPage = () {
+    SleepCheckinProgress progress =
+        serviceLocator<SleepCheckinService>().getProgress();
+    progress.start();
+    return DiaryStart();
+  };
+  @override
+  final prevPage = () => DiaryReminders();
+
+  @override
+  final title = "Log your sleep";
+  @override
+  final image = Image.asset("assets/images/sleep/ch07-brain-to-paper.webp");
+
+  @override
+  final markdown = """
 > Tip: The closer to your wake time, the more accurately you’ll remember how you slept.”
 
 **What time would you like us to remind you?**
@@ -48,6 +67,12 @@ You’ll receive reminders at your preferred time to log your sleep.
 class DiaryStart extends MarkdownPage {
   DiaryStart({Key? key}) : super(key: key);
 
+  bool canNext() {
+    SleepCheckinProgress progress =
+        serviceLocator<SleepCheckinService>().getProgress();
+    return progress.allDone;
+  }
+
   @override
   final nextPage = () {
     SleepCheckinProgress progress =
@@ -58,7 +83,7 @@ class DiaryStart extends MarkdownPage {
     return DiaryStart();
   };
   @override
-  final prevPage = () => DiaryReminders();
+  final prevPage = () => DiaryRemindersTime();
 
   @override
   final title = "Log your sleep";
@@ -71,4 +96,32 @@ Great! We'll check in with you before and after you sleep at your given times. S
 
 When you're done with 7 days of daily check-ins, come back here and continue the program.
 """;
+
+  @override
+  Widget buildPage(BuildContext context) {
+    final markdownStyleSheet = MarkdownStyleSheet(
+        p: Theme.of(context).textTheme.bodyText1,
+        h1: Theme.of(context).textTheme.headline3);
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          if (image != null) PageImage(image!),
+          if (image != null) const SizedBox(height: 4.0),
+          MarkdownBody(
+              data: markdown,
+              extensionSet: md.ExtensionSet.gitHubFlavored,
+              styleSheet: markdownStyleSheet),
+        ]);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BasePage(
+      title: title,
+      nextPage: nextPage,
+      prevPage: prevPage,
+      hideNext: !canNext(),
+      page: buildPage(context),
+    );
+  }
 }

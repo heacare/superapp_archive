@@ -46,8 +46,8 @@ class Done extends StatelessWidget {
     int baseline = sleepEfficiencyPercent;
 
     // Last 7 days
-    List<SleepCheckinData> list =
-        serviceLocator<SleepCheckinService>().storageRead().sublist(0, 7);
+    Iterable<SleepCheckinData> list =
+        serviceLocator<SleepCheckinService>().storageRead().take(7);
     double sleepEfficiencyWeek = 0;
     int days = 0;
     for (SleepCheckinData data in list) {
@@ -65,7 +65,11 @@ class Done extends StatelessWidget {
       sleepEfficiencyWeek += sleepDuration / bedDuration;
       days += 1;
     }
-    int weekAverage = ((sleepEfficiencyWeek / days) * 100).round();
+    double avg = (sleepEfficiencyWeek / days);
+    if (!avg.isFinite) {
+      avg = 0;
+    }
+    int weekAverage = (avg * 100).round();
 
     String changed = "remained the same";
     if (weekAverage < baseline) {
