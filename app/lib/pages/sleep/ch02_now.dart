@@ -270,7 +270,7 @@ class NowDifficultySleeping extends MultipleChoicePage {
   @override
   final title = "In the past month";
   @override
-  final image = null;
+  final image = Image.asset("assets/images/sleep/ch02-porucz-sleepy.webp");
 
   @override
   final markdown = """
@@ -322,7 +322,7 @@ class NowTroubleSleepingWakeUp extends MultipleChoicePage {
   @override
   final title = "Sleep disturbances";
   @override
-  final image = null;
+  final image = Image.asset("assets/images/sleep/ch02-insomnia-sleepy.webp");
 
   @override
   final markdown = """
@@ -355,7 +355,7 @@ class NowTroubleSleepingBathroom extends MultipleChoicePage {
   @override
   final title = "Sleep disturbances";
   @override
-  final image = null;
+  final image = Image.asset("assets/images/sleep/ch02-insomnia-sleepy.webp");
 
   @override
   final markdown = """
@@ -388,7 +388,7 @@ class NowTroubleSleepingBreath extends MultipleChoicePage {
   @override
   final title = "Sleep disturbances";
   @override
-  final image = null;
+  final image = Image.asset("assets/images/sleep/ch02-snoring-continues.webp");
 
   @override
   final markdown = """
@@ -421,7 +421,7 @@ class NowTroubleSleepingSnore extends MultipleChoicePage {
   @override
   final title = "Sleep disturbances";
   @override
-  final image = null;
+  final image = Image.asset("assets/images/sleep/ch02-snoring-continues.webp");
 
   @override
   final markdown = """
@@ -800,15 +800,15 @@ class NowScore extends Page {
     int subjectiveSleepQuality =
         int.tryParse(kvReadStringList("sleep", "overall-quality")[0]) ?? 0;
 
-	int fallAsleep = kvRead<int>("sleep", "sleep-latency") ?? 0;
-    int pointsFallAsleep =0;
-	if (fallAsleep > 60) {
-	pointsFallAsleep = 3;
-	} else if (fallAsleep > 30) {
-	pointsFallAsleep = 2;
-	} else if (fallAsleep > 15) {
-	pointsFallAsleep = 1;
-	}
+    int fallAsleep = kvRead<int>("sleep", "sleep-latency") ?? 0;
+    int pointsFallAsleep = 0;
+    if (fallAsleep > 60) {
+      pointsFallAsleep = 3;
+    } else if (fallAsleep > 30) {
+      pointsFallAsleep = 2;
+    } else if (fallAsleep > 15) {
+      pointsFallAsleep = 1;
+    }
     int howOftenAsleep30Minutes = int.tryParse(
             kvReadStringList("sleep", "how-often-asleep-30-minutes")[0]) ??
         0;
@@ -899,7 +899,7 @@ Wonderful work diving into your sleep. Here’s how your score adds up. We hope 
 | Sleep disturbances | $sleepDisturbances |
 | Sleep medication depedency | $sleepMedication |
 | Energy / Enthusiasm | $daytimeDysfunction |
-| Total Sleep Quality score | $overallScore |
+| **Total Sleep Quality score** | $overallScore |
 """,
               extensionSet: md.ExtensionSet.gitHubFlavored,
               styleSheet: markdownStyleSheet),

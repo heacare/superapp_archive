@@ -187,7 +187,7 @@ class GoalsEmbraceAndManifest extends Page {
       String prefix, List<String> items) {
     String what = items.join(", ");
     return MarkdownBody(
-        data: "**$prefix** $what.",
+        data: "$prefix **$what**.",
         extensionSet: md.ExtensionSet.gitHubFlavored,
         styleSheet: markdownStyleSheet);
   }

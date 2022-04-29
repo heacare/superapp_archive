@@ -269,9 +269,9 @@ Your body needs time to shift gears to prepare for sleep. The brain has to orche
 
 Let’s review how you’re currently sleeping:
 
-- Usually go to bed at: ${goBed.format(context)}
-- Usually get out of bed at: ${outBed.format(context)}
-- Average sleep duration: $sleepTimeText
+- Usually go to bed at: **${goBed.format(context)}**
+- Usually get out of bed at: **${outBed.format(context)}**
+- Average sleep duration: **$sleepTimeText**
 """,
               extensionSet: md.ExtensionSet.gitHubFlavored,
               styleSheet: markdownStyleSheet),
@@ -360,6 +360,13 @@ class RhythmSettingCourseState extends State<RhythmSettingCourse> {
     return "${sleepFor.inHours} hours ${sleepFor.inMinutes.remainder(Duration.minutesPerHour)} minutes";
   }
 
+  bool canNext() {
+    if (wakeTime == null || sleepTime == null) {
+      return false;
+    }
+    return true;
+  }
+
   Widget buildPage(BuildContext context) {
     final markdownStyleSheet = MarkdownStyleSheet(
         p: Theme.of(context).textTheme.bodyText1,
@@ -413,6 +420,7 @@ It starts with a calming wind-down routine, otherwise known as a bedtime routine
       title: widget.title,
       nextPage: widget.nextPage,
       prevPage: widget.prevPage,
+      hideNext: !canNext(),
       page: buildPage(context),
     );
   }
