@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
@@ -53,8 +55,8 @@ class _AppState extends State<App> {
   }
 
   ThemeData _getThemeData() {
-    const primaryColor = Color(0xFFE54A39);
-    const accentColor = Color(0xFFEF9F2F);
+    const primaryColor = Color(0xFFFA6E78);
+    const accentColor = Color(0xFFFD9D5C);
 
     const primaryTextColor = Color(0xFF414141);
     const secondaryTextColor = Color(0xFF707070);
@@ -190,7 +192,6 @@ class _AppState extends State<App> {
         authService.currentUserToken()?.then((token) => debugPrint(token));
         await serviceLocator<LoggingService>()
             .createLog('sleep', kvDump("sleep"));
-
         return await serviceLocator<UserService>().isCurrentUserOnboarded()
             ? UserStatus.onboarded
             : UserStatus.registered;
@@ -228,7 +229,11 @@ class _AppState extends State<App> {
     }
 
     if (snapshot.connectionState != ConnectionState.done) {
-      return const Text("Loading...");
+      return Scaffold(
+	  body: Container(
+		alignment: Alignment.center,
+		  child: const CircularProgressIndicator(),
+		  ));
     }
 
     if (snapshot.hasData) {

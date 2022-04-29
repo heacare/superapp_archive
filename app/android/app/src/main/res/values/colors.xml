@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Overall accent color for things like notification icons -->
-    <color name="accent">#e54a39</color>
+    <color name="accent">#fa6e78</color>
 </resources>

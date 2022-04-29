@@ -216,7 +216,7 @@ class NotificationService {
   }
 
   static Future<NotificationService> create() async {
-    const primaryColor = Color(0xFFE54A39);
+    const primaryColor = Color(0xFFFA6E78);
 
     AwesomeNotifications notifications = AwesomeNotifications();
     notifications.initialize(
