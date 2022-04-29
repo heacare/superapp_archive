@@ -160,7 +160,7 @@ abstract class RoutineCalmingActivities extends Page {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          if (image != null) image!,
+          if (image != null) PageImage(image!),
           if (image != null) const SizedBox(height: 4.0),
           MarkdownBody(
               data: markdown,
@@ -517,7 +517,7 @@ class RoutinePledgeState extends State<RoutinePledge> {
         page: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              if (widget.image != null) widget.image!,
+              if (widget.image != null) PageImage(widget.image!),
               if (widget.image != null) const SizedBox(height: 4.0),
               MarkdownBody(
                   data: """

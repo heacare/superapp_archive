@@ -180,6 +180,22 @@ abstract class Page extends StatelessWidget {
   }
 }
 
+class PageImage extends StatelessWidget {
+  final Widget child;
+  const PageImage(this.child);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        alignment: Alignment.topCenter,
+        child: Container(
+          constraints: const BoxConstraints(
+            maxHeight: 280,
+          ),
+          child: child,
+        ));
+  }
+}
+
 abstract class MarkdownPage extends Page {
   abstract final String markdown;
   abstract final Image? image;
@@ -194,7 +210,7 @@ abstract class MarkdownPage extends Page {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          if (image != null) image!,
+          if (image != null) PageImage(image!),
           if (image != null) const SizedBox(height: 4.0),
           MarkdownBody(
               data: markdown,
@@ -220,7 +236,7 @@ abstract class OpenEndedPage extends Page {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          if (image != null) image!,
+          if (image != null) PageImage(image!),
           if (image != null) const SizedBox(height: 4.0),
           if (markdown != "")
             MarkdownBody(
@@ -330,7 +346,7 @@ class MultipleChoicePageState extends State<MultipleChoicePage> {
         hideNext: hideNext,
         page: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
             Widget>[
-          if (widget.image != null) widget.image!,
+          if (widget.image != null) PageImage(widget.image!),
           if (widget.image != null) const SizedBox(height: 4.0),
           if (widget.markdown != "")
             MarkdownBody(
@@ -549,7 +565,7 @@ class TimePickerPageState extends State<TimePickerPage> {
           page: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                if (widget.image != null) widget.image!,
+                if (widget.image != null) PageImage(widget.image!),
                 if (widget.image != null) const SizedBox(height: 4.0),
                 if (widget.markdown != "")
                   MarkdownBody(
@@ -682,7 +698,7 @@ abstract class DurationPickerPage extends Page {
       return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            if (image != null) image!,
+            if (image != null) PageImage(image!),
             if (image != null) const SizedBox(height: 4.0),
             if (markdown != "")
               MarkdownBody(

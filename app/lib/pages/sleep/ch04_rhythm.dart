@@ -146,7 +146,7 @@ When in the day do you usually feel your best?
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          image,
+          PageImage(image),
           const SizedBox(height: 4.0),
           if (markdown != "")
             MarkdownBody(
@@ -183,7 +183,7 @@ When in the middle of your day do you feel least productive?
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          image,
+          PageImage(image),
           const SizedBox(height: 4.0),
           if (markdown != "")
             MarkdownBody(
@@ -220,7 +220,7 @@ When towards the end of your day you feel sleepy?
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          image,
+          PageImage(image),
           const SizedBox(height: 4.0),
           if (markdown != "")
             MarkdownBody(
@@ -261,7 +261,7 @@ class RhythmSettingCourseIntro extends Page {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          image,
+          PageImage(image),
           const SizedBox(height: 4.0),
           MarkdownBody(
               data: """
@@ -367,7 +367,7 @@ class RhythmSettingCourseState extends State<RhythmSettingCourse> {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          if (widget.image != null) widget.image!,
+          if (widget.image != null) PageImage(widget.image!),
           if (widget.image != null) const SizedBox(height: 4.0),
           MarkdownBody(
               data: """

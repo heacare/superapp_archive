@@ -193,7 +193,7 @@ class NowHowEfficientSleep extends Page {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          image,
+          PageImage(image),
           const SizedBox(height: 4.0),
           MarkdownBody(
               data: """
@@ -582,7 +582,7 @@ class NowOtherFactors extends Page {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          image,
+          PageImage(image),
           const SizedBox(height: 4.0),
           if (markdown != "")
             MarkdownBody(
@@ -856,7 +856,7 @@ class NowScore extends Page {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          if (image != null) image!,
+          if (image != null) PageImage(image!),
           if (image != null) const SizedBox(height: 4.0),
           Center(
             child: Text(

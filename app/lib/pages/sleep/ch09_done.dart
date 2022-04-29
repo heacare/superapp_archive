@@ -318,7 +318,7 @@ Please do fill up the following survey form to let us know that you have complet
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          if (image != null) image!,
+          if (image != null) PageImage(image!),
           if (image != null) const SizedBox(height: 4.0),
           MarkdownBody(
               data: markdown,

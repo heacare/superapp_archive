@@ -200,7 +200,7 @@ class GoalsEmbraceAndManifest extends Page {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          if (image != null) image!,
+          if (image != null) PageImage(image!),
           if (image != null) const SizedBox(height: 4.0),
           MarkdownBody(
               data: """
