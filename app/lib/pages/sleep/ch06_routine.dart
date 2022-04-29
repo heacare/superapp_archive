@@ -525,7 +525,7 @@ I'd like to **$goalsText**
 
 My desired sleep duration is **$goalsSleepDurationText**. If I'd like to wake up by **$goalsWakeTimeText**, I should be sleeping by **$goalsSleepTimeText**.
 
-I've identified $doingBeforeBedText as obstacles from reaching my goals.
+I've identified **$doingBeforeBedText** as obstacles from reaching my goals.
 """,
                   extensionSet: md.ExtensionSet.gitHubFlavored,
                   styleSheet: markdownStyleSheet),
@@ -555,7 +555,7 @@ String formatList(List<String> l) {
   String text = "";
   for (int i = 0; i < l.length; i++) {
     String item = l[i];
-    if (i == l.length - 1) {
+    if (l.length != 1 && i == l.length - 1) {
       text += " and ";
     } else if (i > 0) {
       text += ", ";

@@ -316,15 +316,14 @@ class RhythmSettingCourseState extends State<RhythmSettingCourse> {
         ]));
   }
 
+  @override
+  void initState() {
+    wakeTime = kvReadTimeOfDay("sleep", "goals-wake-time");
+    sleepTime = kvReadTimeOfDay("sleep", "goals-sleep-time");
+  }
+
   Widget buildTime(BuildContext context, String valueName,
-      TimeOfDay defaultTime, String prefix) {
-    TimeOfDay? initialTime = kvReadTimeOfDay("sleep", valueName);
-    if (valueName == "goals-wake-time") {
-      wakeTime = initialTime;
-    }
-    if (valueName == "goals-sleep-time") {
-      sleepTime = initialTime;
-    }
+      TimeOfDay defaultTime, TimeOfDay? initialTime, String prefix) {
     return Container(
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0.0),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -391,12 +390,14 @@ A key to forming successful habits is taking small do-able steps. For example, i
               context,
               "goals-wake-time",
               const TimeOfDay(hour: 0, minute: 0),
+              wakeTime,
               "I would like to wake up by"),
           const SizedBox(height: 4.0),
           buildTime(
               context,
               "goals-sleep-time",
               const TimeOfDay(hour: 0, minute: 0),
+              sleepTime,
               "This means I would need to sleep by"),
           const SizedBox(height: 4.0),
           MarkdownBody(
