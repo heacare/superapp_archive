@@ -19,6 +19,17 @@ class SleepAutofill {
         "awake": awake.toIso8601String(),
       };
 
+  int get sleepLatencyMinutes {
+    if (inBed == null || asleep == null) {
+      return 0;
+    }
+    return ((asleep!.minute + asleep!.hour * 60) -
+            (inBed!.minute + inBed!.hour * 60)) %
+        24 *
+        60;
+  }
+
+  @Deprecated("Use sleepLatencyMinutes instead")
   int get sleepMinutes {
     if (asleep == null) {
       return 0;

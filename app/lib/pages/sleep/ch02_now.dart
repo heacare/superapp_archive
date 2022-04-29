@@ -67,7 +67,7 @@ class NowTimeGoneBed extends TimePickerPage {
   }
 }
 
-class NowMinutesFallAsleep extends MultipleChoicePage {
+class NowMinutesFallAsleep extends DurationPickerPage {
   NowMinutesFallAsleep({Key? key}) : super(key: key);
 
   @override
@@ -86,18 +86,19 @@ How many minutes does it usually take you to fall asleep?
 """;
 
   @override
-  final maxChoice = 1;
+  final valueName = "sleep-latency";
   @override
-  final minSelected = 1;
+  final minutesOnly = true;
   @override
-  final valueName = "points-fall-asleep";
-  @override
-  final List<SelectListItem<String>> choices = [
-    SelectListItem(text: "15 minutes or less", value: "0"),
-    SelectListItem(text: "Between 16 minutes and 30 minutes", value: "1"),
-    SelectListItem(text: "Between 31 minutes and 60 minutes", value: "2"),
-    SelectListItem(text: "60 minutes or more", value: "3"),
-  ];
+  Future<int?> getInitialMinutes(Function(String) setAutofillMessage) async {
+    SleepAutofill? sleep =
+        await serviceLocator<HealthService>().autofillRead30Day();
+    if (sleep != null && sleep.sleepLatencyMinutes > 0) {
+      setAutofillMessage("Was autofilled using data from the last 30 days");
+      return sleep.sleepLatencyMinutes;
+    }
+    return null;
+  }
 }
 
 class NowTimeOutBed extends TimePickerPage {
@@ -132,7 +133,7 @@ class NowTimeOutBed extends TimePickerPage {
   }
 }
 
-class NowGetSleep extends DurationPickerPage {
+class NowGetSleep extends Page {
   NowGetSleep({Key? key}) : super(key: key);
 
   @override
@@ -142,26 +143,38 @@ class NowGetSleep extends DurationPickerPage {
 
   @override
   final title = "In the past month";
-  @override
-  final image = null;
 
   @override
-  final markdown = """
-On average, how many hours of sleep do you get at night?
-(*This differs from the number of hours you spend in bed.*)
-""";
+  Widget buildPage(BuildContext context) {
+    final markdownStyleSheet = MarkdownStyleSheet(
+        p: Theme.of(context).textTheme.bodyText1,
+        h1: Theme.of(context).textTheme.headline3);
 
-  @override
-  final valueName = "minutes-asleep";
-  @override
-  Future<int?> getInitialMinutes(Function(String) setAutofillMessage) async {
-    SleepAutofill? sleep =
-        await serviceLocator<HealthService>().autofillRead30Day();
-    if (sleep != null && sleep.sleepMinutes > 0) {
-      setAutofillMessage("Was autofilled using data from the last 30 days");
-      return sleep.sleepMinutes;
-    }
-    return null;
+    int sleepLatencyMinutes = kvRead<int>("sleep", "sleep-latency") ?? 0;
+    TimeOfDay goBed = kvReadTimeOfDay("sleep", "time-go-bed") ??
+        const TimeOfDay(hour: 0, minute: 0);
+    TimeOfDay outBed = kvReadTimeOfDay("sleep", "time-out-bed") ??
+        const TimeOfDay(hour: 0, minute: 0);
+    int bedDuration = ((outBed.minute + outBed.hour * 60) -
+            (goBed.minute + goBed.hour * 60)) %
+        (24 * 60);
+    int sleepTimeMinutes = bedDuration - sleepLatencyMinutes;
+    // There comes a point where the amount of hacks you use cause cascading
+    // blockades in development, and this is one of them.
+    kvWrite<int>("sleep", "minutes-asleep", sleepTimeMinutes);
+    Duration sleepTime = Duration(minutes: sleepTimeMinutes);
+    String sleepTimeText =
+        "${sleepTime.inHours} hours ${sleepTime.inMinutes.remainder(Duration.minutesPerHour)} minutes";
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          MarkdownBody(
+              data: """
+Based on what you've told us, on average in the past month, you got $sleepTimeText of sleep.
+""",
+              extensionSet: md.ExtensionSet.gitHubFlavored,
+              styleSheet: markdownStyleSheet),
+        ]);
   }
 }
 
@@ -787,8 +800,15 @@ class NowScore extends Page {
     int subjectiveSleepQuality =
         int.tryParse(kvReadStringList("sleep", "overall-quality")[0]) ?? 0;
 
-    int pointsFallAsleep =
-        int.tryParse(kvReadStringList("sleep", "points-fall-asleep")[0]) ?? 0;
+	int fallAsleep = kvRead<int>("sleep", "sleep-latency") ?? 0;
+    int pointsFallAsleep =0;
+	if (fallAsleep > 60) {
+	pointsFallAsleep = 3;
+	} else if (fallAsleep > 30) {
+	pointsFallAsleep = 2;
+	} else if (fallAsleep > 15) {
+	pointsFallAsleep = 1;
+	}
     int howOftenAsleep30Minutes = int.tryParse(
             kvReadStringList("sleep", "how-often-asleep-30-minutes")[0]) ??
         0;

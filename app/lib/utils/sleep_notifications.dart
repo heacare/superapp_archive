@@ -119,8 +119,15 @@ Future<void> scheduleSleepNotifications() async {
     int subjectiveSleepQuality =
         int.tryParse(kvReadStringList("sleep", "overall-quality")[0]) ?? 0;
 
-    int pointsFallAsleep =
-        int.tryParse(kvReadStringList("sleep", "points-fall-asleep")[0]) ?? 0;
+	int fallAsleep = kvRead<int>("sleep", "sleep-latency") ?? 0;
+    int pointsFallAsleep =0;
+	if (fallAsleep > 60) {
+	pointsFallAsleep = 3;
+	} else if (fallAsleep > 30) {
+	pointsFallAsleep = 2;
+	} else if (fallAsleep > 15) {
+	pointsFallAsleep = 1;
+	}
     int howOftenAsleep30Minutes = int.tryParse(
             kvReadStringList("sleep", "how-often-asleep-30-minutes")[0]) ??
         0;

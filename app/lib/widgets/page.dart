@@ -330,13 +330,17 @@ class MultipleChoicePageState extends State<MultipleChoicePage> {
       selected.add(otherItem!.value);
     }
     other = otherList.join(", ");
-    String notice = "";
+    List<String> notices = [];
     if (widget.maxChoice == 0) {
-      notice = "(Select all that apply)";
+      notices.add("Select all that apply");
     }
     if (widget.maxChoice > 1) {
-      notice = "(Select up to ${widget.maxChoice})";
+      notices.add("Select up to ${widget.maxChoice}");
     }
+    if (otherItem != null) {
+      notices.add('If "Other", please specify');
+    }
+    String notice = notices.join(". ");
     return BasePage(
         title: widget.title,
         nextPage: widget.hasNextPageStringList()
@@ -355,7 +359,7 @@ class MultipleChoicePageState extends State<MultipleChoicePage> {
                 styleSheet: markdownStyleSheet),
           if (widget.markdown != "") const SizedBox(height: 4.0),
           if (notice != "")
-            Text(notice, style: Theme.of(context).textTheme.labelSmall),
+            Text("($notice)", style: Theme.of(context).textTheme.labelSmall),
           SelectList(
               items: widget.choices,
               max: widget.maxChoice,
@@ -597,11 +601,15 @@ typedef DurationPickerBlockOnChange = Function(Duration);
 
 class DurationPickerBlock extends StatefulWidget {
   const DurationPickerBlock(
-      {Key? key, required this.initialDuration, required this.onChange})
+      {Key? key,
+      required this.initialDuration,
+      required this.onChange,
+      this.minutesOnly = false})
       : super(key: key);
 
   final Duration? initialDuration;
   final DurationPickerBlockOnChange onChange;
+  final bool minutesOnly;
 
   @override
   DurationPickerBlockState createState() => DurationPickerBlockState();
@@ -619,6 +627,29 @@ class DurationPickerBlockState extends State<DurationPickerBlock> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.minutesOnly) {
+      return Form(
+          key: _formKey,
+          child: Column(children: [
+            Row(children: [
+              SizedBox(
+                  width: 72.0,
+                  child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      textAlign: TextAlign.end,
+                      initialValue: (selectedDuration.inMinutes).toString(),
+                      onChanged: (String value) {
+                        int minutes = int.tryParse(value) ?? 0;
+                        setState(() {
+                          selectedDuration = Duration(minutes: minutes);
+                        });
+                        widget.onChange(selectedDuration);
+                      })),
+              const SizedBox(width: 4.0),
+              const Text('minutes'),
+            ]),
+          ]));
+    }
     return Form(
         key: _formKey,
         child: Column(children: [
@@ -673,6 +704,7 @@ abstract class DurationPickerPage extends Page {
   abstract final Image? image;
 
   abstract final String valueName;
+  abstract final bool minutesOnly;
 
   Future<int?> getInitialMinutes(Function(String) setAutofillMessage) async {
     return null;
@@ -708,6 +740,7 @@ abstract class DurationPickerPage extends Page {
             if (markdown != "") const SizedBox(height: 4.0),
             DurationPickerBlock(
                 initialDuration: initialDuration,
+                minutesOnly: minutesOnly,
                 onChange: (duration) =>
                     kvWrite("sleep", valueName, duration.inMinutes)),
             Text(autofillMessage,

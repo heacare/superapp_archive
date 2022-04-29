@@ -124,12 +124,10 @@ class IntroductionHowTrackSleep extends MultipleChoicePage {
   @override
   final markdown = """
 Which tool/device and model (if applicable) are you using to track your sleep and health during this program? 
-
-You can select more than one. If ‘Others’ please specify.
 """;
 
   @override
-  final maxChoice = 1;
+  final maxChoice = 0;
   @override
   final minSelected = 1;
   @override
