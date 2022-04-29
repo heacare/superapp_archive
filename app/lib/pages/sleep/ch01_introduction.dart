@@ -15,7 +15,7 @@ class IntroductionWelcome extends MarkdownPage {
   @override
   final title = "Welcome";
   @override
-  final image = null;
+  final image = Image.asset("assets/images/sleep/ch01-brain-buddies.webp");
 
   @override
   final markdown = """
@@ -24,6 +24,8 @@ Welcome to your first journey on Happily Ever After. We’re glad you’ve chose
 Good sleep is the foundation of life. It is an essential biological process that supports the optimal functioning of our body and well being.
 
 > As late Prof J. Allan Hobson so aptly puts it, “Sleep is of the brain, by the brain and for the brain.” 
+
+**Important**: This sleep intervention experience aims to help individuals build awareness and good habits around sleep. It is not a treatment for any sleep disorder. If you are not sure, please check with your doctor if you can take part.
 """;
 }
 
@@ -123,13 +125,13 @@ class IntroductionHowTrackSleep extends MultipleChoicePage {
 
   @override
   final markdown = """
-Which tool/device and model (if applicable) are you using to track your sleep and health during this program? 
+Which tools/devices are you using to track your sleep and health during this program? 
 """;
 
   @override
   final maxChoice = 0;
   @override
-  final minSelected = 1;
+  final minSelected = 0;
   @override
   final valueName = "tracking-tool";
   @override

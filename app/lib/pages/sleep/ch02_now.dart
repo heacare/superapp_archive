@@ -28,7 +28,7 @@ class NowFirstThingsFirst extends MarkdownPage {
   final markdown = """
 Before we begin our journey to better sleep, how have you been sleeping in the last 30 dayss?
 
-Let’s find out your sleep score. We will take you on a reflective process to help you become more aware of your own sleep. Your sleep score will be helpful to show how your sleep improves later. There are 20 questions in this process. Start by getting comfortable. If you need more time, pause and continue later. There’s no need to rush.
+Let’s find out your **sleep score**. We will take you on a reflective process to help you become more aware of your own sleep. Your sleep score will be helpful to show how your sleep improves later. There are 20 questions in this process. Start by getting comfortable. If you need more time, pause and continue later. There’s no need to rush.
 
 Let’s begin.
 """;

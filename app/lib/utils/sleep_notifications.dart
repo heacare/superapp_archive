@@ -435,7 +435,7 @@ Future<void> scheduleSleepNotifications() async {
         "Making your pledge",
         "We miss you ☹️.  If you need some help, feel free to contact us directly.",
         minHoursLater: firstReminder + nextReminder * 2);
-  } else if (s == "DiaryReminders") {
+  } else if (s == "DiaryReminders" || s == "DiaryRemindersTime") {
 // Set #16
     await serviceLocator<NotificationService>().showContentReminder(
         baseId + 16 * 10 + 1,
