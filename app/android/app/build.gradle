@@ -48,7 +48,6 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "care.hea.app"
         //minSdkVersion flutter.minSdkVersion
         minSdkVersion 21
@@ -68,8 +67,6 @@ android {
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.release
             // Configure proguard rules
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"

@@ -5,9 +5,9 @@ import 'package:hea/services/service_locator.dart';
 import 'package:hea/services/auth_service.dart';
 import 'api_endpoint.dart';
 
-// TODO Change to prod backend
-// Android emulator routes to localhost on 10.0.2.2
-const apiBaseUrl = "api.alpha.hea.care";
+// Set with flutter run ... --dart-define API_BASE=<addr>
+const apiBaseUrl =
+    String.fromEnvironment("API_BASE", defaultValue: "api.alpha.hea.care");
 
 class ApiManagerException implements Exception {
   final String message;
@@ -65,7 +65,6 @@ class ApiManager {
   }
 
   Uri _buildUri(String endpoint, {Map<String, String>? queryParams}) {
-    // TODO: HTTPS?
     return Uri.https(apiBaseUrl, endpoint, queryParams);
   }
 }

@@ -13,6 +13,7 @@ class AvatarIcon extends StatelessWidget {
         width: width ?? 60.0,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(radius ?? 20.0)),
+            boxShadow: kElevationToShadow[1],
             image: const DecorationImage(
                 image: AssetImage('assets/images/avatar.png'),
                 fit: BoxFit.cover)));

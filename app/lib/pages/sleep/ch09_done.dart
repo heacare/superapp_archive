@@ -309,7 +309,6 @@ Thank you so much for taking part in our pilot test. We’ll be checking-in with
 
 Please do fill up the following survey form to let us know that you have completed the program.
 """;
-// TODO: Embed the survey form
 
   @override
   Widget buildPage(BuildContext context) {

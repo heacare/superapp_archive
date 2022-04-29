@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- App Name -->
+    <string name="app_name">Happily Ever After</string>
     <!-- Firebase Messaging: Default notification channel ID -->
     <string name="default_notification_channel_id">service_updates</string>
 </resources>

@@ -405,7 +405,6 @@ It starts with a calming wind-down routine, otherwise known as a bedtime routine
               extensionSet: md.ExtensionSet.gitHubFlavored,
               styleSheet: markdownStyleSheet),
         ]);
-    // TODO: Read default responses
   }
 
   @override

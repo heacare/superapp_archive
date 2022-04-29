@@ -210,14 +210,15 @@ class _AppState extends State<App> {
                 theme: _getThemeData(),
                 // TODO design a loading page and a 'error' page
                 // Match Firebase initialization result
-                home: NotificationHandler(
-                    snapshot.connectionState == ConnectionState.done,
-                    AnnotatedRegion<SystemUiOverlayStyle>(
-                        value: SystemUiOverlayStyle.dark.copyWith(
-                          systemNavigationBarColor: const Color(0xFFFFFFFF),
-                          systemNavigationBarIconBrightness: Brightness.dark,
-                        ),
-                        child: mainScreen(snapshot))));
+                home: AnnotatedRegion<SystemUiOverlayStyle>(
+                    value: SystemUiOverlayStyle.dark.copyWith(
+                      systemNavigationBarColor: const Color(0xFFFFFFFF),
+                      systemNavigationBarIconBrightness: Brightness.dark,
+                      statusBarColor: const Color(0x40FFFFFF),
+                    ),
+                    child: NotificationHandler(
+                        snapshot.connectionState == ConnectionState.done,
+                        mainScreen(snapshot))));
           },
         ));
   }
@@ -230,10 +231,10 @@ class _AppState extends State<App> {
 
     if (snapshot.connectionState != ConnectionState.done) {
       return Scaffold(
-	  body: Container(
-		alignment: Alignment.center,
-		  child: const CircularProgressIndicator(),
-		  ));
+          body: Container(
+        alignment: Alignment.center,
+        child: const CircularProgressIndicator(),
+      ));
     }
 
     if (snapshot.hasData) {

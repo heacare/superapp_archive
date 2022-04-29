@@ -456,11 +456,18 @@ Future<void> scheduleSleepNotifications() async {
   TimeOfDay? routineReminderTimes =
       kvReadTimeOfDay("sleep", "routine-reminder-times");
   if (!s.startsWith("Done") && routineReminderTimes != null) {
+    String activities = "";
+    List<String> routine = kvReadStringList("sleep", "routine-add-60m") +
+        kvReadStringList("sleep", "routine-add-30m") +
+        kvReadStringList("sleep", "routine-add-15m");
+    if (routine.isNotEmpty) {
+      activities = " Your activities are " + routine.join(", ");
+    }
     await serviceLocator<NotificationService>().showSimpleReminder(
       baseId + 50 * 10 + 1,
       "sleep_reminders",
       "Wind-down reminder",
-      "Remember to wind-down before going to bed. Your activities are TODO",
+      "Remember to wind-down before going to bed.$activities",
       routineReminderTimes,
     );
   }

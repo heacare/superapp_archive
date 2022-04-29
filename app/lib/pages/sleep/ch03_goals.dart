@@ -231,8 +231,6 @@ Knowing and accepting where you are is the first step to making change.
   }
 }
 
-// TODO: Use OpenEndedPage
-
 class GoalsGettingThere extends MarkdownPage {
   GoalsGettingThere({Key? key}) : super(key: key);
 

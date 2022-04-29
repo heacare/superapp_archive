@@ -40,7 +40,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 })));
   }
 
-  // TODO
   Widget pageFor(num index) {
     Widget child;
     if (index == 0) {
