@@ -59,7 +59,8 @@ class NowTimeGoneBed extends TimePickerPage {
     SleepAutofill? sleep =
         await serviceLocator<HealthService>().autofillRead30Day();
     if (sleep != null && sleep.inBed != null) {
-      setAutofillMessage("Was autofilled using data from the last 30 days");
+      setAutofillMessage(
+          "For those connected to your health app, we’ve managed to pull some data from your device from the last 30 days. You may edit the fields if you don’t think the numbers are accurate. Sometimes our devices think they know us better than ourselves ;)");
       return TimeOfDay.fromDateTime(sleep.inBed!);
     }
     return null;
