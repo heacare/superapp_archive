@@ -53,8 +53,10 @@ jobs:
       - run: fastlane ios beta
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          MATCH_GIT_PRIVATE_KEY: ${{ secrets.CODE_SIGNING_REPO_SSH }}
-          CONNECT_API_KEY: ${{ secrets.CONNECT_API_KEY }}
+          MATCH_GIT_PRIVATE_KEY: ${{ secrets.MATCH_GIT_PRIVATE_KEY }}
+          APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY }}
+          APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
+          APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
       #- name: Upload IPA
       #  uses: actions/upload-artifact@v3
       #  with:
@@ -84,7 +86,9 @@ jobs:
           working-directory: hea/app
       - run: bundle exec fastlane ios beta_distribute
         env:
-          CONNECT_API_KEY: ${{ secrets.CONNECT_API_KEY }}
+          APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY }}
+          APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
+          APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
       - name: Update deployment status (success)
         uses: chrnorm/deployment-status@15b9298912c2b84635561a68d35c84d43e3d6c94
         with:
@@ -125,7 +129,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           repository: happilyeveraftercorp/code-signing
-          ssh-key: ${{ secrets.CODE_SIGNING_REPO_SSH }}
+          ssh-key: ${{ secrets.MATCH_GIT_PRIVATE_KEY }}
           path: code-signing
       - name: Configure keystore
         run: |
