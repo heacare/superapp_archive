@@ -54,8 +54,8 @@ platform :ios do
       scheme: "Runner",
     )
     api_key = app_store_connect_api_key(
-      key_id: "C47A4TCR5G",
-      issuer_id: "21c4a1c9-9d05-4413-b76d-10fca3021b3f",
+      key_id: ENV['CONNECT_API_KEY_ID'],
+      issuer_id: ENV['CONNECT_API_KEY_ISSUER'],
       key_content: ENV['CONNECT_API_KEY'],
     )
     upload_to_testflight(
@@ -69,8 +69,8 @@ platform :ios do
     version = YAML.load_file('../pubspec.yaml')["version"]
     version_name, _, build_number = version.rpartition("+")
     api_key = app_store_connect_api_key(
-      key_id: "C47A4TCR5G",
-      issuer_id: "21c4a1c9-9d05-4413-b76d-10fca3021b3f",
+      key_id: ENV['CONNECT_API_KEY_ID'],
+      issuer_id: ENV['CONNECT_API_KEY_ISSUER'],
       key_content: ENV['CONNECT_API_KEY'],
     )
     upload_to_testflight(
