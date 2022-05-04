@@ -6,4 +6,6 @@ groups:
   android: 'internal, pilot-test-1'
   ios: 'Pilot Test 1'
 feedback_email: headothealth@gmail.com
+marketing_url: https://hea.care
+privacy_policy_url: https://hea.care/privacy
 # vim: set et ts=2 sw=2:
