@@ -36,6 +36,8 @@
 	<string>We use your location data to help you find HEAlers</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>We use your location data to help you find HEAlers</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We use your location data to help you find HEAlers</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
