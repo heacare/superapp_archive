@@ -8,7 +8,7 @@ defaults:
   run:
     working-directory: hea/app
 env:
-  FLUTTER_VERSION: 2.10
+  FLUTTER_VERSION: "2.10"
 
 jobs:
   ios:
