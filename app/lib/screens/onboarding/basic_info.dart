@@ -1,5 +1,5 @@
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:date_time_picker/date_time_picker.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:country_picker/country_picker.dart';
 
 import 'package:flutter/foundation.dart';
@@ -182,8 +182,8 @@ class OnboardingBasicInfoScreenState extends State<OnboardingBasicInfoScreen> {
                                         labelText: "170cm",
                                         suffixText: "cm",
                                       ),
-                                      validator: FormBuilderValidators.numeric(
-                                          context),
+                                      validator:
+                                          FormBuilderValidators.numeric(),
                                       keyboardType: TextInputType.number)),
                               Expanded(
                                 child: Text("and",
@@ -203,8 +203,8 @@ class OnboardingBasicInfoScreenState extends State<OnboardingBasicInfoScreen> {
                                         labelText: "60kg",
                                         suffixText: "kg",
                                       ),
-                                      validator: FormBuilderValidators.numeric(
-                                          context),
+                                      validator:
+                                          FormBuilderValidators.numeric(),
                                       keyboardType: TextInputType.number)),
                             ],
                           ),
