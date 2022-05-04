@@ -35,7 +35,7 @@ dependencies:
 
   # Firebase
   firebase_core: ^1.14.1
-  firebase_auth: ^3.3.14
+  firebase_auth: ^3.3.17
   firebase_messaging: ^11.2.13
   # Notifications
   awesome_notifications: ^0.6.21
