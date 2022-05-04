@@ -5,7 +5,7 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
-    paths: ["**.yaml", "**.yml", "**.md", "**.json", "**.hbs", "**.js", "**.py"]
+    paths: ['**.yaml', '**.yml', '**.md', '**.json', '**.hbs', '**.js', '**.py']
 
 jobs:
   misc:
