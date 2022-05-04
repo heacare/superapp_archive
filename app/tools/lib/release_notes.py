@@ -1,8 +1,8 @@
 from pathlib import Path
 
 
-def changelog_write_beta(body: str):
-    path = Path("fastlane", "metadata-beta-changelog.txt")
+def release_notes_write_beta(body: str):
+    path = Path("fastlane", "metadata-beta-release-notes.txt")
     with open(path, "w") as f:
         f.write(body)
 

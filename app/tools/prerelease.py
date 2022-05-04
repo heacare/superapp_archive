@@ -3,13 +3,16 @@
 from lib.git import *
 from lib.version import *
 from lib.pubspec import *
-from lib.changelog import *
+from lib.release_notes import *
 
 
 git_ensure_status_clean()
-# Set changelog
-changelog = input("In past tense, describe the changes that have been made\nChangelog: ")
-changelog_write_beta(changelog)
+# Ensure pushed
+git_push(["main"])
+# Set release_notes
+print("In past tense, describe the changes that have been made")
+release_notes = input("Release notes: ")
+release_notes_write_beta(release_notes)
 # Increment build number
 version = Version(pubspec_read_version())
 print(f"Current version: {version}")
@@ -19,10 +22,7 @@ print(f"New version: {version}")
 input("Press enter to continue")
 pubspec_write_version(version)
 # Perform Git commit
-git_add([
-    "fastlane/metadata-beta-changelog.txt",
-    "pubspec.yaml"
-])
+git_add(["fastlane/metadata-beta-release_notes.txt", "pubspec.yaml"])
 git_commit(f"chore: Release {version}")
 # Perform Git tag
 tag = f"v{version}"

@@ -54,9 +54,7 @@ jobs:
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
           MATCH_GIT_PRIVATE_KEY: ${{ secrets.MATCH_GIT_PRIVATE_KEY }}
-          APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY }}
-          APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
-          APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
+          APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
       #- name: Upload IPA
       #  uses: actions/upload-artifact@v3
       #  with:
@@ -75,6 +73,7 @@ jobs:
   ios-distribute:
     runs-on: ubuntu-latest
     needs: [ios]
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v2
         with:
@@ -86,9 +85,7 @@ jobs:
           working-directory: hea/app
       - run: bundle exec fastlane ios beta_distribute
         env:
-          APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY }}
-          APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
-          APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
+          APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
       - name: Update deployment status (success)
         uses: chrnorm/deployment-status@15b9298912c2b84635561a68d35c84d43e3d6c94
         with:
