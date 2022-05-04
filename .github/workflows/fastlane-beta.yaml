@@ -14,22 +14,9 @@ jobs:
   ios:
     #runs-on: macos-latest
     runs-on: [self-hosted, macos-latest]
-    outputs:
-      deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+    environment:
+      name: android-beta
     steps:
-      - name: Create deployment
-        uses: chrnorm/deployment-action@9fea95f56f4cd87321ff4ec22dea1ffaaed2c902
-        id: deployment
-        with:
-          token: "${{ github.token }}"
-          environment: ios-beta
-      - name: Update deployment status (in_progress)
-        uses: chrnorm/deployment-status@15b9298912c2b84635561a68d35c84d43e3d6c94
-        with:
-          token: ${{ github.token }}
-          state: in_progress
-          target_url: ${{ github.server_url }}/${{ github.repository }}/runs/${{ github.run_id }}?check_suite_focus=true
-          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
       - uses: subosito/flutter-action@d8687e6979e8ef66d2b2970e2c92c1d8e801d7bf
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
@@ -61,46 +48,18 @@ jobs:
       #    name: ios
       #    path: hea/app/Runner.ipa
       #    retention-days: 30
-      - name: Update deployment status (failure)
-        uses: chrnorm/deployment-status@15b9298912c2b84635561a68d35c84d43e3d6c94
-        with:
-          token: ${{ github.token }}
-          state: failure
-          target_url: ${{ github.server_url }}/${{ github.repository }}/runs/${{ github.run_id }}?check_suite_focus=true
-          deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-        if: ${{ failure() }}
-
-  ios-distribute:
-    runs-on: ubuntu-latest
-    needs: [ios]
-    timeout-minutes: 30
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          path: hea
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 3.1
-          bundler-cache: true
-          working-directory: hea/app
-      - run: bundle exec fastlane ios beta_distribute
+      # The following step can take up to 40 minutes to succeed. Be careful
+      # when using GitHub-hosted runners as they cost 10 build minutes per
+      # minute of runtime. This will consume around 300 build minutes per iOS
+      # build, which roughly sums up to $3 per iOS build.
+      # If and when switching back to GitHub-hosted runners, please consider
+      # cutting build minutes in half by using `ubuntu-latest` to run the
+      # following step. That will cost significantly less money per build. See
+      # the version of this workflow in 5e61b1fc5685cc172b1a985b0688132e87c12a1d
+      # for a sample on how to do that. It also helps set Deployment statuses.
+      - run: fastlane ios beta_distribute
         env:
           APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
-      - name: Update deployment status (success)
-        uses: chrnorm/deployment-status@15b9298912c2b84635561a68d35c84d43e3d6c94
-        with:
-          token: ${{ github.token }}
-          state: success
-          target_url: ${{ github.server_url }}/${{ github.repository }}/runs/${{ github.run_id }}?check_suite_focus=true
-          deployment_id: ${{ needs.ios.outputs.deployment_id }}
-      - name: Update deployment status (failure)
-        uses: chrnorm/deployment-status@15b9298912c2b84635561a68d35c84d43e3d6c94
-        with:
-          token: ${{ github.token }}
-          state: failure
-          target_url: ${{ github.server_url }}/${{ github.repository }}/runs/${{ github.run_id }}?check_suite_focus=true
-          deployment_id: ${{ needs.ios.outputs.deployment_id }}
-        if: ${{ failure() }}
 
   android:
     runs-on: ubuntu-latest
