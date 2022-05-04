@@ -1,4 +1,5 @@
-## fastlane documentation
+fastlane documentation
+----
 
 # Installation
 
@@ -62,7 +63,8 @@ Push a new beta build to TestFlight
 
 Distribute the TestFlight beta build
 
----
+----
+
 
 ## Android
 
@@ -82,7 +84,7 @@ Push a new beta build to Firebase
 
 Deploy a new version to the Google Play
 
----
+----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.
 
