@@ -1,0 +1,42 @@
+name: format-code
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    paths: ['**.yaml', '**.yml', '**.md', '**.json', '**.py']
+
+jobs:
+  misc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+      - uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Format yaml, md, json
+        uses: actionsx/prettier@3de869a32607c555c4d8f367228691f6e141d37a
+        with:
+          args: --config backend/.prettierrc --write '**/*.yaml' '**/*.yml' '**/*.md' '**/*.json'
+      - name: Format app/tools app/*.py
+        working-directory: app/tools
+        run: |
+          pip install -r requirements.txt
+          black .
+          black ../*.py
+      - name: Commit changes if any
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "action@github.com"
+          if output=$(git status --porcelain) && [ ! -z "$output" ]; then
+            git commit -m "style: Automatic code formatting" -a
+            git push
+          fi
+
+# vim: set et ts=2 sw=2:

@@ -1,12 +1,12 @@
 from re import findall
 from pathlib import Path
 
-for m in Path('lib', 'pages').iterdir():
-    imports = ['package:hea/widgets/page.dart']
+for m in Path("lib", "pages").iterdir():
+    imports = ["package:hea/widgets/page.dart"]
     pagedefs = []
 
     for chapter in sorted(m.iterdir()):
-        if 'lookup' in chapter.name:
+        if "lookup" in chapter.name:
             continue
         imports.append(chapter.name)
         with open(chapter, "r") as f:
@@ -44,22 +44,28 @@ for m in Path('lib', 'pages').iterdir():
                     prevPage.append(line)
                     if "};" in line:
                         prevPage = "".join(prevPage)
-                if (line.startswith("class ") and "State<" not in line) or (line.startswith("Widget") and "Page(" in line):
+                if (line.startswith("class ") and "State<" not in line) or (
+                    line.startswith("Widget") and "Page(" in line
+                ):
                     if name is not None:
-                        pagedefs.append((
-                            name,
-                            nextPage,
-                            prevPage,
-                        ))
+                        pagedefs.append(
+                            (
+                                name,
+                                nextPage,
+                                prevPage,
+                            )
+                        )
                     name = line.split(" ")[1]
                     name = name.split("(")[0]
                     nextPage = None
                     prevPage = None
-            pagedefs.append((
-                name,
-                nextPage,
-                prevPage,
-            ))
+            pagedefs.append(
+                (
+                    name,
+                    nextPage,
+                    prevPage,
+                )
+            )
 
     lookup = []
     for item in imports:
@@ -99,7 +105,6 @@ for m in Path('lib', 'pages').iterdir():
     # For sleep_notifications.dart
     for item, nextPage, prevPage in pagedefs:
         print(f's == "{item}" ||')
-
 
 
 # vim: set et ts=4 sw=4:

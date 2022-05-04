@@ -5,10 +5,10 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
-    paths: ["app/**"]
+    paths: ['app/**']
 
 env:
-  FLUTTER_VERSION: "2.10"
+  FLUTTER_VERSION: '2.10'
 
 jobs:
   lint:
@@ -17,7 +17,7 @@ jobs:
       - uses: subosito/flutter-action@d8687e6979e8ef66d2b2970e2c92c1d8e801d7bf
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
-          channel: "stable"
+          channel: 'stable'
           cache: true
       - uses: actions/checkout@v3
       - name: Set up problem matcher
@@ -39,7 +39,7 @@ jobs:
       - uses: subosito/flutter-action@d8687e6979e8ef66d2b2970e2c92c1d8e801d7bf
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
-          channel: "stable"
+          channel: 'stable'
           cache: true
       - uses: actions/checkout@v3
       - name: Set up problem matcher

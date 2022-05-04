@@ -2,13 +2,13 @@ name: fastlane-beta
 
 on:
   push:
-    tags: ["v*"]
+    tags: ['v*']
 
 defaults:
   run:
     working-directory: hea/app
 env:
-  FLUTTER_VERSION: "2.10"
+  FLUTTER_VERSION: '2.10'
 
 jobs:
   ios:
@@ -20,7 +20,7 @@ jobs:
       - uses: subosito/flutter-action@d8687e6979e8ef66d2b2970e2c92c1d8e801d7bf
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
-          channel: "stable"
+          channel: 'stable'
           cache: true
       - uses: actions/checkout@v3
         with:
@@ -71,7 +71,7 @@ jobs:
       - uses: subosito/flutter-action@d8687e6979e8ef66d2b2970e2c92c1d8e801d7bf
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
-          channel: "stable"
+          channel: 'stable'
           cache: true
       - uses: actions/checkout@v3
         with:
