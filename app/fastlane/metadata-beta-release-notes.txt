@@ -1,1 +1,1 @@
-Improved the deployment process
+Improved the app deployment process

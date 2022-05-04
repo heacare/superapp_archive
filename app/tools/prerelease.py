@@ -22,7 +22,7 @@ print(f"New version: {version}")
 input("Press enter to continue")
 pubspec_write_version(version)
 # Perform Git commit
-git_add(["fastlane/metadata-beta-release_notes.txt", "pubspec.yaml"])
+git_add(["fastlane/metadata-beta-release-notes.txt", "pubspec.yaml"])
 git_commit(f"chore: Release {version}")
 # Perform Git tag
 tag = f"v{version}"
