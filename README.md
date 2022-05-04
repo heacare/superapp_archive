@@ -1,7 +1,9 @@
 # Happily Ever After
 
+[![format-code](https://github.com/happilyeveraftercorp/hea/actions/workflows/format-code.yaml/badge.svg)](https://github.com/happilyeveraftercorp/hea/actions/workflows/format-code.yaml)
 [![backend](https://github.com/happilyeveraftercorp/hea/actions/workflows/backend.yaml/badge.svg)](https://github.com/happilyeveraftercorp/hea/actions/workflows/backend.yaml)
 [![app](https://github.com/happilyeveraftercorp/hea/actions/workflows/app.yaml/badge.svg)](https://github.com/happilyeveraftercorp/hea/actions/workflows/app.yaml)
+[![app-build](https://github.com/happilyeveraftercorp/hea/actions/workflows/app-build.yaml/badge.svg)](https://github.com/happilyeveraftercorp/hea/actions/workflows/app-build.yaml)
 [![fastlane-beta](https://github.com/happilyeveraftercorp/hea/actions/workflows/fastlane-beta.yaml/badge.svg)](https://github.com/happilyeveraftercorp/hea/actions/workflows/fastlane-beta.yaml)
 
 ## Developing (App)
