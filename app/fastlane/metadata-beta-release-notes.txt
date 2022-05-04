@@ -1,1 +1,1 @@
-Improved the app deployment process
+Invisible bugfixes and upgrades

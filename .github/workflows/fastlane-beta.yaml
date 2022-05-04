@@ -15,7 +15,7 @@ jobs:
     #runs-on: macos-latest
     runs-on: [self-hosted, macos-latest]
     environment:
-      name: android-beta
+      name: ios-beta
     steps:
       - uses: subosito/flutter-action@d8687e6979e8ef66d2b2970e2c92c1d8e801d7bf
         with:
