@@ -68,7 +68,7 @@ jobs:
           lcov-file: app/coverage/lcov.info
           filter-changed-files: true
           delete-old-comments: true
-        if: ${{ github.event_name == 'pull_request' }}
+        if: ${{ github.event_name == 'pull_request' && github.actor != 'dependabot[bot]' }}
       - name: Comment code coverage (Commit)
         uses: romeovs/lcov-reporter-action@dda1c9b1fa1622b225e9acd87a248751dbcc6ada
         with:
