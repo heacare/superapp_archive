@@ -22,7 +22,7 @@ jobs:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: "stable"
           cache: true
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           path: hea
       - uses: actions/cache@v3
@@ -73,7 +73,7 @@ jobs:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: "stable"
           cache: true
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           path: hea
       - uses: actions/cache@v3
@@ -82,7 +82,7 @@ jobs:
           key: ${{ runner.os }}-flutter-${{ hashFiles('hea/app/**/pubspec.lock') }}
           restore-keys: |
             ${{ runner.os }}-flutter-
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: happilyeveraftercorp/code-signing
           ssh-key: ${{ secrets.MATCH_GIT_PRIVATE_KEY }}
