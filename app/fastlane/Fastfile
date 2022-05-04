@@ -93,7 +93,7 @@ platform :ios do
       },
       localized_build_info: {
         "default": {
-          whats_new: metadata_beta["task"] + "\n\n" + metadata_beta_changelog,
+          whats_new: metadata_beta["task"] + "\nRelease notes:\n" + metadata_beta_changelog,
         },
       },
     )
@@ -110,7 +110,7 @@ platform :android do
       app: "1:825250749124:android:721cb5ab745db555090791",
       android_artifact_path: "build/app/outputs/flutter-apk/app-release.apk",
       groups: metadata_beta["groups"]["android"],
-      release_notes: metadata_beta["task"] + "\n\n" + metadata_beta_changelog,
+      release_notes: metadata_beta["task"] + "\nRelease notes:\n" + metadata_beta_changelog,
     )
   end
 
