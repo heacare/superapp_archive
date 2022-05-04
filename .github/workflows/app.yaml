@@ -8,7 +8,7 @@ on:
     paths: ['app/**']
 
 env:
-  FLUTTER_VERSION: '2.10.5'
+  FLUTTER_VERSION: '2.10'
 
 jobs:
   lint:

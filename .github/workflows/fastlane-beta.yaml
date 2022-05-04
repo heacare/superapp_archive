@@ -8,11 +8,10 @@ defaults:
   run:
     working-directory: hea/app
 env:
-  FLUTTER_VERSION: '2.10.5'
+  FLUTTER_VERSION: '2.10'
 
 jobs:
   ios:
-    #runs-on: macos-latest
     runs-on: [self-hosted, macos-latest]
     environment:
       name: ios-beta

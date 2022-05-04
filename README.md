@@ -92,6 +92,20 @@ flutter run --device-id DEVICE_ID
 flutter devices
 ```
 
+### Adding Flutter dependencies
+
+```
+flutter pub add NAME
+```
+
+Even on Linux, you might need to update Podfile.lock by installing CocoaPods
+and running `pod update`:
+
+```
+gem install cocoapods
+cd ios; pod update; cd ..
+```
+
 ### Managing code-signing certificates
 
 To synchronise the list of development devices, run:

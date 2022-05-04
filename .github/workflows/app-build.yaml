@@ -1,0 +1,43 @@
+name: app-build
+
+on:
+  push:
+    branches: [main]
+    paths: ['app/ios/**', 'app/android/**', 'app/podspec.*', 'app/fastlane']
+  workflow_dispatch:
+
+env:
+  FLUTTER_VERSION: '2.10'
+
+jobs:
+  both:
+    runs-on: [self-hosted, macos-latest]
+    steps:
+      - uses: subosito/flutter-action@d8687e6979e8ef66d2b2970e2c92c1d8e801d7bf
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: 'stable'
+          cache: true
+      - uses: actions/checkout@v3
+        with:
+          path: hea
+      - uses: actions/cache@v3
+        with:
+          path: ${{ env.PUB_CACHE }}
+          key: ${{ runner.os }}-flutter-${{ hashFiles('hea/app/**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-flutter-
+      - uses: actions/cache@v3
+        with:
+          path: hea/app/ios/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('hea/app/**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+      - run: flutter pub get
+        working-directory: app
+      - run: flutter build ios --profile --no-codesign
+      # If and when switching back to GitHub-hosted runners, please move the
+      # following step to a new `ubuntu-latest` step. See fastlane-beta.yaml
+      - run: flutter build apk --profile
+
+# vim: set et ts=2 sw=2:
