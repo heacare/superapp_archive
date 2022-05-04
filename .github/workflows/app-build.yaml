@@ -3,11 +3,14 @@ name: app-build
 on:
   push:
     branches: [main]
-    paths: ['app/ios/**', 'app/android/**', 'app/podspec.*', 'app/fastlane']
+    paths: ["app/ios/**", "app/android/**", "app/podspec.*", "app/fastlane"]
   workflow_dispatch:
 
+defaults:
+  run:
+    working-directory: hea/app
 env:
-  FLUTTER_VERSION: '2.10'
+  FLUTTER_VERSION: "2.10"
 
 jobs:
   both:
@@ -16,7 +19,7 @@ jobs:
       - uses: subosito/flutter-action@d8687e6979e8ef66d2b2970e2c92c1d8e801d7bf
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
-          channel: 'stable'
+          channel: "stable"
           cache: true
       - uses: actions/checkout@v3
         with:
@@ -39,5 +42,4 @@ jobs:
       # If and when switching back to GitHub-hosted runners, please move the
       # following step to a new `ubuntu-latest` step. See fastlane-beta.yaml
       - run: flutter build apk --profile
-
 # vim: set et ts=2 sw=2:
