@@ -17,6 +17,9 @@ require 'yaml'
 
 default_platform(:ios)
 
+metadata_beta = YAML.load_file('metadata-beta.yaml')
+metadata_beta_changelog = File.open('metadata-beta-changelog.txt').read
+
 platform :ios do
   desc "Pull code-signing certificates for development"
   lane :development_pull do
@@ -78,8 +81,21 @@ platform :ios do
       app_platform: 'ios',
       distribute_only: true,
       build_number: build_number,
-      # The API key does not allow setting changelogs
-      #changelog: "We don't have changelogs yet",
+      distribute_external: true,
+      groups: metadata_beta["groups"]["ios"],
+      localized_app_info: {
+        "default": {
+          feedback_email: metadata_beta["feedback_email"],
+          marketing_url: metadata_beta["marketing_url"],
+          privacy_policy_url: metadata_beta["privacy_policy_url"],
+          description: metadata_beta["description"],
+        },
+      },
+      localized_build_info: {
+        "default": {
+          whats_new: metadata_beta["task"] + "\n\n" + metadata_beta_changelog,
+        },
+      },
     )
   end
 end
@@ -93,8 +109,8 @@ platform :android do
     firebase_app_distribution(
       app: "1:825250749124:android:721cb5ab745db555090791",
       android_artifact_path: "build/app/outputs/flutter-apk/app-release.apk",
-      groups: "automatic",
-      #release_notes: "",
+      groups: metadata_beta["groups"]["android"],
+      release_notes: metadata_beta["task"] + "\n\n" + metadata_beta_changelog,
     )
   end
 

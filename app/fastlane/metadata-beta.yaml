@@ -1,0 +1,10 @@
+description: |
+  Happily Ever After helps you live a healthier life by keeping good habits and removing bad ones. We're starting off with a sleep program to help you learn about and adopt good sleeping habits. Feel free to reach out to us if you have help or feedback as you go.
+task: |
+  Help us test our sleep program by using the app. You can jump right in once you have it installed. We'll keep in touch with you as you progress. Let us know if you need any help or have feedback as you go.
+groups:
+  android: "internal, pilot-test-1"
+  ios: "Pilot Test 1"
+feedback_email: headothealth@gmail.com
+
+# vim: set et ts=2 sw=2:

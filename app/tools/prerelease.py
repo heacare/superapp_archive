@@ -3,9 +3,13 @@
 from lib.git import *
 from lib.version import *
 from lib.pubspec import *
+from lib.changelog import *
 
 
 git_ensure_status_clean()
+# Set changelog
+changelog = input("In past tense, describe the changes that have been made\nChangelog: ")
+changelog_write_beta(changelog)
 # Increment build number
 version = Version(pubspec_read_version())
 print(f"Current version: {version}")
