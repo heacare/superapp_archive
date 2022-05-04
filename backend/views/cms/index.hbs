@@ -15,7 +15,9 @@
       </form>
       <ul id='results'>
         {{#each results}}
-          <li><a href="/cms/preview/{{id}}"><code>{{id}}</code></a> - {{#each properties}}{{#each title}}{{text.content}}{{/each}}{{/each}}</li>
+          <li><a href='/cms/preview/{{id}}'><code>{{id}}</code></a>
+            -
+            {{#each properties}}{{#each title}}{{text.content}}{{/each}}{{/each}}</li>
         {{/each}}
       </ul>
     {{else}}
