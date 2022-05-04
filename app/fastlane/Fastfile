@@ -68,6 +68,8 @@ platform :ios do
     upload_to_testflight(
       app_platform: 'ios',
       distribute_only: true,
+	  reject_build_waiting_for_review: false,
+	  submit_beta_review: false,
       build_number: build_number,
       distribute_external: true,
       groups: metadata_beta["groups"]["ios"],
