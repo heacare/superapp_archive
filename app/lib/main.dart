@@ -218,7 +218,7 @@ class _AppState extends State<App> {
                     ),
                     child: NotificationHandler(
                         snapshot.connectionState == ConnectionState.done,
-                        mainScreen(snapshot))));
+                        LifecycleHandler(mainScreen(snapshot)))));
           },
         ));
   }
@@ -283,5 +283,47 @@ class NotificationHandler extends StatelessWidget {
       scheduleSleepNotifications();
     }
     return child;
+  }
+}
+
+class LifecycleHandler extends StatefulWidget {
+  const LifecycleHandler(this.child, {Key? key}) : super(key: key);
+
+  final Widget child;
+
+  @override
+  State<LifecycleHandler> createState() => LifecycleHandlerState();
+}
+
+class LifecycleHandlerState extends State<LifecycleHandler>
+    with WidgetsBindingObserver {
+  AppLifecycleState lastState = AppLifecycleState.detached;
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.child;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance!.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (lastState == state) {
+      return;
+    }
+    lastState = state;
+    bool active = state == AppLifecycleState.resumed ||
+        state == AppLifecycleState.inactive;
+    serviceLocator<LoggingService>().createLog("state", active);
   }
 }
