@@ -1,10 +1,12 @@
 import 'dart:io';
 import 'dart:math';
+import 'dart:async';
 import 'package:flutter/material.dart' show TimeOfDay;
 import 'package:health/health.dart';
 
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/services/logging_service.dart';
+import 'package:hea/services/auth_service.dart';
 
 class SleepAutofill {
   final DateTime? inBed;
@@ -44,6 +46,13 @@ class SleepAutofill {
 class HealthService {
   final HealthFactory health = HealthFactory();
 
+  HealthService() {
+    log60Days();
+    Timer.periodic(const Duration(hours: 4), (timer) {
+      log60Days();
+    });
+  }
+
   // Define the types to get
   final List<HealthDataType> types = [
     //HealthDataType.WEIGHT,
@@ -71,6 +80,10 @@ class HealthService {
   }
 
   Future<void> log60Days() async {
+    var user = serviceLocator<AuthService>().currentUser();
+    if (user == null) {
+      return;
+    }
     List<HealthDataPoint> healthData = await get60Days();
     await serviceLocator<LoggingService>()
         .createLog('past-health-data', healthData);
