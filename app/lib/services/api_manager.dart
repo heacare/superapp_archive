@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/services/auth_service.dart';
-import 'api_endpoint.dart';
+import 'package:hea/services/api_endpoint.dart';
 
 // Set with flutter run ... --dart-define API_BASE=<addr>
 const apiBaseUrl =
