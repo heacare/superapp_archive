@@ -1,16 +1,16 @@
-name: backend
+name: dashboard
 
 on:
   push:
     branches: [main]
-    paths: ['backend/**']
+    paths: ['dashboard/**']
   pull_request:
     branches: [main]
-    paths: ['backend/**']
+    paths: ['dashboard/**']
 
 defaults:
   run:
-    working-directory: backend
+    working-directory: dashboard
 
 jobs:
   lint:
@@ -30,36 +30,7 @@ jobs:
       - name: Install npm dependencies
         run: npm ci --prefer-offline --no-audit
       - name: Lint check
-        run: npm run ci-lint
-      - name: Format check
-        run: npm run ci-format
-
-  build:
-    runs-on: ubuntu-latest
-    if: ${{ github.actor != 'dependabot[bot]' }}
-    strategy:
-      matrix:
-        node-version: [17.x]
-    steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-          cache-dependency-path: '**/package-lock.json'
-      - name: Install npm dependencies
-        run: npm ci --prefer-offline --no-audit
-      - name: Build
-        run: npm run build
-      - name: Generate OpenAPI Definitions
-        run: npm run ci-gen-openapi
-      - name: Upload OpenAPI Definitions
-        uses: actions/upload-artifact@v2
-        with:
-          name: openapi.json
-          path: backend/openapi.json
-          if-no-files-found: error
+        run: npm run lint
 
   test:
     runs-on: ubuntu-latest
@@ -75,9 +46,8 @@ jobs:
           cache: 'npm'
           cache-dependency-path: '**/package-lock.json'
       - name: Install npm dependencies
-        run: npm ci
-      - name: Build
-        run: npm run build
+        run: npm ci --prefer-offline --no-audit
       - name: Run tests
         run: npm run test
+
 # vim: set et ts=2 sw=2:

@@ -3,6 +3,7 @@ name: format-code
 on:
   push:
     branches: [main]
+    paths: ['**.yaml', '**.yml', '**.md', '**.json', '**.hbs', '**.js', '**.py']
   pull_request:
     branches: [main]
     paths: ['**.yaml', '**.yml', '**.md', '**.json', '**.hbs', '**.js', '**.py']
