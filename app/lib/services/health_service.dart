@@ -47,9 +47,25 @@ class HealthService {
   final HealthFactory health = HealthFactory();
 
   HealthService() {
-    log60Days();
-    Timer.periodic(const Duration(hours: 4), (timer) {
-      log60Days();
+    Timer(const Duration(seconds: 1), () async {
+      var user = serviceLocator<AuthService>().currentUser();
+      if (user == null) {
+        return;
+      }
+      if (!await serviceLocator<HealthService>().request()) {
+        return;
+      }
+      await log60Days();
+    });
+    Timer.periodic(const Duration(hours: 4), (timer) async {
+      var user = serviceLocator<AuthService>().currentUser();
+      if (user == null) {
+        return;
+      }
+      if (!await serviceLocator<HealthService>().request()) {
+        return;
+      }
+      await log60Days();
     });
   }
 
@@ -80,10 +96,6 @@ class HealthService {
   }
 
   Future<void> log60Days() async {
-    var user = serviceLocator<AuthService>().currentUser();
-    if (user == null) {
-      return;
-    }
     List<HealthDataPoint> healthData = await get60Days();
     await serviceLocator<LoggingService>()
         .createLog('past-health-data', healthData);

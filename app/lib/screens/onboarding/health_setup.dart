@@ -38,6 +38,7 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
     }
 
     _healthDataList = await serviceLocator<HealthService>().get60Days();
+    serviceLocator<HealthService>().log60Days();
 
     setState(() => _state = AppState.DATA_READY);
 
