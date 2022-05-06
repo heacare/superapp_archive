@@ -627,6 +627,8 @@ class DurationPickerBlockState extends State<DurationPickerBlock> {
 
   @override
   Widget build(BuildContext context) {
+    selectedDuration = widget.initialDuration ?? const Duration();
+    debugPrint("selected:" + selectedDuration.toString());
     if (widget.minutesOnly) {
       return Form(
           key: _formKey,
@@ -635,7 +637,7 @@ class DurationPickerBlockState extends State<DurationPickerBlock> {
               SizedBox(
                   width: 72.0,
                   child: TextFormField(
-                      keyboardType: TextInputType.number,
+                      key: Key(selectedDuration.toString()),
                       textAlign: TextAlign.end,
                       initialValue: (selectedDuration.inMinutes).toString(),
                       onChanged: (String value) {
@@ -657,7 +659,7 @@ class DurationPickerBlockState extends State<DurationPickerBlock> {
             SizedBox(
                 width: 72.0,
                 child: TextFormField(
-                    keyboardType: TextInputType.number,
+                    key: Key(selectedDuration.toString()),
                     textAlign: TextAlign.end,
                     initialValue: (selectedDuration.inHours).toString(),
                     onChanged: (String value) {
@@ -679,7 +681,7 @@ class DurationPickerBlockState extends State<DurationPickerBlock> {
             SizedBox(
                 width: 72.0,
                 child: TextFormField(
-                    keyboardType: TextInputType.number,
+                    key: Key(selectedDuration.toString()),
                     textAlign: TextAlign.end,
                     initialValue: (selectedDuration.inMinutes
                             .remainder(Duration.minutesPerHour))
@@ -717,15 +719,17 @@ abstract class DurationPickerPage extends Page {
     final markdownStyleSheet = MarkdownStyleSheet(
         p: Theme.of(context).textTheme.bodyText1,
         h1: Theme.of(context).textTheme.headline3);
-    int? duration = kvReadInt("sleep", valueName);
-    Duration? initialDuration =
-        duration == null ? null : Duration(minutes: duration);
+    int? durationMinutes = kvReadInt("sleep", valueName);
+    Duration? duration =
+        durationMinutes == null ? null : Duration(minutes: durationMinutes);
     String autofillMessage = "";
     return FutureBuilder<int?>(future: getInitialMinutes((s) {
       autofillMessage = s;
     }), builder: (context, snapshot) {
       if (duration == null && snapshot.data != null) {
-        initialDuration = Duration(minutes: snapshot.data!);
+        duration = Duration(minutes: snapshot.data!);
+        debugPrint("read:" + duration.toString());
+        kvWrite("sleep", valueName, duration!.inMinutes);
       }
       return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -739,10 +743,12 @@ abstract class DurationPickerPage extends Page {
                   styleSheet: markdownStyleSheet),
             if (markdown != "") const SizedBox(height: 4.0),
             DurationPickerBlock(
-                initialDuration: initialDuration,
+                initialDuration: duration,
                 minutesOnly: minutesOnly,
-                onChange: (duration) =>
-                    kvWrite("sleep", valueName, duration.inMinutes)),
+                onChange: (duration) {
+                  debugPrint("set:" + duration.toString());
+                  kvWrite("sleep", valueName, duration.inMinutes);
+                }),
             Text(autofillMessage,
                 style: Theme.of(context)
                     .textTheme

@@ -37,9 +37,15 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     try {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Row(children: [
+        const CircularProgressIndicator(),
+        Text("Logging in...")
+      ])));
       await _auth.login(_email.text, _password.text);
       // Get new JWT Token and create user in backend if necessary
       await serviceLocator<ApiManager>().fetchJwtToken();
+      ScaffoldMessenger.of(context).clearSnackBars();
       // Redirect to correct page
       await navigateSuccess();
     } on AuthServiceException catch (e) {
@@ -54,9 +60,15 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     try {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Row(children: [
+        const CircularProgressIndicator(),
+        Text("Logging in...")
+      ])));
       await _auth.signup(_email.text, _password.text);
       // Get new JWT Token and create user in backend if necessary
       await serviceLocator<ApiManager>().fetchJwtToken();
+      ScaffoldMessenger.of(context).clearSnackBars();
       // Redirect to correct page
       await navigateSuccess();
     } on AuthServiceException catch (e) {
