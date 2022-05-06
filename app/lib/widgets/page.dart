@@ -556,6 +556,7 @@ class TimePickerPageState extends State<TimePickerPage> {
     return FutureBuilder<TimeOfDay?>(future: widget.getInitialTime((s) {
       autofillMessage = s;
     }), builder: (context, snapshot) {
+      bool wasEdited = time != snapshot.data && time != null;
       if (time == null && snapshot.data != null) {
         time = snapshot.data;
         kvWriteTimeOfDay("sleep", widget.valueName, time!);
@@ -587,7 +588,7 @@ class TimePickerPageState extends State<TimePickerPage> {
                       });
                       kvWriteTimeOfDay("sleep", widget.valueName, time);
                     }),
-                Text(autofillMessage,
+                Text(!wasEdited ? autofillMessage : "",
                     style: Theme.of(context)
                         .textTheme
                         .bodyMedium!
@@ -726,6 +727,7 @@ abstract class DurationPickerPage extends Page {
     return FutureBuilder<int?>(future: getInitialMinutes((s) {
       autofillMessage = s;
     }), builder: (context, snapshot) {
+      bool wasEdited = duration?.inMinutes != snapshot.data && duration != null;
       if (duration == null && snapshot.data != null) {
         duration = Duration(minutes: snapshot.data!);
         debugPrint("read:" + duration.toString());
@@ -749,7 +751,7 @@ abstract class DurationPickerPage extends Page {
                   debugPrint("set:" + duration.toString());
                   kvWrite("sleep", valueName, duration.inMinutes);
                 }),
-            Text(autofillMessage,
+            Text(!wasEdited ? autofillMessage : "",
                 style: Theme.of(context)
                     .textTheme
                     .bodyMedium!
