@@ -12,13 +12,16 @@ class SleepAutofill {
   final DateTime? inBed;
   final DateTime? asleep;
   final DateTime awake;
+  final DateTime? outBed;
 
-  const SleepAutofill({required this.inBed, this.asleep, required this.awake});
+  const SleepAutofill(
+      {required this.inBed, this.asleep, required this.awake, this.outBed});
 
   toJson() => {
         "in-bed": inBed?.toIso8601String(),
         "asleep": asleep?.toIso8601String(),
         "awake": awake.toIso8601String(),
+        "out-bed": outBed?.toIso8601String(),
       };
 
   int get sleepLatencyMinutes {
@@ -125,30 +128,28 @@ class HealthService {
     DateTime? inBed;
     DateTime? asleep;
     DateTime? awake;
+    DateTime? outBed;
 
     for (var data in healthData) {
       if (Platform.isIOS) {
         if (data.type == HealthDataType.SLEEP_IN_BED) {
-          awake = latest(awake, data.dateTo);
           inBed = earliest(inBed, data.dateFrom);
+          outBed = latest(outBed, data.dateTo);
         } else if (data.type == HealthDataType.SLEEP_ASLEEP) {
-          awake = latest(awake, data.dateTo);
           inBed = earliest(inBed, data.dateFrom);
           asleep = earliest(asleep, data.dateFrom);
+          awake = latest(awake, data.dateTo);
+          outBed = latest(outBed, data.dateTo);
         }
       } else if (Platform.isAndroid) {
-        if (data.type == HealthDataType.SLEEP_ASLEEP) {
-          awake = latest(awake, data.dateTo);
-          if (data.sourceName == "com.northcube.sleepcycle") {
-            // SleepCycle has actual "asleep" data but only registers the time
-            // in bed with Google Fit
-            inBed = earliest(inBed, data.dateFrom);
-          } else {
-            asleep = earliest(asleep, data.dateFrom);
-          }
-        } else if (data.type == HealthDataType.SLEEP_IN_BED) {
-          awake = latest(awake, data.dateTo);
+        if (data.type == HealthDataType.SLEEP_IN_BED) {
           inBed = earliest(inBed, data.dateFrom);
+          outBed = latest(outBed, data.dateTo);
+        } else if (data.type == HealthDataType.SLEEP_ASLEEP) {
+          inBed = earliest(inBed, data.dateFrom);
+          asleep = earliest(asleep, data.dateFrom);
+          awake = latest(awake, data.dateTo);
+          outBed = latest(outBed, data.dateTo);
         }
       }
     }
@@ -159,6 +160,7 @@ class HealthService {
       inBed: inBed,
       asleep: asleep,
       awake: awake,
+	  outBed: outBed,
     );
   }
 
