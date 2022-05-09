@@ -62,7 +62,7 @@ class OwningRoutineActivities1 extends MultipleChoicePage {
   final prevPage = () => OwningZeitgebers();
 
   @override
-  final title = "Existing routine";
+  final title = "Current routine 30 minutes before bedtime";
   @override
   final image = null;
 
@@ -72,7 +72,7 @@ What do you usually do, up to an hour before bedtime could contribute to forming
 
 Select the activities that you usually do before bed under each time section accordingly.
 
-1 hour before bedtime, I usually find myself:
+**1 hour before bedtime, I usually find myself:**
 """;
 
   @override
@@ -94,17 +94,13 @@ class OwningRoutineActivities2 extends MultipleChoicePage {
   final prevPage = () => OwningRoutineActivities1();
 
   @override
-  final title = "Existing routine";
+  final title = "Current routine 30 minutes before bedtime";
   @override
   final image = null;
 
   @override
   final markdown = """
-What do you usually do, up to an hour before bedtime could contribute to forming your bedtime routine and affect your quality of sleep.
-
-Select the activities that you usually do before bed under each time section accordingly.
-
-30 minutes before bedtime, I usually find myself:
+**30 minutes before bedtime, I usually find myself:**
 """;
 
   @override
@@ -126,17 +122,13 @@ class OwningRoutineActivities3 extends MultipleChoicePage {
   final prevPage = () => OwningRoutineActivities2();
 
   @override
-  final title = "Existing routine";
+  final title = "Current routine 15 minutes before bedtime";
   @override
   final image = null;
 
   @override
   final markdown = """
-What do you usually do, up to an hour before bedtime could contribute to forming your bedtime routine and affect your quality of sleep.
-
-Select the activities that you usually do before bed under each time section accordingly.
-
-15 minutes before bedtime, I usually find myself:
+**15 minutes before bedtime, I usually find myself:**
 """;
 
   @override

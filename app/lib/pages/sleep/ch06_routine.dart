@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart' hide Page;
+import 'package:flutter/painting.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_markdown/flutter_markdown.dart';
 
@@ -56,7 +57,7 @@ class RoutineActivities extends MultipleChoicePage {
   RoutineActivities({Key? key}) : super(key: key);
 
   @override
-  final nextPage = () => RoutineCalmingActivities1();
+  final nextPage = () => RoutineCalmingActivitiesIntro();
   @override
   final prevPage = () => RoutineIntro();
 
@@ -168,8 +169,11 @@ abstract class RoutineCalmingActivities extends Page {
               styleSheet: markdownStyleSheet),
           const SizedBox(height: 8.0),
           Text(
-            "I'd like to remove these",
-            style: Theme.of(context).textTheme.bodyLarge,
+            "Instead of",
+            style: Theme.of(context)
+                .textTheme
+                .bodyLarge!
+                .copyWith(fontWeight: FontWeight.bold),
           ),
           SelectList(
               items: selectedActivities,
@@ -180,8 +184,11 @@ abstract class RoutineCalmingActivities extends Page {
               }),
           const SizedBox(height: 8.0),
           Text(
-            "I'd like to add these",
-            style: Theme.of(context).textTheme.bodyLarge,
+            "I choose to do:",
+            style: Theme.of(context)
+                .textTheme
+                .bodyLarge!
+                .copyWith(fontWeight: FontWeight.bold),
           ),
           SelectList(
               items: selectedCalmActivities,
@@ -194,16 +201,35 @@ abstract class RoutineCalmingActivities extends Page {
   }
 }
 
+class RoutineCalmingActivitiesIntro extends MarkdownPage {
+  RoutineCalmingActivitiesIntro({Key? key}) : super(key: key);
+
+  @override
+  final nextPage = () => RoutineCalmingActivities1();
+  @override
+  final prevPage = () => RoutineActivities();
+
+  @override
+  final title = "Create bedtime routine";
+  @override
+  final image = Image.asset("assets/images/sleep/ch06-time-to-wind-down.webp");
+
+  @override
+  final markdown = """
+Routine is a habit. You make your habits and your habits make you. Let’s see how you can remove/swap activating items for more calming ones.
+""";
+}
+
 class RoutineCalmingActivities1 extends RoutineCalmingActivities {
   RoutineCalmingActivities1({Key? key}) : super(key: key);
 
   @override
   final nextPage = () => RoutineCalmingActivities2();
   @override
-  final prevPage = () => RoutineActivities();
+  final prevPage = () => RoutineCalmingActivitiesIntro();
 
   @override
-  final title = "Activity: Winding down for the day";
+  final title = "1 hour before bedtime";
 
   @override
   final image = null;
@@ -218,11 +244,7 @@ class RoutineCalmingActivities1 extends RoutineCalmingActivities {
   final valueNameAdd = "routine-add-60m";
 
   @override
-  final markdown = """
-Routine is a habit. You make your habits and your habits make you. Let’s see how you can remove/swap activating items for more calming ones.
-
-**1 hour before bedtime**
-""";
+  final markdown = "";
 }
 
 class RoutineCalmingActivities2 extends RoutineCalmingActivities {
@@ -234,7 +256,7 @@ class RoutineCalmingActivities2 extends RoutineCalmingActivities {
   final prevPage = () => RoutineCalmingActivities1();
 
   @override
-  final title = "Activity: Winding down for the day";
+  final title = "30 minutes before bedtime";
 
   @override
   final image = null;
@@ -249,11 +271,7 @@ class RoutineCalmingActivities2 extends RoutineCalmingActivities {
   final valueNameAdd = "routine-add-30m";
 
   @override
-  final markdown = """
-Routine is a habit. You make your habits and your habits make you. Let’s see how you can remove/swap activating items for more calming ones.
-
-**30 minutes before bedtime**
-""";
+  final markdown = "";
 }
 
 class RoutineCalmingActivities3 extends RoutineCalmingActivities {
@@ -265,7 +283,7 @@ class RoutineCalmingActivities3 extends RoutineCalmingActivities {
   final prevPage = () => RoutineCalmingActivities2();
 
   @override
-  final title = "Activity: Winding down for the day";
+  final title = "15 minutes before bedtime";
 
   @override
   final image = null;
@@ -280,11 +298,7 @@ class RoutineCalmingActivities3 extends RoutineCalmingActivities {
   final valueNameAdd = "routine-add-15m";
 
   @override
-  final markdown = """
-Routine is a habit. You make your habits and your habits make you. Let’s see how you can remove/swap activating items for more calming ones.
-
-**15 minutes before bedtime**
-""";
+  final markdown = "";
 }
 
 class RoutineCalmingActivitiesNote extends MarkdownPage {

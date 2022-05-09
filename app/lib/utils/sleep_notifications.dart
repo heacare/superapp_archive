@@ -351,7 +351,8 @@ Future<void> scheduleSleepNotifications() async {
         "Understanding why",
         "We miss you ☹️.  If you need some help, feel free to contact us directly.",
         minHoursLater: firstReminder + nextReminder * 2);
-  } else if (s == "RoutineCalmingActivities1" ||
+  } else if (s == "RoutineCalmingActivitiesIntro" ||
+      s == "RoutineCalmingActivities1" ||
       s == "RoutineCalmingActivities2" ||
       s == "RoutineCalmingActivities3" ||
       s == "RoutineCalmingActivitiesNote") {
