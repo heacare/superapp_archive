@@ -313,13 +313,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     .textTheme
                                                     .titleLarge),
                                             Text(
-                                                "In-bed: ${sleep?.inBed}\nAsleep: ${sleep?.asleep}\nAwake: ${sleep?.awake}"),
+                                                "In-bed: ${sleep?.inBed}\nAsleep: ${sleep?.asleep}\nAwake: ${sleep?.awake}\nOut-bed: ${sleep?.outBed}"),
                                             Text("30-day",
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .titleLarge),
                                             Text(
-                                                "In-bed: ${sleep30?.inBed}\nAsleep: ${sleep30?.asleep}\nAwake: ${sleep30?.awake}"),
+                                                "In-bed: ${sleep30?.inBed}\nAsleep: ${sleep30?.asleep}\nAwake: ${sleep30?.awake}\nOut-bed: ${sleep30?.outBed}"),
                                           ]),
                                       actions: [
                                         TextButton(

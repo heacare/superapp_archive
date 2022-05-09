@@ -24,6 +24,7 @@ class SleepCheckinState extends State<SleepCheckin> {
   String? autofillMessageGoBed;
   String? autofillMessageAsleepBed;
   String? autofillMessage;
+  String? autofillMessageSleepDuration;
 
   bool validate(BuildContext context) {
     if (data.didWindDown == "") {
@@ -52,13 +53,8 @@ class SleepCheckinState extends State<SleepCheckin> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    List<SelectListItem<String>> selectedCalmActivities =
-        kvReadStringList("sleep", "included-activities")
-            .map((s) => SelectListItem(text: s, value: s))
-            .toList();
-    SleepCheckinProgress progress =
-        serviceLocator<SleepCheckinService>().getProgress();
+  void initState() {
+    super.initState();
     () async {
       SleepAutofill? sleepAutofill =
           await serviceLocator<HealthService>().autofillRead1Day();
@@ -69,6 +65,7 @@ class SleepCheckinState extends State<SleepCheckin> {
       if (!mounted) {
         return;
       }
+      debugPrint("${sleepAutofill.sleepMinutes}");
       setState(() {
         if (sleepAutofill.inBed != null) {
           data.timeGoBed = TimeOfDay.fromDateTime(sleepAutofill.inBed!);
@@ -86,9 +83,26 @@ class SleepCheckinState extends State<SleepCheckin> {
         }
         data.timeOutBed = TimeOfDay.fromDateTime(sleepAutofill.awake);
         autofillMessage =
-            "Data has been autofilled from your sleep that ended on $date";
+            "Data has been autofilled from your last sleep that ended on $date";
+        if (sleepAutofill.sleepMinutes > 0) {
+          data.sleepDuration = Duration(minutes: sleepAutofill.sleepMinutes);
+          autofillMessageSleepDuration =
+              "Data has been autofilled from your last sleep that ended on $date";
+        } else {
+          autofillMessageSleepDuration = "No autofill data available";
+        }
       });
     }();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    List<SelectListItem<String>> selectedCalmActivities =
+        kvReadStringList("sleep", "included-activities")
+            .map((s) => SelectListItem(text: s, value: s))
+            .toList();
+    SleepCheckinProgress progress =
+        serviceLocator<SleepCheckinService>().getProgress();
 
     List<String> otherHealthAspects =
         kvReadStringList("sleep", "other-health-aspects");
@@ -233,11 +247,18 @@ class SleepCheckinState extends State<SleepCheckin> {
               const SizedBox(height: 64.0),
               Text("You slept (sleep duration):",
                   style: Theme.of(context).textTheme.titleLarge),
-              Text(
-                  "${data.slept.inHours} hours ${data.slept.inMinutes.remainder(Duration.minutesPerHour)} minutes",
-                  style: Theme.of(context).textTheme.displayMedium),
               const Text(
                   "Note: This is different from the amount of time you spent in bed"),
+              DurationPickerBlock(
+                  initialDuration: data.sleepDuration,
+                  onChange: (Duration value) {
+                    data.sleepDuration = value;
+                  }),
+              Text(autofillMessageSleepDuration ?? "",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium!
+                      .copyWith(color: const Color(0xFFD15319))),
               const SizedBox(height: 64.0),
               Text(
                   "How easily did you shift from feeling groggy after waking to feeling fully awake?",

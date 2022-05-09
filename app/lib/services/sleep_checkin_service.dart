@@ -86,6 +86,7 @@ class SleepCheckinData {
   TimeOfDay? timeGoBed;
   TimeOfDay? timeAsleepBed;
   int easyAsleep = 2;
+  Duration? sleepDuration;
   TimeOfDay? timeOutBed;
   int easyWake = 2;
 
@@ -122,6 +123,7 @@ class SleepCheckinData {
         "time-asleep-bed":
             timeAsleepBed == null ? null : JTimeOfDay.from(timeAsleepBed!),
         "easy-asleep": easyAsleep,
+        "sleep-duration": sleepDuration?.inMinutes,
         "time-out-bed":
             timeOutBed == null ? null : JTimeOfDay.from(timeOutBed!),
         "easy-wake": easyWake,
@@ -145,6 +147,9 @@ class SleepCheckinData {
         ? null
         : JTimeOfDay.fromJson(data["time-asleep-bed"]);
     s.easyAsleep = data["easy-asleep"];
+    s.sleepDuration = data["sleep-duration"] == null
+        ? null
+        : Duration(minutes: data["sleep-duration"]);
     s.timeOutBed = data["time-out-bed"] == null
         ? null
         : JTimeOfDay.fromJson(data["time-out-bed"]);

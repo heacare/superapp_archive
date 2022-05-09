@@ -30,8 +30,7 @@ class SleepAutofill {
     }
     return ((asleep!.minute + asleep!.hour * 60) -
             (inBed!.minute + inBed!.hour * 60)) %
-        24 *
-        60;
+        (24 * 60);
   }
 
   int get sleepMinutes {
@@ -40,8 +39,7 @@ class SleepAutofill {
     }
     return ((awake.minute + awake.hour * 60) -
             (asleep!.minute + asleep!.hour * 60)) %
-        24 *
-        60;
+        (24 * 60);
   }
 }
 
