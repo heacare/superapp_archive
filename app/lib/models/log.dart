@@ -2,17 +2,18 @@ import 'dart:convert';
 
 class Log {
   final String key;
-  final DateTime date;
+  final DateTime ts;
   final String value;
 
-  Log(this.key, this.date, this.value);
-  Log.fromDynamic(this.key, this.date, dynamic value)
+  Log(this.key, this.ts, this.value);
+  Log.fromDynamic(this.key, this.ts, dynamic value)
       : value = json.encode(value);
 
   Map<String, dynamic> toJson() {
     return {
       'key': key,
-      'date': date.toIso8601String() + dateOffset(date.timeZoneOffset),
+      'ts': ts.toIso8601String(),
+      'tz': dateOffset(ts.timeZoneOffset),
       'value': value,
     };
   }
