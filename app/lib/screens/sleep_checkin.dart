@@ -65,9 +65,7 @@ class SleepCheckinState extends State<SleepCheckin> {
       if (sleepAutofill == null) {
         return;
       }
-      DateTime lastNight =
-          sleepAutofill.awake.subtract(const Duration(days: 1));
-      String date = DateFormat.yMd().format(lastNight);
+      String date = DateFormat.yMd().format(sleepAutofill.awake);
       if (!mounted) {
         return;
       }
@@ -75,19 +73,20 @@ class SleepCheckinState extends State<SleepCheckin> {
         if (sleepAutofill.inBed != null) {
           data.timeGoBed = TimeOfDay.fromDateTime(sleepAutofill.inBed!);
           autofillMessageGoBed =
-              "Data has been autofilled from last night ($date)";
+              "Data has been autofilled from your last sleep that ended on $date";
         } else {
           autofillMessageGoBed = "No autofill data available";
         }
         if (sleepAutofill.asleep != null) {
           data.timeAsleepBed = TimeOfDay.fromDateTime(sleepAutofill.asleep!);
           autofillMessageAsleepBed =
-              "Data has been autofilled from last night ($date)";
+              "Data has been autofilled from your last sleep that ended on $date";
         } else {
           autofillMessageAsleepBed = "No autofill data available";
         }
         data.timeOutBed = TimeOfDay.fromDateTime(sleepAutofill.awake);
-        autofillMessage = "Data has been autofilled from last night ($date)";
+        autofillMessage =
+            "Data has been autofilled from your sleep that ended on $date";
       });
     }();
 

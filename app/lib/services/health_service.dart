@@ -34,7 +34,6 @@ class SleepAutofill {
         60;
   }
 
-  @Deprecated("Use sleepLatencyMinutes instead")
   int get sleepMinutes {
     if (asleep == null) {
       return 0;
@@ -209,6 +208,9 @@ class HealthService {
         .map((e) => TimeOfDay(hour: e.asleep!.hour, minute: e.asleep!.minute)));
     TimeOfDay? awake = meanTimeOfDay(entries
         .map((e) => TimeOfDay(hour: e.awake.hour, minute: e.awake.minute)));
+    TimeOfDay? outBed = meanTimeOfDay(entries
+        .where((e) => e.asleep != null)
+        .map((e) => TimeOfDay(hour: e.outBed!.hour, minute: e.outBed!.minute)));
     if (awake == null) {
       return null;
     }
@@ -224,6 +226,7 @@ class HealthService {
       inBed: withTimeOfDay(startDate, inBed),
       asleep: withTimeOfDay(startDate, asleep),
       awake: withTimeOfDay(startDate, awake)!,
+      outBed: withTimeOfDay(startDate, outBed),
     );
   }
 

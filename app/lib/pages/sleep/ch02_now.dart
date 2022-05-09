@@ -115,7 +115,9 @@ class NowTimeOutBed extends TimePickerPage {
   final image = null;
 
   @override
-  final markdown = "When have you usually gotten out of bed?";
+  final markdown = """
+When have you usually gotten out of bed?
+""";
 
   @override
   final valueName = "time-out-bed";
@@ -133,7 +135,7 @@ class NowTimeOutBed extends TimePickerPage {
   }
 }
 
-class NowGetSleep extends Page {
+class NowGetSleep extends DurationPickerPage {
   NowGetSleep({Key? key}) : super(key: key);
 
   @override
@@ -143,38 +145,28 @@ class NowGetSleep extends Page {
 
   @override
   final title = "In the past month";
+  @override
+  final image = null;
 
   @override
-  Widget buildPage(BuildContext context) {
-    final markdownStyleSheet = MarkdownStyleSheet(
-        p: Theme.of(context).textTheme.bodyText1,
-        h1: Theme.of(context).textTheme.headline3);
+  final markdown = """
+On average, how many actual hours of sleep do you get at night?
+*(This differs from the number of hours you spend in bed.)*
+""";
 
-    int sleepLatencyMinutes = kvRead<int>("sleep", "sleep-latency") ?? 0;
-    TimeOfDay goBed = kvReadTimeOfDay("sleep", "time-go-bed") ??
-        const TimeOfDay(hour: 0, minute: 0);
-    TimeOfDay outBed = kvReadTimeOfDay("sleep", "time-out-bed") ??
-        const TimeOfDay(hour: 0, minute: 0);
-    int bedDuration = ((outBed.minute + outBed.hour * 60) -
-            (goBed.minute + goBed.hour * 60)) %
-        (24 * 60);
-    int sleepTimeMinutes = bedDuration - sleepLatencyMinutes;
-    // There comes a point where the amount of hacks you use cause cascading
-    // blockades in development, and this is one of them.
-    kvWrite<int>("sleep", "minutes-asleep", sleepTimeMinutes);
-    Duration sleepTime = Duration(minutes: sleepTimeMinutes);
-    String sleepTimeText =
-        "${sleepTime.inHours} hours ${sleepTime.inMinutes.remainder(Duration.minutesPerHour)} minutes";
-    return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          MarkdownBody(
-              data: """
-Based on what you've told us, on average in the past month, you got $sleepTimeText of sleep.
-""",
-              extensionSet: md.ExtensionSet.gitHubFlavored,
-              styleSheet: markdownStyleSheet),
-        ]);
+  @override
+  final valueName = "minutes-asleep";
+  @override
+  final minutesOnly = false;
+  @override
+  Future<int?> getInitialMinutes(Function(String) setAutofillMessage) async {
+    SleepAutofill? sleep =
+        await serviceLocator<HealthService>().autofillRead30Day();
+    if (sleep != null && sleep.sleepMinutes > 0) {
+      setAutofillMessage("Was autofilled using data from the last 30 days");
+      return sleep.sleepMinutes;
+    }
+    return null;
   }
 }
 
