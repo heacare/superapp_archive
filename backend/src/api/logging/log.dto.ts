@@ -1,4 +1,4 @@
-import { IsString, IsISO8601, IsNotEmpty } from 'class-validator';
+import { IsString, IsISO8601, IsNotEmpty, IsOptional } from 'class-validator';
 
 export class LogDto {
   @IsNotEmpty()
@@ -6,10 +6,12 @@ export class LogDto {
   key: string;
 
   @IsISO8601()
-  ts: string;
+  @IsOptional()
+  ts?: string;
 
   @IsString()
-  tz: string;
+  @IsOptional()
+  tz?: string;
 
   @IsString()
   value: string;

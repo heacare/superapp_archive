@@ -14,11 +14,11 @@ export class Log {
   @Column({ type: 'timestamp' })
   timestamp: Date;
 
-  @Column({ type: 'timestamp' })
-  tsClient: Date;
+  @Column({ type: 'timestamp', nullable: true})
+  tsClient?: Date;
 
-  @Column()
-  tzClient: string;
+  @Column({ nullable: true })
+  tzClient?: string;
 
   @Column()
   key: string;

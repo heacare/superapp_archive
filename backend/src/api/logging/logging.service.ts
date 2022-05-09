@@ -13,7 +13,7 @@ export class LoggingService {
     await this.logs.save({
       user: { id: user.id },
       timestamp: new Date(),
-      tsClient: new Date(ts),
+      tsClient: ts ? new Date(ts) : null,
       tzClient: tz,
       key,
       value,
