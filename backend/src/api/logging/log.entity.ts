@@ -11,7 +11,7 @@ export class Log {
   @ManyToOne(() => User, (user) => user.logs)
   user: User;
 
-  @Column({ type: 'timestamp' })
+  @Column({ type: 'timestamp with time zone' })
   timestamp: Date;
 
   @Column()
