@@ -12,7 +12,7 @@ export class LoggingService {
   async create(user: AuthUser, { key, date, value }: LogDto): Promise<void> {
     await this.logs.save({
       user: { id: user.id },
-      timestamp: Date.parse(date),
+      timestamp: new Date(date),
       key,
       value,
     });
