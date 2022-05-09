@@ -15,17 +15,17 @@ class OwningRoutine extends MarkdownPage {
   final prevPage = () => RhythmSettingCourse();
 
   @override
-  final title = "Rhythm is Life and routine";
+  final title = "Rhythm is life and routine";
   @override
   final image = Image.asset("assets/images/sleep/ch05-daily-routine.webp");
 
   @override
   final markdown = """
-In this chapter, we discover the importance of routine and how it can help align you with your circadian rhythm to improve sleep. We start by checking in on your current sleep habits - a.k.a. your ‘sleep hygiene’. It might not sound fancy, but it can have game changing effects.
+Bedtime routines are **regular actions** done every night that **signal** winding down for sleep.
 
-Bedtime routines are **regular actions** you take before sleep every night to **signal winding down for sleep**. For example, dimming lights, doing something relaxing such as taking a warm bath/shower before bed.
+Light, temperature, meals, social activities and exercise are examples of cues that **influence** our **circadian rhythm** by inducing wakefulness or sleepiness. 
 
-Such signalling actions act like **timing cues** to influence our biological clock. They are highly dependent on our routine.
+Dimming the lights or taking a warm bath/shower before bed are some relaxing actions we can do regularly to **cue our biological clock for bedtime**.
 """;
 }
 
@@ -45,13 +45,11 @@ class OwningZeitgebers extends MarkdownPage {
 
   @override
   final markdown = """
-Light, temperature, meals, social activities and exercise are examples of external cues that influence our circadian rhythm by inducing wakefulness or sleepiness.
+External timing cues are known as ‘Zeitgebers’. In German ‘Zeit’ means ‘**time**’ and ‘geber’ means ‘**giver**’.
 
-These external timing cues are known as ‘Zeitgebers’ - in German ‘Zeit’ means ‘time’ and ‘geber’ means ‘giver’. 
+Regular exposure to zeitgebers acutely **activates** or **inhibits** the level of **hormones** and **neurotransmitters** that affect mental and behavioural changes for alertness, metabolism, recovery and growth.
 
-Regular exposure to zeitgebers acutely affects the activation or inhibition of hormones and neurotransmitters. 
-
-Exposure to these cues encourage mental and behavioural changes that support alertness, metabolism, recovery and growth.
+**Let’s check in on your current sleep habits** - a.k.a. your ‘sleep hygiene’. Tweaking it can be a game changer.
 """;
 }
 
