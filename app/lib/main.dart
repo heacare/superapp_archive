@@ -3,6 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/intl_standalone.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'firebase_options.dart';
 
 import 'package:hea/screens/error.dart';
@@ -23,6 +26,8 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   setupServiceLocator();
+  await findSystemLocale();
+  initializeDateFormatting(Intl.systemLocale);
   runApp(const App());
 }
 
