@@ -12,8 +12,8 @@ class LoggingServiceImpl implements LoggingService {
 
   @override
   Future<void> createLog(String key, dynamic value) async {
-    final resp = await api.post(
-        ApiEndpoint.logCreate, Log.fromDynamic(key, DateTime.now(), value).toJson());
+    final resp = await api.post(ApiEndpoint.logCreate,
+        Log.fromDynamic(key, DateTime.now(), value).toJson());
     if (resp.statusCode == 201) {
       return;
     } else {

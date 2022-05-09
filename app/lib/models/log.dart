@@ -6,12 +6,13 @@ class Log {
   final String value;
 
   Log(this.key, this.date, this.value);
-  Log.fromDynamic(this.key, this.date, dynamic value) : value = json.encode(value);
+  Log.fromDynamic(this.key, this.date, dynamic value)
+      : value = json.encode(value);
 
   Map<String, dynamic> toJson() {
     return {
       'key': key,
-	  'date': date.toIso8601String(),
+      'date': date.toIso8601String(),
       'value': value,
     };
   }

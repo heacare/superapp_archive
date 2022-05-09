@@ -160,7 +160,7 @@ class HealthService {
       inBed: inBed,
       asleep: asleep,
       awake: awake,
-	  outBed: outBed,
+      outBed: outBed,
     );
   }
 
