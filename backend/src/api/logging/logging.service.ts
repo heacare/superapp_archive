@@ -14,7 +14,7 @@ export class LoggingService {
       user: { id: user.id },
       timestamp: new Date(),
       tsClient: new Date(ts),
-      tz,
+      tzClient: tz,
       key,
       value,
     });
