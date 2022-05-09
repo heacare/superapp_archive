@@ -182,14 +182,15 @@ abstract class Page extends StatelessWidget {
 
 class PageImage extends StatelessWidget {
   final Widget child;
-  const PageImage(this.child);
+  final double? maxHeight;
+  const PageImage(this.child, {this.maxHeight});
   @override
   Widget build(BuildContext context) {
     return Container(
         alignment: Alignment.topCenter,
         child: Container(
-          constraints: const BoxConstraints(
-            maxHeight: 280,
+          constraints: BoxConstraints(
+            maxHeight: maxHeight ?? 280,
           ),
           child: child,
         ));

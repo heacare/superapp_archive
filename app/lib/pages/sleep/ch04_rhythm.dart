@@ -103,7 +103,7 @@ class RhythmPeaksAndDips2 extends MarkdownPage {
   RhythmPeaksAndDips2({Key? key}) : super(key: key);
 
   @override
-  final nextPage = () => RhythmFeels1();
+  final nextPage = () => RhythmSettingCourseIntro();
   @override
   final prevPage = () => RhythmPeaksAndDips1();
 
@@ -122,127 +122,16 @@ When these peaks and dips will happen depend on our sleep and wake times - a hig
 """;
 }
 
-class RhythmFeels1 extends Page {
-  RhythmFeels1({Key? key}) : super(key: key);
-
-  @override
-  final nextPage = () => RhythmFeels2();
-  @override
-  final prevPage = () => RhythmPeaksAndDips2();
-
-  @override
-  final title = "Setting the course of action";
-  final image = Image.asset("assets/images/sleep/ch04-action.webp");
-
-  final markdown = """
-When in the day do you usually feel your best?
-""";
-
-  @override
-  Widget buildPage(BuildContext context) {
-    final markdownStyleSheet = MarkdownStyleSheet(
-        p: Theme.of(context).textTheme.bodyText1,
-        h1: Theme.of(context).textTheme.headline3);
-    return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          PageImage(image),
-          const SizedBox(height: 4.0),
-          if (markdown != "")
-            MarkdownBody(
-                data: markdown,
-                extensionSet: md.ExtensionSet.gitHubFlavored,
-                styleSheet: markdownStyleSheet),
-          if (markdown != "") const SizedBox(height: 4.0),
-          const TimeRangePickerBlock(valueName: "feel-best-range"),
-        ]);
-  }
-}
-
-class RhythmFeels2 extends Page {
-  RhythmFeels2({Key? key}) : super(key: key);
-
-  @override
-  final nextPage = () => RhythmFeels3();
-  @override
-  final prevPage = () => RhythmFeels1();
-
-  @override
-  final title = "Setting the course of action";
-  final image = Image.asset("assets/images/sleep/ch04-action.webp");
-
-  final markdown = """
-When in the middle of your day do you feel least productive?
-""";
-
-  @override
-  Widget buildPage(BuildContext context) {
-    final markdownStyleSheet = MarkdownStyleSheet(
-        p: Theme.of(context).textTheme.bodyText1,
-        h1: Theme.of(context).textTheme.headline3);
-    return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          PageImage(image),
-          const SizedBox(height: 4.0),
-          if (markdown != "")
-            MarkdownBody(
-                data: markdown,
-                extensionSet: md.ExtensionSet.gitHubFlavored,
-                styleSheet: markdownStyleSheet),
-          if (markdown != "") const SizedBox(height: 4.0),
-          const TimeRangePickerBlock(valueName: "feel-least-productive-range"),
-        ]);
-  }
-}
-
-class RhythmFeels3 extends Page {
-  RhythmFeels3({Key? key}) : super(key: key);
-
-  @override
-  final nextPage = () => RhythmSettingCourseIntro();
-  @override
-  final prevPage = () => RhythmFeels2();
-
-  @override
-  final title = "Setting the course of action";
-  final image = Image.asset("assets/images/sleep/ch04-action.webp");
-
-  final markdown = """
-When towards the end of your day you feel sleepy?
-""";
-
-  @override
-  Widget buildPage(BuildContext context) {
-    final markdownStyleSheet = MarkdownStyleSheet(
-        p: Theme.of(context).textTheme.bodyText1,
-        h1: Theme.of(context).textTheme.headline3);
-    return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          PageImage(image),
-          const SizedBox(height: 4.0),
-          if (markdown != "")
-            MarkdownBody(
-                data: markdown,
-                extensionSet: md.ExtensionSet.gitHubFlavored,
-                styleSheet: markdownStyleSheet),
-          if (markdown != "") const SizedBox(height: 4.0),
-          const TimeRangePickerBlock(valueName: "feel-sleepy-range"),
-        ]);
-  }
-}
-
 class RhythmSettingCourseIntro extends Page {
   RhythmSettingCourseIntro({Key? key}) : super(key: key);
 
   @override
   final nextPage = () => RhythmSettingCourse();
   @override
-  final prevPage = () => RhythmFeels3();
+  final prevPage = () => RhythmPeaksAndDips2();
 
   @override
-  final title = "Activity: Setting the course of action";
+  final title = "Finding my rhythm";
   final image = Image.asset("assets/images/sleep/ch04-action.webp");
 
   @override
@@ -261,13 +150,38 @@ class RhythmSettingCourseIntro extends Page {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          PageImage(image),
+          PageImage(image, maxHeight: 160),
           const SizedBox(height: 4.0),
           MarkdownBody(
               data: """
-Your body needs time to shift gears to prepare for sleep. The brain has to orchestrate sleep. A series of physiological bodily functions need to take place in the right sequence.
-
-Let’s review how you’re currently sleeping:
+When in the day do you usually feel your best?
+""",
+              extensionSet: md.ExtensionSet.gitHubFlavored,
+              styleSheet: markdownStyleSheet),
+          const SizedBox(height: 4.0),
+          const TimeRangePickerBlock(valueName: "feel-best-range"),
+          const SizedBox(height: 4.0),
+          MarkdownBody(
+              data: """
+When in the middle of your day do you feel least productive?
+""",
+              extensionSet: md.ExtensionSet.gitHubFlavored,
+              styleSheet: markdownStyleSheet),
+          const SizedBox(height: 4.0),
+          const TimeRangePickerBlock(valueName: "feel-least-productive-range"),
+          const SizedBox(height: 4.0),
+          MarkdownBody(
+              data: """
+When towards the end of your day you feel sleepy?
+""",
+              extensionSet: md.ExtensionSet.gitHubFlavored,
+              styleSheet: markdownStyleSheet),
+          const SizedBox(height: 4.0),
+          const TimeRangePickerBlock(valueName: "feel-sleepy-range"),
+          const SizedBox(height: 4.0),
+          MarkdownBody(
+              data: """
+How you’re currently sleeping:
 
 - Usually go to bed at: **${goBed.format(context)}**
 - Usually get out of bed at: **${outBed.format(context)}**
@@ -286,7 +200,7 @@ class RhythmSettingCourse extends StatefulWidget {
   final nextPage = () => OwningRoutine();
   final prevPage = () => RhythmSettingCourseIntro();
 
-  final title = "Let's review";
+  final title = "Setting the course of action";
 
   final Image? image = Image.asset("assets/images/sleep/ch04-action.webp");
 
@@ -318,6 +232,7 @@ class RhythmSettingCourseState extends State<RhythmSettingCourse> {
 
   @override
   void initState() {
+    super.initState();
     wakeTime = kvReadTimeOfDay("sleep", "goals-wake-time");
     sleepTime = kvReadTimeOfDay("sleep", "goals-sleep-time");
   }
@@ -373,15 +288,13 @@ class RhythmSettingCourseState extends State<RhythmSettingCourse> {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          if (widget.image != null) PageImage(widget.image!),
+          if (widget.image != null) PageImage(widget.image!, maxHeight: 160),
           if (widget.image != null) const SizedBox(height: 4.0),
           MarkdownBody(
               data: """
-Now, let’s set some specific goals:
+When your energy peaks and dips depend on when you wake and sleep. Our brain needs time to orchestrate a series of body processes for wakefulness and sleep.
 
-Remember, when your peaks and dips happen depends on your wake and sleep times.
-
-A key to forming successful habits is taking small do-able steps. For example, if your average sleep time is 6 hours, aim to increase it by 15 to 30 minutes
+Setting some time-specific goals for waking and sleeping helps.
 """,
               extensionSet: md.ExtensionSet.gitHubFlavored,
               styleSheet: markdownStyleSheet),
@@ -402,13 +315,15 @@ A key to forming successful habits is taking small do-able steps. For example, i
           const SizedBox(height: 4.0),
           MarkdownBody(
               data: """
-Based on these times, I will be sleeping for **$sleepFor**
+To get **$sleepFor** of sleep.
 
---- 
+#tip: Taking small do-able steps helps create successful habits. If you wish to sleep earlier/later, aim to shift it by 15 to 30 minutes.
 
-**So how are we going to get you there?**
+---
 
-It starts with a calming wind-down routine, otherwise known as a bedtime routine.
+**How are we going to get you there?**
+
+It starts with a bedtime routine of calming, wind-down activities.
 """,
               extensionSet: md.ExtensionSet.gitHubFlavored,
               styleSheet: markdownStyleSheet),
