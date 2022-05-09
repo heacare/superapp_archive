@@ -437,15 +437,19 @@ class RoutinePledgeIntro extends MarkdownPage {
   final prevPage = () => RoutineOptInGroup();
 
   @override
-  final title = "Activity: My commitment to sleep";
+  final title = "My commitment to sleep";
   @override
-  final image = Image.asset("assets/images/sleep/ch06-my-sleep-pledge.gif");
+  final image = Image.asset("assets/images/sleep/ch06-my-sleep-pledge.webp");
 
   @override
   final markdown = """
-Over the next week, we’ll help you commit to a routine to improve your sleep. Review your pledge and choose one thing to start practising for the next 7 days.
+Over the next week, we’ll help you commit to a routine to improve your sleep.
 
-#tip: Inform your friends, family and co-workers of your intention to sleep better. This can help create support for you. Who knows, they might be keen to improve their sleep too.
+Review your pledge!
+
+Get support for your journey. Share it with friends, family and co-workers. Wear it proud on social! And tag us @hea.health 😉
+
+You might inspire others keen to join you in sleeping better.
 """;
 }
 
@@ -453,9 +457,9 @@ class RoutinePledge extends StatefulWidget {
   final PageBuilder? nextPage = () => DiaryReminders();
   final PageBuilder? prevPage = () => RoutinePledgeIntro();
 
-  final String title = "Activity: My commitment to sleep";
+  final String title = "My commitment to sleep";
   final Image? image =
-      Image.asset("assets/images/sleep/ch06-my-sleep-pledge.gif");
+      Image.asset("assets/images/sleep/ch06-my-sleep-pledge.webp");
 
   final int maxChoice = 1;
   final int? minSelected = null;
@@ -506,9 +510,7 @@ class RoutinePledgeState extends State<RoutinePledge> {
 
     List<String> includedActivities =
         kvReadStringList("sleep", "included-activities");
-    List<SelectListItem<String>> selectedActivities = includedActivities
-        .map((s) => SelectListItem(text: s, value: s))
-        .toList();
+    String includedActivitiesText = formatList(includedActivities);
     return BasePage(
         title: widget.title,
         nextPage: widget.nextPage,
@@ -526,27 +528,11 @@ I'd like to **$goalsText**
 My desired sleep duration is **$goalsSleepDurationText**. If I'd like to wake up by **$goalsWakeTimeText**, I should be sleeping by **$goalsSleepTimeText**.
 
 I've identified **$doingBeforeBedText** as obstacles from reaching my goals.
+
+To better prepare for sleep, I will practice **$includedActivitiesText** before bedtime.
 """,
                   extensionSet: md.ExtensionSet.gitHubFlavored,
                   styleSheet: markdownStyleSheet),
-              const SizedBox(height: 4.0),
-              MarkdownBody(
-                  data: """
-**To start sleeping better, I am going to commit to doing one of the following over the next 7 days:**
-""",
-                  extensionSet: md.ExtensionSet.gitHubFlavored,
-                  styleSheet: markdownStyleSheet),
-              const SizedBox(height: 4.0),
-              SelectList(
-                  items: selectedActivities,
-                  max: 1,
-                  defaultSelected: kvReadStringList("sleep", "commit-habit"),
-                  onChange: (List<String> c) {
-                    kvWrite<List<String>>("sleep", "commit-habit", c);
-                    setState(() {
-                      hideNext = !canNext();
-                    });
-                  }),
             ]));
   }
 }
