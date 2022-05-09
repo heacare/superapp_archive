@@ -9,10 +9,12 @@ import { Log } from './log.entity';
 export class LoggingService {
   constructor(@InjectRepository(Log) private logs: Repository<Log>) {}
 
-  async create(user: AuthUser, { key, date, value }: LogDto): Promise<void> {
+  async create(user: AuthUser, { key, ts, tz, value }: LogDto): Promise<void> {
     await this.logs.save({
       user: { id: user.id },
-      timestamp: new Date(date),
+      timestamp: new Date(),
+      tsClient: new Date(ts),
+      tz,
       key,
       value,
     });

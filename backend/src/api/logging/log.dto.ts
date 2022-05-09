@@ -6,7 +6,10 @@ export class LogDto {
   key: string;
 
   @IsISO8601()
-  date: string;
+  ts: string;
+
+  @IsString()
+  tz: string;
 
   @IsString()
   value: string;

@@ -11,8 +11,14 @@ export class Log {
   @ManyToOne(() => User, (user) => user.logs)
   user: User;
 
-  @Column({ type: 'timestamp with time zone' })
+  @Column({ type: 'timestamp' })
   timestamp: Date;
+
+  @Column({ type: 'timestamp' })
+  tsClient: Date;
+
+  @Column()
+  tzClient: string;
 
   @Column()
   key: string;
