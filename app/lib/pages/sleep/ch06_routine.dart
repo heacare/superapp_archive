@@ -537,13 +537,13 @@ class RoutinePledgeState extends State<RoutinePledge> {
               if (widget.image != null) const SizedBox(height: 4.0),
               MarkdownBody(
                   data: """
-I'd like to **$goalsText**
+I'd like to $goalsText
 
 My desired sleep duration is **$goalsSleepDurationText**. If I'd like to wake up by **$goalsWakeTimeText**, I should be sleeping by **$goalsSleepTimeText**.
 
 I've identified **$doingBeforeBedText** as obstacles from reaching my goals.
 
-To better prepare for sleep, I will practice **$includedActivitiesText** before bedtime.
+To better prepare for sleep, I will practice $includedActivitiesText before bedtime.
 """,
                   extensionSet: md.ExtensionSet.gitHubFlavored,
                   styleSheet: markdownStyleSheet),
