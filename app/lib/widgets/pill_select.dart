@@ -28,28 +28,31 @@ class PillSelectState<T> extends State<PillSelect<T>> {
   @override
   Widget build(BuildContext context) {
     List<Widget> children = items.entries
-        .map((entry) => Container(
-            margin: const EdgeInsets.all(10.0),
-            alignment: Alignment.center,
-            width: 72.0,
-            height: 30.0,
-            decoration: BoxDecoration(
-              color: selected == entry.key
-                  ? const Color(0xFF5FD0F9)
-                  : Colors.grey[300],
-              borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-            ),
-            child: InkWell(
-                onTap: () {
-                  setState(() {
-                    selected = entry.key;
-                  });
-                  widget.onChange(entry.key);
-                },
-                child: Text(entry.value,
-                    style: Theme.of(context).textTheme.bodyText2))))
+        .map((entry) => ElevatedButton(
+            onPressed: () {
+              setState(() {
+                selected = entry.key;
+              });
+              widget.onChange(entry.key);
+            },
+            style: TextButton.styleFrom(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 10.0, horizontal: 16.0),
+                primary: Colors.black,
+                backgroundColor: selected == entry.key
+                    ? Theme.of(context).colorScheme.primary.withAlpha(0x50)
+                    : const Color(0xFFEBEBEB),
+                elevation: 0.0),
+            child: Text(entry.value,
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  color: selected == entry.key
+                      ? Theme.of(context).colorScheme.primary
+                      : const Color(0xFF414141),
+                  fontSize: 18.0,
+                ))))
         .toList();
 
-    return Wrap(children: children);
+    return Wrap(children: children, spacing: 8);
   }
 }

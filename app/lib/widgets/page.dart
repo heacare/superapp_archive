@@ -190,7 +190,7 @@ class PageImage extends StatelessWidget {
         alignment: Alignment.topCenter,
         child: Container(
           constraints: BoxConstraints(
-            maxHeight: maxHeight ?? 280,
+            maxHeight: maxHeight ?? 240,
           ),
           padding: const EdgeInsets.only(bottom: 8, top: 4),
           child: child,

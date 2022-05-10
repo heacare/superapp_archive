@@ -169,7 +169,7 @@ abstract class RoutineCalmingActivities extends Page {
               styleSheet: markdownStyleSheet),
           const SizedBox(height: 8.0),
           Text(
-            "Instead of",
+            "Instead of:",
             style: Theme.of(context)
                 .textTheme
                 .bodyLarge!
@@ -487,17 +487,9 @@ class RoutinePledge extends StatefulWidget {
 }
 
 class RoutinePledgeState extends State<RoutinePledge> {
-  bool hideNext = false;
-
-  bool canNext() {
-    int minLength = widget.minSelected ?? 1;
-    return kvReadStringList("sleep", "commit-habit").length >= minLength;
-  }
-
   @override
   void initState() {
     super.initState();
-    hideNext = !canNext();
   }
 
   @override
@@ -531,7 +523,6 @@ class RoutinePledgeState extends State<RoutinePledge> {
         title: widget.title,
         nextPage: widget.nextPage,
         prevPage: widget.prevPage,
-        hideNext: hideNext,
         page: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[

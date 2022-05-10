@@ -10,7 +10,7 @@ for source in ${files[@]}; do
 	dest=${dest//sleep-orig/sleep}
 	dest=${dest%.*}
 	echo "$source -> $dest"
-	if [[ "$source" =~ "roles-in-society" ]] || [[ "$source" =~ "my-sleep-pledge" ]]; then
+	if [[ "$source" =~ "roles-in-society" ]]; then
 		cp $source $dest.gif
 		continue
 	fi

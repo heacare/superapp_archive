@@ -61,7 +61,7 @@ class SelectListState<T> extends State<SelectList<T>> {
             color: select
                 ? Theme.of(context).colorScheme.primary
                 : const Color(0xFF414141),
-            fontSize: 20.0,
+            fontSize: 18.0,
           )),
       onPressed: () {
         setState(() {
