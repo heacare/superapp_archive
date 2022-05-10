@@ -38,7 +38,6 @@ Lesson sleep = Lesson([
   PageDef(GoalsSetting, () => GoalsSetting()),
   PageDef(GoalsTimeToSleep, () => GoalsTimeToSleep()),
   PageDef(GoalsDoingBeforeBed, () => GoalsDoingBeforeBed()),
-  PageDef(GoalsCalmingActivities, () => GoalsCalmingActivities()),
   PageDef(GoalsEmbraceAndManifest, () => GoalsEmbraceAndManifest()),
   PageDef(GoalsGettingThere, () => GoalsGettingThere()),
   PageDef(RhythmConsistency, () => RhythmConsistency()),

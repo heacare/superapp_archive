@@ -110,7 +110,7 @@ class GoalsDoingBeforeBed extends MultipleChoicePage {
   GoalsDoingBeforeBed({Key? key}) : super(key: key);
 
   @override
-  final nextPage = () => GoalsCalmingActivities();
+  final nextPage = () => GoalsEmbraceAndManifest();
   @override
   final prevPage = () => GoalsTimeToSleep();
 
@@ -150,32 +150,13 @@ final List<SelectListItem<String>> activityChoices = [
   SelectListItem(text: "Other activities", value: "", other: true),
 ];
 
-class GoalsCalmingActivities extends MarkdownPage {
-  GoalsCalmingActivities({Key? key}) : super(key: key);
-
-  @override
-  final nextPage = () => GoalsEmbraceAndManifest();
-  @override
-  final prevPage = () => GoalsDoingBeforeBed();
-
-  @override
-  final title = "Priorities and procrastination";
-  @override
-  final image = Image.asset("assets/images/sleep/ch03-now-now-now.webp");
-
-  @override
-  final markdown = """
-Regular activities in the run-up to sleep make up your bedtime routine. A supportive routine for sleep has relaxing and calming activities, not energizing ones. More on creating a good bedtime routine later.
-""";
-}
-
 class GoalsEmbraceAndManifest extends Page {
   GoalsEmbraceAndManifest({Key? key}) : super(key: key);
 
   @override
   final nextPage = () => GoalsGettingThere();
   @override
-  final prevPage = () => GoalsCalmingActivities();
+  final prevPage = () => GoalsDoingBeforeBed();
 
   @override
   final title = "Embrace and manifest";
