@@ -139,6 +139,10 @@ class HealthService {
           outBed = latest(outBed, data.dateTo);
         }
       } else if (Platform.isAndroid) {
+        // NOTE: For now, all Android data collected is not gonna be used for
+        // autofill of sleep latency and sleep efficiency, because we cannot
+        // yet "invert" the AWAKE state to find the ASLEEP state until we have
+        // enough user data.
         if (data.type == HealthDataType.SLEEP_IN_BED) {
           inBed = earliest(inBed, data.dateFrom);
           outBed = latest(outBed, data.dateTo);

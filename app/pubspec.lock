@@ -381,9 +381,9 @@ packages:
   health:
     dependency: "direct main"
     description:
-      name: health
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "plugins/health"
+      relative: true
+    source: path
     version: "3.4.4"
   http:
     dependency: "direct main"
