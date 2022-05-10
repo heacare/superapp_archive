@@ -192,6 +192,7 @@ class PageImage extends StatelessWidget {
           constraints: BoxConstraints(
             maxHeight: maxHeight ?? 280,
           ),
+          padding: const EdgeInsets.only(bottom: 8, top: 4),
           child: child,
         ));
   }
