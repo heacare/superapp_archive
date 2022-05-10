@@ -98,8 +98,8 @@ When it is time to sleep, I
         text: "Go to bed early if I have to get up early in the morning",
         value: "go to bed early if I have to get up early in the morning"),
     SelectListItem(
-        text: "Turn off the lights at night I do it immediately",
-        value: "turn off the lights at night I do it immediately"),
+        text: "Turn off the lights and go to sleep immediately",
+        value: "turn off the lights and go to sleep immediately"),
     SelectListItem(
         text: "Have a regular bedtime which I keep to",
         value: "have a regular bedtime which I keep to"),
@@ -135,8 +135,8 @@ What do you usually end up doing instead of going to bed?
 }
 
 final List<SelectListItem<String>> activityChoices = [
-  SelectListItem(text: "Watching TV/videos", value: "watching TV/videos"),
-  SelectListItem(text: "Playing video games", value: "playing video games"),
+  SelectListItem(text: "Watching shows/videos", value: "watching shows/videos"),
+  SelectListItem(text: "Playing games", value: "playing games"),
   SelectListItem(text: "Surfing the internet", value: "surfing the internet"),
   SelectListItem(text: "Going on social media", value: "going on social media"),
   SelectListItem(
@@ -147,7 +147,7 @@ final List<SelectListItem<String>> activityChoices = [
   SelectListItem(
       text: "Chilling/chatting with others",
       value: "chilling/chatting with others"),
-  SelectListItem(text: "Other", value: "", other: true),
+  SelectListItem(text: "Other activities", value: "", other: true),
 ];
 
 class GoalsCalmingActivities extends MarkdownPage {
