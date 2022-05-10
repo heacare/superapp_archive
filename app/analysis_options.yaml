@@ -31,4 +31,4 @@ linter:
 
 analyzer:
   exclude:
-    - "plugins/health/**"
+    - 'plugins/health/**'
