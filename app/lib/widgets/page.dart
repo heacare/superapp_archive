@@ -536,6 +536,10 @@ abstract class TimePickerPage extends StatefulWidget {
     return null;
   }
 
+  String getMarkdown(BuildContext context) {
+    return markdown;
+  }
+
   @override
   TimePickerPageState createState() => TimePickerPageState();
 }
@@ -566,6 +570,7 @@ class TimePickerPageState extends State<TimePickerPage> {
         kvWriteTimeOfDay("sleep", widget.valueName, time!);
         canNext = true;
       }
+      String markdown = widget.getMarkdown(context);
       return BasePage(
           title: widget.title,
           nextPage: widget.nextPage,
@@ -576,12 +581,12 @@ class TimePickerPageState extends State<TimePickerPage> {
               children: <Widget>[
                 if (widget.image != null) PageImage(widget.image!),
                 if (widget.image != null) const SizedBox(height: 4.0),
-                if (widget.markdown != "")
+                if (markdown != "")
                   MarkdownBody(
-                      data: widget.markdown,
+                      data: markdown,
                       extensionSet: md.ExtensionSet.gitHubFlavored,
                       styleSheet: markdownStyleSheet),
-                if (widget.markdown != "") const SizedBox(height: 4.0),
+                if (markdown != "") const SizedBox(height: 4.0),
                 TimePickerBlock(
                     defaultTime: widget.defaultTime,
                     time: time,

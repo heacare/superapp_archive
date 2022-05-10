@@ -59,6 +59,14 @@ class SleepCheckinState extends State<SleepCheckin> {
       SleepAutofill? sleepAutofill =
           await serviceLocator<HealthService>().autofillRead1Day();
       if (sleepAutofill == null) {
+        autofillMessageGoBed =
+            "No autofill data available. Please provide your best estimate";
+        autofillMessageAsleepBed =
+            "No autofill data available. Please provide your best estimate";
+        autofillMessage =
+            "No autofill data available. Please provide your best estimate";
+        autofillMessageSleepDuration =
+            "No autofill data available. Please provide your best estimate";
         return;
       }
       String date = "unknown";
@@ -79,7 +87,7 @@ class SleepCheckinState extends State<SleepCheckin> {
               "Data has been autofilled from your last sleep that ended on $date";
         } else {
           autofillMessageGoBed =
-              "No autofill data available. Please provide your best estimate";
+              "No autofill data available for this field. Please provide your best estimate";
         }
         if (sleepAutofill.asleep != null) {
           data.timeAsleepBed = TimeOfDay.fromDateTime(sleepAutofill.asleep!);
@@ -87,7 +95,7 @@ class SleepCheckinState extends State<SleepCheckin> {
               "Data has been autofilled from your last sleep that ended on $date";
         } else {
           autofillMessageAsleepBed =
-              "No autofill data available. Please provide your best estimate";
+              "No autofill data available for this field. Please provide your best estimate";
         }
         if (sleepAutofill.awake != null) {
           data.timeOutBed = TimeOfDay.fromDateTime(sleepAutofill.awake!);
@@ -95,7 +103,7 @@ class SleepCheckinState extends State<SleepCheckin> {
               "Data has been autofilled from your last sleep that ended on $date";
         } else {
           autofillMessage =
-              "No autofill data available. Please provide your best estimate";
+              "No autofill data available for this field. Please provide your best estimate";
         }
         if (sleepAutofill.sleepMinutes > 0) {
           data.sleepDuration = Duration(minutes: sleepAutofill.sleepMinutes);
@@ -103,7 +111,7 @@ class SleepCheckinState extends State<SleepCheckin> {
               "Data has been autofilled from your last sleep that ended on $date";
         } else {
           autofillMessageSleepDuration =
-              "No autofill data available. Please provide your best estimate";
+              "No autofill data available for this field. Please provide your best estimate";
         }
       });
     }();

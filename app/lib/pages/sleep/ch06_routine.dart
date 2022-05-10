@@ -337,11 +337,20 @@ class RoutineReminders extends TimePickerPage {
   final image = Image.asset("assets/images/sleep/ch06-reminder-self-care.webp");
 
   @override
-  final markdown = """
+  final markdown = "";
+  @override
+  String getMarkdown(BuildContext context) {
+    TimeOfDay goalsSleepTime = kvReadTimeOfDay("sleep", "goals-sleep-time") ??
+        const TimeOfDay(hour: 0, minute: 0);
+    String goalsSleepTimeText = goalsSleepTime.format(context);
+    return """
 Remember, consistency is key. Winding down at the same time before bed signals your body to prepare for sleep. We’re here to help by sending you a daily reminder. 
 
-Noting that you wish to start winding down at least <1 hour / 30 mins / 15 mins> before bed.  When would you like to be reminded to start winding down for sleep? 
+Your goal is to sleep by: $goalsSleepTimeText
+
+When shall we remind you to start preparing for your bedtime routine?
 """;
+  }
 
   @override
   final defaultTime = const TimeOfDay(hour: 22, minute: 00);
