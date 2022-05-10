@@ -11,16 +11,16 @@ import 'package:hea/services/auth_service.dart';
 class SleepAutofill {
   final DateTime? inBed;
   final DateTime? asleep;
-  final DateTime awake;
+  final DateTime? awake;
   final DateTime? outBed;
 
   const SleepAutofill(
-      {required this.inBed, this.asleep, required this.awake, this.outBed});
+      {required this.inBed, this.asleep, this.awake, this.outBed});
 
   toJson() => {
         "in-bed": inBed?.toIso8601String(),
         "asleep": asleep?.toIso8601String(),
-        "awake": awake.toIso8601String(),
+        "awake": awake?.toIso8601String(),
         "out-bed": outBed?.toIso8601String(),
       };
 
@@ -34,10 +34,10 @@ class SleepAutofill {
   }
 
   int get sleepMinutes {
-    if (asleep == null) {
+    if (asleep == null || awake == null) {
       return 0;
     }
-    return ((awake.minute + awake.hour * 60) -
+    return ((awake!.minute + awake!.hour * 60) -
             (asleep!.minute + asleep!.hour * 60)) %
         (24 * 60);
   }
@@ -142,19 +142,36 @@ class HealthService {
         // NOTE: For now, all Android data collected is not gonna be used for
         // autofill of sleep latency and sleep efficiency, because we cannot
         // yet "invert" the AWAKE state to find the ASLEEP state until we have
-        // enough user data.
+        // enough work put into the health plugin.
         if (data.type == HealthDataType.SLEEP_IN_BED) {
           inBed = earliest(inBed, data.dateFrom);
           outBed = latest(outBed, data.dateTo);
         } else if (data.type == HealthDataType.SLEEP_ASLEEP) {
           inBed = earliest(inBed, data.dateFrom);
-          asleep = earliest(asleep, data.dateFrom);
-          awake = latest(awake, data.dateTo);
+          //asleep = earliest(asleep, data.dateFrom);
+          //awake = latest(awake, data.dateTo);
           outBed = latest(outBed, data.dateTo);
         }
       }
     }
-    if (awake == null) {
+    for (var data in healthData) {
+      if (Platform.isAndroid) {
+        if (data.type == HealthDataType.SLEEP_AWAKE) {
+          // For now, pick the earliest end of an AWAKE segment, which should
+          // indicate a rough time of falling asleep. This AWAKE segment should
+          // end very recently.
+          const acceptable = Duration(hours: 1, minutes: 30);
+          if (inBed != null && data.dateFrom.isBefore(inBed.add(acceptable))) {
+            asleep = earliest(asleep, data.dateTo);
+          }
+          if (outBed != null &&
+              data.dateFrom.isAfter(outBed.subtract(acceptable))) {
+            awake = latest(asleep, data.dateFrom);
+          }
+        }
+      }
+    }
+    if (healthData.isEmpty) {
       return null;
     }
     return SleepAutofill(
@@ -179,6 +196,7 @@ class HealthService {
         await health.getHealthDataFromTypes(startDate, endDate, [
       HealthDataType.SLEEP_IN_BED,
       HealthDataType.SLEEP_ASLEEP,
+      HealthDataType.SLEEP_AWAKE,
     ]);
 
     List<SleepAutofill> entries = [];
@@ -209,13 +227,11 @@ class HealthService {
         .where((e) => e.asleep != null)
         .map((e) => TimeOfDay(hour: e.asleep!.hour, minute: e.asleep!.minute)));
     TimeOfDay? awake = meanTimeOfDay(entries
-        .map((e) => TimeOfDay(hour: e.awake.hour, minute: e.awake.minute)));
+        .where((e) => e.awake != null)
+        .map((e) => TimeOfDay(hour: e.awake!.hour, minute: e.awake!.minute)));
     TimeOfDay? outBed = meanTimeOfDay(entries
-        .where((e) => e.asleep != null)
+        .where((e) => e.outBed != null)
         .map((e) => TimeOfDay(hour: e.outBed!.hour, minute: e.outBed!.minute)));
-    if (awake == null) {
-      return null;
-    }
 
     DateTime? withTimeOfDay(DateTime date, TimeOfDay? time) {
       if (time == null) {
@@ -227,7 +243,7 @@ class HealthService {
     return SleepAutofill(
       inBed: withTimeOfDay(startDate, inBed),
       asleep: withTimeOfDay(startDate, asleep),
-      awake: withTimeOfDay(startDate, awake)!,
+      awake: withTimeOfDay(startDate, awake),
       outBed: withTimeOfDay(startDate, outBed),
     );
   }
@@ -245,6 +261,7 @@ class HealthService {
         await health.getHealthDataFromTypes(startDate, endDate, [
       HealthDataType.SLEEP_IN_BED,
       HealthDataType.SLEEP_ASLEEP,
+      HealthDataType.SLEEP_AWAKE,
     ]);
 
     return processNight(healthData);

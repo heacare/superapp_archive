@@ -61,7 +61,13 @@ class SleepCheckinState extends State<SleepCheckin> {
       if (sleepAutofill == null) {
         return;
       }
-      String date = DateFormat.yMd().format(sleepAutofill.awake);
+      String date = "unknown";
+      if (sleepAutofill.outBed != null) {
+        date = DateFormat.yMd().format(sleepAutofill.outBed!);
+      }
+      if (sleepAutofill.awake != null) {
+        date = DateFormat.yMd().format(sleepAutofill.awake!);
+      }
       if (!mounted) {
         return;
       }
@@ -81,9 +87,13 @@ class SleepCheckinState extends State<SleepCheckin> {
         } else {
           autofillMessageAsleepBed = "No autofill data available";
         }
-        data.timeOutBed = TimeOfDay.fromDateTime(sleepAutofill.awake);
-        autofillMessage =
-            "Data has been autofilled from your last sleep that ended on $date";
+        if (sleepAutofill.awake != null) {
+          data.timeOutBed = TimeOfDay.fromDateTime(sleepAutofill.awake!);
+          autofillMessage =
+              "Data has been autofilled from your last sleep that ended on $date";
+        } else {
+          autofillMessage = "No autofill data available";
+        }
         if (sleepAutofill.sleepMinutes > 0) {
           data.sleepDuration = Duration(minutes: sleepAutofill.sleepMinutes);
           autofillMessageSleepDuration =

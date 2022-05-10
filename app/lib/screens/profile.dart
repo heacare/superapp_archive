@@ -223,12 +223,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             child: const Text("Yes"),
                                             onPressed: () {
                                               var s = SleepCheckinData();
-                                              s.timeGoBed = TimeOfDay(
+                                              s.timeGoBed = const TimeOfDay(
                                                   hour: 23, minute: 59);
-                                              s.timeAsleepBed =
-                                                  TimeOfDay(hour: 0, minute: 0);
-                                              s.timeOutBed =
-                                                  TimeOfDay(hour: 0, minute: 1);
+                                              s.timeAsleepBed = const TimeOfDay(
+                                                  hour: 0, minute: 0);
+                                              s.timeOutBed = const TimeOfDay(
+                                                  hour: 0, minute: 1);
                                               serviceLocator<
                                                       SleepCheckinService>()
                                                   .add(s);

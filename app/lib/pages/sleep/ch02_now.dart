@@ -127,9 +127,9 @@ When have you usually gotten out of bed?
   Future<TimeOfDay?> getInitialTime(Function(String) setAutofillMessage) async {
     SleepAutofill? sleep =
         await serviceLocator<HealthService>().autofillRead30Day();
-    if (sleep != null) {
+    if (sleep != null && sleep.awake != null) {
       setAutofillMessage("Was autofilled using data from the last 30 days");
-      return TimeOfDay.fromDateTime(sleep.awake);
+      return TimeOfDay.fromDateTime(sleep.awake!);
     }
     return null;
   }

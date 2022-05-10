@@ -20,8 +20,8 @@ class Log {
 }
 
 String _twoDigits(int n) {
-  if (n >= 10) return "${n}";
-  return "0${n}";
+  if (n >= 10) return "$n";
+  return "0$n";
 }
 
 String dateOffset(Duration offset) {

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart' hide Page;
-import 'package:flutter/painting.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_markdown/flutter_markdown.dart';
 

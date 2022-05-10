@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
 import 'package:hea/services/auth_service.dart';
@@ -38,8 +37,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Row(children: [
-        const CircularProgressIndicator(),
+          content: Row(children: const [
+        CircularProgressIndicator(),
         Text("Logging in...")
       ])));
       await _auth.login(_email.text, _password.text);
@@ -61,8 +60,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Row(children: [
-        const CircularProgressIndicator(),
+          content: Row(children: const [
+        CircularProgressIndicator(),
         Text("Logging in...")
       ])));
       await _auth.signup(_email.text, _password.text);
