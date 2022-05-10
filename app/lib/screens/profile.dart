@@ -325,9 +325,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         TextButton(
                                             child: const Text("Close"),
                                             onPressed: () {
-                                              serviceLocator<
-                                                      SleepCheckinService>()
-                                                  .add(SleepCheckinData());
                                               Navigator.of(context).pop();
                                             }),
                                       ]);

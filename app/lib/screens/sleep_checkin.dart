@@ -97,8 +97,8 @@ class SleepCheckinState extends State<SleepCheckin> {
           autofillMessageAsleepBed =
               "No autofill data available for this field. Please provide your best estimate";
         }
-        if (sleepAutofill.awake != null) {
-          data.timeOutBed = TimeOfDay.fromDateTime(sleepAutofill.awake!);
+        if (sleepAutofill.outBed != null) {
+          data.timeOutBed = TimeOfDay.fromDateTime(sleepAutofill.outBed!);
           autofillMessage =
               "Data has been autofilled from your last sleep that ended on $date";
         } else {
@@ -196,6 +196,11 @@ class SleepCheckinState extends State<SleepCheckin> {
                   "Did you have any unexpected interruptions to wind-down or any insights to your sleep?",
                   style: Theme.of(context).textTheme.titleLarge),
               TextFormField(
+                  maxLines: 6,
+                  minLines: 1,
+                  decoration: const InputDecoration(
+                    hintText: "Start typing...",
+                  ),
                   initialValue: data.interruptions,
                   onChanged: (String value) {
                     data.interruptions = value;
