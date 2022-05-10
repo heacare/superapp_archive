@@ -63,6 +63,7 @@ class NowTimeGoneBed extends TimePickerPage {
           "For those connected to your health app, we’ve managed to pull some data from your device from the last 30 days. You may edit the fields if you don’t think the numbers are accurate. Sometimes our devices think they know us better than ourselves ;)");
       return TimeOfDay.fromDateTime(sleep.inBed!);
     }
+    setAutofillMessage("Please provide your best estimate");
     return null;
   }
 }
@@ -97,6 +98,7 @@ How many minutes does it usually take you to fall asleep?
       setAutofillMessage("Was autofilled using data from the last 30 days");
       return sleep.sleepLatencyMinutes;
     }
+    setAutofillMessage("Please provide your best estimate");
     return null;
   }
 }
@@ -131,6 +133,7 @@ When have you usually gotten out of bed?
       setAutofillMessage("Was autofilled using data from the last 30 days");
       return TimeOfDay.fromDateTime(sleep.awake!);
     }
+    setAutofillMessage("Please provide your best estimate");
     return null;
   }
 }
@@ -166,6 +169,7 @@ On average, how many actual hours of sleep do you get at night?
       setAutofillMessage("Was autofilled using data from the last 30 days");
       return sleep.sleepMinutes;
     }
+    setAutofillMessage("Please provide your best estimate");
     return null;
   }
 }
