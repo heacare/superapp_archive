@@ -279,7 +279,7 @@ class SleepCheckinState extends State<SleepCheckin> {
               ),
               const SizedBox(height: 64.0),
               if (stress)
-                Text("Was today a stressful day for you?",
+                Text("Was it a stressful day for you yesterday?",
                     style: Theme.of(context).textTheme.titleLarge),
               if (stress)
                 Row(children: const [
