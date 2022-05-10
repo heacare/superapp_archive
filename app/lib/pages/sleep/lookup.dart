@@ -55,7 +55,6 @@ Lesson sleep = Lesson([
   PageDef(OwningRoutineActivities2, () => OwningRoutineActivities2()),
   PageDef(OwningRoutineActivities3, () => OwningRoutineActivities3()),
   PageDef(OwningTheDayNegative, () => OwningTheDayNegative()),
-  PageDef(OwningTheDayNote, () => OwningTheDayNote()),
   PageDef(RoutineBeforeBedtime, () => RoutineBeforeBedtime()),
   PageDef(RoutineIntro, () => RoutineIntro()),
   PageDef(RoutineActivities, () => RoutineActivities()),

@@ -145,7 +145,7 @@ class OwningTheDayNegative extends MultipleChoicePage {
   OwningTheDayNegative({Key? key}) : super(key: key);
 
   @override
-  final nextPage = () => OwningTheDayNote();
+  final nextPage = () => RoutineBeforeBedtime();
   @override
   final prevPage = () => OwningRoutineActivities3();
 
@@ -184,23 +184,4 @@ What you do during the day may also be ‘sabo-ing’ (disrupting) your sleep!
         value: "late-caffeine"),
     SelectListItem(text: "Sleeping with pet in the room", value: "with-pet"),
   ];
-}
-
-class OwningTheDayNote extends MarkdownPage {
-  OwningTheDayNote({Key? key}) : super(key: key);
-
-  @override
-  final nextPage = () => RoutineBeforeBedtime();
-  @override
-  final prevPage = () => OwningTheDayNegative();
-
-  @override
-  final title = "What's your why";
-  @override
-  final image = null;
-
-  @override
-  final markdown = """
-Now that you are aware of the need for good sleep lets use our understanding of the Circadian Rhythm and Zeitgebers to a bedtime routine. 
-""";
 }

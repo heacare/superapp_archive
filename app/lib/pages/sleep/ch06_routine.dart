@@ -15,7 +15,7 @@ class RoutineBeforeBedtime extends MarkdownPage {
   @override
   final nextPage = () => RoutineIntro();
   @override
-  final prevPage = () => OwningTheDayNote();
+  final prevPage = () => OwningTheDayNegative();
 
   @override
   final title = "Before 'bedtime', there is 'get ready for bedtime'";
