@@ -14,7 +14,7 @@ export class Log {
   @Column({ type: 'timestamp' })
   timestamp: Date;
 
-  @Column({ type: 'timestamp', nullable: true})
+  @Column({ type: 'timestamp', nullable: true })
   tsClient?: Date;
 
   @Column({ nullable: true })
