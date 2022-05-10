@@ -117,7 +117,7 @@ class OwningRoutineActivities3 extends MultipleChoicePage {
   OwningRoutineActivities3({Key? key}) : super(key: key);
 
   @override
-  final nextPage = () => OwningRoutineStart();
+  final nextPage = () => OwningTheDayNegative();
   @override
   final prevPage = () => OwningRoutineActivities2();
 
@@ -141,80 +141,22 @@ class OwningRoutineActivities3 extends MultipleChoicePage {
   final List<SelectListItem<String>> choices = activityChoices;
 }
 
-class OwningRoutineStart extends MarkdownPage {
-  OwningRoutineStart({Key? key}) : super(key: key);
-
-  @override
-  final nextPage = () => OwningTheDaySupporting();
-  @override
-  final prevPage = () => OwningRoutineActivities3();
-
-  @override
-  final title = "Setting a routine";
-  @override
-  final image = null;
-
-  @override
-  final markdown = """
-What you do during the day may also be helping or ‘sabo-ing’ (disrupting) your sleep! Let’s do a quick awareness check on this next. 
-""";
-}
-
-class OwningTheDaySupporting extends MultipleChoicePage {
-  OwningTheDaySupporting({Key? key}) : super(key: key);
-
-  @override
-  final nextPage = () => OwningTheDayNegative();
-  @override
-  final prevPage = () => OwningRoutineStart();
-
-  @override
-  final title = "Activity: What else could be affecting your sleep?";
-  @override
-  final image = Image.asset("assets/images/sleep/ch05-checkpoint.webp");
-
-  @override
-  final markdown = """
-Which of these applies to you? Check all that applies.
-
-Things that support sleep:
-""";
-
-  @override
-  final maxChoice = 0;
-  @override
-  final minSelected = 0;
-  @override
-  final valueName = "daytime-supporting";
-  @override
-  final List<SelectListItem<String>> choices = [
-    SelectListItem(
-        text: "Getting direct sunlight within 1 hour of waking up",
-        value: "sunlight-within-1h"),
-    SelectListItem(text: "Exercising regularly", value: "regular-exercise"),
-    SelectListItem(
-        text: "Waking up at the same time every day", value: "regular-wakeup"),
-  ];
-}
-
 class OwningTheDayNegative extends MultipleChoicePage {
   OwningTheDayNegative({Key? key}) : super(key: key);
 
   @override
   final nextPage = () => OwningTheDayNote();
   @override
-  final prevPage = () => OwningTheDaySupporting();
+  final prevPage = () => OwningRoutineActivities3();
 
   @override
-  final title = "Activity: What else could be affecting your sleep?";
+  final title = "What else could be affecting your sleep?";
   @override
   final image = Image.asset("assets/images/sleep/ch05-checkpoint.webp");
 
   @override
   final markdown = """
-Which of these applies to you? Check all that applies.
-
-Things that may 'sabo' sleep:
+What you do during the day may also be ‘sabo-ing’ (disrupting) your sleep!
 """;
 
   @override
