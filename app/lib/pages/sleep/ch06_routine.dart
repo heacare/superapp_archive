@@ -40,7 +40,7 @@ class RoutineIntro extends MarkdownPage {
   final prevPage = () => RoutineBeforeBedtime();
 
   @override
-  final title = "Activity: Winding down for the day";
+  final title = "Winding down for the day";
   @override
   final image = Image.asset("assets/images/sleep/ch06-time-to-wind-down.webp");
 
@@ -61,7 +61,7 @@ class RoutineActivities extends MultipleChoicePage {
   final prevPage = () => RoutineIntro();
 
   @override
-  final title = "Activity: Winding down for the day";
+  final title = "Winding down for the day";
   @override
   final image = null;
 
@@ -311,7 +311,7 @@ class RoutineCalmingActivitiesNote extends MarkdownPage {
   final prevPage = () => RoutineCalmingActivities3();
 
   @override
-  final title = "Activity: Winding down for the day";
+  final title = "Winding down for the day";
   @override
   final image = Image.asset("assets/images/sleep/ch06-time-to-wind-down.webp");
 
