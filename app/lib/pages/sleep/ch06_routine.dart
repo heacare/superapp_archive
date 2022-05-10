@@ -69,7 +69,7 @@ class RoutineActivities extends MultipleChoicePage {
   final markdown = """
 Here’s a list of possible actions for your routine. New to a bedtime routine? Start with one thing, and add another when you get comfortable with that.
 
-Check as many as you wish to include in your routine:
+Here are some ideas for a bedtime routine. Which of these do you wish to try?
 """;
 
   @override
@@ -279,7 +279,7 @@ class RoutineCalmingActivities3 extends RoutineCalmingActivities {
   RoutineCalmingActivities3({Key? key}) : super(key: key);
 
   @override
-  final nextPage = () => RoutineCalmingActivitiesNote();
+  final nextPage = () => RoutineReminders();
   @override
   final prevPage = () => RoutineCalmingActivities2();
 
@@ -302,25 +302,6 @@ class RoutineCalmingActivities3 extends RoutineCalmingActivities {
   final markdown = "";
 }
 
-class RoutineCalmingActivitiesNote extends MarkdownPage {
-  RoutineCalmingActivitiesNote({Key? key}) : super(key: key);
-
-  @override
-  final nextPage = () => RoutineReminders();
-  @override
-  final prevPage = () => RoutineCalmingActivities3();
-
-  @override
-  final title = "Winding down for the day";
-  @override
-  final image = Image.asset("assets/images/sleep/ch06-time-to-wind-down.webp");
-
-  @override
-  final markdown = """
-Test out your bedtime routine for a week. You can always fine tune it to work better for you. 
-""";
-}
-
 // Chapter 7
 
 class RoutineReminders extends TimePickerPage {
@@ -329,7 +310,7 @@ class RoutineReminders extends TimePickerPage {
   @override
   final nextPage = () => RoutineOptInGroup();
   @override
-  final prevPage = () => RoutineCalmingActivitiesNote();
+  final prevPage = () => RoutineCalmingActivities3();
 
   @override
   final title = "Let's help with reminders";
