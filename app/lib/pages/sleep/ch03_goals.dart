@@ -186,10 +186,20 @@ class GoalsEmbraceAndManifest extends Page {
   Widget buildLine(BuildContext context, MarkdownStyleSheet markdownStyleSheet,
       String prefix, List<String> items) {
     String what = items.join(", ");
-    return MarkdownBody(
-        data: "$prefix **$what**.",
-        extensionSet: md.ExtensionSet.gitHubFlavored,
-        styleSheet: markdownStyleSheet);
+    return Text.rich(
+      TextSpan(children: [
+        TextSpan(text: "$prefix "),
+        TextSpan(
+          text: what,
+          style: Theme.of(context)
+              .textTheme
+              .bodyText1!
+              .copyWith(color: Theme.of(context).colorScheme.primary),
+        ),
+        TextSpan(text: "."),
+      ]),
+      style: Theme.of(context).textTheme.bodyText1,
+    );
   }
 
   @override
@@ -208,25 +218,25 @@ Knowing and accepting where you are is the first step to making change.
 """,
               extensionSet: md.ExtensionSet.gitHubFlavored,
               styleSheet: markdownStyleSheet),
-          const SizedBox(height: 4.0),
+          const SizedBox(height: 6.0),
           buildLine(
               context,
               markdownStyleSheet,
               "When it is time to go to bed, I",
               kvReadStringList("sleep", "time-to-sleep")),
-          const SizedBox(height: 4.0),
+          const SizedBox(height: 6.0),
           buildLine(
               context,
               markdownStyleSheet,
               "Instead of going to bed, I end up",
               kvReadStringList("sleep", "doing-before-bed")),
-          const SizedBox(height: 4.0),
+          const SizedBox(height: 6.0),
           buildLine(
               context,
               markdownStyleSheet,
               "To get better sleep from hereon, I would like to",
               kvReadStringList("sleep", "sleep-goals")),
-          const SizedBox(height: 4.0),
+          const SizedBox(height: 6.0),
         ]);
   }
 }

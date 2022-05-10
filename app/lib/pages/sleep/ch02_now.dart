@@ -226,7 +226,7 @@ class NowHowEfficientSleep extends Page {
               textAlign: TextAlign.center,
             ),
           ),
-		  const SizedBox(height: 8),
+          const SizedBox(height: 8),
           MarkdownBody(
               data: """
 85% and above is considered healthy. Monitoring your sleep efficiency can help you sleep smarter, earning you more time in the day.
@@ -881,7 +881,7 @@ class NowScore extends Page {
               textAlign: TextAlign.center,
             ),
           ),
-		  const SizedBox(height: 8),
+          const SizedBox(height: 8),
           MarkdownBody(
               data: """
 | Areas of your sleep | # of issues |
