@@ -10,14 +10,19 @@ for source in ${files[@]}; do
 	dest=${dest//sleep-orig/sleep}
 	dest=${dest%.*}
 	echo "$source -> $dest"
+	resize="-resize 720x>"
+	quality="-quality 45"
 	if [[ "$source" =~ "roles-in-society" ]]; then
 		cp $source $dest.gif
 		continue
 	fi
+	if [[ "$source" =~ "hannah-mumby" ]]; then
+		resize=""
+	fi
 	convert \
 		$source \
 		-format webp \
-		-resize 720x\> \
-		-quality 45 \
+		$resize \
+		$quality \
 		$dest.webp
 done

@@ -47,11 +47,13 @@ class RhythmWhy extends MarkdownPage {
 
   @override
   final markdown = """
-All living things have one thing in common - rhythm. This rhythm is closely tied to the rotation of Earth, cycles of the moon and the rise and fall of the sun. 
+Living things are tied to the rhythm of the Earth’s rotation, moon’s cycles, and transitions between day and night. 
 
-This rhythm, also known as the biological clock, is also **highly personal**. It differs across individuals, depending on genetics, personality and environmental cues. 
+This rhythm drives biological clocks.
 
-Understanding how our body responds to the environment can help us work with this rhythm. Being aligned with it helps us to **reduce negative effects on our immediate wellbeing** and long-term health. 
+People respond differently to it depending on genetics, personality and environmental cues.
+
+Aligning with this rhythm helps improve our well-being and health, especially over the long-term.
 """;
 }
 
