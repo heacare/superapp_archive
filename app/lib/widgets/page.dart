@@ -360,8 +360,10 @@ class MultipleChoicePageState extends State<MultipleChoicePage> {
                 extensionSet: md.ExtensionSet.gitHubFlavored,
                 styleSheet: markdownStyleSheet),
           if (widget.markdown != "") const SizedBox(height: 4.0),
+          const SizedBox(height: 8.0),
           if (notice != "")
             Text("($notice)", style: Theme.of(context).textTheme.labelSmall),
+          if (notice != "") const SizedBox(height: 4.0),
           SelectList(
               items: widget.choices,
               max: widget.maxChoice,

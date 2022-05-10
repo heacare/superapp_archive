@@ -175,6 +175,7 @@ abstract class RoutineCalmingActivities extends Page {
                 .bodyLarge!
                 .copyWith(fontWeight: FontWeight.bold),
           ),
+          const SizedBox(height: 8.0),
           SelectList(
               items: selectedActivities,
               max: 0,
@@ -190,6 +191,7 @@ abstract class RoutineCalmingActivities extends Page {
                 .bodyLarge!
                 .copyWith(fontWeight: FontWeight.bold),
           ),
+          const SizedBox(height: 8.0),
           SelectList(
               items: selectedCalmActivities,
               max: 0,
