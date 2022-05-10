@@ -22,11 +22,13 @@ class RhythmConsistency extends MarkdownPage {
 
   @override
   final markdown = """
-Based on your sleep goals, we hear you. It is a complex two-way relationship between sleep and the things we do from the time we wake up.
+We often struggle to prioritise creating our ideal sleep. How do we make it easier?
 
-If you can’t change everything, that’s okay. Focus on small things first so it's easier to be consistent.
+Recognise that regular activities before sleep make up our bedtime routine. Relaxing and calming activities support good sleep. 
 
-Why is it important to be consistent? It’s about falling in step with life’s rhythms.
+We'll start with little changes first to make it easy to be consistent.
+
+Consistency helps us to dance in step with life’s rhythms.
 """;
 }
 
