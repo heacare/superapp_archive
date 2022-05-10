@@ -178,7 +178,7 @@ class NowHowEfficientSleep extends Page {
   NowHowEfficientSleep({Key? key}) : super(key: key);
 
   @override
-  final nextPage = () => NowHowEfficientSleep2();
+  final nextPage = () => NowDifficultySleeping();
   @override
   final prevPage = () => NowGetSleep();
 
@@ -205,14 +205,13 @@ class NowHowEfficientSleep extends Page {
         children: <Widget>[
           PageImage(image),
           const SizedBox(height: 4.0),
-          MarkdownBody(
-              data: """
-Here's a sneak insight!
-
-Your avergae sleep efficiency is
-""",
-              extensionSet: md.ExtensionSet.gitHubFlavored,
-              styleSheet: markdownStyleSheet),
+          Center(
+            child: Text(
+              "Based on your sleep data, you are spending an average of:",
+              style: Theme.of(context).textTheme.bodyLarge,
+              textAlign: TextAlign.center,
+            ),
+          ),
           Center(
             child: Text(
               "$sleepEfficiencyPercent%",
@@ -220,39 +219,22 @@ Your avergae sleep efficiency is
               textAlign: TextAlign.center,
             ),
           ),
+          Center(
+            child: Text(
+              "quality time in bed",
+              style: Theme.of(context).textTheme.bodyLarge,
+              textAlign: TextAlign.center,
+            ),
+          ),
+		  const SizedBox(height: 8),
           MarkdownBody(
               data: """
-A sleep efficiency of 85% and above is considered in the healthy range.
-
-Being aware of how much quality time you’re actually spending in bed can help you sleep smarter and get more time to do things you love (unless staying in bed is actually one!)
-
-Many of us try to catch up on our sleep during the weekends. This actually sets up a vicious cycle of recurring sleep debt and fatigue during the week.
+85% and above is considered healthy. Monitoring your sleep efficiency can help you sleep smarter, earning you more time in the day.
 """,
               extensionSet: md.ExtensionSet.gitHubFlavored,
               styleSheet: markdownStyleSheet),
         ]);
   }
-}
-
-class NowHowEfficientSleep2 extends MarkdownPage {
-  NowHowEfficientSleep2({Key? key}) : super(key: key);
-
-  @override
-  final nextPage = () => NowDifficultySleeping();
-  @override
-  final prevPage = () => NowHowEfficientSleep();
-
-  @override
-  final title = "How efficient is your sleep?";
-  @override
-  final image = Image.asset("assets/images/sleep/ch02-good-morning.webp");
-
-  @override
-  final markdown = """
-Contrary to popular belief, sleeping less isn’t a sign of being productive.
-
-What most fail to recognise is that this “skill” is only celebrated by a handful of successful and famous people. What we don’t know are how they manage this, the underlying health conditions that follow, or irreversible consequences that happen later.
-""";
 }
 
 class NowDifficultySleeping extends MultipleChoicePage {
@@ -261,7 +243,7 @@ class NowDifficultySleeping extends MultipleChoicePage {
   @override
   final nextPage = () => NowSleepDisturbances();
   @override
-  final prevPage = () => NowHowEfficientSleep2();
+  final prevPage = () => NowHowEfficientSleep();
 
   @override
   final title = "In the past month";
@@ -881,7 +863,7 @@ class NowScore extends Page {
           Center(
             child: Text(
               "Great work reflecting on your sleep. You have a sleep score of:",
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: Theme.of(context).textTheme.bodyLarge,
               textAlign: TextAlign.center,
             ),
           ),
@@ -895,10 +877,11 @@ class NowScore extends Page {
           Center(
             child: Text(
               "The lower the score, the better your sleep quality. The breakdown below gives you clarity on which area of your sleep to improve.",
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: Theme.of(context).textTheme.bodyLarge,
               textAlign: TextAlign.center,
             ),
           ),
+		  const SizedBox(height: 8),
           MarkdownBody(
               data: """
 | Areas of your sleep | # of issues |

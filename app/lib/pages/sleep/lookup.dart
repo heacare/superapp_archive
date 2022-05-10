@@ -19,7 +19,6 @@ Lesson sleep = Lesson([
   PageDef(NowTimeOutBed, () => NowTimeOutBed()),
   PageDef(NowGetSleep, () => NowGetSleep()),
   PageDef(NowHowEfficientSleep, () => NowHowEfficientSleep()),
-  PageDef(NowHowEfficientSleep2, () => NowHowEfficientSleep2()),
   PageDef(NowDifficultySleeping, () => NowDifficultySleeping()),
   PageDef(NowSleepDisturbances, () => NowSleepDisturbances()),
   PageDef(NowTroubleSleepingWakeUp, () => NowTroubleSleepingWakeUp()),
