@@ -6,11 +6,13 @@ class GradientButton extends StatelessWidget {
       required this.text,
       this.onPressed,
       this.firstColor,
-      this.secondColor})
+      this.secondColor,
+      this.noGradient = false})
       : super(key: key);
 
   final String text;
   final VoidCallback? onPressed;
+  final bool noGradient;
 
   final Color? firstColor;
   final Color? secondColor;
@@ -28,21 +30,24 @@ class GradientButton extends StatelessWidget {
             constraints: const BoxConstraints(minWidth: 88.0, minHeight: 36.0),
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [a, b],
-              ),
+              gradient: noGradient
+                  ? null
+                  : LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [a, b],
+                    ),
+              color: noGradient ? const Color(0xFFEBEBEB) : null,
               borderRadius: const BorderRadius.all(Radius.circular(15.0)),
             ),
             child: Text(text.toUpperCase(),
-                style: const TextStyle(
+                style: TextStyle(
                     fontFamily: "Poppins",
                     letterSpacing: 1.0,
                     fontSize: 20.0,
                     fontWeight: FontWeight.w600,
                     height: 1.5,
-                    color: Colors.white),
+                    color: noGradient ? Colors.black : Colors.white),
                 textAlign: TextAlign.center),
           ),
         ));

@@ -50,6 +50,15 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
     ));
   }
 
+  Future<void> skip() async {
+    Navigator.of(context, rootNavigator: true).pop(OnboardingStepReturn(
+      nextStep: OnboardingStep.starter,
+      returnData: <String, dynamic>{
+        "healthData": [],
+      },
+    ));
+  }
+
   Widget _contentFetchingData() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -110,10 +119,15 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
                           height: 1.4,
                           color: const Color(0xFF707070))),
                   Padding(
-                      child: GradientButton(
-                        text: "SYNC DATA",
-                        onPressed: fetchData,
-                      ),
+                      child: Column(children: [
+                        GradientButton(
+                            text: "Skip", onPressed: skip, noGradient: true),
+                        const SizedBox(height: 10.0),
+                        GradientButton(
+                          text: "SYNC DATA",
+                          onPressed: fetchData,
+                        ),
+                      ]),
                       padding: const EdgeInsets.only(top: 30.0))
                 ])));
   }

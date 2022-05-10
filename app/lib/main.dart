@@ -300,7 +300,7 @@ class LifecycleHandler extends StatefulWidget {
 
 class LifecycleHandlerState extends State<LifecycleHandler>
     with WidgetsBindingObserver {
-  AppLifecycleState lastState = AppLifecycleState.detached;
+  bool lastState = false;
 
   @override
   Widget build(BuildContext context) {
@@ -321,12 +321,12 @@ class LifecycleHandlerState extends State<LifecycleHandler>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (lastState == state) {
-      return;
-    }
-    lastState = state;
     bool active = state == AppLifecycleState.resumed ||
         state == AppLifecycleState.inactive;
+    if (lastState == active) {
+      return;
+    }
+    lastState = active;
     serviceLocator<LoggingService>().createLog("state", active);
   }
 }
