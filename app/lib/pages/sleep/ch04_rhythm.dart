@@ -72,9 +72,9 @@ class RhythmHow extends MarkdownPage {
 
   @override
   final markdown = """
-These biological clocks regulate physiological and chemical changes in our body. The timing of these changes is synchronised by our **Circadian Rhythm** - a central pacemaker controlled by an internal master clock in the brain, the suprachiasmatic nucleus. 
+Every cell in our body has its own **biological clock**. The timing of these clocks is synchronised by our **Circadian Rhythm** - a central **pacemaker** managed by a **master clock** in the brain called the suprachiasmatic nucleus.
 
-Our sleep-wake cycle, body temperature changes and hormone secretions need to synchronise to carry out essential bodily functions effectively. 
+This **synchronisation** helps our bodies effectively manage essential tasks like the sleep-wake cycle, and temperature and hormone changes.
 
 Let’s see what affects this rhythm.
 """;
@@ -95,11 +95,13 @@ class RhythmPeaksAndDips1 extends MarkdownPage {
 
   @override
   final markdown = """
-Ever wondered why you are sometimes so productive, or why your energy slumps around midday when your brain seems to switch off? 
+Our energy levels are determined by the sleep-wake cycle (rhythm). This is a dance of two processes, our **circadian or wake drive**, and our **sleep drive**.
 
-Our energy levels are determined by the sleep-wake cycle. This is a dance of two processes, our circadian or wake drive, and our sleep drive. 
+This **circadian drive** keeps us awake and regulates our body functions such as temperature and chemical processes 24 hours a day. 
 
-The circadian cycle affects both sleep and wakefulness. Our internal pacemaker does this by regulating body temperature and chemical processes 24 hours a day, and other functions.
+The **sleep drive**, on the other hand, works to **stabilise** our biological systems to best survive amidst changing conditions.
+
+This cycling rhythm affects our sleep and wakefulness.
 """;
 }
 
@@ -118,11 +120,9 @@ class RhythmPeaksAndDips2 extends MarkdownPage {
 
   @override
   final markdown = """
-The sleep drive, on the other hand, is a process that works to stabilise our biological systems for optimal survival amidst changing conditions.
+The **interplay of these two processes** creates high energy peaks and low energy dips across our day. This is why you find yourself most productive at a certain time of day, or why your brain seems to switch off around midday with an energy slump. 
 
-The interplay of these two processes creates peaks of high energy and dips of low energy across our day. 
-
-When these peaks and dips will happen depend on our sleep and wake times - a highly personal choice by each of us.
+When these peaks and dips happen depend on our sleep and wake times - a highly **personal** choice for each of us.
 """;
 }
 
