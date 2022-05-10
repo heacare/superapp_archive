@@ -880,15 +880,27 @@ class NowScore extends Page {
           if (image != null) const SizedBox(height: 4.0),
           Center(
             child: Text(
+              "Great work reflecting on your sleep. You have a sleep score of:",
+              style: Theme.of(context).textTheme.bodyMedium,
+              textAlign: TextAlign.center,
+            ),
+          ),
+          Center(
+            child: Text(
               "$overallScore",
               style: Theme.of(context).textTheme.headlineLarge,
               textAlign: TextAlign.center,
             ),
           ),
+          Center(
+            child: Text(
+              "The lower the score, the better your sleep quality. The breakdown below gives you clarity on which area of your sleep to improve.",
+              style: Theme.of(context).textTheme.bodyMedium,
+              textAlign: TextAlign.center,
+            ),
+          ),
           MarkdownBody(
               data: """
-Wonderful work diving into your sleep. Here’s how your score adds up. We hope the breakdown gives a clearer picture on which area of sleep you can improve.
-
 | Areas of your sleep | # of issues |
 |-|-|
 | Sleep quality | $subjectiveSleepQuality |
@@ -896,9 +908,9 @@ Wonderful work diving into your sleep. Here’s how your score adds up. We hope 
 | Sleep duration | $sleepTimeText |
 | Sleep efficiency | $sleepEfficiency |
 | Sleep disturbances | $sleepDisturbances |
-| Sleep medication depedency | $sleepMedication |
+| Sleep medication dependency | $sleepMedication |
 | Energy / Enthusiasm | $daytimeDysfunction |
-| **Total Sleep Quality score** | $overallScore |
+| **Total** | $overallScore |
 """,
               extensionSet: md.ExtensionSet.gitHubFlavored,
               styleSheet: markdownStyleSheet),
