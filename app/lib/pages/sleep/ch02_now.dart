@@ -598,6 +598,9 @@ class NowOtherFactors extends Page {
           if (markdown != "") const SizedBox(height: 4.0),
           TextFormField(
               initialValue: kvRead("sleep", valueName + "-reason"),
+              decoration: const InputDecoration(
+                labelText: "Type the other factor(s) here",
+              ),
               onChanged: (String value) {
                 kvWrite<String>("sleep", valueName + "-reason", value);
               }),

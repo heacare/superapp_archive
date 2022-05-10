@@ -446,7 +446,7 @@ class TimePickerBlockState extends State<TimePickerBlock> {
       style: TextButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
           primary: Colors.black,
-          backgroundColor: const Color(0xFFF5F5F5),
+          backgroundColor: const Color(0xFFEBEBEB),
           elevation: 0.0),
     );
   }

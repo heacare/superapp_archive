@@ -83,8 +83,8 @@ class SelectListState<T> extends State<SelectList<T>> {
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
           primary: Colors.black,
           backgroundColor: select
-              ? Theme.of(context).colorScheme.primary.withAlpha(0x30)
-              : const Color(0xFFF5F5F5),
+              ? Theme.of(context).colorScheme.primary.withAlpha(0x50)
+              : const Color(0xFFEBEBEB),
           elevation: 0.0),
     );
   }
@@ -93,7 +93,8 @@ class SelectListState<T> extends State<SelectList<T>> {
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
       const SizedBox(height: 11.0),
       TextFormField(
-          decoration: const InputDecoration(labelText: "Type your option here"),
+          decoration:
+              const InputDecoration(labelText: "Type your own choice here"),
           initialValue: widget.defaultOther,
           onChanged: (String value) {
             if (widget.onChangeOther != null) {

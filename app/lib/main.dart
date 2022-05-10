@@ -169,7 +169,7 @@ class _AppState extends State<App> {
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(50.0),
             ),
-            fillColor: const Color(0xFFF5F5F5),
+            fillColor: const Color(0xFFEBEBEB),
             filled: true,
             enabledBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.transparent, width: 2.0)),

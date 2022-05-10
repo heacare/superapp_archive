@@ -384,7 +384,7 @@ class ModuleListItem extends StatelessWidget {
             padding:
                 const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
             decoration: const BoxDecoration(
-              color: Color(0xFFF5F5F5),
+              color: Color(0xFFEBEBEB),
               borderRadius: BorderRadius.all(Radius.circular(20.0)),
             ),
             child: Row(children: <Widget>[
@@ -440,7 +440,7 @@ class ModuleCheckinItem extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 15.0, vertical: 20.0),
                     decoration: const BoxDecoration(
-                      color: Color(0xFFF5F5F5),
+                      color: Color(0xFFEBEBEB),
                       borderRadius: BorderRadius.all(Radius.circular(20.0)),
                     ),
                     child: Row(children: <Widget>[
