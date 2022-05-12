@@ -15,7 +15,10 @@ class SleepAutofill {
   final DateTime? outBed;
 
   const SleepAutofill(
-      {required this.inBed, this.asleep, this.awake, this.outBed});
+      {required this.inBed,
+      required this.asleep,
+      required this.awake,
+      required this.outBed});
 
   toJson() => {
         "in-bed": inBed?.toIso8601String(),
@@ -182,25 +185,41 @@ class HealthService {
     );
   }
 
+  Timer? cacheExpire;
+  SleepAutofill? cache30Day;
+
   Future<SleepAutofill?> autofillRead30Day() async {
     if (!await request()) {
       return null;
     }
+
+    if (cache30Day != null) {
+      return cache30Day;
+    }
+    cacheExpire = Timer(const Duration(minutes: 10), () {
+      cache30Day = null;
+    });
+
+    final stopwatch = Stopwatch();
 
     DateTime now = DateTime.now();
     DateTime thisMorning = DateTime(now.year, now.month, now.day, 0, 0);
     DateTime startDate =
         thisMorning.subtract(const Duration(days: 30, hours: 12));
     DateTime endDate = DateTime.now();
+
+    stopwatch.start();
     List<HealthDataPoint> healthData =
         await health.getHealthDataFromTypes(startDate, endDate, [
       HealthDataType.SLEEP_IN_BED,
       HealthDataType.SLEEP_ASLEEP,
       HealthDataType.SLEEP_AWAKE,
     ]);
+    int stopwatchFetch = stopwatch.elapsedMicroseconds;
 
     List<SleepAutofill> entries = [];
     DateTime periodEnd = startDate.add(const Duration(days: 1));
+    int stopwatchProcessing = 0;
     while (periodEnd.isBefore(endDate)) {
       DateTime periodStart = periodEnd.subtract(const Duration(days: 1));
       List<HealthDataPoint> nightData = [];
@@ -213,12 +232,14 @@ class HealthService {
         }
         return false;
       });
+      stopwatchProcessing = stopwatch.elapsedMicroseconds;
       SleepAutofill? nightAutofill = processNight(nightData);
       if (nightAutofill != null) {
         entries.add(nightAutofill);
       }
       periodEnd = periodEnd.add(const Duration(days: 1));
     }
+    int stopwatchProcessed = stopwatch.elapsedMicroseconds;
 
     TimeOfDay? inBed = meanTimeOfDay(entries
         .where((e) => e.inBed != null)
@@ -232,6 +253,14 @@ class HealthService {
     TimeOfDay? outBed = meanTimeOfDay(entries
         .where((e) => e.outBed != null)
         .map((e) => TimeOfDay(hour: e.outBed!.hour, minute: e.outBed!.minute)));
+    int stopwatchCalculatedMean = stopwatch.elapsedMicroseconds;
+    stopwatch.stop();
+    serviceLocator<LoggingService>().createLog('perf-autofill-30-day', {
+      "t-fetch": stopwatchFetch,
+      "d-processNightx1": stopwatchProcessed - stopwatchProcessing,
+      "t-processed": stopwatchProcessed,
+      "t-calculatedMean": stopwatchCalculatedMean,
+    });
 
     DateTime? withTimeOfDay(DateTime date, TimeOfDay? time) {
       if (time == null) {
@@ -240,12 +269,15 @@ class HealthService {
       return DateTime(date.year, date.month, date.day, time.hour, time.minute);
     }
 
-    return SleepAutofill(
+    cache30Day = SleepAutofill(
       inBed: withTimeOfDay(startDate, inBed),
       asleep: withTimeOfDay(startDate, asleep),
       awake: withTimeOfDay(startDate, awake),
       outBed: withTimeOfDay(startDate, outBed),
     );
+    serviceLocator<LoggingService>()
+        .createLog('sleep-autofill-30-day', cache30Day);
+    return cache30Day;
   }
 
   Future<SleepAutofill?> autofillRead1Day() async {

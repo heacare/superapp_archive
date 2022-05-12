@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:hea/services/notification_service.dart';
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/services/sleep_checkin_service.dart';
+import 'package:hea/services/logging_service.dart';
 import 'package:hea/services/health_service.dart';
 import 'package:hea/utils/sleep_notifications.dart';
 import 'package:hea/widgets/page.dart';
@@ -43,6 +44,11 @@ class SleepCheckinState extends State<SleepCheckin> {
           content: Text("Please indicate the time you fell asleep")));
       return false;
     }
+    if (data.sleepDuration == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Please indicate sleep duration")));
+      return false;
+    }
     if (data.timeOutBed == null) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text("Please indicate the time you woke up")));
@@ -58,6 +64,8 @@ class SleepCheckinState extends State<SleepCheckin> {
     () async {
       SleepAutofill? sleepAutofill =
           await serviceLocator<HealthService>().autofillRead1Day();
+      serviceLocator<LoggingService>()
+          .createLog("sleep-autofill", sleepAutofill);
       if (sleepAutofill == null) {
         autofillMessageGoBed =
             "No autofill data available. Please provide your best estimate";
