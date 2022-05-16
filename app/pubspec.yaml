@@ -60,7 +60,7 @@ dependencies:
   colorful_safe_area: ^0.3.0
   country_picker: ^2.0.15
 
-  google_maps_flutter: ^2.1.4
+  google_maps_flutter: ^2.1.5
   location: ^4.3.0
   permission_handler: ^9.2.0
 
