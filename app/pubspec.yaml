@@ -50,7 +50,7 @@ dependencies:
   # UI
   intl: ^0.17.0
   flutter_markdown: ^0.6.6
-  url_launcher: ^6.0.12
+  url_launcher: ^6.1.2
   flutter_custom_tabs: ^1.0.4
   date_time_picker: ^2.1.0
   flutter_svg: ^1.0.3
