@@ -45,7 +45,7 @@ dependencies:
     path: plugins/health/
 
   # Storage
-  shared_preferences: ^2.0.13
+  shared_preferences: ^2.0.15
 
   # UI
   intl: ^0.17.0
