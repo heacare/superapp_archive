@@ -1,3 +1,3 @@
 test('hello', () => {
-	console.debug("No tests");
+  console.debug('No tests');
 });
