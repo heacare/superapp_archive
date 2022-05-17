@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AuthController } from './auth/auth.controller';
@@ -24,6 +24,7 @@ import { Session } from './session/session.entity';
 import { LoggingController } from './logging/logging.controller';
 import { LoggingService } from './logging/logging.service';
 import { Log } from './logging/log.entity';
+import { CorsMiddleware } from '../middleware/cors.middleware';
 
 export const ApiFirebaseModule = FirebaseAdminModule.forRootAsync({
   useFactory: () => {
@@ -55,4 +56,8 @@ export const ApiJwtModule = JwtModule.register({
     ApiAuthStrategy,
   ],
 })
-export class ApiModule {}
+export class ApiModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(CorsMiddleware).forRoutes('logging/dump');
+  }
+}
