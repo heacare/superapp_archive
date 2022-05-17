@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { AuthUser } from '../auth/auth.strategy';
 import { LogDto } from './log.dto';
 import { Log } from './log.entity';
@@ -17,6 +17,14 @@ export class LoggingService {
       tzClient: tz,
       key,
       value,
+    });
+  }
+
+  async dump(start: Date, end: Date): Promise<Log[]> {
+    return await this.logs.find({
+      where: {
+        timestamp: Between(start, end),
+      },
     });
   }
 }
