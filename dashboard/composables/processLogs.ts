@@ -215,6 +215,6 @@ function processLogs(logs: Log[]): Record<string, User> {
   return users;
 }
 
-export function useProcessLogs(logs: Log[] | Ref<Log[]> | null): Ref<Record<string, User>> {
-  return computed(() => processLogs(unref(logs ?? [])));
+export function useProcessLogs(logs: Log[] | Ref<Log[]>): Ref<Record<string, User>> {
+  return computed(() => processLogs(unref(logs) ?? []));
 }

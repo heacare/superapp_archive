@@ -1,9 +1,7 @@
-import type { Log } from '../types/api';
-
-export const useLogs = async (secret: string, start: Date, end: Date) => {
+export const useLogsRequest = (secret: string, start: string, end: string): RequestInfo | string => {
   const url = new URL('https://api.alpha.hea.care/api/logging/dump');
   url.searchParams.append('secret', secret);
-  url.searchParams.append('start', start.toISOString());
-  url.searchParams.append('end', end.toISOString());
-  return await useFetch<Log[]>(url.toString());
+  url.searchParams.append('start', start);
+  url.searchParams.append('end', end);
+  return url.toString();
 };

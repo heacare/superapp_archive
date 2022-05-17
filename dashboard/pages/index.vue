@@ -1,16 +1,26 @@
 <template>
-  <Button @click="logs.refresh()">Refresh</Button>
+  <Button @click="update()">Refresh</Button>
   <UserDataElement v-for="user in users" :key="user.id" :user="user" :period="{ start, end }" />
 </template>
 
 <script setup lang="ts">
 import { DateTime } from 'luxon';
 
-const now = DateTime.utc().set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
-const start = now.minus({ days: 7 });
-const end = now.plus({ days: 1 });
+import type { Log } from '../types/api';
+
+const now = ref(DateTime.utc());
+const end = computed(() => now.value.set({ millisecond: 0 }));
+const start = computed(() => end.value.minus({ days: 8 }));
+const endQuery = computed(() => now.value.set({ millisecond: 0 }).plus({ minutes: 1 }));
 
 const secret = useSecret();
-const logs = secret ? await useLogs(secret, start.toJSDate(), end.toJSDate()) : null;
-const users = useProcessLogs(logs?.data ?? null);
+const reqLogs = computed(() => useLogsRequest(secret ?? '', start.value.toISO(), endQuery.value.toISO()));
+const { data: logs } = await useFetch<Log[]>(reqLogs);
+const users = useProcessLogs(logs);
+
+function update() {
+  now.value = DateTime.utc();
+}
+
+watch(useTimer({ seconds: 60, repeat: true }), update);
 </script>
