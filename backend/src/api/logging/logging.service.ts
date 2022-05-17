@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Between, Repository } from 'typeorm';
+import { Not, Between, Repository } from 'typeorm';
 import { AuthUser } from '../auth/auth.strategy';
 import { LogDto } from './log.dto';
 import { Log } from './log.entity';
@@ -20,7 +20,15 @@ export class LoggingService {
     });
   }
 
-  async dump(start: Date, end: Date): Promise<Log[]> {
+  async dump(start: Date, end: Date, skipPastHealthData: boolean = true): Promise<Log[]> {
+    if (skipPastHealthData) {
+      return await this.logs.find({
+        where: {
+          timestamp: Between(start, end),
+          key: Not('past-health-data'),
+        },
+      });
+    }
     return await this.logs.find({
       where: {
         timestamp: Between(start, end),

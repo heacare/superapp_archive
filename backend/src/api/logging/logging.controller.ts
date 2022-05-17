@@ -11,7 +11,6 @@ if (!LOGGING_DUMP_SECRET) {
 }
 
 @Controller('/api/logging')
-@RequiresAuth()
 export class LoggingController {
   constructor(private logging: LoggingService) {}
 

@@ -7,7 +7,6 @@ import { ContentModule } from './content/content.module';
 import { UserController } from './user/user.controller';
 import { User } from './user/user.entity';
 import { UserService } from './user/user.service';
-import { LandingModule } from './landing/landing.module';
 
 import { FirebaseAdminModule } from '@tfarras/nestjs-firebase-admin';
 import * as firebaseAdmin from 'firebase-admin';
@@ -44,9 +43,8 @@ export const ApiJwtModule = JwtModule.register({
     ApiFirebaseModule,
     PassportModule,
     ApiJwtModule,
-    LandingModule,
   ],
-  controllers: [UserController, AuthController, HealerController, SessionController, LoggingController],
+  controllers: [LoggingController, UserController, AuthController, HealerController, SessionController],
   providers: [
     UserService,
     HealerService,
