@@ -5,9 +5,6 @@ import { LogDto, LogDumpDto, LogDumpSimplifiedDto } from './log.dto';
 import { LoggingService } from './logging.service';
 
 const LOGGING_DUMP_SECRET = process.env.LOGGING_DUMP_SECRET;
-if (!LOGGING_DUMP_SECRET) {
-  throw new Error('LOGGING_DUMP_SECRET is required');
-}
 
 @Controller('/api/logging')
 export class LoggingController {
@@ -21,6 +18,9 @@ export class LoggingController {
 
   @Get('dump')
   async dumpLog(@Query() query: LogDumpDto): Promise<LogDumpSimplifiedDto[]> {
+    if (!LOGGING_DUMP_SECRET) {
+      throw new UnauthorizedException();
+    }
     if (query.secret != LOGGING_DUMP_SECRET) {
       throw new UnauthorizedException();
     }
