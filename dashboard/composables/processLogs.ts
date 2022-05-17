@@ -5,83 +5,101 @@ import type { Log } from '../types/api';
 export interface User {
   id: number;
   name: string;
-  timezone: string;
+  timezone: string | null;
   navigations: UserNavigation[];
   inBed: UserSleep[];
   asleep: UserSleep[];
 }
 
 interface UserEvent {
-	timestamp: DateTime
+  timestamp: DateTime;
 }
 
 interface UserPeriod {
-	timestampStart: DateTime
-	timestampEnd: DateTime
+  timestampStart: DateTime;
+  timestampEnd: DateTime;
 }
 
 interface UserNavigation extends UserEvent {
-	page: string;
+  page: string;
 }
 
-interface UserSleep extends UserPeriod, UserEvent {
-}
+interface UserSleep extends UserPeriod, UserEvent {}
 
 interface TimeOfDay {
-	hour: number
-	minute: number
+  hour: number;
+  minute: number;
 }
 
 function processSleepTimeOfDay(reference: DateTime, timeOfDay: TimeOfDay): DateTime {
-	// Treat a time-of-day as "last night"
-	const day = reference.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
-	if (timeOfDay.hour > 12) {
-		return day.minus({ days: 1 }).set(timeOfDay);
-	} else {
-		return day.set(timeOfDay);
-	}
+  // Treat a time-of-day as "last night"
+  const day = reference.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+  if (timeOfDay.hour > 12) {
+    return day.minus({ days: 1 }).set(timeOfDay);
+  } else {
+    return day.set(timeOfDay);
+  }
+}
+
+interface LogCheckIn {
+  time: string;
+  'time-go-bed': TimeOfDay;
+  'time-out-bed': TimeOfDay;
+  'time-asleep-bed': TimeOfDay;
+  'sleep-duration': number;
+}
+
+function validateCheckIn(checkIn: unknown): checkIn is LogCheckIn {
+  const c = checkIn as LogCheckIn;
+  if (!c.time || c['sleep-duration'] == null || !c['time-asleep-bed'] || !c['time-go-bed'] || !c['time-out-bed']) {
+    return false;
+  }
+  return true;
 }
 
 function processLogs(logs: Log[]): Record<string, User> {
-  let users: Record<string, User> = {};
+  const users: Record<string, User> = {};
   for (const log of logs) {
     const userId = log.user.id;
-	let zone = FixedOffsetZone.parseSpecifier("UTC" + log.tzClient ?? "+0");
-	let timestamp = DateTime.fromISO(log.timestamp, { zone });
+    const zone = FixedOffsetZone.parseSpecifier('UTC' + (log.tzClient ?? '+0'));
+    let timestamp = DateTime.fromISO(log.timestamp, { zone });
 
-	const user = users[userId.toString(10)] ??= {
-		id: userId,
-		name: `User ${userId.toString()}`,
-		timezone: log.tzClient!,
-		navigations: [],
-		inBed: [],
-		asleep: [],
-	};
+    const user = (users[userId.toString(10)] ??= {
+      id: userId,
+      name: `User ${userId.toString()}`,
+      timezone: log.tzClient,
+      navigations: [],
+      inBed: [],
+      asleep: [],
+    });
 
     if (log.key === 'navigate') {
-		user.navigations.push({
-			timestamp,
-			page: log.value
-		});
-    } if (log.key === "sleep-checkin") {
-		const checkins = JSON.parse(log.value);
-		const checkin = checkins[0];
-		if (checkin) {
-			timestamp = DateTime.fromISO(checkin.time, { zone});
-			user.inBed.push({
-				timestamp,
-				timestampStart: processSleepTimeOfDay(timestamp, checkin["time-go-bed"]),
-				timestampEnd: processSleepTimeOfDay(timestamp, checkin["time-out-bed"]),
-			});
-			const asleepStart = processSleepTimeOfDay(timestamp, checkin["time-asleep-bed"]);
-			const asleepEnd = asleepStart.plus({ minutes: checkin["sleep-duration"] ?? 0 });
-			user.asleep.push({
-				timestamp,
-				timestampStart: asleepStart,
-				timestampEnd: asleepEnd,
-			});
-		}
-	}
+      user.navigations.push({
+        timestamp,
+        page: log.value,
+      });
+    }
+    if (log.key === 'sleep-checkin') {
+      const checkIns: unknown = JSON.parse(log.value);
+      if (Array.isArray(checkIns)) {
+        const checkIn: unknown = checkIns[0];
+        if (checkIn && validateCheckIn(checkIn)) {
+          timestamp = DateTime.fromISO(checkIn.time, { zone });
+          user.inBed.push({
+            timestamp,
+            timestampStart: processSleepTimeOfDay(timestamp, checkIn['time-go-bed']),
+            timestampEnd: processSleepTimeOfDay(timestamp, checkIn['time-out-bed']),
+          });
+          const asleepStart = processSleepTimeOfDay(timestamp, checkIn['time-asleep-bed']);
+          const asleepEnd = asleepStart.plus({ minutes: checkIn['sleep-duration'] ?? 0 });
+          user.asleep.push({
+            timestamp,
+            timestampStart: asleepStart,
+            timestampEnd: asleepEnd,
+          });
+        }
+      }
+    }
   }
   return users;
 }
