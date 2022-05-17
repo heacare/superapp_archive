@@ -1,5 +1,6 @@
 <template>
   <p>{{ logs }}</p>
+  <UserDataElement />
 </template>
 
 <script setup lang="ts">
