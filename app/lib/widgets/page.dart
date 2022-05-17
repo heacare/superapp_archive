@@ -227,6 +227,7 @@ abstract class OpenEndedPage extends Page {
   abstract final Image? image;
 
   abstract final String valueName;
+  abstract final String label;
 
   const OpenEndedPage({Key? key}) : super(key: key);
 
@@ -248,6 +249,9 @@ abstract class OpenEndedPage extends Page {
           if (markdown != "") const SizedBox(height: 4.0),
           TextFormField(
               initialValue: kvRead("sleep", valueName),
+              decoration: InputDecoration(
+                labelText: label,
+              ),
               onChanged: (String value) {
                 kvWrite<String>("sleep", valueName, value);
               })

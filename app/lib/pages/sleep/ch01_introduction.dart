@@ -114,7 +114,7 @@ class IntroductionHowTrackSleep extends MultipleChoicePage {
   IntroductionHowTrackSleep({Key? key}) : super(key: key);
 
   @override
-  final nextPage = () => NowFirstThingsFirst();
+  final nextPage = () => IntroductionHowTrackSleep2();
   @override
   final prevPage = () => IntroductionHowTrackHealth();
 
@@ -147,4 +147,37 @@ Which tools/devices are you using to track your sleep and health during this pro
     SelectListItem(text: "Pen and paper", value: "PenPaper"),
     SelectListItem(text: "Other", value: "", other: true),
   ];
+}
+
+class IntroductionHowTrackSleep2 extends OpenEndedPage {
+  IntroductionHowTrackSleep2({Key? key}) : super(key: key);
+
+  @override
+  final nextPage = () => NowFirstThingsFirst();
+  @override
+  final prevPage = () => IntroductionHowTrackSleep();
+
+  @override
+  final title = "How are you tracking sleep and health?";
+  @override
+  final image = null;
+
+  @override
+  final markdown = """
+If you're using a wearable or device, let us know the model of your device. This
+helps us make better decisions based on the model.
+
+For example:
+- Apple Watch Series 7
+- Apple Watch SE
+- Garmin venu sq
+- Garmin vivosmart 5
+- Fitbit charge 5
+- Fitbit luxe
+""";
+
+  @override
+  final valueName = "tracking-tool-model";
+  @override
+  final label = "Enter your device model";
 }

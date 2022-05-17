@@ -13,6 +13,7 @@ Lesson sleep = Lesson([
   PageDef(IntroductionGettingToKnowYou, () => IntroductionGettingToKnowYou()),
   PageDef(IntroductionHowTrackHealth, () => IntroductionHowTrackHealth()),
   PageDef(IntroductionHowTrackSleep, () => IntroductionHowTrackSleep()),
+  PageDef(IntroductionHowTrackSleep2, () => IntroductionHowTrackSleep2()),
   PageDef(NowFirstThingsFirst, () => NowFirstThingsFirst()),
   PageDef(NowTimeGoneBed, () => NowTimeGoneBed()),
   PageDef(NowMinutesFallAsleep, () => NowMinutesFallAsleep()),

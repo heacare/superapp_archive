@@ -16,7 +16,7 @@ class NowFirstThingsFirst extends MarkdownPage {
   @override
   final nextPage = () => NowTimeGoneBed();
   @override
-  final prevPage = () => IntroductionHowTrackSleep();
+  final prevPage = () => IntroductionHowTrackSleep2();
 
   @override
   final title = "First things first";
