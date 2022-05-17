@@ -29,13 +29,13 @@ export interface User {
   continueAction?: string;
 }
 
-interface UserEvent {
+export interface UserEvent {
   timestamp: DateTime;
 }
 
-interface UserPeriod {
-  timestampStart: DateTime;
-  timestampEnd: DateTime;
+export interface UserPeriod {
+  start: DateTime;
+  end: DateTime;
 }
 
 interface UserNavigation extends UserEvent {
@@ -143,8 +143,8 @@ function processLogs(logs: Log[]): Record<string, User> {
           continue;
         }
         user.active.push({
-          timestampStart: lastActive,
-          timestampEnd: timestamp,
+          start: lastActive,
+          end: timestamp,
         });
         lastActive = null;
       }
@@ -195,15 +195,15 @@ function processLogs(logs: Log[]): Record<string, User> {
           timestamp = DateTime.fromISO(checkIn.time, { zone });
           user.inBed.push({
             timestamp,
-            timestampStart: processSleepTimeOfDay(timestamp, checkIn['time-go-bed']),
-            timestampEnd: processSleepTimeOfDay(timestamp, checkIn['time-out-bed']),
+            start: processSleepTimeOfDay(timestamp, checkIn['time-go-bed']),
+            end: processSleepTimeOfDay(timestamp, checkIn['time-out-bed']),
           });
           const asleepStart = processSleepTimeOfDay(timestamp, checkIn['time-asleep-bed']);
           const asleepEnd = asleepStart.plus({ minutes: checkIn['sleep-duration'] ?? 0 });
           user.asleep.push({
             timestamp,
-            timestampStart: asleepStart,
-            timestampEnd: asleepEnd,
+            start: asleepStart,
+            end: asleepEnd,
           });
         }
       }
