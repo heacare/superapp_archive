@@ -31,6 +31,9 @@ export class LoggingService {
         key: Not(In(ignored)),
       },
       relations: ['user'],
+      order: {
+        timestamp: 'ASC',
+      },
     });
     return logs;
   }
