@@ -24,6 +24,13 @@ class SleepCheckinProgress extends ChangeNotifier {
     notifyListeners();
   }
 
+  extend(int days) {
+	  total = total + days;
+    kvWrite("sleep", "day-total", total);
+    recalculate();
+    notifyListeners();
+  }
+
   get dayCounter {
     if (todayDone) {
       return day;
@@ -164,6 +171,7 @@ class SleepCheckinData {
 abstract class SleepCheckinService {
   SleepCheckinProgress getProgress();
   Future<void> add(SleepCheckinData data);
+  extend(int days);
   List<SleepCheckinData> storageRead();
   reset();
 }
@@ -185,6 +193,12 @@ class SleepCheckinServiceImpl implements SleepCheckinService {
         .createLog("sleep-checkin", list.map((d) => d.toJson()).toList());
     SleepCheckinProgress progress = getProgress();
     progress.addDay();
+  }
+
+  @override
+  extend(int days) {
+    SleepCheckinProgress progress = getProgress();
+    progress.extend(days);
   }
 
   @override
