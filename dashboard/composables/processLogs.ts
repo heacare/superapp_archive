@@ -13,6 +13,7 @@ export interface User {
   inBed: UserSleep[];
   asleep: UserSleep[];
   resets: UserReset[];
+  checkInCount: number;
 
   trackingTools?: string[];
   trackingToolModel?: string;
@@ -121,6 +122,7 @@ function processLogs(logs: Log[]): Record<string, User> {
       inBed: [],
       asleep: [],
       resets: [],
+      checkInCount: 0,
     });
 
     if (log.key === 'navigate') {
@@ -187,6 +189,7 @@ function processLogs(logs: Log[]): Record<string, User> {
         });
       }
       if (Array.isArray(data)) {
+        user.checkInCount = data.length;
         const checkIn: unknown = data[0];
         if (checkIn && validateCheckIn(checkIn)) {
           timestamp = DateTime.fromISO(checkIn.time, { zone });

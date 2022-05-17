@@ -38,6 +38,7 @@
       </li>
     </ul>
     <ul>
+      <li>Check-ins: {{ user.checkInCount }}</li>
       <li v-if="user.navigationsRecent">Page: {{ user.navigationsRecent }}</li>
       <li v-if="user.trackingTools">
         Tracking tools: {{ user.trackingTools.join(', ') }} ({{ user.trackingToolModel }})
