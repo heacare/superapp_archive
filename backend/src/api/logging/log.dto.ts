@@ -1,3 +1,4 @@
+import { Log } from './log.entity';
 import { IsString, IsISO8601, IsNotEmpty, IsOptional } from 'class-validator';
 
 export class LogDto {
@@ -26,4 +27,10 @@ export class LogDumpDto {
 
   @IsISO8601()
   end: string;
+}
+
+export interface LogDumpSimplifiedDto extends Omit<Log, 'user'> {
+  user: {
+    id: number;
+  };
 }
