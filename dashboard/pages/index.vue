@@ -13,18 +13,5 @@ const end = now.plus({ years: 1 });
 
 const secret = useSecret();
 const logs = secret ? await useLogs(secret, start.toJSDate(), end.toJSDate()) : null;
-const users: User[] | null = computed(() => {
-	if (!logs) {
-		return null;
-	}
-	return processLogs(logs.data);
-});
-
-interface User {
-	id: number
-}
-
-function processLogs(logs: Log[]): User[] {
-	return [];
-}
+const users = useProcessLogs(logs?.data);
 </script>
