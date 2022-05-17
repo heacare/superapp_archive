@@ -20,7 +20,7 @@ export class LoggingService {
     });
   }
 
-  async dump(start: Date, end: Date, skipPastHealthData: boolean = true): Promise<Log[]> {
+  async dump(start: Date, end: Date, skipPastHealthData = true): Promise<Log[]> {
     if (skipPastHealthData) {
       return await this.logs.find({
         where: {

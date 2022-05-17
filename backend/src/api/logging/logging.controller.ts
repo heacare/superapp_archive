@@ -15,6 +15,7 @@ export class LoggingController {
   constructor(private logging: LoggingService) {}
 
   @Post('simple')
+  @RequiresAuth()
   async createLog(@RequiresAuthUser() user: AuthUser, @Body() log: LogDto): Promise<void> {
     await this.logging.create(user, log);
   }
