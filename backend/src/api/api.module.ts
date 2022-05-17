@@ -58,6 +58,6 @@ export const ApiJwtModule = JwtModule.register({
 })
 export class ApiModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(CorsMiddleware).forRoutes('logging/dump');
+    consumer.apply(CorsMiddleware).forRoutes('api/logging/dump');
   }
 }
