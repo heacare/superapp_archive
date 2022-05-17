@@ -1,5 +1,6 @@
 # Compiled output
 /.nuxt
+/.output
 
 # Dependencies
 /node_modules
