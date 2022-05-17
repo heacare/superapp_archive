@@ -1,4 +1,4 @@
-interface Log {
+interface LogData {
   id: number;
   key: string;
   timestamp: string;
@@ -15,13 +15,5 @@ export const useLogs = async (secret: string, start: Date, end: Date) => {
   url.searchParams.append('secret', secret);
   url.searchParams.append('start', start.toISOString());
   url.searchParams.append('end', end.toISOString());
-  const { data: logs } = await useFetch<Log[]>(url.toString());
-  if (logs.value === null) {
-    return null;
-  }
-  return logs.value.map((log: Log) => ({
-    ...log,
-    timestamp: new Date(log.timestamp),
-    tsClient: new Date(log.tsClient),
-  }));
+  return await useFetch<LogData[]>(url.toString());
 };
