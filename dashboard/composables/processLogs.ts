@@ -14,6 +14,7 @@ export interface User {
   asleep: UserSleep[];
   resets: UserReset[];
   checkInCount: number;
+  currentlyActive: boolean;
 
   trackingTools?: string[];
   trackingToolModel?: string;
@@ -123,6 +124,7 @@ function processLogs(logs: Log[]): Record<string, User> {
       asleep: [],
       resets: [],
       checkInCount: 0,
+      currentlyActive: false,
     });
 
     if (log.key === 'navigate') {
@@ -135,6 +137,7 @@ function processLogs(logs: Log[]): Record<string, User> {
     }
     if (log.key === 'state') {
       const state: boolean = JSON.parse(log.value) as boolean;
+      user.currentlyActive = state;
       if (state) {
         lastActive = timestamp;
       } else {

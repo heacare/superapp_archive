@@ -22,7 +22,13 @@
         <h3>Navigations</h3>
         <RangeBar :start-range="startRange" :end-range="endRange" :ranges="navigations" fill-color="bg-yellow-400" />
         <h3>Active</h3>
-        <RangeBar :start-range="startRange" :end-range="endRange" :ranges="active" fill-color="bg-red-400" />
+        <RangeBar
+          :start-range="startRange"
+          :end-range="endRange"
+          :ranges="active"
+          fill-color="bg-red-400"
+          :dot="user.currentlyActive"
+        />
         <h3>In Bed</h3>
         <RangeBar :start-range="startRange" :end-range="endRange" :ranges="inBed" fill-color="bg-blue-600" />
         <h3>Asleep</h3>

@@ -8,6 +8,12 @@
       :style="{ minWidth: '1px', width: bar.width + '%', left: bar.offset + '%' }"
       :title="bar.label"
     ></div>
+    <div
+      v-if="dot"
+      class="h-4 w-4 top-1 right-1 absolute rounded-full"
+      :class="[dotFillColor ?? 'bg-green-500']"
+      :title="dotLabel"
+    ></div>
   </div>
 </template>
 
@@ -17,6 +23,9 @@ interface Props {
   fillColor: string;
   startRange: number;
   endRange: number;
+  dot?: boolean;
+  dotFillColor?: string;
+  dotLabel?: string;
 }
 
 const props = defineProps<Props>();
