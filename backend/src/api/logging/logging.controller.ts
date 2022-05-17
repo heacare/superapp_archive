@@ -1,7 +1,7 @@
-import { Body, Controller, Post, Param, UnauthorizedException, BadRequestException } from '@nestjs/common';
+import { Body, Controller, Post, Get, Query, UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { AuthUser } from '../auth/auth.strategy';
 import { RequiresAuth, RequiresAuthUser } from '../auth/requiresAuthUser.decorator';
-import { LogDto } from './log.dto';
+import { LogDto, LogDumpDto } from './log.dto';
 import { LoggingService } from './logging.service';
 import { Log } from './log.entity';
 
@@ -20,13 +20,13 @@ export class LoggingController {
     await this.logging.create(user, log);
   }
 
-  @Post('dump')
-  async dumpLog(@Param() secret: string, @Param() start: string, @Param() end: string): Promise<Log[]> {
-    if (secret != LOGGING_DUMP_SECRET) {
+  @Get('dump')
+  async dumpLog(@Query() query: LogDumpDto): Promise<Log[]> {
+    if (query.secret != LOGGING_DUMP_SECRET) {
       throw new UnauthorizedException();
     }
-    const startDate = new Date(start);
-    const endDate = new Date(end);
+    const startDate = new Date(query.start);
+    const endDate = new Date(query.end);
     if (startDate.getTime() === NaN || endDate.getTime() === NaN) {
       throw new BadRequestException();
     }

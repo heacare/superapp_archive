@@ -16,3 +16,14 @@ export class LogDto {
   @IsString()
   value: string;
 }
+
+export class LogDumpDto {
+  @IsString()
+  secret: string;
+
+  @IsISO8601()
+  start: string;
+
+  @IsISO8601()
+  end: string;
+}
