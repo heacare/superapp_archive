@@ -1,7 +1,6 @@
 <template>
-  <UserDataElement />
   <Button @click="logs.refresh()">Refresh</Button>
-  <p>{{ users }}</p>
+  <UserDataElement v-for="user in users" :key="user.id" :user="user" />
 </template>
 
 <script setup lang="ts">

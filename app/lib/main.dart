@@ -321,8 +321,7 @@ class LifecycleHandlerState extends State<LifecycleHandler>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    bool active = state == AppLifecycleState.resumed ||
-        state == AppLifecycleState.inactive;
+    bool active = state == AppLifecycleState.resumed;
     if (lastState == active) {
       return;
     }

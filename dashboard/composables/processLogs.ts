@@ -7,6 +7,7 @@ export interface User {
   name: string;
   timezone: string | null;
   navigations: UserNavigation[];
+  active: UserActive[];
   inBed: UserSleep[];
   asleep: UserSleep[];
 }
@@ -23,6 +24,8 @@ interface UserPeriod {
 interface UserNavigation extends UserEvent {
   page: string;
 }
+
+type UserActive = UserPeriod;
 
 interface UserSleep extends UserPeriod, UserEvent {}
 
@@ -59,6 +62,9 @@ function validateCheckIn(checkIn: unknown): checkIn is LogCheckIn {
 
 function processLogs(logs: Log[]): Record<string, User> {
   const users: Record<string, User> = {};
+
+  let lastActive: DateTime | null = DateTime.fromMillis(0);
+
   for (const log of logs) {
     const userId = log.user.id;
     const zone = FixedOffsetZone.parseSpecifier('UTC' + (log.tzClient ?? '+0'));
@@ -69,6 +75,7 @@ function processLogs(logs: Log[]): Record<string, User> {
       name: `User ${userId.toString()}`,
       timezone: log.tzClient,
       navigations: [],
+      active: [],
       inBed: [],
       asleep: [],
     });
@@ -76,8 +83,24 @@ function processLogs(logs: Log[]): Record<string, User> {
     if (log.key === 'navigate') {
       user.navigations.push({
         timestamp,
-        page: log.value,
+        page: JSON.parse(log.value) as string,
       });
+    }
+    if (log.key === 'state') {
+      const state: boolean = JSON.parse(log.value) as boolean;
+      if (state) {
+        lastActive = timestamp;
+      } else {
+        if (lastActive === null) {
+          // Repeated false
+          continue;
+        }
+        user.active.push({
+          timestampStart: lastActive,
+          timestampEnd: timestamp,
+        });
+        lastActive = null;
+      }
     }
     if (log.key === 'sleep-checkin') {
       const checkIns: unknown = JSON.parse(log.value);

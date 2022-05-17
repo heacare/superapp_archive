@@ -221,9 +221,9 @@ Would you like to try again or change your routine?
   @override
   Widget nextPageStringList(List<String> data) {
     String choice = data[0];
-	if (choice.startsWith("more-checkin")) {
-        serviceLocator<SleepCheckinService>().extend(7);
-	}
+    if (choice.startsWith("more-checkin")) {
+      serviceLocator<SleepCheckinService>().extend(7);
+    }
     if (choice.endsWith("with-healer")) {
       return DoneWithHealer();
     } else if (choice.endsWith("with-team")) {

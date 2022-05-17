@@ -25,7 +25,7 @@ class SleepCheckinProgress extends ChangeNotifier {
   }
 
   extend(int days) {
-	  total = total + days;
+    total = total + days;
     kvWrite("sleep", "day-total", total);
     recalculate();
     notifyListeners();

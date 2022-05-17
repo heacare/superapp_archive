@@ -29,6 +29,8 @@ jobs:
           cache-dependency-path: '**/package-lock.json'
       - name: Install npm dependencies
         run: npm ci --prefer-offline --no-audit
+      - name: Prepare Nuxt
+        run: npx nuxt prepare
       - name: Lint check
         run: npm run lint
 
