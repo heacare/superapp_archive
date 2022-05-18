@@ -12,6 +12,7 @@ export interface User {
   active: UserActive[];
   inBed: UserSleep[];
   asleep: UserSleep[];
+  autofills: UserAutofill[];
   resets: UserReset[];
   checkInCount: number;
   currentlyActive: boolean;
@@ -38,6 +39,15 @@ export interface UserPeriod {
   start: DateTime;
   end: DateTime;
 }
+
+export interface UserNestedPeriod {
+  start: DateTime;
+  innerStart: DateTime;
+  innerEnd: DateTime;
+  end: DateTime;
+}
+
+type UserAutofill = Partial<UserNestedPeriod>;
 
 interface UserNavigation extends UserEvent {
   page: string;
@@ -77,6 +87,13 @@ function expectTimeOfDay(data: unknown): TimeOfDay | undefined {
     return data as TimeOfDay;
   }
   return undefined;
+}
+
+function expectDateTime(data: unknown): DateTime | undefined {
+  if (!data || typeof data != 'string') {
+    return undefined;
+  }
+  return DateTime.fromISO(data);
 }
 
 function expectStringArray(data: unknown): string[] | undefined {
@@ -122,6 +139,7 @@ function processLogs(logs: Log[]): Record<string, User> {
       active: [],
       inBed: [],
       asleep: [],
+      autofills: [],
       resets: [],
       checkInCount: 0,
       currentlyActive: false,
@@ -178,6 +196,27 @@ function processLogs(logs: Log[]): Record<string, User> {
         user.optInGroup = expectOneOrNone(d['opt-in-group']);
         user.groupAccept = expectOneOrNone(d['group-accept']);
         user.continueAction = expectOneOrNone(d['continue-action']);
+      }
+    }
+    if (log.key === 'sleep-autofill') {
+      // {"in-bed":"2022-05-18T01:45:00.000","asleep":"2022-05-18T02:07:00.000","awake":null,"out-bed":"2022-05-18T09:02:00.000"}
+      const data: unknown = JSON.parse(log.value);
+      if (data === null) {
+        continue;
+      }
+      if (typeof data === 'object') {
+        const d = data as Record<string, unknown>;
+        const autofill = {
+          start: expectDateTime(d['in-bed']),
+          innerStart: expectDateTime(d['asleep']),
+          innerEnd: expectDateTime(d['awake']),
+          end: expectDateTime(d['out-bed']),
+        };
+        user.autofills = user.autofills.filter(
+          (o) =>
+            o.start?.toSeconds() !== autofill.start?.toSeconds() && o.end?.toSeconds() !== autofill.end?.toSeconds(),
+        );
+        user.autofills.push(autofill);
       }
     }
     if (log.key === 'sleep-checkin') {

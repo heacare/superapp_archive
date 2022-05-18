@@ -33,6 +33,14 @@
         <RangeBar :start-range="startRange" :end-range="endRange" :ranges="inBed" fill-color="bg-blue-600" />
         <h3>Asleep</h3>
         <RangeBar :start-range="startRange" :end-range="endRange" :ranges="asleep" fill-color="bg-purple-600" />
+        <h3>Autofill</h3>
+        <RangeBar
+          :start-range="startRange"
+          :end-range="endRange"
+          :ranges="autofills"
+          fill-color="bg-blue-600 from-blue-600"
+          inner-fill-color="bg-purple-600 from-purple-600"
+        />
       </div>
     </div>
   </div>
@@ -42,7 +50,7 @@
 import type { DateTime } from 'luxon';
 
 import { formatTimeOfDay, formatMinutesDuration } from '../types/datetime';
-import type { User, UserPeriod } from '../composables/processLogs';
+import type { User, UserPeriod, UserNestedPeriod } from '../composables/processLogs';
 
 interface Props {
   user: User;
@@ -59,9 +67,35 @@ const props = defineProps<Props>();
 const startRange = computed(() => props.period.start.toMillis());
 const endRange = computed(() => props.period.end.toMillis());
 
-const periodToMillis = (p: UserPeriod) => ({
-  start: p.start.toMillis(),
-  end: p.end.toMillis(),
+const periodToLabel = (p: Partial<UserPeriod | UserNestedPeriod>): string => {
+  let string = '';
+  if (p.start) {
+    string += p.start.toLocaleString();
+  }
+  string += ' - ';
+  if (p.end) {
+    string += p.end.toLocaleString();
+  }
+  if ('innerStart' in p) {
+    string += '(';
+    if (p.innerStart) {
+      string += p.innerStart.toLocaleString();
+    }
+    string += ' - ';
+    if (p.innerEnd) {
+      string += p.innerEnd.toLocaleString();
+    }
+    string += ')';
+  }
+  return string;
+};
+
+const periodToMillis = (p: Partial<UserPeriod | UserNestedPeriod>) => ({
+  start: p.start?.toMillis(),
+  end: p.end?.toMillis(),
+  innerStart: 'innerStart' in p ? p.innerStart?.toMillis() : undefined,
+  innerEnd: 'innerEnd' in p ? p.innerEnd?.toMillis() : undefined,
+  label: periodToLabel(p),
 });
 
 const navigations = computed(() =>
@@ -75,4 +109,5 @@ const navigations = computed(() =>
 const active = computed(() => props.user.active.map(periodToMillis));
 const inBed = computed(() => props.user.inBed.map(periodToMillis));
 const asleep = computed(() => props.user.asleep.map(periodToMillis));
+const autofills = computed(() => props.user.autofills.map(periodToMillis));
 </script>
