@@ -68,6 +68,14 @@ const marks = computed<Mark[]>(() => {
       type: 'partial-day',
       label: t.hour == 0 ? '' : t.hour.toString(),
     });
+    if (totalM > 1000 * 60 * 60 * 24 * 8) {
+      if (window.innerWidth > 1200) {
+        t = t.plus({ hour: 24 / 2 });
+        continue;
+      } else {
+        break;
+      }
+    }
     t = t.plus({ hour: 24 / 4 });
   }
 

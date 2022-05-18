@@ -1,6 +1,16 @@
 <template>
   <NuxtLayout name="default">
     <template #actions>
+      <select
+        v-model="days"
+        class="px-3 py-2 rounded-md border border-neutral-300 bg-neutral-200 text-black hover:border-neutral-400 active:bg-neutral-300 mr-4"
+        @change="update()"
+      >
+        <option value="3">3 days</option>
+        <option value="7">7 days</option>
+        <option value="10">10 days</option>
+        <option value="14">14 days</option>
+      </select>
       <Button @click="update()">Refresh</Button>
     </template>
     <div v-if="secret && !error">
@@ -23,11 +33,13 @@ definePageMeta({
   layout: false,
 });
 
+const days = ref('7');
+
 const utc = DateTime.utc();
 const now = ref(utc.set({ second: Math.floor(utc.second / 10) * 10, millisecond: 0 }));
 
 const end = computed(() => now.value);
-const start = computed(() => end.value.minus({ days: 8 }));
+const start = computed(() => end.value.minus({ days: parseInt(days.value) }));
 const endQuery = computed(() => now.value.plus({ minutes: 1 }));
 
 const secret = useSecret();

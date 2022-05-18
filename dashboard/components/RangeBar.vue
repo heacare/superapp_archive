@@ -1,6 +1,6 @@
 <template>
   <div class="w-full h-6 relative rounded bg-neutral-100">
-    <template v-for="bar in bars" :key="bar.offset">
+    <template v-for="bar in bars" :key="bar.key">
       <div
         v-if="bar.offset"
         class="h-6 absolute rounded"
@@ -9,7 +9,7 @@
         :title="bar.label"
       ></div>
       <div
-        v-if="bar.innerWidth"
+        v-if="bar.innerOffset"
         class="h-4 top-1 absolute rounded"
         :class="bar.innerClass"
         :style="{ minWidth: '1px', width: bar.innerWidth + '%', left: bar.innerOffset + '%' }"
@@ -55,6 +55,7 @@ interface Bar {
   innerOffset?: number;
   innerClass: string[];
   label?: string;
+  key: string;
 }
 
 const bars = computed(() => {
@@ -64,6 +65,7 @@ const bars = computed(() => {
       label: range.label,
       class: props.fillColor.split(' '),
       innerClass: props.innerFillColor?.split(' ') ?? [],
+      key: `${range.start ?? ''}:${range.end ?? ''}:${range.innerStart ?? ''}:${range.innerEnd ?? ''}`,
     };
     if (range.start && range.end) {
       o.width = ((range.end - range.start) / totalWidth) * 100;
