@@ -1,6 +1,6 @@
 <template>
   <div class="w-full h-8 relative overflow-hidden">
-    <template v-for="mark in marks" :key="mark.offset">
+    <template v-for="mark in marks" :key="mark.type + mark.offset">
       <div
         v-if="mark.type === 'day'"
         class="h-3 absolute bottom-0 rounded w-0.5 bg-neutral-400"
