@@ -632,6 +632,8 @@ class DurationPickerBlock extends StatefulWidget {
 class DurationPickerBlockState extends State<DurationPickerBlock> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   Duration selectedDuration = const Duration();
+  Duration prevSelectedDuration = const Duration();
+  Key key = UniqueKey();
 
   @override
   void initState() {
@@ -643,6 +645,12 @@ class DurationPickerBlockState extends State<DurationPickerBlock> {
   Widget build(BuildContext context) {
     selectedDuration = widget.initialDuration ?? const Duration();
     debugPrint("selected:" + selectedDuration.toString());
+    if (selectedDuration != null &&
+        prevSelectedDuration != null &&
+        selectedDuration != prevSelectedDuration) {
+      key = UniqueKey();
+    }
+    prevSelectedDuration = selectedDuration;
     if (widget.minutesOnly) {
       return Form(
           key: _formKey,
@@ -651,14 +659,18 @@ class DurationPickerBlockState extends State<DurationPickerBlock> {
               SizedBox(
                   width: 72.0,
                   child: TextFormField(
-                      key: Key(selectedDuration.toString()),
+                      key: key,
                       textAlign: TextAlign.end,
                       initialValue: (selectedDuration.inMinutes).toString(),
+                      onFieldSubmitted: (String value) {
+                        debugPrint("submit");
+                        setState(() {
+                          key = UniqueKey();
+                        });
+                      },
                       onChanged: (String value) {
                         int minutes = int.tryParse(value) ?? 0;
-                        setState(() {
-                          selectedDuration = Duration(minutes: minutes);
-                        });
+                        selectedDuration = Duration(minutes: minutes);
                         widget.onChange(selectedDuration);
                       })),
               const SizedBox(width: 4.0),
@@ -673,18 +685,23 @@ class DurationPickerBlockState extends State<DurationPickerBlock> {
             SizedBox(
                 width: 72.0,
                 child: TextFormField(
-                    key: Key(selectedDuration.toString()),
+                    key: key,
                     textAlign: TextAlign.end,
                     initialValue: (selectedDuration.inHours).toString(),
-                    onChanged: (String value) {
-                      int hours = int.tryParse(value) ?? 0;
+                    onFieldSubmitted: (String value) {
+                      debugPrint("submit-hour");
                       setState(() {
-                        selectedDuration = Duration(
-                          hours: hours,
-                          minutes: selectedDuration.inMinutes
-                              .remainder(Duration.minutesPerHour),
-                        );
+                        key = UniqueKey();
                       });
+                    },
+                    onChanged: (String value) {
+                      debugPrint(value);
+                      int hours = int.tryParse(value) ?? 0;
+                      selectedDuration = Duration(
+                        hours: hours,
+                        minutes: selectedDuration.inMinutes
+                            .remainder(Duration.minutesPerHour),
+                      );
                       widget.onChange(selectedDuration);
                     })),
             const SizedBox(width: 4.0),
@@ -695,17 +712,22 @@ class DurationPickerBlockState extends State<DurationPickerBlock> {
             SizedBox(
                 width: 72.0,
                 child: TextFormField(
-                    key: Key(selectedDuration.toString()),
+                    key: key,
                     textAlign: TextAlign.end,
                     initialValue: (selectedDuration.inMinutes
                             .remainder(Duration.minutesPerHour))
                         .toString(),
-                    onChanged: (String value) {
-                      int minutes = int.tryParse(value) ?? 0;
+                    onFieldSubmitted: (String value) {
+                      debugPrint("submit-minute");
                       setState(() {
-                        selectedDuration = Duration(
-                            hours: selectedDuration.inHours, minutes: minutes);
+                        key = UniqueKey();
                       });
+                    },
+                    onChanged: (String value) {
+                      debugPrint(value);
+                      int minutes = int.tryParse(value) ?? 0;
+                      selectedDuration = Duration(
+                          hours: selectedDuration.inHours, minutes: minutes);
                       widget.onChange(selectedDuration);
                     })),
             const SizedBox(width: 4.0),
