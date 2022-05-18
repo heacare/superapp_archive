@@ -37,16 +37,18 @@
           :start-range="startRange"
           :end-range="endRange"
           :ranges="sleeps"
-          fill-color="bg-blue-600 from-blue-600"
-          inner-fill-color="bg-purple-600 from-purple-600"
+          fill-color="bg-violet-400 from-violet-400"
+          inner-fill-color="bg-violet-700 from-violet-700"
+          :marks="sleepsMarks"
+          marks-fill-color="bg-red-400"
         />
         <h3 class="font-semibold">Autofill</h3>
         <RangeBar
           :start-range="startRange"
           :end-range="endRange"
           :ranges="autofills"
-          fill-color="bg-blue-600 from-blue-600"
-          inner-fill-color="bg-purple-600 from-purple-600"
+          fill-color="bg-violet-400 from-violet-400"
+          inner-fill-color="bg-violet-700 from-violet-700"
         />
         <div class="flex gap-4 max-w-md">
           <div class="flex-1">
@@ -137,5 +139,39 @@ const navigations = computed(() =>
 
 const active = computed(() => props.user.active.map(periodToMillis));
 const sleeps = computed(() => props.user.sleeps.map(periodToMillis));
+
+interface SimpleRange {
+  start: number;
+  end: number;
+}
+const sleepsMarks = computed(() => {
+  const marks: SimpleRange[] = [];
+  if (!props.user.goalsSleepTime || !props.user.goalsWakeTime) {
+    return marks;
+  }
+
+  const startM = props.period.start.toMillis();
+  const endM = props.period.end.toMillis();
+
+  const start = props.period.start.setZone(props.user.zone).set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+
+  let t = start;
+  while (t.toMillis() < endM) {
+    let start = t.set(props.user.goalsSleepTime);
+    const end = t.set(props.user.goalsWakeTime);
+    if (start.toMillis() > end.toMillis()) {
+      start = start.minus({ day: 1 });
+    }
+    if (end.toMillis() > startM) {
+      marks.push({
+        start: start.toMillis(),
+        end: end.toMillis(),
+      });
+    }
+    t = t.plus({ day: 1 });
+  }
+
+  return marks;
+});
 const autofills = computed(() => props.user.autofills.map(periodToMillis));
 </script>

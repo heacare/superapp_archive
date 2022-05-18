@@ -16,6 +16,14 @@
         :title="bar.label"
       ></div>
     </template>
+    <template v-for="mark in marks" :key="mark.key">
+      <div
+        v-if="mark.offset"
+        class="h-1 absolute -top-1 rounded"
+        :class="mark.class"
+        :style="{ minWidth: '1px', width: mark.width + '%', left: mark.offset + '%' }"
+      ></div>
+    </template>
     <div
       v-if="dot"
       class="h-3 w-3 top-1.5 right-1.5 absolute rounded-full"
@@ -27,7 +35,7 @@
 
 <script setup lang="ts">
 interface Props {
-  ranges: Array<Range>;
+  ranges: Range[];
   fillColor: string;
   startRange: number;
   endRange: number;
@@ -35,9 +43,16 @@ interface Props {
   dotFillColor?: string;
   dotLabel?: string;
   innerFillColor?: string;
+  marks?: SimpleRange[];
+  marksFillColor?: string;
 }
 
 const props = defineProps<Props>();
+
+interface SimpleRange {
+  start: number;
+  end: number;
+}
 
 interface Range {
   start?: number;
@@ -99,6 +114,20 @@ const bars = computed(() => {
       o.innerWidth = 0.03 * 100;
       o.innerOffset = ((range.innerEnd - props.startRange) / totalWidth) * 100 - o.innerWidth;
     }
+    return o;
+  });
+});
+
+const marks = computed(() => {
+  const totalWidth = props.endRange - props.startRange;
+  return props.marks?.map<Bar>((range) => {
+    let o: Bar = {
+      class: props.marksFillColor?.split(' ') ?? [],
+      innerClass: [],
+      key: `${range.start ?? ''}:${range.end ?? ''}`,
+      width: ((range.end - range.start) / totalWidth) * 100,
+      offset: ((range.start - props.startRange) / totalWidth) * 100,
+    };
     return o;
   });
 });

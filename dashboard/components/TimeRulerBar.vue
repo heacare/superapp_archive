@@ -45,7 +45,7 @@ interface Mark {
 const day = 1000 * 60 * 60 * 24;
 
 const marks = computed<Mark[]>(() => {
-  let marks: Mark[] = [];
+  const marks: Mark[] = [];
 
   const startM = props.start.toMillis();
   const endM = props.end.toMillis();
