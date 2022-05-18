@@ -2,6 +2,7 @@ import { Ref, unref } from 'vue';
 import { DateTime, FixedOffsetZone } from 'luxon';
 import type { Log } from '../types/api';
 import type { TimeOfDay } from '../types/datetime';
+import { pages } from './genPages_sleep';
 
 export interface User {
   id: number;
@@ -13,8 +14,6 @@ export interface User {
   sleeps: UserSleep[];
   autofills: UserAutofill[];
   resets: UserReset[];
-  checkInCount: number;
-  currentlyActive: boolean;
 
   trackingTools?: string[];
   trackingToolModel?: string;
@@ -28,6 +27,12 @@ export interface User {
   optInGroup?: string;
   groupAccept?: string;
   continueAction?: string;
+
+  // Derived
+  checkInCount: number;
+  currentlyActive: boolean;
+  pageCount: number;
+  pageTotal: number;
 }
 
 export interface UserEvent {
@@ -118,6 +123,13 @@ function validateCheckIn(checkIn: unknown): checkIn is LogCheckIn {
   return true;
 }
 
+function pageTotal(): number {
+  return pages.length;
+}
+function pageCount(name: string): number {
+  return pages.indexOf(name);
+}
+
 function processLogs(logs: Log[]): Record<string, User> {
   const users: Record<string, User> = {};
 
@@ -137,8 +149,11 @@ function processLogs(logs: Log[]): Record<string, User> {
       sleeps: [],
       autofills: [],
       resets: [],
+      // Derived
       checkInCount: 0,
       currentlyActive: false,
+      pageCount: 0,
+      pageTotal: pageTotal(),
     });
 
     if (log.key === 'navigate') {
@@ -149,6 +164,7 @@ function processLogs(logs: Log[]): Record<string, User> {
       });
       if (page != 'home' && page != null) {
         user.navigationsRecent = page;
+        user.pageCount = pageCount(page);
       }
     }
     if (log.key === 'state') {

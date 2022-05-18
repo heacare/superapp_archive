@@ -81,7 +81,7 @@ const periodToLabel = (p: Partial<UserPeriod | UserNestedPeriod>): string => {
     string += p.end.toLocaleString(DateTime.DATETIME_SHORT);
   }
   if ('innerStart' in p && (p.innerStart || p.innerEnd)) {
-    string += ' (';
+    string += '\n(';
     if (p.innerStart) {
       string += p.innerStart.toLocaleString(DateTime.DATETIME_SHORT);
     }
