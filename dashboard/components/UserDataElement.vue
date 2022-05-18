@@ -1,27 +1,29 @@
 <template>
   <div class="px-4 py-2">
-    <h2 class="text-xl">{{ user.name }}</h2>
-    <div class="md:flex">
-      <ul class="flex-none w-72">
-        <li>Check-ins: {{ user.checkInCount }}</li>
-        <li v-if="user.navigationsRecent">Page: {{ user.navigationsRecent }}</li>
-        <li v-if="user.trackingTools">
-          Tracking tools: {{ user.trackingTools.join(', ') }} ({{ user.trackingToolModel }})
-        </li>
-        <li v-if="user.timeGoBed">(Pre) Go bed: {{ formatTimeOfDay(user.timeGoBed) }}</li>
-        <li v-if="user.sleepLatency">(Pre) Latency: {{ formatMinutesDuration(user.sleepLatency) }}</li>
-        <li v-if="user.minutesAsleep">(Pre) Asleep: {{ formatMinutesDuration(user.minutesAsleep) }}</li>
-        <li v-if="user.timeOutBed">(Pre) Out bed: {{ formatTimeOfDay(user.timeOutBed) }}</li>
-        <li v-if="user.sleepGoals">Goals: {{ user.sleepGoals.join(', ') }}</li>
-        <li v-if="user.goalsSleepTime">(Goals) Sleep: {{ formatTimeOfDay(user.goalsSleepTime) }}</li>
-        <li v-if="user.goalsWakeTime">(Goals) Wake: {{ formatTimeOfDay(user.goalsWakeTime) }}</li>
-        <li v-if="user.groupAccept">Group accept: {{ user.groupAccept }}</li>
-        <li v-if="user.continueAction">Continue action: {{ user.continueAction }}</li>
-      </ul>
+    <div class="flex flex-col md:flex-row gap-4">
+      <div class="flex-none md:w-72">
+        <h2 class="text-2xl font-bold">{{ user.name }}</h2>
+        <ul class="text-xs">
+          <li v-if="user.trackingTools">
+            Tracking tools: {{ user.trackingTools.join(', ') }} ({{ user.trackingToolModel }})
+          </li>
+          <li v-if="user.timeGoBed">(Pre) Go bed: {{ formatTimeOfDay(user.timeGoBed) }}</li>
+          <li v-if="user.sleepLatency">(Pre) Latency: {{ formatMinutesDuration(user.sleepLatency) }}</li>
+          <li v-if="user.minutesAsleep">(Pre) Asleep: {{ formatMinutesDuration(user.minutesAsleep) }}</li>
+          <li v-if="user.timeOutBed">(Pre) Out bed: {{ formatTimeOfDay(user.timeOutBed) }}</li>
+          <li v-if="user.sleepGoals">Goals: {{ user.sleepGoals.join(', ') }}</li>
+          <li v-if="user.goalsSleepTime">(Goals) Sleep: {{ formatTimeOfDay(user.goalsSleepTime) }}</li>
+          <li v-if="user.goalsWakeTime">(Goals) Wake: {{ formatTimeOfDay(user.goalsWakeTime) }}</li>
+          <li>
+            Group accept: <strong>{{ user.groupAccept ?? 'no' }}</strong>
+          </li>
+          <li v-if="user.continueAction">Continue action: {{ user.continueAction }}</li>
+        </ul>
+      </div>
       <div class="flex-1">
-        <h3>Navigations</h3>
+        <h3 class="font-semibold">Navigations</h3>
         <RangeBar :start-range="startRange" :end-range="endRange" :ranges="navigations" fill-color="bg-yellow-400" />
-        <h3>App Activity</h3>
+        <h3 class="font-semibold">App Activity</h3>
         <RangeBar
           :start-range="startRange"
           :end-range="endRange"
@@ -29,7 +31,7 @@
           fill-color="bg-red-400"
           :dot="user.currentlyActive"
         />
-        <h3>Check-in Sleep</h3>
+        <h3 class="font-semibold">Check-in Sleep</h3>
         <RangeBar
           :start-range="startRange"
           :end-range="endRange"
@@ -37,7 +39,7 @@
           fill-color="bg-blue-600 from-blue-600"
           inner-fill-color="bg-purple-600 from-purple-600"
         />
-        <h3>Autofill</h3>
+        <h3 class="font-semibold">Autofill</h3>
         <RangeBar
           :start-range="startRange"
           :end-range="endRange"
@@ -45,6 +47,28 @@
           fill-color="bg-blue-600 from-blue-600"
           inner-fill-color="bg-purple-600 from-purple-600"
         />
+        <div class="flex gap-4 max-w-md">
+          <div class="flex-1">
+            <h3 class="font-semibold">Page</h3>
+            <ProgressBar
+              :max="user.pageTotal"
+              :value="user.pageCount < 0 ? 0 : user.pageCount"
+              fill-color="bg-neutral-300"
+              :label="user.pageCount + ' of ' + user.pageTotal"
+              :text="user.navigationsRecent"
+            />
+          </div>
+          <div class="flex-1">
+            <h3 class="font-semibold">Check-ins</h3>
+            <ProgressBar
+              :max="7"
+              :value="user.checkInCount"
+              fill-color="bg-neutral-300"
+              :label="user.checkInCount + ' of ' + 7"
+              :text="user.checkInCount + ''"
+            />
+          </div>
+        </div>
       </div>
     </div>
   </div>
