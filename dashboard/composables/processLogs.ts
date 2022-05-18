@@ -47,7 +47,7 @@ export interface UserNestedPeriod extends UserPeriod {
 type UserAutofill = Partial<UserNestedPeriod>;
 
 interface UserNavigation extends UserEvent {
-  page: string;
+  page: string | null;
 }
 
 interface UserReset extends UserEvent {
@@ -147,7 +147,9 @@ function processLogs(logs: Log[]): Record<string, User> {
         timestamp,
         page,
       });
-      user.navigationsRecent = page;
+      if (page != 'home' && page != null) {
+        user.navigationsRecent = page;
+      }
     }
     if (log.key === 'state') {
       const state: boolean = JSON.parse(log.value) as boolean;

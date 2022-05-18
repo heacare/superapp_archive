@@ -51,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import type { DateTime } from 'luxon';
+import { DateTime } from 'luxon';
 
 import { formatTimeOfDay, formatMinutesDuration } from '../types/datetime';
 import type { User, UserPeriod, UserNestedPeriod } from '../composables/processLogs';
@@ -74,20 +74,20 @@ const endRange = computed(() => props.period.end.toMillis());
 const periodToLabel = (p: Partial<UserPeriod | UserNestedPeriod>): string => {
   let string = '';
   if (p.start) {
-    string += p.start.toLocaleString();
+    string += p.start.toLocaleString(DateTime.DATETIME_SHORT);
   }
   string += ' - ';
   if (p.end) {
-    string += p.end.toLocaleString();
+    string += p.end.toLocaleString(DateTime.DATETIME_SHORT);
   }
-  if ('innerStart' in p) {
-    string += '(';
+  if ('innerStart' in p && (p.innerStart || p.innerEnd)) {
+    string += ' (';
     if (p.innerStart) {
-      string += p.innerStart.toLocaleString();
+      string += p.innerStart.toLocaleString(DateTime.DATETIME_SHORT);
     }
     string += ' - ';
     if (p.innerEnd) {
-      string += p.innerEnd.toLocaleString();
+      string += p.innerEnd.toLocaleString(DateTime.DATETIME_SHORT);
     }
     string += ')';
   }
@@ -106,7 +106,7 @@ const navigations = computed(() =>
   props.user.navigations.map((e) => ({
     start: e.timestamp.toMillis(),
     end: e.timestamp.toMillis(),
-    label: e.page,
+    label: e.page || 'null',
   })),
 );
 
