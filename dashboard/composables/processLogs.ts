@@ -137,12 +137,13 @@ function processLogs(logs: Log[]): Record<string, User> {
 
   for (const log of logs) {
     const userId = log.user.id;
+    const userName = log.user.name;
     const zone = FixedOffsetZone.parseSpecifier('UTC' + (log.tzClient ?? '+0'));
     let timestamp = DateTime.fromISO(log.timestamp, { zone });
 
     const user = (users[userId.toString(10)] ??= {
       id: userId,
-      name: `User ${userId.toString()}`,
+      name: userName,
       timezone: log.tzClient,
       navigations: [],
       active: [],

@@ -2,7 +2,7 @@
   <div class="px-4 py-2">
     <div class="flex flex-col md:flex-row gap-4">
       <div class="flex-none md:w-72">
-        <h2 class="text-2xl font-bold">{{ user.name }}</h2>
+        <h2 class="text-xl font-bold">{{ user.id }}: {{ user.name }}</h2>
         <ul class="text-xs">
           <li v-if="user.trackingTools">
             Tracking tools: {{ user.trackingTools.join(', ') }} ({{ user.trackingToolModel }})
