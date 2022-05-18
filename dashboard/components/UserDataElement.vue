@@ -21,6 +21,7 @@
         </ul>
       </div>
       <div class="flex-1">
+        <TimeRulerBar :start="period.start" :end="period.end" :zone="user.zone" />
         <h3 class="font-semibold">Navigations</h3>
         <RangeBar :start-range="startRange" :end-range="endRange" :ranges="navigations" fill-color="bg-yellow-400" />
         <h3 class="font-semibold">App Activity</h3>

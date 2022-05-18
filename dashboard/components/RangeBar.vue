@@ -1,9 +1,8 @@
 <template>
   <div class="w-full h-6 relative rounded bg-neutral-100">
-    <template v-for="bar in bars">
+    <template v-for="bar in bars" :key="bar.offset">
       <div
         v-if="bar.offset"
-        :key="bar.offset"
         class="h-6 absolute rounded"
         :class="bar.class"
         :style="{ minWidth: '1px', width: bar.width + '%', left: bar.offset + '%' }"
@@ -11,7 +10,6 @@
       ></div>
       <div
         v-if="bar.innerWidth"
-        :key="bar.innerOffset"
         class="h-4 top-1 absolute rounded"
         :class="bar.innerClass"
         :style="{ minWidth: '1px', width: bar.innerWidth + '%', left: bar.innerOffset + '%' }"
@@ -20,7 +18,7 @@
     </template>
     <div
       v-if="dot"
-      class="h-4 w-4 top-1 right-1 absolute rounded-full"
+      class="h-3 w-3 top-1.5 right-1.5 absolute rounded-full"
       :class="[dotFillColor ?? 'bg-green-500']"
       :title="dotLabel"
     ></div>

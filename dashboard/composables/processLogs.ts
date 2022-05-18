@@ -1,5 +1,5 @@
 import { Ref, unref } from 'vue';
-import { DateTime, FixedOffsetZone } from 'luxon';
+import { DateTime, Zone, FixedOffsetZone } from 'luxon';
 import type { Log } from '../types/api';
 import type { TimeOfDay } from '../types/datetime';
 import { pages } from './genPages_sleep';
@@ -7,7 +7,7 @@ import { pages } from './genPages_sleep';
 export interface User {
   id: number;
   name: string;
-  timezone: string | null;
+  zone: Zone;
   navigations: UserNavigation[];
   navigationsRecent?: string;
   active: UserActive[];
@@ -91,11 +91,11 @@ function expectTimeOfDay(data: unknown): TimeOfDay | undefined {
   return undefined;
 }
 
-function expectDateTime(data: unknown): DateTime | undefined {
+function expectDateTime(data: unknown, zone: Zone): DateTime | undefined {
   if (!data || typeof data != 'string') {
     return undefined;
   }
-  return DateTime.fromISO(data);
+  return DateTime.fromISO(data, { zone });
 }
 
 function expectStringArray(data: unknown): string[] | undefined {
@@ -144,7 +144,7 @@ function processLogs(logs: Log[]): Record<string, User> {
     const user = (users[userId.toString(10)] ??= {
       id: userId,
       name: userName,
-      timezone: log.tzClient,
+      zone: zone,
       navigations: [],
       active: [],
       sleeps: [],
@@ -222,10 +222,10 @@ function processLogs(logs: Log[]): Record<string, User> {
       if (typeof data === 'object') {
         const d = data as Record<string, unknown>;
         const autofill = {
-          start: expectDateTime(d['in-bed']),
-          innerStart: expectDateTime(d['asleep']),
-          innerEnd: expectDateTime(d['awake']),
-          end: expectDateTime(d['out-bed']),
+          start: expectDateTime(d['in-bed'], zone),
+          innerStart: expectDateTime(d['asleep'], zone),
+          innerEnd: expectDateTime(d['awake'], zone),
+          end: expectDateTime(d['out-bed'], zone),
         };
         user.autofills = user.autofills.filter(
           (o) =>
