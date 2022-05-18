@@ -10,8 +10,7 @@ export interface User {
   navigations: UserNavigation[];
   navigationsRecent?: string;
   active: UserActive[];
-  inBed: UserSleep[];
-  asleep: UserSleep[];
+  sleeps: UserSleep[];
   autofills: UserAutofill[];
   resets: UserReset[];
   checkInCount: number;
@@ -40,11 +39,9 @@ export interface UserPeriod {
   end: DateTime;
 }
 
-export interface UserNestedPeriod {
-  start: DateTime;
+export interface UserNestedPeriod extends UserPeriod {
   innerStart: DateTime;
   innerEnd: DateTime;
-  end: DateTime;
 }
 
 type UserAutofill = Partial<UserNestedPeriod>;
@@ -59,7 +56,7 @@ interface UserReset extends UserEvent {
 
 type UserActive = UserPeriod;
 
-interface UserSleep extends UserPeriod, UserEvent {}
+interface UserSleep extends UserEvent, UserNestedPeriod {}
 
 function processSleepTimeOfDay(reference: DateTime, timeOfDay: TimeOfDay): DateTime {
   // Treat a time-of-day as "last night"
@@ -137,8 +134,7 @@ function processLogs(logs: Log[]): Record<string, User> {
       timezone: log.tzClient,
       navigations: [],
       active: [],
-      inBed: [],
-      asleep: [],
+      sleeps: [],
       autofills: [],
       resets: [],
       checkInCount: 0,
@@ -235,17 +231,14 @@ function processLogs(logs: Log[]): Record<string, User> {
         const checkIn: unknown = data[0];
         if (checkIn && validateCheckIn(checkIn)) {
           timestamp = DateTime.fromISO(checkIn.time, { zone });
-          user.inBed.push({
+          const asleepStart = processSleepTimeOfDay(timestamp, checkIn['time-asleep-bed']);
+          const asleepEnd = asleepStart.plus({ minutes: checkIn['sleep-duration'] ?? 0 });
+          user.sleeps.push({
             timestamp,
             start: processSleepTimeOfDay(timestamp, checkIn['time-go-bed']),
             end: processSleepTimeOfDay(timestamp, checkIn['time-out-bed']),
-          });
-          const asleepStart = processSleepTimeOfDay(timestamp, checkIn['time-asleep-bed']);
-          const asleepEnd = asleepStart.plus({ minutes: checkIn['sleep-duration'] ?? 0 });
-          user.asleep.push({
-            timestamp,
-            start: asleepStart,
-            end: asleepEnd,
+            innerStart: asleepStart,
+            innerEnd: asleepEnd,
           });
         }
       }

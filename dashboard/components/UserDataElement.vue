@@ -21,7 +21,7 @@
       <div class="flex-1">
         <h3>Navigations</h3>
         <RangeBar :start-range="startRange" :end-range="endRange" :ranges="navigations" fill-color="bg-yellow-400" />
-        <h3>Active</h3>
+        <h3>App Activity</h3>
         <RangeBar
           :start-range="startRange"
           :end-range="endRange"
@@ -29,10 +29,14 @@
           fill-color="bg-red-400"
           :dot="user.currentlyActive"
         />
-        <h3>In Bed</h3>
-        <RangeBar :start-range="startRange" :end-range="endRange" :ranges="inBed" fill-color="bg-blue-600" />
-        <h3>Asleep</h3>
-        <RangeBar :start-range="startRange" :end-range="endRange" :ranges="asleep" fill-color="bg-purple-600" />
+        <h3>Check-in Sleep</h3>
+        <RangeBar
+          :start-range="startRange"
+          :end-range="endRange"
+          :ranges="sleeps"
+          fill-color="bg-blue-600 from-blue-600"
+          inner-fill-color="bg-purple-600 from-purple-600"
+        />
         <h3>Autofill</h3>
         <RangeBar
           :start-range="startRange"
@@ -107,7 +111,6 @@ const navigations = computed(() =>
 );
 
 const active = computed(() => props.user.active.map(periodToMillis));
-const inBed = computed(() => props.user.inBed.map(periodToMillis));
-const asleep = computed(() => props.user.asleep.map(periodToMillis));
+const sleeps = computed(() => props.user.sleeps.map(periodToMillis));
 const autofills = computed(() => props.user.autofills.map(periodToMillis));
 </script>
