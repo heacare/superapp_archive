@@ -42,6 +42,8 @@ interface Mark {
   label?: string;
 }
 
+const day = 1000 * 60 * 60 * 24;
+
 const marks = computed<Mark[]>(() => {
   let marks: Mark[] = [];
 
@@ -53,34 +55,40 @@ const marks = computed<Mark[]>(() => {
 
   let t = start;
   while (t.toMillis() < endM) {
+    let label: string | undefined = t.toLocaleString({ month: 'numeric', day: 'numeric' });
+    const tDay = Math.floor(t.toSeconds() / 60 / 60 / 24);
+    if (totalM > day * 15) {
+      if (tDay % 2 != 0) {
+        label = undefined;
+      }
+    }
     marks.push({
       offset: ((t.toMillis() - startM) / totalM) * 100,
       type: 'day',
-      label: t.toLocaleString({ month: 'numeric', day: 'numeric' }),
+      label,
     });
     t = t.plus({ day: 1 });
   }
 
   t = start;
   while (t.toMillis() < endM) {
+    let label: string | undefined = t.hour == 0 ? '' : t.hour.toString();
+    if (totalM > day * 8) {
+      label = undefined;
+    }
     marks.push({
       offset: ((t.toMillis() - startM) / totalM) * 100,
       type: 'partial-day',
-      label: t.hour == 0 ? '' : t.hour.toString(),
+      label,
     });
-    if (totalM > 1000 * 60 * 60 * 24 * 8) {
-      if (window.innerWidth > 1200) {
-        t = t.plus({ hour: 24 / 2 });
-        continue;
-      } else {
-        break;
-      }
-    }
     t = t.plus({ hour: 24 / 4 });
   }
 
   t = start;
   while (t.toMillis() < endM) {
+    if (totalM > day * 15) {
+      break;
+    }
     marks.push({
       offset: ((t.toMillis() - startM) / totalM) * 100,
       type: 'hour',
