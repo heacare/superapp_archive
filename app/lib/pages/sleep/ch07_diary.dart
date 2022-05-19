@@ -114,13 +114,11 @@ When you’re done with 7 days of check-ins, come back here and continue the pro
               data: markdown,
               extensionSet: md.ExtensionSet.gitHubFlavored,
               styleSheet: markdownStyleSheet),
-
-			  GradientButton(
-				  text: "Home",
-				  onPressed: () async {
-
-                              Navigator.of(context).pop();
-							  }),
+          GradientButton(
+              text: "Home",
+              onPressed: () async {
+                Navigator.of(context).pop();
+              }),
         ]);
   }
 

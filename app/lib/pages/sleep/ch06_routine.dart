@@ -487,7 +487,7 @@ class RoutinePledgeState extends State<RoutinePledge> {
         p: Theme.of(context).textTheme.bodyText1,
         h1: Theme.of(context).textTheme.headline3);
     List<String> goals = kvReadStringList("sleep", "sleep-goals");
-    String goalsText = formatList(goals);
+    String goalsText = formatList(goals, bolded: true);
 
     TimeOfDay goalsWakeTime = kvReadTimeOfDay("sleep", "goals-wake-time") ??
         const TimeOfDay(hour: 0, minute: 0);
@@ -496,7 +496,7 @@ class RoutinePledgeState extends State<RoutinePledge> {
         const TimeOfDay(hour: 0, minute: 0);
     String goalsSleepTimeText = goalsSleepTime.format(context);
     List<String> doingBeforeBed = kvReadStringList("sleep", "doing-before-bed");
-    String doingBeforeBedText = formatList(doingBeforeBed);
+    String doingBeforeBedText = formatList(doingBeforeBed, bolded: true);
 
     int sleepForMinutes = ((goalsWakeTime.minute + goalsWakeTime.hour * 60) -
             (goalsSleepTime.minute + goalsSleepTime.hour * 60)) %
@@ -507,7 +507,8 @@ class RoutinePledgeState extends State<RoutinePledge> {
 
     List<String> includedActivities =
         kvReadStringList("sleep", "included-activities");
-    String includedActivitiesText = formatList(includedActivities);
+    String includedActivitiesText =
+        formatList(includedActivities, bolded: true);
     return BasePage(
         title: widget.title,
         nextPage: widget.nextPage,
@@ -523,7 +524,7 @@ I'd like to $goalsText
 
 My desired sleep duration is **$goalsSleepDurationText**. If I'd like to wake up by **$goalsWakeTimeText**, I should be sleeping by **$goalsSleepTimeText**.
 
-I've identified **$doingBeforeBedText** as obstacles from reaching my goals.
+I've identified $doingBeforeBedText as obstacles from reaching my goals.
 
 To better prepare for sleep, I will practice $includedActivitiesText before bedtime.
 """,
@@ -533,10 +534,13 @@ To better prepare for sleep, I will practice $includedActivitiesText before bedt
   }
 }
 
-String formatList(List<String> l) {
+String formatList(List<String> l, {bool bolded = false}) {
   String text = "";
   for (int i = 0; i < l.length; i++) {
     String item = l[i];
+    if (bolded) {
+      item = "**$item**";
+    }
     if (l.length != 1 && i == l.length - 1) {
       text += " and ";
     } else if (i > 0) {
