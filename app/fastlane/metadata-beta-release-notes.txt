@@ -1,1 +1,1 @@
-Notification fixes and add question about device
+Continue program has been fixed. Fixed the check-in time entry, and other small bugs and interface improvements.
