@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "825250749124",
+    "firebase_url": "https://happily-ever-after-4b2fe-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "happily-ever-after-4b2fe",
+    "storage_bucket": "happily-ever-after-4b2fe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:825250749124:android:721cb5ab745db555090791",
+        "android_client_info": {
+          "package_name": "care.hea.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "825250749124-97v2kpkssgvm07egkqu116bjdhrh059k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7CT0_8_IENsJrCzUWkmd1g8RMcUzyYmY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "825250749124-97v2kpkssgvm07egkqu116bjdhrh059k.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "825250749124-8qchmst7ihvrpaq041bavbebm465l7qc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "care.hea.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
