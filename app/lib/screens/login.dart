@@ -107,9 +107,9 @@ class _LoginScreenState extends State<LoginScreen> {
             )),
             const SizedBox(height: 24.0),
             Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: Text("Say hello to longevity!",
-                    style: Theme.of(context).textTheme.headline1),
-                padding: const EdgeInsets.symmetric(vertical: 16.0)),
+                    style: Theme.of(context).textTheme.headline1)),
             Text(
                 "We provide proactive, preventive & personalised healthcare to keep you at the apex of your health.",
                 style: Theme.of(context).textTheme.headline2?.copyWith(

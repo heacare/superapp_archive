@@ -54,15 +54,6 @@ class SelectListState<T> extends State<SelectList<T>> {
 
   Widget getButton(BuildContext context, bool select, SelectListItem<T> item) {
     return ElevatedButton(
-      child: Text(item.text,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontWeight: FontWeight.w500,
-            color: select
-                ? Theme.of(context).colorScheme.primary
-                : const Color(0xFF414141),
-            fontSize: 18.0,
-          )),
       onPressed: () {
         setState(() {
           if (select) {
@@ -86,6 +77,15 @@ class SelectListState<T> extends State<SelectList<T>> {
               ? Theme.of(context).colorScheme.primary.withAlpha(0x50)
               : const Color(0xFFEBEBEB),
           elevation: 0.0),
+      child: Text(item.text,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            color: select
+                ? Theme.of(context).colorScheme.primary
+                : const Color(0xFF414141),
+            fontSize: 18.0,
+          )),
     );
   }
 

@@ -22,13 +22,13 @@ import 'package:hea/utils/kv_wrap.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-// Firebase
+  // Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
 
-// Services
+  // Services
   setupServiceLocator();
 
   // Locale
@@ -41,14 +41,14 @@ void main() async {
 class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
 
-  static _AppState of(BuildContext context) {
+  static AppState of(BuildContext context) {
     _RestartInheritedWidget? result =
         context.findAncestorWidgetOfExactType<_RestartInheritedWidget>();
     return result!.data;
   }
 
   @override
-  _AppState createState() => _AppState();
+  State<App> createState() => AppState();
 }
 
 enum UserStatus {
@@ -57,7 +57,7 @@ enum UserStatus {
   onboarded,
 }
 
-class _AppState extends State<App> {
+class AppState extends State<App> {
   Key _key = UniqueKey();
 
   void restart() async {
@@ -268,7 +268,7 @@ class _AppState extends State<App> {
 }
 
 class _RestartInheritedWidget extends InheritedWidget {
-  final _AppState data;
+  final AppState data;
 
   const _RestartInheritedWidget({
     required Key key,
@@ -319,12 +319,12 @@ class LifecycleHandlerState extends State<LifecycleHandler>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 

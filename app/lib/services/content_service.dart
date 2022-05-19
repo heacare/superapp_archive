@@ -29,8 +29,7 @@ class ContentServiceImpl implements ContentService {
 
   @override
   Future<List<Lesson>> getLessons(int moduleId) async {
-    final resp =
-        await api.get(ApiEndpoint.contentLesson + "/" + moduleId.toString());
+    final resp = await api.get("${ApiEndpoint.contentLesson}/$moduleId");
     if (resp.statusCode == 200) {
       final lessonList = jsonDecode(resp.body);
       return lessonList.map<Lesson>((e) => Lesson.fromJson(e)).toList();
@@ -42,8 +41,7 @@ class ContentServiceImpl implements ContentService {
 
   @override
   Future<List<Page>> getPages(int lessonId) async {
-    final resp =
-        await api.get(ApiEndpoint.contentPage + "/" + lessonId.toString());
+    final resp = await api.get("${ApiEndpoint.contentPage}/$lessonId");
     if (resp.statusCode == 200) {
       final pageList = jsonDecode(resp.body);
       return pageList.map<Page>((e) => Page.fromJson(e)).toList();

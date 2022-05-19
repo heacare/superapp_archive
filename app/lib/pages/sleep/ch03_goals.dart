@@ -177,7 +177,7 @@ class GoalsEmbraceAndManifest extends Page {
               .bodyText1!
               .copyWith(color: Theme.of(context).colorScheme.primary),
         ),
-        TextSpan(text: "."),
+        const TextSpan(text: "."),
       ]),
       style: Theme.of(context).textTheme.bodyText1,
     );

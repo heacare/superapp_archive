@@ -479,7 +479,7 @@ Future<void> scheduleSleepNotifications() async {
         kvReadStringList("sleep", "routine-add-30m") +
         kvReadStringList("sleep", "routine-add-15m");
     if (routine.isNotEmpty) {
-      activities = " Your activities are " + routine.join(", ");
+      activities = " Your activities are ${routine.join(", ")}";
     }
     await serviceLocator<NotificationService>().showSimpleReminder(
       baseId + 50 * 10 + 1,

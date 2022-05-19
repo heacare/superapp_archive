@@ -61,7 +61,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     userJson = User(authUser.uid).toJson();
 
     // Pull health data
-    WidgetsBinding.instance!.addPostFrameCallback((_) => Navigator.of(context)
+    WidgetsBinding.instance.addPostFrameCallback((_) => Navigator.of(context)
             .push(MaterialPageRoute(
                 builder: (context) => const HealthSetupScreen()))
             .then((value) {
@@ -111,7 +111,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         return;
     }
 
-    WidgetsBinding.instance!.addPostFrameCallback((_) => Navigator.of(context)
+    WidgetsBinding.instance.addPostFrameCallback((_) => Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => nextScreen))
             .then((value) {
           OnboardingStepReturn res = value;

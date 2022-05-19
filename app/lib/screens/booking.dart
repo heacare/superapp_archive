@@ -75,9 +75,8 @@ class _BookingScreenState extends State<BookingScreen> {
               DateUtils.isSameDay(availability, selectedDate!))
           .fold(<DateTime, String>{},
               (Map<DateTime, String> acc, DateTime val) {
-        acc[val] = val.hour.toString().padLeft(2, '0') +
-            ':' +
-            val.minute.toString().padLeft(2, '0');
+        acc[val] =
+            '${val.hour.toString().padLeft(2, '0')}:${val.minute.toString().padLeft(2, '0')}';
         return acc;
       });
 

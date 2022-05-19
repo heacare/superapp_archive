@@ -79,7 +79,7 @@ class BasePage extends StatelessWidget {
                       children: <Widget>[
                         IconButton(
                             iconSize: 38,
-                            icon: FaIcon(FontAwesomeIcons.times,
+                            icon: FaIcon(FontAwesomeIcons.xmark,
                                 color: Theme.of(context).colorScheme.primary),
                             onPressed: () {
                               Navigator.of(context).pop();
@@ -93,7 +93,7 @@ class BasePage extends StatelessWidget {
                         if (prevPage != null)
                           IconButton(
                               iconSize: 24,
-                              icon: FaIcon(FontAwesomeIcons.undo,
+                              icon: FaIcon(FontAwesomeIcons.arrowRotateLeft,
                                   color: Theme.of(context).colorScheme.primary),
                               onPressed: () {
                                 Widget prev = prevPage!();
@@ -183,7 +183,7 @@ abstract class Page extends StatelessWidget {
 class PageImage extends StatelessWidget {
   final Widget child;
   final double? maxHeight;
-  const PageImage(this.child, {this.maxHeight});
+  const PageImage(this.child, {this.maxHeight, Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -440,6 +440,12 @@ class TimePickerBlockState extends State<TimePickerBlock> {
   Widget build(BuildContext context) {
     TimeOfDay? showTime = widget.time ?? selectedTime;
     return ElevatedButton(
+      onPressed: () => onTap(context),
+      style: TextButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+          primary: Colors.black,
+          backgroundColor: const Color(0xFFEBEBEB),
+          elevation: 0.0),
       child: Text(showTime != null ? showTime.format(context) : "00:00",
           textAlign: TextAlign.center,
           style: TextStyle(
@@ -449,12 +455,6 @@ class TimePickerBlockState extends State<TimePickerBlock> {
                 : const Color(0xFFDDDDDD),
             fontSize: 20.0,
           )),
-      onPressed: () => onTap(context),
-      style: TextButton.styleFrom(
-          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-          primary: Colors.black,
-          backgroundColor: const Color(0xFFEBEBEB),
-          elevation: 0.0),
     );
   }
 }
@@ -644,10 +644,8 @@ class DurationPickerBlockState extends State<DurationPickerBlock> {
   @override
   Widget build(BuildContext context) {
     selectedDuration = widget.initialDuration ?? const Duration();
-    debugPrint("selected:" + selectedDuration.toString());
-    if (selectedDuration != null &&
-        prevSelectedDuration != null &&
-        selectedDuration != prevSelectedDuration) {
+    debugPrint("selected:$selectedDuration");
+    if (selectedDuration != prevSelectedDuration) {
       key = UniqueKey();
     }
     prevSelectedDuration = selectedDuration;
@@ -765,7 +763,7 @@ abstract class DurationPickerPage extends Page {
       bool wasEdited = duration?.inMinutes != snapshot.data && duration != null;
       if (duration == null && snapshot.data != null) {
         duration = Duration(minutes: snapshot.data!);
-        debugPrint("read:" + duration.toString());
+        debugPrint("read:$duration");
         kvWrite("sleep", valueName, duration!.inMinutes);
       }
       return Column(
@@ -783,7 +781,7 @@ abstract class DurationPickerPage extends Page {
                 initialDuration: duration,
                 minutesOnly: minutesOnly,
                 onChange: (duration) {
-                  debugPrint("set:" + duration.toString());
+                  debugPrint("set:$duration");
                   kvWrite("sleep", valueName, duration.inMinutes);
                 }),
             Text(!wasEdited ? autofillMessage : "",

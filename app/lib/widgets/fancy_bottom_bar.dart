@@ -7,7 +7,7 @@ class FancyBottomNav extends StatefulWidget {
   final List<IconData> icons;
   final void Function(int) clicked;
   @override
-  _FancyBottomNavState createState() => _FancyBottomNavState();
+  State<FancyBottomNav> createState() => _FancyBottomNavState();
 }
 
 class _FancyBottomNavState extends State<FancyBottomNav>
@@ -43,9 +43,9 @@ class _FancyBottomNavState extends State<FancyBottomNav>
     return SafeArea(
         child: Stack(clipBehavior: Clip.none, children: <Widget>[
       Container(
-          child: const SizedBox(width: double.infinity, height: 70),
           decoration: const BoxDecoration(
-              border: Border(top: BorderSide(color: Color(0xFFC6C6C6))))),
+              border: Border(top: BorderSide(color: Color(0xFFC6C6C6)))),
+          child: const SizedBox(width: double.infinity, height: 70)),
       ..._generateIcons(),
     ]));
   }
@@ -101,8 +101,6 @@ class AnimatedBottomIcon extends AnimatedWidget {
             onTap: () => click(),
             child: Container(
               padding: const EdgeInsets.all(15.0),
-              child:
-                  Icon(icon, size: 40.0, color: logoTween.evaluate(animation)),
               decoration: BoxDecoration(
                 boxShadow: [
                   BoxShadow(
@@ -128,6 +126,8 @@ class AnimatedBottomIcon extends AnimatedWidget {
                 ),
                 borderRadius: const BorderRadius.all(Radius.circular(25.0)),
               ),
+              child:
+                  Icon(icon, size: 40.0, color: logoTween.evaluate(animation)),
             )));
   }
 }

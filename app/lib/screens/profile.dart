@@ -69,9 +69,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     // ignore: unused_local_variable
     final name = user.name;
     // ignore: unused_local_variable
-    final height = user.height.toString() + "m";
+    final height = "${user.height}m";
     // ignore: unused_local_variable
-    final weight = user.weight.toString() + "kg";
+    final weight = "${user.weight}kg";
     // ignore: unused_local_variable
     final country = user.country;
     // ignore: unused_local_variable

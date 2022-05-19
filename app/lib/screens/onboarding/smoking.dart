@@ -71,9 +71,9 @@ class OnboardingSmokingScreenState extends State<OnboardingSmokingScreen> {
   Widget _buildForm() {
     List<Widget> children = [
       Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16.0),
           child: Text("Do you smoke?",
-              style: Theme.of(context).textTheme.headline1),
-          padding: const EdgeInsets.symmetric(vertical: 16.0)),
+              style: Theme.of(context).textTheme.headline1)),
       const SizedBox(height: 24.0),
       SwitchButton(
         selected: smokes,
@@ -89,12 +89,12 @@ class OnboardingSmokingScreenState extends State<OnboardingSmokingScreen> {
       children.addAll([
         const SizedBox(height: 24.0),
         Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: Text("Have you smoked in the past?",
                 style: Theme.of(context).textTheme.headline2?.copyWith(
                     fontWeight: FontWeight.w400,
                     height: 1.4,
-                    color: const Color(0xFF414141))),
-            padding: const EdgeInsets.symmetric(vertical: 16.0)),
+                    color: const Color(0xFF414141)))),
         SwitchButton(
           selected: pastSmokes,
           onChange: (bool selected) {
@@ -110,12 +110,12 @@ class OnboardingSmokingScreenState extends State<OnboardingSmokingScreen> {
       children.addAll([
         const SizedBox(height: 24.0),
         Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: Text("Have many packs a day?",
                 style: Theme.of(context).textTheme.headline2?.copyWith(
                     fontWeight: FontWeight.w400,
                     height: 1.4,
-                    color: const Color(0xFF414141))),
-            padding: const EdgeInsets.symmetric(vertical: 16.0)),
+                    color: const Color(0xFF414141)))),
         SelectList(
           items: choices,
           onChange: (List<SmokingPacks> c) {
@@ -126,12 +126,12 @@ class OnboardingSmokingScreenState extends State<OnboardingSmokingScreen> {
         ),
         const SizedBox(height: 24.0),
         Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: Text("For how long?",
                 style: Theme.of(context).textTheme.headline2?.copyWith(
                     fontWeight: FontWeight.w400,
                     height: 1.4,
-                    color: const Color(0xFF414141))),
-            padding: const EdgeInsets.symmetric(vertical: 16.0)),
+                    color: const Color(0xFF414141)))),
         TextFormField(
             controller: _smokeYears,
             decoration: const InputDecoration(

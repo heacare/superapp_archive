@@ -167,7 +167,7 @@ class _ScrollingCalendarState extends State<ScrollingCalendar> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(getMonthName(currentMonth) + " " + currentYear.toString(),
+        Text("${getMonthName(currentMonth)} $currentYear",
             style: Theme.of(context).textTheme.headline4),
         const SizedBox(height: 8.0),
         SingleChildScrollView(

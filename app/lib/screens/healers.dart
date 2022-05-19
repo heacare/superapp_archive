@@ -39,7 +39,7 @@ class _HealersScreenState extends State<HealersScreen> {
   @override
   void initState() {
     super.initState();
-    SchedulerBinding.instance?.addPostFrameCallback((_) {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
       rootBundle.loadString("assets/style/map_style.txt").then((string) {
         _mapStyle = string;
       });
@@ -184,8 +184,8 @@ class _HealersScreenState extends State<HealersScreen> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: <Widget>[
                         MapIconButton(
-                          icon:
-                              const FaIcon(FontAwesomeIcons.search, size: 24.0),
+                          icon: const FaIcon(FontAwesomeIcons.magnifyingGlass,
+                              size: 24.0),
                           onPressed: () {},
                         ),
                         const SizedBox(height: 8.0),

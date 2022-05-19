@@ -16,9 +16,9 @@ class OnboardingFollowupScreen extends StatelessWidget {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: Text("Would you like to tell me more?",
-                    style: Theme.of(context).textTheme.headline1),
-                padding: const EdgeInsets.symmetric(vertical: 16.0)),
+                    style: Theme.of(context).textTheme.headline1)),
             Text(
                 "Based on your answers, I think these follow ups are good for me to get to know you better!",
                 style: Theme.of(context).textTheme.headline2?.copyWith(
@@ -47,7 +47,7 @@ class OnboardingFollowupScreen extends StatelessWidget {
                   IconGradientButton(
                     title: "Psychosocial Health",
                     text: "Survey review of mental health",
-                    icon: const FaIcon(FontAwesomeIcons.peopleArrows,
+                    icon: const FaIcon(FontAwesomeIcons.peopleArrowsLeftRight,
                         color: Colors.white),
                     iconColor: const Color(0x0C000000),
                     firstColor: const Color(0xFFFFC498),
@@ -60,7 +60,6 @@ class OnboardingFollowupScreen extends StatelessWidget {
                   SizedBox(
                     height: 50.0,
                     child: ElevatedButton(
-                      child: const Text("SKIP"),
                       onPressed: () {
                         Navigator.of(context, rootNavigator: true)
                             .pop(OnboardingStepReturn(
@@ -72,6 +71,7 @@ class OnboardingFollowupScreen extends StatelessWidget {
                           primary: const Color(0xFF414141),
                           backgroundColor: Colors.grey[200],
                           elevation: 0.0),
+                      child: const Text("SKIP"),
                     ),
                   )
                 ])),

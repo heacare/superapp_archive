@@ -162,7 +162,7 @@ class SleepCheckinState extends State<SleepCheckin> {
                       children: <Widget>[
                         IconButton(
                             iconSize: 38,
-                            icon: FaIcon(FontAwesomeIcons.times,
+                            icon: FaIcon(FontAwesomeIcons.xmark,
                                 color: Theme.of(context).colorScheme.primary),
                             onPressed: () {
                               Navigator.of(context).pop();
@@ -180,6 +180,7 @@ class SleepCheckinState extends State<SleepCheckin> {
         child: Padding(
           padding: const EdgeInsets.fromLTRB(18.0, 0.0, 18.0, 5.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text("Did you manage to wind-down before bedtime?",
                   style: Theme.of(context).textTheme.titleLarge),
@@ -250,10 +251,12 @@ class SleepCheckinState extends State<SleepCheckin> {
               const SizedBox(height: 64.0),
               Text("How easily did you fall asleep?",
                   style: Theme.of(context).textTheme.titleLarge),
-              Row(children: const [
-                Text("Not easy"),
-                Text("Very easy"),
-              ], mainAxisAlignment: MainAxisAlignment.spaceBetween),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const [
+                    Text("Not easy"),
+                    Text("Very easy"),
+                  ]),
               Slider(
                 value: data.easyAsleep.toDouble(),
                 max: 4,
@@ -298,10 +301,12 @@ class SleepCheckinState extends State<SleepCheckin> {
               Text(
                   "How easily did you shift from feeling groggy after waking to feeling fully awake?",
                   style: Theme.of(context).textTheme.titleLarge),
-              Row(children: const [
-                Text("Easy"),
-                Text("Difficult"),
-              ], mainAxisAlignment: MainAxisAlignment.spaceBetween),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const [
+                    Text("Easy"),
+                    Text("Difficult"),
+                  ]),
               Slider(
                 value: data.easyWake.toDouble(),
                 max: 4,
@@ -317,10 +322,12 @@ class SleepCheckinState extends State<SleepCheckin> {
                 Text("Was it a stressful day for you yesterday?",
                     style: Theme.of(context).textTheme.titleLarge),
               if (stress)
-                Row(children: const [
-                  Text("Not at all"),
-                  Text("Very"),
-                ], mainAxisAlignment: MainAxisAlignment.spaceBetween),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [
+                      Text("Not at all"),
+                      Text("Very"),
+                    ]),
               if (stress)
                 Slider(
                   value: data.stressScore.toDouble(),
@@ -337,10 +344,12 @@ class SleepCheckinState extends State<SleepCheckin> {
                 Text("How did you feel about your meal choices yesterday?",
                     style: Theme.of(context).textTheme.titleLarge),
               if (diet)
-                Row(children: const [
-                  Text("Very dissatisfied"),
-                  Text("Very satisfied"),
-                ], mainAxisAlignment: MainAxisAlignment.spaceBetween),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [
+                      Text("Very dissatisfied"),
+                      Text("Very satisfied"),
+                    ]),
               if (diet)
                 Slider(
                   value: data.dietScore.toDouble(),
@@ -357,10 +366,12 @@ class SleepCheckinState extends State<SleepCheckin> {
                 Text("Did you do any exercise yesterday?",
                     style: Theme.of(context).textTheme.titleLarge),
               if (exercise)
-                Row(children: const [
-                  Text("None"),
-                  Text("More than enough"),
-                ], mainAxisAlignment: MainAxisAlignment.spaceBetween),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [
+                      Text("None"),
+                      Text("More than enough"),
+                    ]),
               if (exercise)
                 Slider(
                   value: data.exerciseScore.toDouble(),
@@ -374,7 +385,6 @@ class SleepCheckinState extends State<SleepCheckin> {
                 ),
               if (exercise) const SizedBox(height: 64.0),
             ],
-            crossAxisAlignment: CrossAxisAlignment.start,
           ),
         ),
       )),

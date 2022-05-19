@@ -155,8 +155,8 @@ class OnboardingBasicInfoScreenState extends State<OnboardingBasicInfoScreen> {
                                         .map((gender) =>
                                             DropdownMenuItem<String>(
                                               value: describeEnum(gender),
-                                              child: Text(describeEnum(gender)),
                                               enabled: true,
+                                              child: Text(describeEnum(gender)),
                                             ))
                                         .toList(),
                                     onChanged: (val) => setState(() {
@@ -221,7 +221,6 @@ class OnboardingBasicInfoScreenState extends State<OnboardingBasicInfoScreen> {
                           SizedBox(
                             height: 50.0,
                             child: ElevatedButton(
-                              child: Text(countryName),
                               onPressed: () => showCountryPicker(
                                 context: context,
                                 showPhoneCode:
@@ -236,6 +235,7 @@ class OnboardingBasicInfoScreenState extends State<OnboardingBasicInfoScreen> {
                               style: TextButton.styleFrom(
                                   primary: Colors.black,
                                   backgroundColor: Colors.grey[100]),
+                              child: Text(countryName),
                             ),
                           ),
                           const SizedBox(height: 36.0),
