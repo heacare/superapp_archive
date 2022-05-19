@@ -87,11 +87,12 @@ class Done extends StatelessWidget {
         page: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              PageImage(changed == "decreased"
+                  ? Image.asset("assets/images/sleep/ch09-keep-it-going.webp")
+                  : Image.asset("assets/images/sleep/ch09-you-did-great.webp")),
               MarkdownBody(
                   data: """
-You managed to check in on your sleep for ${progress.day} days so far.
-
-Based on your self-reported results for the last $days days, your sleep efficiency $changed from $baseline% to $weekAverage%.
+Based on your self-reported results for the last 7 days, your sleep efficiency $changed from $baseline% to $weekAverage%.
 """,
                   extensionSet: md.ExtensionSet.gitHubFlavored,
                   styleSheet: markdownStyleSheet),
@@ -221,7 +222,8 @@ Would you like to try again or change your routine?
   @override
   Widget nextPageStringList(List<String> data) {
     String choice = data[0];
-    if (choice.startsWith("more-checkin")) {
+    if (choice.startsWith("more-checkin") ||
+        choice.startsWith("change-routine")) {
       serviceLocator<SleepCheckinService>().extend(7);
     }
     if (choice.endsWith("with-healer")) {
