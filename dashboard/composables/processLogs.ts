@@ -15,6 +15,7 @@ export interface User {
   autofills: UserAutofill[];
   resets: UserReset[];
 
+  person?: string[];
   trackingTools?: string[];
   trackingToolModel?: string;
   timeGoBed?: TimeOfDay;
@@ -22,8 +23,11 @@ export interface User {
   minutesAsleep?: number;
   sleepLatency?: number;
   sleepGoals?: string[];
+  timeToSleep?: string[];
+  doingBeforeBed?: string[];
   goalsSleepTime?: TimeOfDay;
   goalsWakeTime?: TimeOfDay;
+  includedActivities?: string[];
   optInGroup?: string;
   groupAccept?: string;
   continueAction?: string;
@@ -31,6 +35,7 @@ export interface User {
   checkInTotal: number;
 
   // Derived
+  sleepEfficiency: number;
   checkInCount: number;
   currentlyActive: boolean;
   pageCount: number;
@@ -153,6 +158,7 @@ function processLogs(logs: Log[]): Record<string, User> {
       autofills: [],
       resets: [],
       // Derived
+      sleepEfficiency: 0,
       checkInCount: 0,
       checkInDay: 0,
       checkInTotal: 7,
@@ -203,6 +209,7 @@ function processLogs(logs: Log[]): Record<string, User> {
       if (typeof data === 'object') {
         const d = data as Record<string, unknown>;
         // Extract key information
+        user.person = expectStringArray(d['person']);
         user.trackingTools = expectStringArray(d['tracking-tool']);
         user.trackingToolModel = d['tracking-tool-model'] as string | undefined;
         user.timeGoBed = expectTimeOfDay(d['time-go-bed']);
@@ -210,12 +217,16 @@ function processLogs(logs: Log[]): Record<string, User> {
         user.minutesAsleep = d['minutes-asleep'] as number | undefined;
         user.sleepLatency = d['sleep-latency'] as number | undefined;
         user.sleepGoals = expectStringArray(d['sleep-goals']);
+        user.timeToSleep = expectStringArray(d['time-to-sleep']);
+        user.doingBeforeBed = expectStringArray(d['doing-before-bed']);
         user.goalsSleepTime = expectTimeOfDay(d['goals-sleep-time']);
         user.goalsWakeTime = expectTimeOfDay(d['goals-wake-time']);
+        user.includedActivities = expectStringArray(d['included-activities']);
         user.optInGroup = expectOneOrNone(d['opt-in-group']);
         user.groupAccept = expectOneOrNone(d['group-accept']);
         user.continueAction = expectOneOrNone(d['continue-action']);
       }
+      user.sleepEfficiency = 0; // TODO
     }
     if (log.key === 'sleep-autofill') {
       // {"in-bed":"2022-05-18T01:45:00.000","asleep":"2022-05-18T02:07:00.000","awake":null,"out-bed":"2022-05-18T09:02:00.000"}

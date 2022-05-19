@@ -3,22 +3,40 @@
     <div class="flex flex-col md:flex-row gap-4">
       <div class="flex-none md:w-72">
         <h2 class="text-xl font-bold">{{ user.id }}: {{ user.name }}</h2>
-        <ul class="text-xs">
-          <li v-if="user.trackingTools">
-            Tracking tools: {{ user.trackingTools.join(', ') }} ({{ user.trackingToolModel }})
-          </li>
-          <li v-if="user.timeGoBed">(Pre) Go bed: {{ formatTimeOfDay(user.timeGoBed) }}</li>
-          <li v-if="user.sleepLatency">(Pre) Latency: {{ formatMinutesDuration(user.sleepLatency) }}</li>
-          <li v-if="user.minutesAsleep">(Pre) Asleep: {{ formatMinutesDuration(user.minutesAsleep) }}</li>
-          <li v-if="user.timeOutBed">(Pre) Out bed: {{ formatTimeOfDay(user.timeOutBed) }}</li>
-          <li v-if="user.sleepGoals">Goals: {{ user.sleepGoals.join(', ') }}</li>
-          <li v-if="user.goalsSleepTime">(Goals) Sleep: {{ formatTimeOfDay(user.goalsSleepTime) }}</li>
-          <li v-if="user.goalsWakeTime">(Goals) Wake: {{ formatTimeOfDay(user.goalsWakeTime) }}</li>
+        <ul class="text-xs list-disc pl-3">
           <li>
-            Group accept: <strong>{{ user.groupAccept ?? 'no' }}</strong>
+            <strong>Group accept</strong>:
+            <span :class="user.groupAccept?.toLowerCase() === 'yes' ? 'text-green-700' : 'text-red-500'">{{
+              user.groupAccept ?? 'no'
+            }}</span>
           </li>
-          <li v-if="user.continueAction">Continue action: {{ user.continueAction }}</li>
+          <li v-if="user.continueAction"><strong>Continue action</strong>: {{ user.continueAction }}</li>
+          <li v-if="user.person"><strong>Person</strong>: {{ user.person.join(', ') }}</li>
+          <li v-if="user.trackingTools"><strong>Tracking tools</strong>: {{ trackingTools }}</li>
+          <li v-if="user.timeGoBed"><strong>(Pre) Go bed</strong>: {{ formatTimeOfDay(user.timeGoBed) }}</li>
+          <li v-if="user.sleepLatency">
+            <strong>(Pre) Latency</strong>: {{ formatMinutesDuration(user.sleepLatency) }}
+          </li>
+          <li v-if="user.minutesAsleep">
+            <strong>(Pre) Asleep</strong>: {{ formatMinutesDuration(user.minutesAsleep) }}
+          </li>
+          <li v-if="user.timeOutBed"><strong>(Pre) Out bed</strong>: {{ formatTimeOfDay(user.timeOutBed) }}</li>
+          <li v-if="user.sleepGoals"><strong>Goals</strong>: {{ user.sleepGoals.join(', ') }}</li>
+          <li v-if="user.goalsSleepTime"><strong>(Goals) Sleep</strong>: {{ formatTimeOfDay(user.goalsSleepTime) }}</li>
+          <li v-if="user.goalsWakeTime"><strong>(Goals) Wake</strong>: {{ formatTimeOfDay(user.goalsWakeTime) }}</li>
         </ul>
+        <details>
+          <summary class="text-xs my-1">More details</summary>
+          <ul class="text-xs list-disc pl-3">
+            <li v-if="user.timeToSleep"><strong>(Pre) When it's time</strong>: {{ user.timeToSleep.join(', ') }}</li>
+            <li v-if="user.doingBeforeBed">
+              <strong>(Pre) Do before bed</strong>: {{ user.doingBeforeBed.join(', ') }}
+            </li>
+            <li v-if="user.includedActivities">
+              <strong>(Goals) Wind down activities</strong>: {{ user.includedActivities.join(', ') }}
+            </li>
+          </ul>
+        </details>
       </div>
       <div class="flex-1">
         <TimeRulerBar :start="period.start" :end="period.end" :zone="user.zone" />
@@ -178,5 +196,8 @@ const autofills = computed(() => props.user.autofills.map(periodToMillis));
 const checkInText = computed(() => `${props.user.checkInCount} of ${props.user.checkInTotal}`);
 const checkInLabel = computed(
   () => `${props.user.checkInCount} of ${props.user.checkInTotal}\nDay: ${props.user.checkInDay}`,
+);
+const trackingTools = computed(
+  () => `${props.user.trackingTools?.join(', ') ?? ''} (${props.user.trackingToolModel ?? ''})`,
 );
 </script>
