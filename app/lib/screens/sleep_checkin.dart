@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:hea/services/notification_service.dart';
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/services/sleep_checkin_service.dart';
-import 'package:hea/services/logging_service.dart';
 import 'package:hea/services/health_service.dart';
 import 'package:hea/utils/sleep_notifications.dart';
 import 'package:hea/widgets/page.dart';

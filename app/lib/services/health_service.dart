@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:async';
 import 'package:flutter/material.dart' show TimeOfDay;
-import 'package:flutter/foundation.dart';
 import 'package:health/health.dart';
 
 import 'package:hea/services/service_locator.dart';

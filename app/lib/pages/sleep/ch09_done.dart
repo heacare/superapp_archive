@@ -30,9 +30,6 @@ class Done extends StatelessWidget {
         p: Theme.of(context).textTheme.bodyText1,
         h1: Theme.of(context).textTheme.headline3);
 
-    SleepCheckinProgress progress =
-        serviceLocator<SleepCheckinService>().getProgress();
-
     TimeOfDay goBed = kvReadTimeOfDay("sleep", "time-go-bed") ??
         const TimeOfDay(hour: 0, minute: 0);
     TimeOfDay outBed = kvReadTimeOfDay("sleep", "time-out-bed") ??

@@ -398,7 +398,7 @@ class MultipleChoicePageState extends State<MultipleChoicePage> {
                 if (widget.maxChoice == 1 &&
                     savedValues.length == widget.minSelected &&
                     other == "" &&
-                    prevSelected.length == 0) {
+                    prevSelected.isEmpty) {
                   skipNext();
                 }
               },

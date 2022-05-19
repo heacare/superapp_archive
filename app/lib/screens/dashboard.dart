@@ -111,7 +111,7 @@ class DashboardPage extends StatelessWidget {
     });
 
     String goodMorning = "Good morning";
-    if (name.length > 0) {
+    if (name.isNotEmpty) {
       goodMorning += ", $name";
     }
 
