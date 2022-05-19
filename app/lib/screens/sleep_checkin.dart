@@ -64,8 +64,6 @@ class SleepCheckinState extends State<SleepCheckin> {
     () async {
       SleepAutofill? sleepAutofill =
           await serviceLocator<HealthService>().autofillRead1Day();
-      serviceLocator<LoggingService>()
-          .createLog("sleep-autofill", sleepAutofill);
       if (sleepAutofill == null) {
         autofillMessageGoBed =
             "No autofill data available. Please provide your best estimate";

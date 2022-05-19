@@ -35,14 +35,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }), (route) => false);
   }
 
-  Future<void> send60DaysHealthData() async {
-    if (!await serviceLocator<HealthService>().request()) {
-      return;
-    }
-    await serviceLocator<HealthService>().log60Days();
-    SleepAutofill? day =
-        await serviceLocator<HealthService>().autofillRead1Day();
-    await serviceLocator<LoggingService>().createLog("sleep-autofill", day);
+  Future<String> send60DaysHealthData() async {
+    bool hasData = await serviceLocator<HealthService>().log60Days();
+    await serviceLocator<HealthService>().autofillRead1Day();
+    await serviceLocator<HealthService>().autofillRead30Day();
+    return hasData ? "Health data sent" : "No health data available";
   }
 
   Future<void> scheduleDemoNotification() async {
@@ -120,10 +117,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       text: "Send 60 days health data",
                       onPressed: () async {
                         try {
-                          await send60DaysHealthData();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text("Health data sent")));
+                          String info = await send60DaysHealthData();
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(SnackBar(content: Text(info)));
                         } catch (e) {
                           ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text(e.toString())));

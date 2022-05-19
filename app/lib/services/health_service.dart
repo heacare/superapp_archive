@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:async';
 import 'package:flutter/material.dart' show TimeOfDay;
+import 'package:flutter/foundation.dart';
 import 'package:health/health.dart';
 
 import 'package:hea/services/service_locator.dart';
@@ -55,17 +56,11 @@ class HealthService {
       if (user == null) {
         return;
       }
-      if (!await serviceLocator<HealthService>().request()) {
-        return;
-      }
       await log60Days();
     });
-    Timer.periodic(const Duration(hours: 4), (timer) async {
+    Timer.periodic(const Duration(hours: 8), (timer) async {
       var user = serviceLocator<AuthService>().currentUser();
       if (user == null) {
-        return;
-      }
-      if (!await serviceLocator<HealthService>().request()) {
         return;
       }
       await log60Days();
@@ -93,15 +88,20 @@ class HealthService {
   }
 
   Future<List<HealthDataPoint>> get60Days() async {
+    if (!await request()) {
+      return [];
+    }
+
     DateTime startDate = DateTime.now().subtract(const Duration(days: 60));
     DateTime endDate = DateTime.now();
     return await health.getHealthDataFromTypes(startDate, endDate, types);
   }
 
-  Future<void> log60Days() async {
+  Future<bool> log60Days() async {
     List<HealthDataPoint> healthData = await get60Days();
     await serviceLocator<LoggingService>()
         .createLog('past-health-data', healthData);
+    return healthData.isNotEmpty;
   }
 
   DateTime earliest(DateTime? a, DateTime b) {
@@ -296,7 +296,9 @@ class HealthService {
       HealthDataType.SLEEP_AWAKE,
     ]);
 
-    return processNight(healthData);
+    SleepAutofill? day = processNight(healthData);
+    serviceLocator<LoggingService>().createLog("sleep-autofill", day);
+    return day;
   }
 }
 
