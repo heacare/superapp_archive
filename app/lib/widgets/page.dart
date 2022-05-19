@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hea/utils/sleep_notifications.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,6 +10,8 @@ import 'package:hea/widgets/select_list.dart';
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/services/logging_service.dart';
 import 'package:hea/pages/sleep/lookup.dart';
+import 'package:hea/utils/sleep_notifications.dart';
+import 'package:hea/utils/sleep_log.dart';
 
 typedef PageBuilder = Widget Function();
 
@@ -82,6 +83,8 @@ class BasePage extends StatelessWidget {
                             icon: FaIcon(FontAwesomeIcons.xmark,
                                 color: Theme.of(context).colorScheme.primary),
                             onPressed: () {
+                              serviceLocator<LoggingService>()
+                                  .createLog('navigate', 'home');
                               Navigator.of(context).pop();
                             }),
                         const SizedBox(width: 10.0),
@@ -105,8 +108,7 @@ class BasePage extends StatelessWidget {
                                 }
                                 serviceLocator<LoggingService>()
                                     .createLog('navigate', s);
-                                serviceLocator<LoggingService>()
-                                    .createLog('sleep', kvDump("sleep"));
+                                sleepLog();
                                 Navigator.of(context)
                                     .pushReplacement(MaterialPageRoute<void>(
                                   builder: (BuildContext context) => prev,
@@ -143,8 +145,7 @@ class BasePage extends StatelessWidget {
                   serviceLocator<SharedPreferences>().setString('sleep', s);
                 }
                 serviceLocator<LoggingService>().createLog('navigate', s);
-                serviceLocator<LoggingService>()
-                    .createLog('sleep', kvDump("sleep"));
+                sleepLog();
                 Navigator.of(context).pushReplacement(MaterialPageRoute<void>(
                   builder: (BuildContext context) => next,
                 ));
@@ -298,6 +299,9 @@ class MultipleChoicePageState extends State<MultipleChoicePage> {
   }
 
   void skipNext() {
+    if (widget.nextPage == null) {
+      return;
+    }
     // This is pretty bad code, duplicated from BasePage
     Widget next = widget.nextPage!();
     String? s = sleep.rlookup(next.runtimeType);
@@ -306,7 +310,7 @@ class MultipleChoicePageState extends State<MultipleChoicePage> {
       serviceLocator<SharedPreferences>().setString('sleep', s);
     }
     serviceLocator<LoggingService>().createLog('navigate', s);
-    serviceLocator<LoggingService>().createLog('sleep', kvDump("sleep"));
+    sleepLog();
     Navigator.of(context).pushReplacement(MaterialPageRoute<void>(
       builder: (BuildContext context) => next,
     ));

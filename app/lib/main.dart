@@ -17,7 +17,7 @@ import 'package:hea/services/user_service.dart';
 import 'package:hea/services/logging_service.dart';
 import 'package:hea/services/notification_service.dart';
 import 'package:hea/utils/sleep_notifications.dart';
-import 'package:hea/utils/kv_wrap.dart';
+import 'package:hea/utils/sleep_log.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -203,8 +203,7 @@ class AppState extends State<App> {
         return UserStatus.signedOut;
       } else {
         authService.currentUserToken()?.then((token) => debugPrint(token));
-        await serviceLocator<LoggingService>()
-            .createLog('sleep', kvDump("sleep"));
+        sleepLog();
         return await serviceLocator<UserService>().isCurrentUserOnboarded()
             ? UserStatus.onboarded
             : UserStatus.registered;
