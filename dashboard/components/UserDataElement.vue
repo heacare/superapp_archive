@@ -41,13 +41,13 @@
       <div class="flex-1">
         <TimeRulerBar :start="period.start" :end="period.end" :zone="user.zone" />
         <h3 class="font-semibold">Navigations</h3>
-        <RangeBar :start-range="startRange" :end-range="endRange" :ranges="navigations" fill-color="bg-yellow-400" />
+        <RangeBar :start-range="startRange" :end-range="endRange" :ranges="navigations" fill-color="bg-yellow-500" />
         <h3 class="font-semibold">App Activity</h3>
         <RangeBar
           :start-range="startRange"
           :end-range="endRange"
           :ranges="active"
-          fill-color="bg-red-400"
+          fill-color="bg-red-500"
           :dot="user.currentlyActive"
         />
         <h3 class="font-semibold">Check-in Sleep</h3>
@@ -56,9 +56,9 @@
           :end-range="endRange"
           :ranges="sleeps"
           fill-color="bg-violet-400 from-violet-400"
-          inner-fill-color="bg-violet-700 from-violet-700"
+          inner-fill-color="bg-violet-800 from-violet-800"
           :marks="sleepsMarks"
-          marks-fill-color="bg-red-400"
+          marks-fill-color="bg-red-500"
         />
         <h3 class="font-semibold">Autofill</h3>
         <RangeBar
@@ -66,7 +66,7 @@
           :end-range="endRange"
           :ranges="autofills"
           fill-color="bg-violet-400 from-violet-400"
-          inner-fill-color="bg-violet-700 from-violet-700"
+          inner-fill-color="bg-violet-800 from-violet-800"
         />
         <div class="flex gap-4 max-w-md">
           <div class="flex-1">

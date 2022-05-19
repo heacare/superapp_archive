@@ -1,6 +1,6 @@
 <template>
   <Head>
-    <Title>HEA Dashboard</Title>
+    <Title>Healer Dashboard</Title>
   </Head>
   <NuxtLayout name="default">
     <template #actions>
