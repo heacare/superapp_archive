@@ -9,7 +9,7 @@ on:
     paths: ['app/**']
 
 env:
-  FLUTTER_VERSION: '2.10'
+  FLUTTER_VERSION: '3.0'
 
 jobs:
   lint:
