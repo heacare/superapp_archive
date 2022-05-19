@@ -741,8 +741,6 @@ class NowEnthusiasm extends MultipleChoicePage {
 
   @override
   final markdown = """
-During the past month...
-
 During the past month, how much of a problem has it been for you to keep up enough enthusiasm to get things done?
 """;
 

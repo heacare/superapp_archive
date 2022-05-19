@@ -297,6 +297,21 @@ class MultipleChoicePageState extends State<MultipleChoicePage> {
         widget.minSelected;
   }
 
+  void skipNext() {
+    // This is pretty bad code, duplicated from BasePage
+    Widget next = widget.nextPage!();
+    String? s = sleep.rlookup(next.runtimeType);
+    debugPrint(s);
+    if (s != null) {
+      serviceLocator<SharedPreferences>().setString('sleep', s);
+    }
+    serviceLocator<LoggingService>().createLog('navigate', s);
+    serviceLocator<LoggingService>().createLog('sleep', kvDump("sleep"));
+    Navigator.of(context).pushReplacement(MaterialPageRoute<void>(
+      builder: (BuildContext context) => next,
+    ));
+  }
+
   @override
   void initState() {
     super.initState();
@@ -374,11 +389,18 @@ class MultipleChoicePageState extends State<MultipleChoicePage> {
               defaultSelected: selected,
               defaultOther: other,
               onChange: (List<String> c) {
+                List<String> prevSelected = selected;
                 selected = c;
                 kvWrite<List<String>>("sleep", widget.valueName, savedValues);
                 setState(() {
                   hideNext = !canNext();
                 });
+                if (widget.maxChoice == 1 &&
+                    savedValues.length == widget.minSelected &&
+                    other == "" &&
+                    prevSelected.length == 0) {
+                  skipNext();
+                }
               },
               onChangeOther: (String c) {
                 other = c;

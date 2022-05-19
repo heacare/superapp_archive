@@ -3,6 +3,7 @@ import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_markdown/flutter_markdown.dart';
 
 import 'package:hea/widgets/page.dart';
+import 'package:hea/widgets/gradient_button.dart';
 import 'package:hea/services/sleep_checkin_service.dart';
 import 'package:hea/services/service_locator.dart';
 import 'ch06_routine.dart';
@@ -92,9 +93,11 @@ class DiaryStart extends MarkdownPage {
 
   @override
   final markdown = """
-Great! We'll check in with you before and after you sleep at your given times. See you then!
+Your first daily sleep check-in starts tomorrow!
 
-When you're done with 7 days of daily check-ins, come back here and continue the program.
+We’ll remind you before and after you sleep at your given times. 
+
+When you’re done with 7 days of check-ins, come back here and continue the program. 
 """;
 
   @override
@@ -111,6 +114,13 @@ When you're done with 7 days of daily check-ins, come back here and continue the
               data: markdown,
               extensionSet: md.ExtensionSet.gitHubFlavored,
               styleSheet: markdownStyleSheet),
+
+			  GradientButton(
+				  text: "Home",
+				  onPressed: () async {
+
+                              Navigator.of(context).pop();
+							  }),
         ]);
   }
 
