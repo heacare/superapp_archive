@@ -37,12 +37,14 @@ class DashboardPage extends StatelessWidget {
   final double expYears;
   final double optYears;
   final double socScore;
+  final String name;
 
   const DashboardPage(
       {Key? key,
       required this.expYears,
       required this.optYears,
-      required this.socScore})
+      required this.socScore,
+      required this.name})
       : super(key: key);
 
   // TODO: ideally this logic should be stored and retrieved from the backend
@@ -55,8 +57,9 @@ class DashboardPage extends StatelessWidget {
     double optYears =
         user.gender == Gender.Male ? 87 : 92 + (2.5 * random.nextDouble()) - 2;
     double socScore = random.nextInt(21) + 5.0;
+    String name = user.name;
     return DashboardPage(
-        expYears: expYears, optYears: optYears, socScore: socScore);
+        expYears: expYears, optYears: optYears, socScore: socScore, name: name);
   }
 
   @override
@@ -107,6 +110,11 @@ class DashboardPage extends StatelessWidget {
       return const Text("Not available");
     });
 
+    String goodMorning = "Good morning";
+    if (name.length > 0) {
+      goodMorning += ", $name";
+    }
+
     return Scaffold(
         appBar: PreferredSize(
             preferredSize: const Size.fromHeight(150),
@@ -125,7 +133,7 @@ class DashboardPage extends StatelessWidget {
                                 Text("Dashboard",
                                     style:
                                         Theme.of(context).textTheme.headline1),
-                                Text("Good morning",
+                                Text(goodMorning,
                                     style:
                                         Theme.of(context).textTheme.headline4),
                               ])),
