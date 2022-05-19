@@ -222,7 +222,9 @@ class SleepCheckinState extends State<SleepCheckin> {
                   defaultTime: const TimeOfDay(hour: 20, minute: 0),
                   time: data.timeGoBed,
                   onChange: (TimeOfDay value) {
-                    data.timeGoBed = value;
+                    setState(() {
+                      data.timeGoBed = value;
+                    });
                   }),
               Text(autofillMessageGoBed ?? "",
                   style: Theme.of(context)
@@ -236,7 +238,9 @@ class SleepCheckinState extends State<SleepCheckin> {
                   defaultTime: const TimeOfDay(hour: 21, minute: 0),
                   time: data.timeAsleepBed,
                   onChange: (TimeOfDay value) {
-                    data.timeAsleepBed = value;
+                    setState(() {
+                      data.timeAsleepBed = value;
+                    });
                   }),
               Text(autofillMessageAsleepBed ?? "",
                   style: Theme.of(context)
@@ -275,7 +279,9 @@ class SleepCheckinState extends State<SleepCheckin> {
                   defaultTime: const TimeOfDay(hour: 9, minute: 0),
                   time: data.timeOutBed,
                   onChange: (TimeOfDay value) {
-                    data.timeOutBed = value;
+                    setState(() {
+                      data.timeOutBed = value;
+                    });
                   }),
               Text(autofillMessage ?? "",
                   style: Theme.of(context)
