@@ -27,6 +27,8 @@ export interface User {
   optInGroup?: string;
   groupAccept?: string;
   continueAction?: string;
+  checkInDay: number;
+  checkInTotal: number;
 
   // Derived
   checkInCount: number;
@@ -152,6 +154,8 @@ function processLogs(logs: Log[]): Record<string, User> {
       resets: [],
       // Derived
       checkInCount: 0,
+      checkInDay: 0,
+      checkInTotal: 7,
       currentlyActive: false,
       pageCount: 0,
       pageTotal: pageTotal(),
@@ -232,6 +236,17 @@ function processLogs(logs: Log[]): Record<string, User> {
             o.start?.toSeconds() !== autofill.start?.toSeconds() && o.end?.toSeconds() !== autofill.end?.toSeconds(),
         );
         user.autofills.push(autofill);
+      }
+    }
+    if (log.key === 'sleep-checkin-progress') {
+      const data: unknown = JSON.parse(log.value);
+      if (data === null) {
+        continue;
+      }
+      if (typeof data === 'object') {
+        const d = data as Record<string, unknown>;
+        user.checkInDay = d['day'] as number;
+        user.checkInTotal = d['total'] as number;
       }
     }
     if (log.key === 'sleep-checkin') {

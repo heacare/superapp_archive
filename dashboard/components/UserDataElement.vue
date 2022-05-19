@@ -64,11 +64,11 @@
           <div class="flex-1">
             <h3 class="font-semibold">Check-ins</h3>
             <ProgressBar
-              :max="7"
+              :max="user.checkInTotal"
               :value="user.checkInCount"
               fill-color="bg-neutral-300"
-              :label="user.checkInCount + ' of ' + 7"
-              :text="user.checkInCount + ''"
+              :label="checkInLabel"
+              :text="checkInText"
             />
           </div>
         </div>
@@ -174,4 +174,9 @@ const sleepsMarks = computed(() => {
   return marks;
 });
 const autofills = computed(() => props.user.autofills.map(periodToMillis));
+
+const checkInText = computed(() => `${props.user.checkInCount} of ${props.user.checkInTotal}`);
+const checkInLabel = computed(
+  () => `${props.user.checkInCount} of ${props.user.checkInTotal}\nDay: ${props.user.checkInDay}`,
+);
 </script>

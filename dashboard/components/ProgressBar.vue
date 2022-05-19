@@ -1,7 +1,8 @@
 <template>
   <div class="w-full h-6 relative rounded bg-neutral-100 overflow-hidden" :title="label">
-    <div class="h-6 rounded" :class="fillColor" :style="{ width: width + '%' }">{{ text }}</div>
-    <div v-if="overflow" class="h-6 top-0 right-0 absolute rounded w-6 bg-gradient-to-l from-neutral-400"></div>
+    <div class="h-6 rounded" :class="fillColor" :style="{ width: width + '%' }"></div>
+    <div class="absolute top-0 left-1">{{ text }}</div>
+    <div v-if="overflow" class="h-6 absolute top-0 right-0 rounded w-6 bg-gradient-to-l from-neutral-400"></div>
   </div>
 </template>
 

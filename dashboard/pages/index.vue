@@ -1,4 +1,7 @@
 <template>
+  <Head>
+    <Title>HEA Dashboard</Title>
+  </Head>
   <NuxtLayout name="default">
     <template #actions>
       <select
