@@ -12,6 +12,9 @@
           </li>
           <li v-if="user.continueAction"><strong>Continue action</strong>: {{ user.continueAction }}</li>
           <li v-if="user.person"><strong>Person</strong>: {{ user.person.join(', ') }}</li>
+          <li v-if="user.otherHealthAspects">
+            <strong>Other aspects</strong>: {{ user.otherHealthAspects.join(', ') }}
+          </li>
           <li v-if="user.trackingTools"><strong>Tracking tools</strong>: {{ trackingTools }}</li>
           <li v-if="user.timeGoBed"><strong>(Pre) Go bed</strong>: {{ formatTimeOfDay(user.timeGoBed) }}</li>
           <li v-if="user.sleepLatency">

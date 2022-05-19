@@ -16,6 +16,7 @@ export interface User {
   resets: UserReset[];
 
   person?: string[];
+  otherHealthAspects?: string[];
   trackingTools?: string[];
   trackingToolModel?: string;
   timeGoBed?: TimeOfDay;
@@ -210,6 +211,7 @@ function processLogs(logs: Log[]): Record<string, User> {
         const d = data as Record<string, unknown>;
         // Extract key information
         user.person = expectStringArray(d['person']);
+        user.otherHealthAspects = expectStringArray(d['other-health-aspects']);
         user.trackingTools = expectStringArray(d['tracking-tool']);
         user.trackingToolModel = d['tracking-tool-model'] as string | undefined;
         user.timeGoBed = expectTimeOfDay(d['time-go-bed']);
