@@ -59,14 +59,9 @@ class BasePage extends StatelessWidget {
   final Widget page;
   final bool hideNext;
 
-  Timer? _timer;
-
   @override
   Widget build(BuildContext context) {
-    if (_timer != null) {
-      _timer!.cancel();
-    }
-    _timer = Timer(const Duration(seconds: 5), scheduleSleepNotifications);
+    scheduleSleepNotifications();
     return Scaffold(
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(154),
@@ -83,8 +78,6 @@ class BasePage extends StatelessWidget {
                             icon: FaIcon(FontAwesomeIcons.xmark,
                                 color: Theme.of(context).colorScheme.primary),
                             onPressed: () {
-                              serviceLocator<LoggingService>()
-                                  .createLog('navigate', 'home');
                               Navigator.of(context).pop();
                             }),
                         const SizedBox(width: 10.0),

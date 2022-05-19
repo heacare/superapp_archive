@@ -53,7 +53,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    serviceLocator<ApiManager>().get("/"); // What is this for?
+    serviceLocator<LoggingService>().createLog('navigate', 'profile');
+    //serviceLocator<ApiManager>().get("/"); // What is this for?
     return Consumer<User?>(builder: (context, user, _) {
       if (user == null) {
         return const Center(child: CircularProgressIndicator());

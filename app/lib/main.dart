@@ -203,7 +203,7 @@ class AppState extends State<App> {
         return UserStatus.signedOut;
       } else {
         authService.currentUserToken()?.then((token) => debugPrint(token));
-        sleepLog();
+        //sleepLog();
         return await serviceLocator<UserService>().isCurrentUserOnboarded()
             ? UserStatus.onboarded
             : UserStatus.registered;
@@ -228,9 +228,9 @@ class AppState extends State<App> {
                       systemNavigationBarIconBrightness: Brightness.dark,
                       statusBarColor: const Color(0x40FFFFFF),
                     ),
-                    child: NotificationHandler(
+                    child: LifecycleHandler(
                         snapshot.connectionState == ConnectionState.done,
-                        LifecycleHandler(mainScreen(snapshot)))));
+                        mainScreen(snapshot))));
           },
         ));
   }
@@ -282,25 +282,10 @@ class _RestartInheritedWidget extends InheritedWidget {
   }
 }
 
-class NotificationHandler extends StatelessWidget {
-  final bool ready;
-  final Widget child;
-  const NotificationHandler(this.ready, this.child, {Key? key})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    if (ready) {
-      serviceLocator<NotificationService>().ensureListen(context);
-      scheduleSleepNotifications();
-    }
-    return child;
-  }
-}
-
 class LifecycleHandler extends StatefulWidget {
-  const LifecycleHandler(this.child, {Key? key}) : super(key: key);
+  const LifecycleHandler(this.ready, this.child, {Key? key}) : super(key: key);
 
+  final bool ready;
   final Widget child;
 
   @override
@@ -313,6 +298,10 @@ class LifecycleHandlerState extends State<LifecycleHandler>
 
   @override
   Widget build(BuildContext context) {
+    if (widget.ready) {
+      serviceLocator<NotificationService>().ensureListen(context);
+      scheduleSleepNotifications(debounce: false);
+    }
     return widget.child;
   }
 
@@ -336,5 +325,9 @@ class LifecycleHandlerState extends State<LifecycleHandler>
     }
     lastState = active;
     serviceLocator<LoggingService>().createLog("state", active);
+    debugPrint(state.toString());
+    if (state == AppLifecycleState.inactive && widget.ready) {
+      scheduleSleepNotifications(debounce: false);
+    }
   }
 }

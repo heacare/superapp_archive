@@ -396,7 +396,7 @@ class SleepCheckinState extends State<SleepCheckin> {
           if (validate(context)) {
             await serviceLocator<SleepCheckinService>().add(data);
             Navigator.of(context).pop();
-            scheduleSleepNotifications();
+            scheduleSleepNotifications(debounce: false);
             if (progress.allDone) {
               // Set #18
               await serviceLocator<NotificationService>().showContentReminder(

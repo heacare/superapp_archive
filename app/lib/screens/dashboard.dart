@@ -16,6 +16,7 @@ import 'package:hea/widgets/avatar_icon.dart';
 import 'package:hea/widgets/page.dart';
 import 'package:hea/screens/sleep_checkin.dart';
 import 'package:hea/utils/kv_wrap.dart';
+import 'package:hea/utils/sleep_notifications.dart';
 
 import 'package:hea/pages/sleep/lookup.dart';
 
@@ -64,6 +65,7 @@ class DashboardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    serviceLocator<LoggingService>().createLog('navigate', 'home');
     final moduleListView = FutureProvider<List<Module>>(
       initialData: const [],
       create: (_) => serviceLocator<ContentService>().getModules(),
@@ -381,12 +383,14 @@ class ModuleListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: () {
+        onTap: () async {
           String? s = serviceLocator<SharedPreferences>().getString('sleep');
           PageBuilder resume = sleep.lookup(s);
           serviceLocator<LoggingService>().createLog('navigate', s);
-          Navigator.of(context)
+          await Navigator.of(context)
               .push(MaterialPageRoute(builder: (context) => resume()));
+          serviceLocator<LoggingService>().createLog('navigate', 'home');
+          scheduleSleepNotifications(debounce: false);
         },
         child: Container(
             padding:

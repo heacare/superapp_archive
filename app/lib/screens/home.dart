@@ -30,7 +30,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     super.activate();
-    serviceLocator<LoggingService>().createLog('navigate', 'home');
     sleepLog();
     return Scaffold(
         body: pageFor(index),
@@ -62,11 +61,6 @@ class _HomeScreenState extends State<HomeScreen> {
       initialData: null,
       create: (context) => serviceLocator<UserService>().getCurrentUser(),
       child: child,
-      catchError: (context, error) {
-        log("$error");
-        log("${StackTrace.current}");
-        return null;
-      },
     );
   }
 }
