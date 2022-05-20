@@ -1,0 +1,28 @@
+targets:
+  $default:
+    builders:
+      experiment_js:node_transform: {}
+      build_web_compilers:entrypoint:
+        dev_options:
+          #compiler: dartdevc
+          compiler: dart2js
+          dart2js_args:
+            - -O0
+        release_options:
+          compiler: dart2js
+          dart2js_args:
+            - -O2
+
+builders:
+  node_transform:
+    import: 'tool/node_transform_builder.dart'
+    builder_factories:
+      - nodeTransformBuilder
+    build_extensions:
+      .dart.js:
+        - .dart.node.js
+    required_inputs:
+      - .dart.js
+    build_to: cache
+    auto_apply: root_package
+# vim: set et ts=2 sw=2:
