@@ -3,7 +3,7 @@
     "jsx": "preserve",
     "target": "ESNext",
     "module": "ESNext",
-	"esModuleInterop": true,
+    "esModuleInterop": true,
     "moduleResolution": "Node",
     "allowJs": true,
     "noEmit": true,

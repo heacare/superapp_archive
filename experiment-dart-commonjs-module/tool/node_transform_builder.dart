@@ -11,7 +11,7 @@ class _NodeTransformBuilder extends Builder {
   @override
   Future<void> build(BuildStep buildStep) async {
     var outputId = buildStep.inputId.changeExtension(".node.js");
-    var preamble = getPreamble(minified: false);
+    var preamble = getPreamble(minified: true);
     var contents = buildStep.readAsString(buildStep.inputId);
     buildStep.writeAsString(outputId, _addPreamble(preamble, contents));
   }

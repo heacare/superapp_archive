@@ -1,7 +1,7 @@
 targets:
   $default:
     builders:
-      experiment_js:node_transform: {}
+      :node_transform: {}
       build_web_compilers:entrypoint:
         dev_options:
           #compiler: dartdevc

@@ -5,13 +5,15 @@
   "main": "./build/execute.dart.node.js",
   "typings": "./web/execute.d.ts",
   "scripts": {
-    "build": "webdev",
+    "build": "webdev build",
     "lint:dart": "dart analyze",
     "lint:js": "eslint --ext \".js,.ts\" --ignore-path .gitignore .",
     "lint:prettier": "prettier --check .",
-    "lint": "npm run lint:js && npm run lint:prettier && npm run lint:dart",
+    "lint": "npm run lint:dart && npm run lint:js && npm run lint:prettier",
     "lintfix": "prettier --write --list-different . && npm run lint:js -- --fix && dart fix --apply",
-    "test": "jest"
+    "test:dart": "dart test",
+    "test:js": "jest",
+    "test": "run test:dart && npm run test:js"
   },
   "devDependencies": {
     "@types/jest": "^27.5.1",
