@@ -336,10 +336,10 @@ Please do fill up the following survey form to let us know that you have complet
                 User user =
                     await serviceLocator<UserService>().getCurrentUser();
                 Uri uri =
-                    Uri.parse('https://2b0snealkkz.typeform.com/to/a8UHkaNd');
+                    Uri.parse('https://flourishea.typeform.com/to/a8UHkaNd');
                 if (kDebugMode) {
                   uri =
-                      Uri.parse('https://2b0snealkkz.typeform.com/to/T7NdL2JC');
+                      Uri.parse('https://flourishea.typeform.com/to/T7NdL2JC');
                 }
                 uri = uri.replace(queryParameters: {"user": user.authId});
                 await launch(uri.toString());
