@@ -25,7 +25,7 @@ jobs:
       - name: Format yaml, md, json, hbs, js
         uses: actionsx/prettier@3de869a32607c555c4d8f367228691f6e141d37a
         with:
-          args: --config backend/.prettierrc --write '**/*.yaml' '**/*.yml' '**/*.md' '**/*.json' '**/*.hbs' '**/*.js' '!app/fastlane/README.md'
+          args: --config backend/package.json --write '**/*.yaml' '**/*.yml' '**/*.md' '**/*.json' '**/*.hbs' '**/*.js' '!app/fastlane/README.md'
       - name: Format app/tools app/*.py
         working-directory: app/tools
         run: |
