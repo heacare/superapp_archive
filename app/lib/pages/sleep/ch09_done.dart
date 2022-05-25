@@ -1,17 +1,17 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Page;
-import 'package:hea/services/logging_service.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
-import 'package:hea/widgets/gradient_button.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_markdown/flutter_markdown.dart';
 
 import 'package:hea/widgets/page.dart';
 import 'package:hea/widgets/select_list.dart';
+import 'package:hea/widgets/gradient_button.dart';
 import 'package:hea/services/sleep_checkin_service.dart';
 import 'package:hea/services/user_service.dart';
 import 'package:hea/models/user.dart';
 import 'package:hea/services/service_locator.dart';
+import 'package:hea/services/logging_service.dart';
 import 'package:hea/utils/kv_wrap.dart';
 import 'ch07_diary.dart';
 import 'ch05_owning.dart';
@@ -333,6 +333,7 @@ Please do fill up the following survey form to let us know that you have complet
           GradientButton(
               text: "Complete Program",
               onPressed: () async {
+                Navigator.of(context).pop();
                 User user =
                     await serviceLocator<UserService>().getCurrentUser();
                 Uri uri =

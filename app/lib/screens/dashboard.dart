@@ -19,6 +19,7 @@ import 'package:hea/utils/kv_wrap.dart';
 import 'package:hea/utils/sleep_notifications.dart';
 
 import 'package:hea/pages/sleep/lookup.dart';
+import 'package:hea/pages/sleep_review/lookup.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -106,8 +107,38 @@ class DashboardPage extends StatelessWidget {
         Consumer<SleepCheckinProgress>(builder: (context, progress, child) {
       TimeOfDay? diaryReminderTimes =
           kvReadTimeOfDay("sleep", "diary-reminder-times");
+      List<Widget> list = [];
       if (diaryReminderTimes != null) {
-        return const ModuleCheckinItem();
+        list.add(ModuleCheckinItem(
+            "Sleep check-in day ${progress.dayCounter} of ${progress.total}",
+            "Keep track of how you slept last night",
+            (context) => const SleepCheckin(),
+            progress.todayDone));
+      }
+      if (progress.allDone && progress.lastCheckIn != null) {
+        // Last check-in time
+        DateTime last = progress.lastCheckIn!;
+        DateTime now = DateTime.now();
+		//bool show = now.isAfter(last.add(const Duration(days: 30)));
+		bool show = true;
+		if (kvRead<bool>("sleep", "review-done") ?? false) {
+		show = false;
+		}
+          list.add(ModuleCheckinItem("30-day post-journey check-in",
+              "Let us know how you are sleeping now", (context) {
+            String? s =
+                serviceLocator<SharedPreferences>().getString('sleep_review');
+            PageBuilder resume = sleep_review.lookup(s);
+            serviceLocator<LoggingService>().createLog('navigate', s);
+            serviceLocator<LoggingService>().createLog('navigate', 'home');
+            scheduleSleepNotifications(debounce: false);
+            return resume();
+          }, !show));
+      }
+      if (list.isNotEmpty) {
+        return Column(
+            children:
+                list.expand((w) => [w, const SizedBox(height: 10)]).toList());
       }
       return const Text("Not available");
     });
@@ -433,62 +464,65 @@ class ModuleListItem extends StatelessWidget {
 }
 
 class ModuleCheckinItem extends StatelessWidget {
-  const ModuleCheckinItem({Key? key}) : super(key: key);
+  final String title;
+  final String subtitle;
+  final WidgetBuilder nextPage;
+  final bool fade;
+
+  const ModuleCheckinItem(this.title, this.subtitle, this.nextPage, this.fade,
+      {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<SleepCheckinProgress>(
-        builder: (context, progress, child) => GestureDetector(
-            onTap: () {
-              if (progress.todayDone) {
-                return;
-              }
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const SleepCheckin()));
-            },
-            child: Opacity(
-                opacity: progress.todayDone ? 0.2 : 1.0,
-                child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 15.0, vertical: 20.0),
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFEBEBEB),
-                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                    ),
-                    child: Row(children: <Widget>[
-                      Container(
-                          margin: const EdgeInsets.only(right: 15.0),
-                          height: 50,
-                          width: 50,
-                          decoration: const BoxDecoration(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(16.0)),
-                            gradient: LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: [
-                                  Color(0xFF00ABE9),
-                                  Color(0xFF7FDDFF),
-                                ]),
-                          ),
-                          child: const Center(
-                              child: FaIcon(FontAwesomeIcons.solidMoon,
-                                  color: Colors.white))),
-                      Expanded(
-                          child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                            Text(
-                                "Sleep check-in day ${progress.dayCounter} of ${progress.total}",
-                                style: Theme.of(context).textTheme.headline3),
-                            const SizedBox(height: 5.0),
-                            Text("Keep track of how you slept last night",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText2
-                                    ?.copyWith(color: const Color(0xFF707070)))
-                          ])),
-                    ])))));
+    return GestureDetector(
+        onTap: () {
+          if (fade) {
+            return;
+          }
+          Navigator.of(context).push(MaterialPageRoute(builder: nextPage));
+        },
+        child: Opacity(
+            opacity: fade ? 0.2 : 1.0,
+            child: Container(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 15.0, vertical: 20.0),
+                decoration: const BoxDecoration(
+                  color: Color(0xFFEBEBEB),
+                  borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                ),
+                child: Row(children: <Widget>[
+                  Container(
+                      margin: const EdgeInsets.only(right: 15.0),
+                      height: 50,
+                      width: 50,
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                        gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Color(0xFF00ABE9),
+                              Color(0xFF7FDDFF),
+                            ]),
+                      ),
+                      child: const Center(
+                          child: FaIcon(FontAwesomeIcons.solidMoon,
+                              color: Colors.white))),
+                  Expanded(
+                      child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                        Text(title,
+                            style: Theme.of(context).textTheme.headline3),
+                        const SizedBox(height: 5.0),
+                        Text(subtitle,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText2
+                                ?.copyWith(color: const Color(0xFF707070)))
+                      ])),
+                ]))));
   }
 }

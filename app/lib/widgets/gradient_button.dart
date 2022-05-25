@@ -22,13 +22,11 @@ class GradientButton extends StatelessWidget {
     final a = firstColor ?? Theme.of(context).colorScheme.secondary;
     final b = secondColor ?? Theme.of(context).colorScheme.primary;
 
-    return SizedBox(
-        height: 50.0,
-        child: GestureDetector(
+    return GestureDetector(
           onTap: onPressed,
           child: Container(
-            constraints: const BoxConstraints(minWidth: 88.0, minHeight: 36.0),
             alignment: Alignment.center,
+			padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             decoration: BoxDecoration(
               gradient: noGradient
                   ? null
@@ -50,6 +48,6 @@ class GradientButton extends StatelessWidget {
                     color: noGradient ? Colors.black : Colors.white),
                 textAlign: TextAlign.center),
           ),
-        ));
+        );
   }
 }

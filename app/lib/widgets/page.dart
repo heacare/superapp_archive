@@ -10,6 +10,7 @@ import 'package:hea/widgets/select_list.dart';
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/services/logging_service.dart';
 import 'package:hea/pages/sleep/lookup.dart';
+import 'package:hea/pages/sleep_review/lookup.dart';
 import 'package:hea/utils/sleep_notifications.dart';
 import 'package:hea/utils/sleep_log.dart';
 
@@ -40,6 +41,23 @@ class Lesson {
     PageBuilder builder = byKey[key]?.builder ?? defaultPage.builder;
     return builder;
   }
+}
+
+String? rlookup(Widget w) {
+  String? s = sleep.rlookup(w.runtimeType);
+  if (s != null) {
+    serviceLocator<SharedPreferences>().setString('sleep', s);
+    sleepLog();
+    return s;
+  }
+
+  s = sleep_review.rlookup(w.runtimeType);
+  if (s != null) {
+    serviceLocator<SharedPreferences>().setString('sleep_review', s);
+    return s;
+  }
+
+  return null;
 }
 
 class BasePage extends StatelessWidget {
@@ -93,15 +111,10 @@ class BasePage extends StatelessWidget {
                                   color: Theme.of(context).colorScheme.primary),
                               onPressed: () {
                                 Widget prev = prevPage!();
-                                String? s = sleep.rlookup(prev.runtimeType);
+                                String? s = rlookup(prev);
                                 debugPrint(s);
-                                if (s != null) {
-                                  serviceLocator<SharedPreferences>()
-                                      .setString('sleep', s);
-                                }
                                 serviceLocator<LoggingService>()
                                     .createLog('navigate', s);
-                                sleepLog();
                                 Navigator.of(context)
                                     .pushReplacement(MaterialPageRoute<void>(
                                   builder: (BuildContext context) => prev,
@@ -132,11 +145,8 @@ class BasePage extends StatelessWidget {
                   return;
                 }
                 Widget next = nextPage!();
-                String? s = sleep.rlookup(next.runtimeType);
+                String? s = rlookup(next);
                 debugPrint(s);
-                if (s != null) {
-                  serviceLocator<SharedPreferences>().setString('sleep', s);
-                }
                 serviceLocator<LoggingService>().createLog('navigate', s);
                 sleepLog();
                 Navigator.of(context).pushReplacement(MaterialPageRoute<void>(
@@ -297,11 +307,8 @@ class MultipleChoicePageState extends State<MultipleChoicePage> {
     }
     // This is pretty bad code, duplicated from BasePage
     Widget next = widget.nextPage!();
-    String? s = sleep.rlookup(next.runtimeType);
+    String? s = rlookup(next);
     debugPrint(s);
-    if (s != null) {
-      serviceLocator<SharedPreferences>().setString('sleep', s);
-    }
     serviceLocator<LoggingService>().createLog('navigate', s);
     sleepLog();
     Navigator.of(context).pushReplacement(MaterialPageRoute<void>(
