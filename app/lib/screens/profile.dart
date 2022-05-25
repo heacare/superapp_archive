@@ -208,6 +208,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               serviceLocator<
                                                       SharedPreferences>()
                                                   .remove('sleep');
+                                              serviceLocator<
+                                                      SharedPreferences>()
+                                                  .remove('review-force');
                                               Navigator.of(context).pop();
                                             }),
                                       ]);

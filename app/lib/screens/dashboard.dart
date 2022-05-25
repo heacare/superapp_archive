@@ -115,15 +115,24 @@ class DashboardPage extends StatelessWidget {
             (context) => const SleepCheckin(),
             progress.todayDone));
       }
-      if ((progress.allDone && progress.lastCheckIn != null) ||
-          (serviceLocator<SharedPreferences>().getBool('review-force') ??
-              false)) {
-        // Last check-in time
-        DateTime last = progress.lastCheckIn!;
-        DateTime now = DateTime.now();
-        bool show = now.isAfter(last.add(const Duration(days: 30)));
+      bool reviewForce =
+          serviceLocator<SharedPreferences>().getBool('review-force') ?? false;
+      debugPrint(reviewForce.toString());
+      if ((progress.allDone && progress.lastCheckIn != null) || reviewForce) {
+        bool show = true;
+        if (progress.lastCheckIn != null) {
+          // Last check-in time
+          DateTime last = progress.lastCheckIn!;
+          DateTime now = DateTime.now();
+          show = now.isAfter(last.add(const Duration(days: 30)));
+          debugPrint("last check in show: $show");
+        }
+        if (reviewForce) {
+          show = true;
+        }
         if (kvRead<bool>("sleep", "review-done") ?? false) {
           show = false;
+          debugPrint("review done, no show");
         }
         list.add(ModuleCheckinItem("30-day post-journey check-in",
             "Let us know how you are sleeping now", (context) {
@@ -477,11 +486,12 @@ class ModuleCheckinItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: () {
+        onTap: () async {
           if (fade) {
             return;
           }
-          Navigator.of(context).push(MaterialPageRoute(builder: nextPage));
+          await Navigator.of(context)
+              .push(MaterialPageRoute(builder: nextPage));
         },
         child: Opacity(
             opacity: fade ? 0.2 : 1.0,

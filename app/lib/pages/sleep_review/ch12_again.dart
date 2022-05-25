@@ -8,6 +8,7 @@ import 'package:hea/widgets/select_list.dart';
 import 'package:hea/widgets/gradient_button.dart';
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/services/health_service.dart';
+import 'package:hea/services/sleep_checkin_service.dart';
 
 class ReviewIntroduction extends MarkdownPage {
   ReviewIntroduction({Key? key}) : super(key: key);
@@ -1138,13 +1139,17 @@ class ReviewEnd extends MarkdownPage {
   final prevPage = () => ReviewScore();
 
   @override
-  final title = "Check-in completed";
+  final title = "Thank you!";
   @override
   final image = null;
 
   @override
   final markdown = """
-Thank you so much for coming back 30 days later to finish taking part in our pilot test.
+You are on your way to completing your Happily Ever After journey on sleep health. Your HEAler will be in touch with you soon for a final check-in for this early access experience.
+
+We hope you found the journey to improve sleep health interesting and helpful. We are continuously working on improving the program while building out other health pillars. Your participation has been extremely valuable for us in building the future of preventative healthcare.
+
+In the meantime, we invite you to stay connected on Telegram for updates.
 """;
 
   @override
@@ -1164,6 +1169,9 @@ Thank you so much for coming back 30 days later to finish taking part in our pil
           GradientButton(
               text: "Done",
               onPressed: () async {
+                serviceLocator<SleepCheckinService>()
+                    .getProgress()
+                    .notifyListeners();
                 kvWrite<bool>("sleep", "review-done", true);
                 Navigator.of(context).pop();
               }),
