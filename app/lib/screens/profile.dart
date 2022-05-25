@@ -139,6 +139,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Column(children: [
                       const SizedBox(height: 8.0),
                       GradientButton(
+                          text: "Show autofill sleep data",
+                          onPressed: () async {
+                            var sleep = await serviceLocator<HealthService>()
+                                .autofillRead1Day();
+                            var sleep30 = await serviceLocator<HealthService>()
+                                .autofillRead30Day();
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                      title: const Text("Autofill sleep data"),
+                                      content: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text("1-day",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleLarge),
+                                            Text(
+                                                "In-bed: ${sleep?.inBed}\nAsleep: ${sleep?.asleep}\nAwake: ${sleep?.awake}\nOut-bed: ${sleep?.outBed}"),
+                                            Text("30-day",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleLarge),
+                                            Text(
+                                                "In-bed: ${sleep30?.inBed}\nAsleep: ${sleep30?.asleep}\nAwake: ${sleep30?.awake}\nOut-bed: ${sleep30?.outBed}"),
+                                          ]),
+                                      actions: [
+                                        TextButton(
+                                            child: const Text("Close"),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            }),
+                                      ]);
+                                });
+                          }),
+                      const SizedBox(height: 8.0),
+                      GradientButton(
                           text: "Reset all content state",
                           onPressed: () {
                             showDialog(
@@ -289,39 +329,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           }),
                       const SizedBox(height: 8.0),
                       GradientButton(
-                          text: "Show autofill sleep data",
-                          onPressed: () async {
-                            var sleep = await serviceLocator<HealthService>()
-                                .autofillRead1Day();
-                            var sleep30 = await serviceLocator<HealthService>()
-                                .autofillRead30Day();
+                          text: "Re-enable 30-day check-in",
+                          onPressed: () {
                             showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
                                   return AlertDialog(
-                                      title: const Text("Autofill sleep data"),
-                                      content: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text("1-day",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .titleLarge),
-                                            Text(
-                                                "In-bed: ${sleep?.inBed}\nAsleep: ${sleep?.asleep}\nAwake: ${sleep?.awake}\nOut-bed: ${sleep?.outBed}"),
-                                            Text("30-day",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .titleLarge),
-                                            Text(
-                                                "In-bed: ${sleep30?.inBed}\nAsleep: ${sleep30?.asleep}\nAwake: ${sleep30?.awake}\nOut-bed: ${sleep30?.outBed}"),
-                                          ]),
+                                      title: const Text(
+                                          "Are you sure you want to re-enable 30-day check-in?"),
                                       actions: [
                                         TextButton(
-                                            child: const Text("Close"),
+                                            child: const Text("No"),
                                             onPressed: () {
+                                              Navigator.of(context).pop();
+                                            }),
+                                        TextButton(
+                                            child: const Text("Yes"),
+                                            onPressed: () {
+                                              kvDelete("sleep", "review-done");
                                               Navigator.of(context).pop();
                                             }),
                                       ]);

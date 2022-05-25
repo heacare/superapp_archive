@@ -21,7 +21,8 @@ Lesson sleep_review = Lesson([
   PageDef(ReviewTroubleSleepingSnore, () => ReviewTroubleSleepingSnore()),
   PageDef(ReviewTroubleSleepingCold, () => ReviewTroubleSleepingCold()),
   PageDef(ReviewTroubleSleepingHot, () => ReviewTroubleSleepingHot()),
-  PageDef(ReviewTroubleSleepingBadDreams, () => ReviewTroubleSleepingBadDreams()),
+  PageDef(
+      ReviewTroubleSleepingBadDreams, () => ReviewTroubleSleepingBadDreams()),
   PageDef(ReviewTroubleSleepingPain, () => ReviewTroubleSleepingPain()),
   PageDef(ReviewOtherFactors, () => ReviewOtherFactors()),
   PageDef(ReviewOverallQuality, () => ReviewOverallQuality()),

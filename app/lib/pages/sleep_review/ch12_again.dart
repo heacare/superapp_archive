@@ -63,15 +63,13 @@ class ReviewPracticing extends MultipleChoicePage {
   Widget nextPageStringList(List<String> data) {
     String choice = data[0];
     if (choice == "yes") {
-     return ReviewPracticingYes();
+      return ReviewPracticingYes();
+    } else if (choice == "some") {
+      return ReviewPracticingSome();
+    } else if (choice == "no") {
+      return ReviewPracticingNo();
     }
-    else if (choice == "some") {
-     return ReviewPracticingSome();
-    }
-    else if (choice == "no") {
-     return ReviewPracticingNo();
-    }
-	return ReviewPracticing();
+    return ReviewPracticing();
   }
 }
 
@@ -148,24 +146,22 @@ class ReviewGoals extends MultipleChoicePage {
   final nextPage = () {
     List<String> otherHealthAspects =
         kvReadStringList("sleep", "other-health-aspects");
-		if (otherHealthAspects.isEmpty) {
-			return ReviewTimeGoneBed();
-		}
-		return ReviewOtherHealthAspects();
+    if (otherHealthAspects.isEmpty) {
+      return ReviewTimeGoneBed();
+    }
+    return ReviewOtherHealthAspects();
   };
   @override
   final prevPage = () {
-	String? choice = kvRead<String>("sleep", "review-still-practising");
+    String? choice = kvRead<String>("sleep", "review-still-practising");
     if (choice == "yes") {
-     return ReviewPracticingYes();
+      return ReviewPracticingYes();
+    } else if (choice == "some") {
+      return ReviewPracticingSome();
+    } else if (choice == "no") {
+      return ReviewPracticingNo();
     }
-    else if (choice == "some") {
-     return ReviewPracticingSome();
-    }
-    else if (choice == "no") {
-     return ReviewPracticingNo();
-    }
-	return ReviewPracticing();
+    return ReviewPracticing();
   };
 
   @override
@@ -187,8 +183,8 @@ These were the sleep goals you picked to pursue. Which of these sleep goals are 
   @override
   List<SelectListItem<String>> get choices {
     return kvReadStringList("sleep", "sleep-goals")
-            .map((s) => SelectListItem(text: s, value: s))
-            .toList();
+        .map((s) => SelectListItem(text: s, value: s))
+        .toList();
   }
 }
 
@@ -201,28 +197,31 @@ class ReviewOtherHealthAspects extends StatefulWidget {
   final title = "Embrace and manifest";
 
   @override
-  State<ReviewOtherHealthAspects> createState() => ReviewOtherHealthAspectsState();
+  State<ReviewOtherHealthAspects> createState() =>
+      ReviewOtherHealthAspectsState();
 }
 
 class ReviewOtherHealthAspectsState extends State<ReviewOtherHealthAspects> {
-	double meal = 2;
-	bool hideNext = false;
+  double meal = 2;
+  bool hideNext = false;
 
   @override
   void initState() {
     super.initState();
-	meal = kvRead<double>("sleep", "review-diet") ?? 2;
-				  kvWrite("sleep", "review-diet", meal);
+    meal = kvRead<double>("sleep", "review-diet") ?? 2;
+    kvWrite("sleep", "review-diet", meal);
   }
 
   canNext(List<String> otherHealthAspects) {
-    if (otherHealthAspects.contains("stress") && kvReadStringList("sleep", "review-stress").isEmpty) {
-		return false;
+    if (otherHealthAspects.contains("stress") &&
+        kvReadStringList("sleep", "review-stress").isEmpty) {
+      return false;
     }
-    if (otherHealthAspects.contains("exercise") && kvReadStringList("sleep", "review-exercise").isEmpty) {
-	return false;
+    if (otherHealthAspects.contains("exercise") &&
+        kvReadStringList("sleep", "review-exercise").isEmpty) {
+      return false;
     }
-	return true;
+    return true;
   }
 
   @override
@@ -245,87 +244,86 @@ class ReviewOtherHealthAspectsState extends State<ReviewOtherHealthAspects> {
       exercise = true;
     }
 
-	hideNext = !canNext(otherHealthAspects);
-	debugPrint("render other health aspects");
+    hideNext = !canNext(otherHealthAspects);
+    debugPrint("render other health aspects");
 
     return BasePage(
         title: widget.title,
         nextPage: widget.nextPage,
         prevPage: widget.prevPage,
-		hideNext: hideNext,
-        page: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-              if (stress)
-                Text("How often did you go to bed feeling stressed in the last 14 days?",
-                    style: Theme.of(context).textTheme.titleLarge),
-              if (stress)
-          SelectList(
-              items: [
-    SelectListItem(text: "Almost never", value: "0"),
-    SelectListItem(text: "Less than once a week", value: "1"),
-    SelectListItem(text: "2 to 3 times a week", value: "2"),
-    SelectListItem(text: "More than 3 times a week", value: "3"),
-    SelectListItem(text: "Almost everyday", value: "4"),
-  ],
-              max: 1,
-              defaultSelected: kvReadStringList("sleep", "review-stress"),
-              onChange: (List<String> c) {
-                kvWrite<List<String>>("sleep", "review-stress", c);
-				setState(() {
-				  hideNext = !canNext(otherHealthAspects);
-				  });
-              }),
-              if (stress) const SizedBox(height: 64.0),
-              if (diet)
-                Text("How did you feel about your meal choices in the last 14 days?",
-                    style: Theme.of(context).textTheme.titleLarge),
-              if (diet)
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text("Very dissatisfied"),
-                      Text("Very satisfied"),
-                    ]),
-              if (diet)
-                Slider(
-                  value: meal,
-                  max: 4,
-                  divisions: 4,
-                  onChanged: (double value) {
-				  setState(() {
-				  meal = value;
-				  });
-				  kvWrite("sleep", "review-diet", value);
-                  },
-                ),
-              if (diet) const SizedBox(height: 64.0),
-              if (exercise)
-                Text("How often did you exercise in the last 14 days?",
-                    style: Theme.of(context).textTheme.titleLarge),
-              if (exercise)
-          SelectList(
-              items: [
-    SelectListItem(text: "Not at all", value: "0"),
-    SelectListItem(text: "1-2 times a week", value: "1"),
-    SelectListItem(text: "3-4 times a week", value: "2"),
-    SelectListItem(text: "5-7 times a week", value: "3"),
-  ],
-              max: 1,
-              defaultSelected: kvReadStringList("sleep", "review-exercise"),
-              onChange: (List<String> c) {
-                kvWrite<List<String>>("sleep", "review-exercise", c);
-				setState(() {
-				  hideNext = !canNext(otherHealthAspects);
-				  });
-              }),
-              if (exercise) const SizedBox(height: 64.0),
-			]));
-			}
-			}
+        hideNext: hideNext,
+        page: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
+            Widget>[
+          if (stress)
+            Text(
+                "How often did you go to bed feeling stressed in the last 14 days?",
+                style: Theme.of(context).textTheme.titleLarge),
+          if (stress)
+            SelectList(
+                items: [
+                  SelectListItem(text: "Almost never", value: "0"),
+                  SelectListItem(text: "Less than once a week", value: "1"),
+                  SelectListItem(text: "2 to 3 times a week", value: "2"),
+                  SelectListItem(text: "More than 3 times a week", value: "3"),
+                  SelectListItem(text: "Almost everyday", value: "4"),
+                ],
+                max: 1,
+                defaultSelected: kvReadStringList("sleep", "review-stress"),
+                onChange: (List<String> c) {
+                  kvWrite<List<String>>("sleep", "review-stress", c);
+                  setState(() {
+                    hideNext = !canNext(otherHealthAspects);
+                  });
+                }),
+          if (stress) const SizedBox(height: 64.0),
+          if (diet)
+            Text(
+                "How did you feel about your meal choices in the last 14 days?",
+                style: Theme.of(context).textTheme.titleLarge),
+          if (diet)
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Text("Very dissatisfied"),
+                  Text("Very satisfied"),
+                ]),
+          if (diet)
+            Slider(
+              value: meal,
+              max: 4,
+              divisions: 4,
+              onChanged: (double value) {
+                setState(() {
+                  meal = value;
+                });
+                kvWrite("sleep", "review-diet", value);
+              },
+            ),
+          if (diet) const SizedBox(height: 64.0),
+          if (exercise)
+            Text("How often did you exercise in the last 14 days?",
+                style: Theme.of(context).textTheme.titleLarge),
+          if (exercise)
+            SelectList(
+                items: [
+                  SelectListItem(text: "Not at all", value: "0"),
+                  SelectListItem(text: "1-2 times a week", value: "1"),
+                  SelectListItem(text: "3-4 times a week", value: "2"),
+                  SelectListItem(text: "5-7 times a week", value: "3"),
+                ],
+                max: 1,
+                defaultSelected: kvReadStringList("sleep", "review-exercise"),
+                onChange: (List<String> c) {
+                  kvWrite<List<String>>("sleep", "review-exercise", c);
+                  setState(() {
+                    hideNext = !canNext(otherHealthAspects);
+                  });
+                }),
+          if (exercise) const SizedBox(height: 64.0),
+        ]));
+  }
+}
 
-
-			
 class ReviewTimeGoneBed extends TimePickerPage {
   ReviewTimeGoneBed({Key? key}) : super(key: key);
 
@@ -1006,7 +1004,8 @@ class ReviewScore extends Page {
         p: Theme.of(context).textTheme.bodyText1,
         h1: Theme.of(context).textTheme.headline3);
     int subjectiveSleepQuality =
-        int.tryParse(kvReadStringList("sleep", "review-overall-quality")[0]) ?? 0;
+        int.tryParse(kvReadStringList("sleep", "review-overall-quality")[0]) ??
+            0;
 
     int fallAsleep = kvRead<int>("sleep", "review-sleep-latency") ?? 0;
     int pointsFallAsleep = 0;
@@ -1017,8 +1016,8 @@ class ReviewScore extends Page {
     } else if (fallAsleep > 15) {
       pointsFallAsleep = 1;
     }
-    int howOftenAsleep30Minutes = int.tryParse(
-            kvReadStringList("sleep", "review-how-often-asleep-30-minutes")[0]) ??
+    int howOftenAsleep30Minutes = int.tryParse(kvReadStringList(
+            "sleep", "review-how-often-asleep-30-minutes")[0]) ??
         0;
     int sleepLatency =
         ((pointsFallAsleep + howOftenAsleep30Minutes) / 2).ceil();
@@ -1067,13 +1066,15 @@ class ReviewScore extends Page {
     }
     int sleepDisturbances = (pointsDisturbance / keys.length).ceil();
 
-    int sleepMedication =
-        int.tryParse(kvReadStringList("sleep", "review-how-sleep-medication")[0]) ?? 0;
+    int sleepMedication = int.tryParse(
+            kvReadStringList("sleep", "review-how-sleep-medication")[0]) ??
+        0;
 
     int pointsFatigue =
         int.tryParse(kvReadStringList("sleep", "review-how-fatigue")[0]) ?? 0;
     int pointsEnthusiasm =
-        int.tryParse(kvReadStringList("sleep", "review-how-enthusiasm")[0]) ?? 0;
+        int.tryParse(kvReadStringList("sleep", "review-how-enthusiasm")[0]) ??
+            0;
     int daytimeDysfunction = pointsFatigue + pointsEnthusiasm;
 
     int overallScore = sleepLatency +

@@ -119,21 +119,21 @@ class DashboardPage extends StatelessWidget {
         // Last check-in time
         DateTime last = progress.lastCheckIn!;
         DateTime now = DateTime.now();
-		//bool show = now.isAfter(last.add(const Duration(days: 30)));
-		bool show = true;
-		if (kvRead<bool>("sleep", "review-done") ?? false) {
-		show = false;
-		}
-          list.add(ModuleCheckinItem("30-day post-journey check-in",
-              "Let us know how you are sleeping now", (context) {
-            String? s =
-                serviceLocator<SharedPreferences>().getString('sleep_review');
-            PageBuilder resume = sleep_review.lookup(s);
-            serviceLocator<LoggingService>().createLog('navigate', s);
-            serviceLocator<LoggingService>().createLog('navigate', 'home');
-            scheduleSleepNotifications(debounce: false);
-            return resume();
-          }, !show));
+        //bool show = now.isAfter(last.add(const Duration(days: 30)));
+        bool show = true;
+        if (kvRead<bool>("sleep", "review-done") ?? false) {
+          show = false;
+        }
+        list.add(ModuleCheckinItem("30-day post-journey check-in",
+            "Let us know how you are sleeping now", (context) {
+          String? s =
+              serviceLocator<SharedPreferences>().getString('sleep_review');
+          PageBuilder resume = sleep_review.lookup(s);
+          serviceLocator<LoggingService>().createLog('navigate', s);
+          serviceLocator<LoggingService>().createLog('navigate', 'home');
+          scheduleSleepNotifications(debounce: false);
+          return resume();
+        }, !show));
       }
       if (list.isNotEmpty) {
         return Column(
