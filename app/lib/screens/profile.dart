@@ -329,7 +329,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           }),
                       const SizedBox(height: 8.0),
                       GradientButton(
-                          text: "Re-enable 30-day check-in",
+                          text: "Enable 30-day check-in",
                           onPressed: () {
                             showDialog(
                                 context: context,
@@ -347,6 +347,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             child: const Text("Yes"),
                                             onPressed: () {
                                               kvDelete("sleep", "review-done");
+                                              serviceLocator<
+                                                      SharedPreferences>()
+                                                  .setBool(
+                                                      'review-force', true);
                                               Navigator.of(context).pop();
                                             }),
                                       ]);

@@ -115,12 +115,13 @@ class DashboardPage extends StatelessWidget {
             (context) => const SleepCheckin(),
             progress.todayDone));
       }
-      if (progress.allDone && progress.lastCheckIn != null) {
+      if ((progress.allDone && progress.lastCheckIn != null) ||
+          (serviceLocator<SharedPreferences>().getBool('review-force') ??
+              false)) {
         // Last check-in time
         DateTime last = progress.lastCheckIn!;
         DateTime now = DateTime.now();
-        //bool show = now.isAfter(last.add(const Duration(days: 30)));
-        bool show = true;
+        bool show = now.isAfter(last.add(const Duration(days: 30)));
         if (kvRead<bool>("sleep", "review-done") ?? false) {
           show = false;
         }
