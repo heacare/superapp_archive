@@ -27,6 +27,7 @@
           <li v-if="user.sleepGoals"><strong>Goals</strong>: {{ user.sleepGoals.join(', ') }}</li>
           <li v-if="user.goalsSleepTime"><strong>(Goals) Sleep</strong>: {{ formatTimeOfDay(user.goalsSleepTime) }}</li>
           <li v-if="user.goalsWakeTime"><strong>(Goals) Wake</strong>: {{ formatTimeOfDay(user.goalsWakeTime) }}</li>
+          <li><strong>App Version</strong>: {{ user.version ?? 'before 23' }}</li>
         </ul>
         <details>
           <summary class="text-xs my-1">More details</summary>

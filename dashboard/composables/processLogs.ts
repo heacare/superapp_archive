@@ -14,6 +14,7 @@ export interface User {
   sleeps: UserSleep[];
   autofills: UserAutofill[];
   resets: UserReset[];
+  version?: string;
 
   person?: string[];
   otherHealthAspects?: string[];
@@ -194,6 +195,12 @@ function processLogs(logs: Log[]): Record<string, User> {
           end: timestamp,
         });
         lastActive = null;
+      }
+    }
+    if (log.key === 'version') {
+      const data: unknown = JSON.parse(log.value);
+      if (typeof data === 'string') {
+        user.version = data;
       }
     }
     if (log.key === 'sleep') {
