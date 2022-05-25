@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'firebase_options.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/intl_standalone.dart';
@@ -301,6 +302,13 @@ class LifecycleHandlerState extends State<LifecycleHandler>
     if (widget.ready) {
       serviceLocator<NotificationService>().ensureListen(context);
       scheduleSleepNotifications(debounce: false);
+      () async {
+        PackageInfo packageInfo = await PackageInfo.fromPlatform();
+        String version = packageInfo.version;
+        String build = packageInfo.buildNumber;
+        serviceLocator<LoggingService>()
+            .createLog("version", version + "+" + build);
+      }();
     }
     return widget.child;
   }
