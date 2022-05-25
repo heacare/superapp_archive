@@ -1,1 +1,1 @@
-Continue program has been fixed. Fixed the check-in time entry, and other small bugs and interface improvements.
+Add the post-journey 30-day check-in and other minor bugfixes
