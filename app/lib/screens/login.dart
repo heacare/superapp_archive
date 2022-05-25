@@ -41,7 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
         CircularProgressIndicator(),
         Text("Logging in...")
       ])));
-      await _auth.login(_email.text, _password.text);
+      await _auth.login(_email.text.trim(), _password.text);
       // Get new JWT Token and create user in backend if necessary
       await serviceLocator<ApiManager>().fetchJwtToken();
       ScaffoldMessenger.of(context).clearSnackBars();
