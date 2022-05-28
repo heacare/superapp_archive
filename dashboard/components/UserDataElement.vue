@@ -16,17 +16,24 @@
             <strong>Other aspects</strong>: {{ user.otherHealthAspects.join(', ') }}
           </li>
           <li v-if="user.trackingTools"><strong>Tracking tools</strong>: {{ trackingTools }}</li>
-          <li v-if="user.timeGoBed"><strong>(Pre) Go bed</strong>: {{ formatTimeOfDay(user.timeGoBed) }}</li>
-          <li v-if="user.sleepLatency">
-            <strong>(Pre) Latency</strong>: {{ formatMinutesDuration(user.sleepLatency) }}
+          <li v-if="user.sleepEfficiency"><strong>(Pre) Sleep Efficiency</strong>: {{ user.sleepEfficiency }}</li>
+          <li v-if="user.psqiScore"><strong>(Pre) PSQI Score</strong>: {{ user.psqiScore }}</li>
+          <li v-if="user.timeGoBed || user.timeOutBed">
+            <strong>(Pre) In-bed</strong>: {{ formatTimeOfDay(user.timeGoBed) }} to
+            {{ formatTimeOfDay(user.timeOutBed) }}
           </li>
-          <li v-if="user.minutesAsleep">
-            <strong>(Pre) Asleep</strong>: {{ formatMinutesDuration(user.minutesAsleep) }}
+          <li v-if="user.sleepLatency || user.minutesAsleep">
+            <strong>(Pre) Latency</strong>: {{ formatMinutesDuration(user.sleepLatency) }} <strong>Asleep</strong>:
+            {{ formatMinutesDuration(user.minutesAsleep) }}
           </li>
-          <li v-if="user.timeOutBed"><strong>(Pre) Out bed</strong>: {{ formatTimeOfDay(user.timeOutBed) }}</li>
-          <li v-if="user.sleepGoals"><strong>Goals</strong>: {{ user.sleepGoals.join(', ') }}</li>
-          <li v-if="user.goalsSleepTime"><strong>(Goals) Sleep</strong>: {{ formatTimeOfDay(user.goalsSleepTime) }}</li>
-          <li v-if="user.goalsWakeTime"><strong>(Goals) Wake</strong>: {{ formatTimeOfDay(user.goalsWakeTime) }}</li>
+          <li v-if="user.goalsSleepTime || user.goalsWakeTime">
+            <strong>(Goals) Asleep</strong>: {{ formatTimeOfDay(user.goalsSleepTime) }} to
+            {{ formatTimeOfDay(user.goalsWakeTime) }}
+          </li>
+          <li v-if="user.sleepEfficiencyReview">
+            <strong>(30d Post) Sleep Efficiency</strong>: {{ user.sleepEfficiencyReview }}
+          </li>
+          <li v-if="user.psqiScoreReview"><strong>(30d Post) PSQI Score</strong>: {{ user.psqiScoreReview }}</li>
           <li><strong>App Version</strong>: {{ user.version ?? 'before 23' }}</li>
         </ul>
         <details>
@@ -39,6 +46,7 @@
             <li v-if="user.includedActivities">
               <strong>(Goals) Wind down activities</strong>: {{ user.includedActivities.join(', ') }}
             </li>
+            <li v-if="user.sleepGoals"><strong>Goals</strong>: {{ user.sleepGoals.join(', ') }}</li>
           </ul>
         </details>
       </div>

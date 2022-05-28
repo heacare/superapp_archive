@@ -37,7 +37,10 @@ export interface User {
   checkInTotal: number;
 
   // Derived
-  sleepEfficiency: number;
+  sleepEfficiency?: number;
+  psqiScore?: number;
+  sleepEfficiencyReview?: number;
+  psqiScoreReview?: number;
   checkInCount: number;
   currentlyActive: boolean;
   pageCount: number;
@@ -124,6 +127,105 @@ function expectOneOrNone(data: unknown): string | undefined {
   return undefined;
 }
 
+function expectNumber(data: unknown): number | undefined {
+  if (typeof data === 'number') {
+    return data;
+  } else if (typeof data === 'string') {
+    return parseInt(data, 10);
+  }
+  return undefined;
+}
+
+function sleepEfficiencyFromData(d: Record<string, unknown>, prefix = ''): number | undefined {
+  const goBed = expectTimeOfDay(d[prefix + 'time-go-bed']);
+  if (goBed === undefined) {
+    return undefined;
+  }
+  const outBed = expectTimeOfDay(d[prefix + 'time-out-bed']);
+  if (outBed === undefined) {
+    return undefined;
+  }
+  const bedDuration = (outBed.minute + outBed.hour * 60 - (goBed.minute + goBed.hour * 60) + 24 * 60) % (24 * 60);
+  const sleepDuration = expectNumber(d[prefix + 'minutes-asleep']);
+  if (sleepDuration === undefined) {
+    return undefined;
+  }
+  const sleepEfficiencyPercent = Math.round((sleepDuration / bedDuration) * 100);
+  return sleepEfficiencyPercent;
+}
+
+function psqiScoreFromData(d: Record<string, unknown>, prefix = ''): number | undefined {
+  const subjectiveSleepQuality = expectNumber(expectOneOrNone(d[prefix + 'overall-quality']));
+  if (subjectiveSleepQuality === undefined) {
+    return undefined;
+  }
+  const fallAsleep = expectNumber(d[prefix + 'sleep-latency']);
+  let pointsFallAsleep = 0;
+  if (fallAsleep === undefined) {
+    return undefined;
+  } else if (fallAsleep > 60) {
+    pointsFallAsleep = 3;
+  } else if (fallAsleep > 30) {
+    pointsFallAsleep = 2;
+  } else if (fallAsleep > 15) {
+    pointsFallAsleep = 2;
+  }
+  const howOftenAsleep30Minutes = expectNumber(expectOneOrNone(d[prefix + 'how-often-asleep-30-minutes']));
+  if (howOftenAsleep30Minutes === undefined) {
+    return undefined;
+  }
+  const sleepLatency = Math.ceil((pointsFallAsleep + howOftenAsleep30Minutes) / 2);
+  const sleepEfficiencyPercent = sleepEfficiencyFromData(d);
+  if (sleepEfficiencyPercent === undefined) {
+    return undefined;
+  }
+  let sleepEfficiency = 0;
+  if (sleepEfficiencyPercent < 65) {
+    sleepEfficiency = 3;
+  } else if (sleepEfficiencyPercent < 75) {
+    sleepEfficiency = 2;
+  } else if (sleepEfficiencyPercent < 85) {
+    sleepEfficiency = 1;
+  }
+  const keys = [
+    'how-often-wake-up',
+    'how-often-bathroom',
+    'how-often-breath',
+    'how-often-snore',
+    'how-often-cold',
+    'how-often-hot',
+    'how-often-bad-dreams',
+    'how-often-pain',
+    'how-often-other',
+  ];
+  let pointsDisturbance = 0;
+  for (const key of keys) {
+    const score = expectNumber(expectOneOrNone(d[prefix + key]));
+    if (score === undefined) {
+      continue;
+    }
+    pointsDisturbance += score;
+  }
+  const sleepDisturbances = Math.ceil(pointsDisturbance / keys.length);
+  const sleepMedication = expectNumber(expectOneOrNone(d[prefix + 'how-sleep-medication']));
+  if (sleepMedication === undefined) {
+    return undefined;
+  }
+  const pointsFatigue = expectNumber(expectOneOrNone(d[prefix + 'how-fatigue']));
+  if (pointsFatigue === undefined) {
+    return undefined;
+  }
+  const pointsEnthusiasm = expectNumber(expectOneOrNone(d[prefix + 'how-enthusiasm']));
+  if (pointsEnthusiasm === undefined) {
+    return undefined;
+  }
+  const daytmeDysfunction = pointsFatigue + pointsEnthusiasm;
+
+  const overallScore =
+    sleepLatency + sleepEfficiency + sleepDisturbances + subjectiveSleepQuality + sleepMedication + daytmeDysfunction;
+  return overallScore;
+}
+
 function validateCheckIn(checkIn: unknown): checkIn is LogCheckIn {
   const c = checkIn as LogCheckIn;
   if (!c.time || c['sleep-duration'] == null || !c['time-asleep-bed'] || !c['time-go-bed'] || !c['time-out-bed']) {
@@ -160,7 +262,6 @@ function processLogs(logs: Log[]): Record<string, User> {
       autofills: [],
       resets: [],
       // Derived
-      sleepEfficiency: 0,
       checkInCount: 0,
       checkInDay: 0,
       checkInTotal: 7,
@@ -234,8 +335,12 @@ function processLogs(logs: Log[]): Record<string, User> {
         user.optInGroup = expectOneOrNone(d['opt-in-group']);
         user.groupAccept = expectOneOrNone(d['group-accept']);
         user.continueAction = expectOneOrNone(d['continue-action']);
+        // Derived
+        user.psqiScore = psqiScoreFromData(d);
+        user.sleepEfficiency = sleepEfficiencyFromData(d); // TODO
+        user.psqiScoreReview = psqiScoreFromData(d, 'review');
+        user.sleepEfficiencyReview = sleepEfficiencyFromData(d, 'review'); // TODO
       }
-      user.sleepEfficiency = 0; // TODO
     }
     if (log.key === 'sleep-autofill') {
       // {"in-bed":"2022-05-18T01:45:00.000","asleep":"2022-05-18T02:07:00.000","awake":null,"out-bed":"2022-05-18T09:02:00.000"}
