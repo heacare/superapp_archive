@@ -62,7 +62,7 @@ class OwningRoutineActivities1 extends MultipleChoicePage {
   final prevPage = () => OwningZeitgebers();
 
   @override
-  final title = "Current routine 30 minutes before bedtime";
+  final title = "Current routine 1 hour before bedtime";
   @override
   final image = null;
 
