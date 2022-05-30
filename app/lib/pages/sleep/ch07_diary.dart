@@ -18,19 +18,19 @@ class DiaryReminders extends MarkdownPage {
   final prevPage = () => RoutinePledge();
 
   @override
-  final title = "What is a sleep diary?";
+  final title = "Sleep diary";
   @override
   final image = Image.asset("assets/images/sleep/ch07-brain-to-paper.webp");
 
   @override
   final markdown = """
-You had a taste of logging your sleep before starting the intervention. But why is it important?
+You had a taste of reflecting on your sleep at the start. Why is it important?
 
-Keeping a record of how you’re sleeping builds deeper awareness on factors influencing sleep quality. It may reveal patterns that explain sleeping problems and how it affects your waking hours. 
+Keeping a record of how you’re sleeping **builds deeper awareness**, **reveal patterns** and **encourages progress**. This can explain sleeping problems and how it affects your waking hours.
 
-Whether we meet our goals or not, knowing where we are with the help of a sleep diary can also help encourage progress. If you do not have sleep data that night or follow your bedtime routine at your set time, **it’s okay! we never know what life has in store for us** - just note what happened. 
+If you didn't manage to meet your sleep goals or routine at the set time, **it’s okay! - just note what happened**. We never know what life has in store for us.
 
-Continue to the next page to set your preferred reminder timings.
+Continue to the next page to set your preferred reminder time.
 """;
 }
 
@@ -48,13 +48,13 @@ class DiaryRemindersTime extends TimePickerPage {
   final prevPage = () => DiaryReminders();
 
   @override
-  final title = "Log your sleep";
+  final title = "Sleep Diary Reminder";
   @override
   final image = Image.asset("assets/images/sleep/ch07-brain-to-paper.webp");
 
   @override
   final markdown = """
-> Tip: The closer to your wake time, the more accurately you’ll remember how you slept.”
+> Tip: Set your reminder at least 1 hour after your planned wake-up time. Sleep inertia is a transitory feeling from waking up that might impair your judgement and thinking.
 
 **What time would you like us to remind you?**
 """;
