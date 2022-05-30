@@ -442,19 +442,17 @@ class RoutinePledgeIntro extends MarkdownPage {
   final prevPage = () => RoutineOptInGroup();
 
   @override
-  final title = "My commitment to sleep";
+  final title = "Commit to sleep";
   @override
   final image = Image.asset("assets/images/sleep/ch06-my-sleep-pledge.webp");
 
   @override
   final markdown = """
-Over the next week, we’ll help you commit to a routine to improve your sleep.
+Seal your commitment with a pledge then share with friends, family, co-workers and @hea_health on social 😉
 
-Review your pledge!
+Get support and inspire others to join you in sleeping better.
 
-Get support for your journey. Share it with friends, family and co-workers. Wear it proud on social! And tag us @hea.health 😉
-
-You might inspire others keen to join you in sleeping better.
+Review your pledge on the next page.
 """;
 }
 
@@ -462,7 +460,7 @@ class RoutinePledge extends StatefulWidget {
   final PageBuilder? nextPage = () => DiaryReminders();
   final PageBuilder? prevPage = () => RoutinePledgeIntro();
 
-  final String title = "My commitment to sleep";
+  final String title = "Commit to sleep";
   final Image? image =
       Image.asset("assets/images/sleep/ch06-my-sleep-pledge.webp");
 
