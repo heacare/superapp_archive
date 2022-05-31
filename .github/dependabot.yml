@@ -17,6 +17,14 @@ updates:
     reviewers:
       - serverwentdown
 
+  - package-ecosystem: npm
+    directory: /dashboard/
+    schedule:
+      interval: weekly
+      timezone: Asia/Singapore
+    reviewers:
+      - serverwentdown
+
   - package-ecosystem: pub
     directory: /app/
     schedule:
@@ -24,4 +32,6 @@ updates:
       timezone: Asia/Singapore
     reviewers:
       - serverwentdown
+
+
 # vim: set et ts=2 sw=2:
