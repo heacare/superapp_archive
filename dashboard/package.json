@@ -30,7 +30,7 @@
     "ts-jest": "^28.0.2"
   },
   "dependencies": {
-    "vue-tsc": "^0.34.15"
+    "vue-tsc": "^0.35.2"
   },
   "jest": {
     "transform": {
