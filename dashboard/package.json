@@ -14,7 +14,7 @@
     "test": "jest"
   },
   "devDependencies": {
-    "@nuxtjs/tailwindcss": "^5.0.4",
+    "@nuxtjs/tailwindcss": "^5.1.2",
     "@types/jest": "^27.5.1",
     "@types/luxon": "^2.3.2",
     "@typescript-eslint/eslint-plugin": "^5.24.0",
