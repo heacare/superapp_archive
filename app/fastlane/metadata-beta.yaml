@@ -3,8 +3,8 @@ description: |
 task: |
   Help us test our sleep program by using the app. You can jump right in once you have it installed. We'll keep in touch with you as you progress. Let us know if you need any help or have feedback as you go.
 groups:
-  android: 'internal, pilot-test-1'
-  ios: 'Pilot Test 1'
+  android: 'internal'
+  ios: ''
 feedback_email: headothealth@gmail.com
 marketing_url: https://hea.care
 privacy_policy_url: https://hea.care/privacy
