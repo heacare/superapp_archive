@@ -3,10 +3,8 @@ import 'package:hea/utils/kv_wrap.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:hea/services/sleep_checkin_service.dart';
-import 'package:hea/screens/login.dart';
 import 'package:hea/models/user.dart';
 import 'package:hea/services/api_manager.dart';
-import 'package:hea/services/auth_service.dart';
 import 'package:hea/services/notification_service.dart';
 import 'package:hea/services/health_service.dart';
 import 'package:hea/services/logging_service.dart';
@@ -27,12 +25,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future logout() async {
     await serviceLocator<LoggingService>().createLog('logout', '');
-    await serviceLocator<AuthService>().logout();
-
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) {
-      return const LoginScreen();
-    }), (route) => false);
   }
 
   Future<String> send60DaysHealthData() async {
@@ -42,41 +34,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return hasData ? "Health data sent" : "No health data available";
   }
 
-  Future<void> scheduleDemoNotification() async {
-    await serviceLocator<NotificationService>().showContentReminder(
-        1,
-        "sleep_content",
-        "Hop right in",
-        "Hi {name}! To get started, tell us how you'll be getting your sleep and health data",
-        minHoursLater: 1);
-  }
-
   @override
   Widget build(BuildContext context) {
     serviceLocator<LoggingService>().createLog('navigate', 'profile');
-    //serviceLocator<ApiManager>().get("/"); // What is this for?
-    return Consumer<User?>(builder: (context, user, _) {
-      if (user == null) {
-        return const Center(child: CircularProgressIndicator());
-      }
-      return loaded(user);
-    });
+    return loaded();
   }
 
-  Widget loaded(User user) {
-    // ignore: unused_local_variable
-    final name = user.name;
-    // ignore: unused_local_variable
-    final height = "${user.height}m";
-    // ignore: unused_local_variable
-    final weight = "${user.weight}kg";
-    // ignore: unused_local_variable
-    final country = user.country;
-    // ignore: unused_local_variable
-    final gender = user.gender;
-    // ignore: unused_local_variable
-    final icon = user.icon;
-
+  Widget loaded() {
     return Scaffold(
         appBar: PreferredSize(
             preferredSize: const Size.fromHeight(150),

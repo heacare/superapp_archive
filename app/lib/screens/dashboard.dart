@@ -26,12 +26,7 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<User?>(builder: (context, user, _) {
-      if (user == null) {
-        return const Center(child: CircularProgressIndicator());
-      }
-      return DashboardPage.fromUser(user);
-    });
+    return DashboardPage(expYears: 0, optYears: 0, socScore: 0, name: "TODO");
   }
 }
 
@@ -67,26 +62,19 @@ class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     serviceLocator<LoggingService>().createLog('navigate', 'home');
-    final moduleListView = FutureProvider<List<Module>>(
-      initialData: const [],
-      create: (_) => serviceLocator<ContentService>().getModules(),
-      child: Consumer<List<Module>>(builder: (context, modules, _) {
-        if (modules.length != 2) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
-            children: const [
-              ModuleListItem(
-                  title: "Sleep and Recovery",
-                  description:
-                      "Learn about the benefits and howtos of a good night of sleep",
-                  gradient1: Color(0xFF00ABE9),
-                  gradient2: Color(0xFF7FDDFF),
-                  icon: FontAwesomeIcons.solidMoon),
-              SizedBox(height: 10.0),
-              /*
+    final moduleListView = Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        children: const [
+          ModuleListItem(
+              title: "Sleep and Recovery",
+              description:
+                  "Learn about the benefits and howtos of a good night of sleep",
+              gradient1: Color(0xFF00ABE9),
+              gradient2: Color(0xFF7FDDFF),
+              icon: FontAwesomeIcons.solidMoon),
+          SizedBox(height: 10.0),
+          /*
               ModuleListItem(
                   title: "Mental Hygiene",
                   description:
@@ -96,12 +84,7 @@ class DashboardPage extends StatelessWidget {
                   icon: FontAwesomeIcons.peopleArrows,
                   module: modules[1])
 			  */
-            ]);
-      }),
-      catchError: (context, error) {
-        return [];
-      },
-    );
+        ]);
 
     Widget moduleCheckinListView =
         Consumer<SleepCheckinProgress>(builder: (context, progress, child) {

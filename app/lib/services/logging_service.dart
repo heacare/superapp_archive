@@ -16,6 +16,9 @@ class LoggingServiceImpl implements LoggingService {
         Log.fromDynamic(key, DateTime.now(), value).toJson());
     if (resp.statusCode == 201) {
       return;
+    } else if (resp.statusCode == 401) {
+      // TODO
+      return;
     } else {
       throw ApiManagerException(
           message: "Failure in createLog: ${resp.statusCode}");

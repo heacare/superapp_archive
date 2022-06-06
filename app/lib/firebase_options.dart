@@ -28,10 +28,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -60,6 +57,21 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyDn3a67V0b5dprJPc3zVmhefotNmvN6i7U',
+    appId: '1:825250749124:ios:129f3cd75a15aed3090791',
+    messagingSenderId: '825250749124',
+    projectId: 'happily-ever-after-4b2fe',
+    databaseURL:
+        'https://happily-ever-after-4b2fe-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'happily-ever-after-4b2fe.appspot.com',
+    androidClientId:
+        '825250749124-s45chj8kjdteihdls432j0qiv3j8n0te.apps.googleusercontent.com',
+    iosClientId:
+        '825250749124-8qchmst7ihvrpaq041bavbebm465l7qc.apps.googleusercontent.com',
+    iosBundleId: 'care.hea.app',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyDn3a67V0b5dprJPc3zVmhefotNmvN6i7U',
     appId: '1:825250749124:ios:129f3cd75a15aed3090791',
     messagingSenderId: '825250749124',

@@ -1,33 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'firebase_options.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/intl_standalone.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 import 'package:hea/screens/error.dart';
 import 'package:hea/screens/home.dart';
-import 'package:hea/screens/login.dart';
-import 'package:hea/screens/onboarding.dart';
-import 'package:hea/services/auth_service.dart';
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/services/user_service.dart';
 import 'package:hea/services/logging_service.dart';
 import 'package:hea/services/notification_service.dart';
 import 'package:hea/utils/sleep_notifications.dart';
-import 'package:hea/utils/sleep_log.dart';
+import 'package:hea/firebase.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Firebase
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+  await firebaseSetup();
 
   // Services
   setupServiceLocator();
@@ -193,78 +184,25 @@ class AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    getUserData() async {
-      await serviceLocator.allReady();
-
-      // Authentication user exists separately from user data, so we have to check for the case where
-      // the user signed up but uninstalled/reset the app before finishing onboarding
-      final authService = serviceLocator<AuthService>();
-
-      if (authService.currentUser() == null) {
-        return UserStatus.signedOut;
-      } else {
-        authService.currentUserToken()?.then((token) => debugPrint(token));
-        //sleepLog();
-        return await serviceLocator<UserService>().isCurrentUserOnboarded()
-            ? UserStatus.onboarded
-            : UserStatus.registered;
-      }
-    }
-
-    final Future<UserStatus> hasUserData = getUserData();
     return _RestartInheritedWidget(
         key: _key,
         data: this,
-        child: FutureBuilder(
-          future: hasUserData,
-          builder: (context, AsyncSnapshot<UserStatus> snapshot) {
-            return MaterialApp(
-                title: 'Happily Ever After',
-                theme: _getThemeData(),
-                // TODO design a loading page and a 'error' page
-                // Match Firebase initialization result
-                home: AnnotatedRegion<SystemUiOverlayStyle>(
-                    value: SystemUiOverlayStyle.dark.copyWith(
-                      systemNavigationBarColor: const Color(0xFFFFFFFF),
-                      systemNavigationBarIconBrightness: Brightness.dark,
-                      statusBarColor: const Color(0x40FFFFFF),
-                    ),
-                    child: LifecycleHandler(
-                        snapshot.connectionState == ConnectionState.done,
-                        mainScreen(snapshot))));
-          },
-        ));
+        child: MaterialApp(
+            title: 'Happily Ever After',
+            theme: _getThemeData(),
+            // TODO design a loading page and a 'error' page
+            // Match Firebase initialization result
+            home: AnnotatedRegion<SystemUiOverlayStyle>(
+                value: SystemUiOverlayStyle.dark.copyWith(
+                  systemNavigationBarColor: const Color(0xFFFFFFFF),
+                  systemNavigationBarIconBrightness: Brightness.dark,
+                  statusBarColor: const Color(0x40FFFFFF),
+                ),
+                child: LifecycleHandler(true, mainScreen()))));
   }
 
-  Widget mainScreen(AsyncSnapshot<UserStatus> snapshot) {
-    if (snapshot.hasError) {
-      debugPrint("Encountered error: ${snapshot.error}");
-      return const ErrorScreen();
-    }
-
-    if (snapshot.connectionState != ConnectionState.done) {
-      return Scaffold(
-          body: Container(
-        alignment: Alignment.center,
-        child: const CircularProgressIndicator(),
-      ));
-    }
-
-    if (snapshot.hasData) {
-      switch (snapshot.requireData) {
-        case UserStatus.signedOut:
-          return const LoginScreen();
-
-        case UserStatus.registered:
-          return const OnboardingScreen();
-
-        case UserStatus.onboarded:
-          return const HomeScreen();
-      }
-    }
-
-    // Something has gone horribly wrong somehow
-    return const ErrorScreen();
+  Widget mainScreen() {
+    return const HomeScreen();
   }
 }
 
