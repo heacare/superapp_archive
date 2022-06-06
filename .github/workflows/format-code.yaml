@@ -26,7 +26,7 @@ jobs:
         uses: actionsx/prettier@3de869a32607c555c4d8f367228691f6e141d37a
         with:
           args: --config backend/package.json --write '**/*.yaml' '**/*.yml' '**/*.md' '**/*.json' '**/*.hbs' '**/*.js' '!app/fastlane/README.md'
-      - name: Format app/tools app/*.py
+      - name: Format app/tools
         working-directory: app/tools
         run: |
           pip install -r requirements.txt
