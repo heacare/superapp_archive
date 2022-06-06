@@ -20,6 +20,7 @@ Future<void> oldMain() async {
 
   // Services
   setupServiceLocator();
+  await serviceLocator.allReady();
 
   // Locale
   await findSystemLocale();

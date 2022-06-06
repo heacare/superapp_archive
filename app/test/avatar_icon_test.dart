@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:hea/widgets/avatar_icon.dart';
+import 'package:hea/old/widgets/avatar_icon.dart';
 
 void main() {
   testWidgets('AvatarIcon', (WidgetTester tester) async {

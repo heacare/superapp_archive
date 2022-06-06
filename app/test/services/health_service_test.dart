@@ -1,7 +1,7 @@
 import 'package:test/test.dart';
 import 'package:flutter/material.dart' show TimeOfDay;
 
-import 'package:hea/services/health_service.dart';
+import 'package:hea/old/services/health_service.dart';
 
 void main() {
   group('meanTimeOfDay', () {

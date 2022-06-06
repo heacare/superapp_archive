@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart' show debugPrint;
+
 import '../models/log.dart';
 import 'api_manager.dart';
 import 'service_locator.dart';
@@ -18,6 +20,7 @@ class LoggingServiceImpl implements LoggingService {
       return;
     } else if (resp.statusCode == 401) {
       // TODO
+      debugPrint("unable to send logs");
       return;
     } else {
       throw ApiManagerException(

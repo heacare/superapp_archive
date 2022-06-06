@@ -1,6 +1,6 @@
 import 'package:test/test.dart';
 
-import 'package:hea/models/log.dart';
+import 'package:hea/old/models/log.dart';
 
 void main() {
   test('zero', () {
