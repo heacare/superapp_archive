@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart'
@@ -11,14 +12,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/services/logging_service.dart';
 import 'package:hea/widgets/page.dart';
+import 'package:hea/firebase.dart';
 
 import 'package:hea/pages/sleep/lookup.dart';
 
 class NotificationService {
   final AwesomeNotifications notifications;
-  final FirebaseMessaging messaging;
+  final FirebaseMessaging? messaging;
 
-  NotificationService({required this.notifications, required this.messaging});
+  NotificationService({required this.notifications, this.messaging});
 
   Future<void> cancelAllSchedules() async {
     notifications.cancelAllSchedules();
@@ -257,17 +259,25 @@ class NotificationService {
               channelGroupkey: "content", channelGroupName: "Content"),
         ],
         debug: true);
-    NotificationService service = NotificationService(
-        notifications: notifications, messaging: FirebaseMessaging.instance);
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-    FirebaseMessaging.onMessage
-        .listen(service._firebaseMessagingForegroundHandler);
-    // Debug: Print token
-    debugPrint(await service.messaging.getToken());
+    NotificationService service;
+    if (hasFirebase) {
+      service = NotificationService(
+          notifications: notifications, messaging: FirebaseMessaging.instance);
+      FirebaseMessaging.onBackgroundMessage(
+          _firebaseMessagingBackgroundHandler);
+      FirebaseMessaging.onMessage
+          .listen(service._firebaseMessagingForegroundHandler);
+      // Debug: Print token
+      debugPrint(await service.messaging?.getToken());
+    } else {
+      service = NotificationService(notifications: notifications);
+    }
     // For now, request notifications on start up
-    bool allowed = await notifications.isNotificationAllowed();
-    if (!allowed) {
-      await notifications.requestPermissionToSendNotifications();
+    if (Platform.isAndroid || Platform.isIOS) {
+      bool allowed = await notifications.isNotificationAllowed();
+      if (!allowed) {
+        await notifications.requestPermissionToSendNotifications();
+      }
     }
     return service;
   }

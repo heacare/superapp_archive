@@ -6,7 +6,6 @@ import 'package:health/health.dart';
 
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/services/logging_service.dart';
-import 'package:hea/services/auth_service.dart';
 
 class SleepAutofill {
   final DateTime? inBed;
@@ -51,17 +50,9 @@ class HealthService {
 
   HealthService() {
     Timer(const Duration(seconds: 1), () async {
-      var user = serviceLocator<AuthService>().currentUser();
-      if (user == null) {
-        return;
-      }
       await log60Days();
     });
     Timer.periodic(const Duration(hours: 8), (timer) async {
-      var user = serviceLocator<AuthService>().currentUser();
-      if (user == null) {
-        return;
-      }
       await log60Days();
     });
   }
