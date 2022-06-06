@@ -27,7 +27,7 @@
     "luxon": "^2.4.0",
     "nuxt": "3.0.0-rc.3",
     "prettier": "^2.6.2",
-    "ts-jest": "^28.0.3"
+    "ts-jest": "^28.0.4"
   },
   "dependencies": {
     "vue-tsc": "^0.35.2"
