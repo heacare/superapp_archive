@@ -21,16 +21,16 @@ class LocationService {
     LocationData? getLocation;
     await location.changeSettings(accuracy: LocationAccuracy.high);
     try {
-      var _hasLocationPermission = await location.hasPermission();
-      if (_hasLocationPermission == PermissionStatus.granted) {
+      var hasLocationPermission = await location.hasPermission();
+      if (hasLocationPermission == PermissionStatus.granted) {
         grantedPermissionMethod(context, getLocation, mapData,
             updatePosition: updatePosition);
-      } else if (_hasLocationPermission == PermissionStatus.denied) {
-        var _permissionGranted = await location.requestPermission();
-        if (_permissionGranted == PermissionStatus.granted) {
+      } else if (hasLocationPermission == PermissionStatus.denied) {
+        var permissionGranted = await location.requestPermission();
+        if (permissionGranted == PermissionStatus.granted) {
           grantedPermissionMethod(context, getLocation, mapData,
               updatePosition: updatePosition);
-        } else if (_permissionGranted == PermissionStatus.denied) {
+        } else if (permissionGranted == PermissionStatus.denied) {
           serviceDisabledMethod(context, mapData);
         }
       }
@@ -42,13 +42,13 @@ class LocationService {
   void grantedPermissionMethod(
       BuildContext context, LocationData? locData, Function? mapData,
       {Function? updatePosition}) async {
-    var _hasLocationServiceEnabled = await location.serviceEnabled();
-    if (_hasLocationServiceEnabled) {
+    var hasLocationServiceEnabled = await location.serviceEnabled();
+    if (hasLocationServiceEnabled) {
       serviceEnabledMethod(locData, context, mapData!,
           updatePosition: updatePosition);
     } else {
-      var _serviceEnabled = await location.requestService();
-      if (_serviceEnabled) {
+      var serviceEnabled = await location.requestService();
+      if (serviceEnabled) {
         serviceEnabledMethod(locData, context, mapData!,
             updatePosition: updatePosition);
       } else {

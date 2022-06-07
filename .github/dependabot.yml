@@ -17,6 +17,14 @@ updates:
     reviewers:
       - serverwentdown
 
+  - package-ecosystem: npm
+    directory: /dashboard/
+    schedule:
+      interval: weekly
+      timezone: Asia/Singapore
+    reviewers:
+      - serverwentdown
+
   - package-ecosystem: pub
     directory: /app/
     schedule:

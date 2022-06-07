@@ -442,19 +442,17 @@ class RoutinePledgeIntro extends MarkdownPage {
   final prevPage = () => RoutineOptInGroup();
 
   @override
-  final title = "My commitment to sleep";
+  final title = "Commit to sleep";
   @override
   final image = Image.asset("assets/images/sleep/ch06-my-sleep-pledge.webp");
 
   @override
   final markdown = """
-Over the next week, we’ll help you commit to a routine to improve your sleep.
+Seal your commitment with a pledge then share with friends, family, co-workers and @hea_health on social 😉
 
-Review your pledge!
+Get support and inspire others to join you in sleeping better.
 
-Get support for your journey. Share it with friends, family and co-workers. Wear it proud on social! And tag us @hea.health 😉
-
-You might inspire others keen to join you in sleeping better.
+Review your pledge on the next page.
 """;
 }
 
@@ -462,7 +460,7 @@ class RoutinePledge extends StatefulWidget {
   final PageBuilder? nextPage = () => DiaryReminders();
   final PageBuilder? prevPage = () => RoutinePledgeIntro();
 
-  final String title = "My commitment to sleep";
+  final String title = "Commit to sleep";
   final Image? image =
       Image.asset("assets/images/sleep/ch06-my-sleep-pledge.webp");
 
@@ -487,7 +485,7 @@ class RoutinePledgeState extends State<RoutinePledge> {
         p: Theme.of(context).textTheme.bodyText1,
         h1: Theme.of(context).textTheme.headline3);
     List<String> goals = kvReadStringList("sleep", "sleep-goals");
-    String goalsText = formatList(goals);
+    String goalsText = formatList(goals, bolded: true);
 
     TimeOfDay goalsWakeTime = kvReadTimeOfDay("sleep", "goals-wake-time") ??
         const TimeOfDay(hour: 0, minute: 0);
@@ -496,7 +494,7 @@ class RoutinePledgeState extends State<RoutinePledge> {
         const TimeOfDay(hour: 0, minute: 0);
     String goalsSleepTimeText = goalsSleepTime.format(context);
     List<String> doingBeforeBed = kvReadStringList("sleep", "doing-before-bed");
-    String doingBeforeBedText = formatList(doingBeforeBed);
+    String doingBeforeBedText = formatList(doingBeforeBed, bolded: true);
 
     int sleepForMinutes = ((goalsWakeTime.minute + goalsWakeTime.hour * 60) -
             (goalsSleepTime.minute + goalsSleepTime.hour * 60)) %
@@ -507,7 +505,8 @@ class RoutinePledgeState extends State<RoutinePledge> {
 
     List<String> includedActivities =
         kvReadStringList("sleep", "included-activities");
-    String includedActivitiesText = formatList(includedActivities);
+    String includedActivitiesText =
+        formatList(includedActivities, bolded: true);
     return BasePage(
         title: widget.title,
         nextPage: widget.nextPage,
@@ -523,7 +522,7 @@ I'd like to $goalsText
 
 My desired sleep duration is **$goalsSleepDurationText**. If I'd like to wake up by **$goalsWakeTimeText**, I should be sleeping by **$goalsSleepTimeText**.
 
-I've identified **$doingBeforeBedText** as obstacles from reaching my goals.
+I've identified $doingBeforeBedText as obstacles from reaching my goals.
 
 To better prepare for sleep, I will practice $includedActivitiesText before bedtime.
 """,
@@ -533,10 +532,13 @@ To better prepare for sleep, I will practice $includedActivitiesText before bedt
   }
 }
 
-String formatList(List<String> l) {
+String formatList(List<String> l, {bool bolded = false}) {
   String text = "";
   for (int i = 0; i < l.length; i++) {
     String item = l[i];
+    if (bolded) {
+      item = "**$item**";
+    }
     if (l.length != 1 && i == l.length - 1) {
       text += " and ";
     } else if (i > 0) {

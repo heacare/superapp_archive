@@ -58,7 +58,7 @@ class OnboardingDrinkingScreenState extends State<OnboardingDrinkingScreen> {
 
                         Navigator.of(context, rootNavigator: true)
                             .pop(OnboardingStepReturn(
-                          nextStep: OnboardingStep.followups,
+                          nextStep: OnboardingStep.end,
                           returnData: res,
                         ));
                       } on String catch (e) {

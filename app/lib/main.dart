@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'firebase_options.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/intl_standalone.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'firebase_options.dart';
 
 import 'package:hea/screens/error.dart';
 import 'package:hea/screens/home.dart';
@@ -16,30 +18,38 @@ import 'package:hea/services/user_service.dart';
 import 'package:hea/services/logging_service.dart';
 import 'package:hea/services/notification_service.dart';
 import 'package:hea/utils/sleep_notifications.dart';
-import 'package:hea/utils/kv_wrap.dart';
+import 'package:hea/utils/sleep_log.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+
+  // Services
   setupServiceLocator();
+
+  // Locale
   await findSystemLocale();
   initializeDateFormatting(Intl.systemLocale);
+
   runApp(const App());
 }
 
 class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
 
-  static _AppState of(BuildContext context) {
+  static AppState of(BuildContext context) {
     _RestartInheritedWidget? result =
         context.findAncestorWidgetOfExactType<_RestartInheritedWidget>();
     return result!.data;
   }
 
   @override
-  _AppState createState() => _AppState();
+  State<App> createState() => AppState();
 }
 
 enum UserStatus {
@@ -48,7 +58,7 @@ enum UserStatus {
   onboarded,
 }
 
-class _AppState extends State<App> {
+class AppState extends State<App> {
   Key _key = UniqueKey();
 
   void restart() async {
@@ -95,6 +105,7 @@ class _AppState extends State<App> {
         primaryColor: Colors.white,
         colorScheme: colorScheme,
         fontFamily: "Poppins",
+        useMaterial3: true,
         textTheme: const TextTheme(
             headline1: TextStyle(
                 fontSize: 32.0,
@@ -193,8 +204,7 @@ class _AppState extends State<App> {
         return UserStatus.signedOut;
       } else {
         authService.currentUserToken()?.then((token) => debugPrint(token));
-        await serviceLocator<LoggingService>()
-            .createLog('sleep', kvDump("sleep"));
+        //sleepLog();
         return await serviceLocator<UserService>().isCurrentUserOnboarded()
             ? UserStatus.onboarded
             : UserStatus.registered;
@@ -219,9 +229,9 @@ class _AppState extends State<App> {
                       systemNavigationBarIconBrightness: Brightness.dark,
                       statusBarColor: const Color(0x40FFFFFF),
                     ),
-                    child: NotificationHandler(
+                    child: LifecycleHandler(
                         snapshot.connectionState == ConnectionState.done,
-                        LifecycleHandler(mainScreen(snapshot)))));
+                        mainScreen(snapshot))));
           },
         ));
   }
@@ -259,7 +269,7 @@ class _AppState extends State<App> {
 }
 
 class _RestartInheritedWidget extends InheritedWidget {
-  final _AppState data;
+  final AppState data;
 
   const _RestartInheritedWidget({
     required Key key,
@@ -273,25 +283,10 @@ class _RestartInheritedWidget extends InheritedWidget {
   }
 }
 
-class NotificationHandler extends StatelessWidget {
-  final bool ready;
-  final Widget child;
-  const NotificationHandler(this.ready, this.child, {Key? key})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    if (ready) {
-      serviceLocator<NotificationService>().ensureListen(context);
-      scheduleSleepNotifications();
-    }
-    return child;
-  }
-}
-
 class LifecycleHandler extends StatefulWidget {
-  const LifecycleHandler(this.child, {Key? key}) : super(key: key);
+  const LifecycleHandler(this.ready, this.child, {Key? key}) : super(key: key);
 
+  final bool ready;
   final Widget child;
 
   @override
@@ -304,18 +299,29 @@ class LifecycleHandlerState extends State<LifecycleHandler>
 
   @override
   Widget build(BuildContext context) {
+    if (widget.ready) {
+      serviceLocator<NotificationService>().ensureListen(context);
+      scheduleSleepNotifications(debounce: false);
+      () async {
+        PackageInfo packageInfo = await PackageInfo.fromPlatform();
+        String version = packageInfo.version;
+        String build = packageInfo.buildNumber;
+        serviceLocator<LoggingService>()
+            .createLog("version", version + "+" + build);
+      }();
+    }
     return widget.child;
   }
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -327,5 +333,9 @@ class LifecycleHandlerState extends State<LifecycleHandler>
     }
     lastState = active;
     serviceLocator<LoggingService>().createLog("state", active);
+    debugPrint(state.toString());
+    if (state == AppLifecycleState.inactive && widget.ready) {
+      scheduleSleepNotifications(debounce: false);
+    }
   }
 }

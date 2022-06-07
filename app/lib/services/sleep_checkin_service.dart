@@ -193,12 +193,20 @@ class SleepCheckinServiceImpl implements SleepCheckinService {
         .createLog("sleep-checkin", list.map((d) => d.toJson()).toList());
     SleepCheckinProgress progress = getProgress();
     progress.addDay();
+    serviceLocator<LoggingService>().createLog("sleep-checkin-progress", {
+      "total": progress.total,
+      "day": progress.day,
+    });
   }
 
   @override
   extend(int days) {
     SleepCheckinProgress progress = getProgress();
     progress.extend(days);
+    serviceLocator<LoggingService>().createLog("sleep-checkin-progress", {
+      "total": progress.total,
+      "day": progress.day,
+    });
   }
 
   @override

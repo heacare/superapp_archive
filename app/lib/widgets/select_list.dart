@@ -41,38 +41,45 @@ class SelectList<T> extends StatefulWidget {
 class SelectListState<T> extends State<SelectList<T>> {
   List<T> selected = [];
   List<T> values = [];
+  String other = "";
 
   @override
   void initState() {
     super.initState();
     values = widget.items.map((item) => item.value).toList();
     debugPrint(widget.defaultSelected.toString());
-// If there's no "other" option, drop the other values
+    // If there's no "other" option, drop the other values
     selected = List<T>.from(
         widget.defaultSelected.where((sel) => values.contains(sel)));
   }
 
   Widget getButton(BuildContext context, bool select, SelectListItem<T> item) {
     return ElevatedButton(
-      child: Text(item.text,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontWeight: FontWeight.w500,
-            color: select
-                ? Theme.of(context).colorScheme.primary
-                : const Color(0xFF414141),
-            fontSize: 18.0,
-          )),
       onPressed: () {
         setState(() {
           if (select) {
             selected.remove(item.value);
             if (item.other && widget.onChangeOther != null) {
+              other = "";
               widget.onChangeOther!("");
             }
           } else {
             selected.add(item.value);
-            while (widget.max != 0 && selected.length > widget.max) {
+            Iterable<SelectListItem<T>> others =
+                widget.items.where((item) => item.other);
+            T? otherValue = others.isNotEmpty ? others.first.value : null;
+            int otherCount = 0;
+            if (other.isNotEmpty) {
+              otherCount += 1;
+            }
+            while (widget.max != 0 &&
+                selected.isNotEmpty &&
+                selected.length + otherCount > widget.max) {
+              if (selected[0] == otherValue && widget.onChangeOther != null) {
+                // Also clear the other
+                other = "";
+                widget.onChangeOther!("");
+              }
               selected.removeAt(0);
             }
           }
@@ -86,6 +93,15 @@ class SelectListState<T> extends State<SelectList<T>> {
               ? Theme.of(context).colorScheme.primary.withAlpha(0x50)
               : const Color(0xFFEBEBEB),
           elevation: 0.0),
+      child: Text(item.text,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            color: select
+                ? Theme.of(context).colorScheme.primary
+                : const Color(0xFF414141),
+            fontSize: 18.0,
+          )),
     );
   }
 
@@ -97,7 +113,9 @@ class SelectListState<T> extends State<SelectList<T>> {
               const InputDecoration(labelText: "Type your own choice here"),
           initialValue: widget.defaultOther,
           onChanged: (String value) {
+            other = value;
             if (widget.onChangeOther != null) {
+              other = "";
               widget.onChangeOther!(value);
             }
           }),

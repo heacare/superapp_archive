@@ -32,5 +32,6 @@ export class LogDumpDto {
 export interface LogDumpSimplifiedDto extends Omit<Log, 'user'> {
   user: {
     id: number;
+    name: string;
   };
 }

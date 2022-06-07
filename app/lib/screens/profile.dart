@@ -35,14 +35,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }), (route) => false);
   }
 
-  Future<void> send60DaysHealthData() async {
-    if (!await serviceLocator<HealthService>().request()) {
-      return;
-    }
-    await serviceLocator<HealthService>().log60Days();
-    SleepAutofill? day =
-        await serviceLocator<HealthService>().autofillRead1Day();
-    await serviceLocator<LoggingService>().createLog("sleep-autofill", day);
+  Future<String> send60DaysHealthData() async {
+    bool hasData = await serviceLocator<HealthService>().log60Days();
+    await serviceLocator<HealthService>().autofillRead1Day();
+    await serviceLocator<HealthService>().autofillRead30Day();
+    return hasData ? "Health data sent" : "No health data available";
   }
 
   Future<void> scheduleDemoNotification() async {
@@ -56,7 +53,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    serviceLocator<ApiManager>().get("/"); // What is this for?
+    serviceLocator<LoggingService>().createLog('navigate', 'profile');
+    //serviceLocator<ApiManager>().get("/"); // What is this for?
     return Consumer<User?>(builder: (context, user, _) {
       if (user == null) {
         return const Center(child: CircularProgressIndicator());
@@ -69,9 +67,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     // ignore: unused_local_variable
     final name = user.name;
     // ignore: unused_local_variable
-    final height = user.height.toString() + "m";
+    final height = "${user.height}m";
     // ignore: unused_local_variable
-    final weight = user.weight.toString() + "kg";
+    final weight = "${user.weight}kg";
     // ignore: unused_local_variable
     final country = user.country;
     // ignore: unused_local_variable
@@ -120,10 +118,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       text: "Send 60 days health data",
                       onPressed: () async {
                         try {
-                          await send60DaysHealthData();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text("Health data sent")));
+                          String info = await send60DaysHealthData();
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(SnackBar(content: Text(info)));
                         } catch (e) {
                           ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text(e.toString())));
@@ -140,6 +137,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       }),
                   if (developerExpanded)
                     Column(children: [
+                      const SizedBox(height: 8.0),
+                      GradientButton(
+                          text: "Show autofill sleep data",
+                          onPressed: () async {
+                            var sleep = await serviceLocator<HealthService>()
+                                .autofillRead1Day();
+                            var sleep30 = await serviceLocator<HealthService>()
+                                .autofillRead30Day();
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                      title: const Text("Autofill sleep data"),
+                                      content: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text("1-day",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleLarge),
+                                            Text(
+                                                "In-bed: ${sleep?.inBed}\nAsleep: ${sleep?.asleep}\nAwake: ${sleep?.awake}\nOut-bed: ${sleep?.outBed}"),
+                                            Text("30-day",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleLarge),
+                                            Text(
+                                                "In-bed: ${sleep30?.inBed}\nAsleep: ${sleep30?.asleep}\nAwake: ${sleep30?.awake}\nOut-bed: ${sleep30?.outBed}"),
+                                          ]),
+                                      actions: [
+                                        TextButton(
+                                            child: const Text("Close"),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            }),
+                                      ]);
+                                });
+                          }),
                       const SizedBox(height: 8.0),
                       GradientButton(
                           text: "Reset all content state",
@@ -171,6 +208,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               serviceLocator<
                                                       SharedPreferences>()
                                                   .remove('sleep');
+                                              serviceLocator<
+                                                      SharedPreferences>()
+                                                  .remove('review-force');
                                               Navigator.of(context).pop();
                                             }),
                                       ]);
@@ -292,39 +332,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           }),
                       const SizedBox(height: 8.0),
                       GradientButton(
-                          text: "Show autofill sleep data",
-                          onPressed: () async {
-                            var sleep = await serviceLocator<HealthService>()
-                                .autofillRead1Day();
-                            var sleep30 = await serviceLocator<HealthService>()
-                                .autofillRead30Day();
+                          text: "Enable 30-day check-in",
+                          onPressed: () {
                             showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
                                   return AlertDialog(
-                                      title: const Text("Autofill sleep data"),
-                                      content: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text("1-day",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .titleLarge),
-                                            Text(
-                                                "In-bed: ${sleep?.inBed}\nAsleep: ${sleep?.asleep}\nAwake: ${sleep?.awake}\nOut-bed: ${sleep?.outBed}"),
-                                            Text("30-day",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .titleLarge),
-                                            Text(
-                                                "In-bed: ${sleep30?.inBed}\nAsleep: ${sleep30?.asleep}\nAwake: ${sleep30?.awake}\nOut-bed: ${sleep30?.outBed}"),
-                                          ]),
+                                      title: const Text(
+                                          "Are you sure you want to re-enable 30-day check-in?"),
                                       actions: [
                                         TextButton(
-                                            child: const Text("Close"),
+                                            child: const Text("No"),
                                             onPressed: () {
+                                              Navigator.of(context).pop();
+                                            }),
+                                        TextButton(
+                                            child: const Text("Yes"),
+                                            onPressed: () {
+                                              kvDelete("sleep", "review-done");
+                                              serviceLocator<
+                                                      SharedPreferences>()
+                                                  .setBool(
+                                                      'review-force', true);
                                               Navigator.of(context).pop();
                                             }),
                                       ]);

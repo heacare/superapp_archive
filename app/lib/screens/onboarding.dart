@@ -14,7 +14,6 @@ import 'package:hea/screens/onboarding/health_setup.dart';
 import 'package:hea/screens/onboarding/basic_info.dart';
 import 'package:hea/screens/onboarding/smoking.dart';
 import 'package:hea/screens/onboarding/drinking.dart';
-import 'package:hea/screens/onboarding/followup.dart';
 import 'package:hea/main.dart';
 
 final getIt = GetIt.instance;
@@ -25,7 +24,6 @@ enum OnboardingStep {
   basic_info,
   smoking,
   drinking,
-  followups,
   end,
 }
 
@@ -61,7 +59,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     userJson = User(authUser.uid).toJson();
 
     // Pull health data
-    WidgetsBinding.instance!.addPostFrameCallback((_) => Navigator.of(context)
+    WidgetsBinding.instance.addPostFrameCallback((_) => Navigator.of(context)
             .push(MaterialPageRoute(
                 builder: (context) => const HealthSetupScreen()))
             .then((value) {
@@ -88,9 +86,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       case OnboardingStep.drinking:
         nextScreen = const OnboardingDrinkingScreen();
         break;
-      case OnboardingStep.followups:
-        nextScreen = const OnboardingFollowupScreen();
-        break;
       case OnboardingStep.end:
       default:
         // Update through user service
@@ -111,7 +106,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         return;
     }
 
-    WidgetsBinding.instance!.addPostFrameCallback((_) => Navigator.of(context)
+    WidgetsBinding.instance.addPostFrameCallback((_) => Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => nextScreen))
             .then((value) {
           OnboardingStepReturn res = value;

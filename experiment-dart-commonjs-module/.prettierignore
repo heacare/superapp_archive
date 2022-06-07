@@ -1,0 +1,6 @@
+# Compiled output
+/.dart_tool
+/build
+
+# Dependencies
+/node_modules

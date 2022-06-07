@@ -53,6 +53,6 @@ class PillSelectState<T> extends State<PillSelect<T>> {
                 ))))
         .toList();
 
-    return Wrap(children: children, spacing: 8);
+    return Wrap(spacing: 8, children: children);
   }
 }

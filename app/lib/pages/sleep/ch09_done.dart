@@ -1,17 +1,17 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Page;
-import 'package:hea/services/logging_service.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
-import 'package:hea/widgets/gradient_button.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_markdown/flutter_markdown.dart';
 
 import 'package:hea/widgets/page.dart';
 import 'package:hea/widgets/select_list.dart';
+import 'package:hea/widgets/gradient_button.dart';
 import 'package:hea/services/sleep_checkin_service.dart';
 import 'package:hea/services/user_service.dart';
 import 'package:hea/models/user.dart';
 import 'package:hea/services/service_locator.dart';
+import 'package:hea/services/logging_service.dart';
 import 'package:hea/utils/kv_wrap.dart';
 import 'ch07_diary.dart';
 import 'ch05_owning.dart';
@@ -29,9 +29,6 @@ class Done extends StatelessWidget {
     final markdownStyleSheet = MarkdownStyleSheet(
         p: Theme.of(context).textTheme.bodyText1,
         h1: Theme.of(context).textTheme.headline3);
-
-    SleepCheckinProgress progress =
-        serviceLocator<SleepCheckinService>().getProgress();
 
     TimeOfDay goBed = kvReadTimeOfDay("sleep", "time-go-bed") ??
         const TimeOfDay(hour: 0, minute: 0);
@@ -87,11 +84,12 @@ class Done extends StatelessWidget {
         page: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              PageImage(changed == "decreased"
+                  ? Image.asset("assets/images/sleep/ch09-keep-it-going.webp")
+                  : Image.asset("assets/images/sleep/ch09-you-did-great.webp")),
               MarkdownBody(
                   data: """
-You managed to check in on your sleep for ${progress.day} days so far.
-
-Based on your self-reported results for the last $days days, your sleep efficiency $changed from $baseline% to $weekAverage%.
+Based on your self-reported results for the last 7 days, your sleep efficiency $changed from $baseline% to $weekAverage%.
 """,
                   extensionSet: md.ExtensionSet.gitHubFlavored,
                   styleSheet: markdownStyleSheet),
@@ -221,7 +219,8 @@ Would you like to try again or change your routine?
   @override
   Widget nextPageStringList(List<String> data) {
     String choice = data[0];
-    if (choice.startsWith("more-checkin")) {
+    if (choice.startsWith("more-checkin") ||
+        choice.startsWith("change-routine")) {
       serviceLocator<SleepCheckinService>().extend(7);
     }
     if (choice.endsWith("with-healer")) {
@@ -334,13 +333,14 @@ Please do fill up the following survey form to let us know that you have complet
           GradientButton(
               text: "Complete Program",
               onPressed: () async {
+                Navigator.of(context).pop();
                 User user =
                     await serviceLocator<UserService>().getCurrentUser();
                 Uri uri =
-                    Uri.parse('https://2b0snealkkz.typeform.com/to/a8UHkaNd');
+                    Uri.parse('https://flourishea.typeform.com/to/a8UHkaNd');
                 if (kDebugMode) {
                   uri =
-                      Uri.parse('https://2b0snealkkz.typeform.com/to/T7NdL2JC');
+                      Uri.parse('https://flourishea.typeform.com/to/T7NdL2JC');
                 }
                 uri = uri.replace(queryParameters: {"user": user.authId});
                 await launch(uri.toString());

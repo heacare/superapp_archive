@@ -100,6 +100,12 @@ for m in Path("lib", "pages").iterdir():
                         f.write(f'{item} -> {p} [label="prev",style="dashed"];\n')
         f.write("}\n")
 
+    with open(f"../dashboard/composables/genPages_{m.name}.ts", "w") as f:
+        f.write("export const pages = [\n")
+        for item, nextPage, prevPage in pagedefs:
+            f.write(f"  '{item}',\n")
+        f.write("];\n")
+
     # Copy-paste code
 
     # For sleep_notifications.dart

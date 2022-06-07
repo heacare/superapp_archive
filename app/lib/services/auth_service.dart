@@ -43,8 +43,7 @@ class AuthService {
         throw AuthServiceException(
             message: "Username not found - did you mean to signup instead?");
       } else if (e.code == 'wrong-password') {
-        throw AuthServiceException(
-            message: "Wrong password - is it really hunter2?");
+        throw AuthServiceException(message: "Wrong password");
       }
       throw AuthServiceException(
           message:

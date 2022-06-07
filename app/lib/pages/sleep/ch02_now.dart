@@ -583,12 +583,12 @@ class NowOtherFactors extends Page {
                 styleSheet: markdownStyleSheet),
           if (markdown != "") const SizedBox(height: 4.0),
           TextFormField(
-              initialValue: kvRead("sleep", valueName + "-reason"),
+              initialValue: kvRead("sleep", "$valueName-reason"),
               decoration: const InputDecoration(
                 labelText: "Type the other factor(s) here",
               ),
               onChanged: (String value) {
-                kvWrite<String>("sleep", valueName + "-reason", value);
+                kvWrite<String>("sleep", "$valueName-reason", value);
               }),
           if (markdown2 != "")
             MarkdownBody(
@@ -741,8 +741,6 @@ class NowEnthusiasm extends MultipleChoicePage {
 
   @override
   final markdown = """
-During the past month...
-
 During the past month, how much of a problem has it been for you to keep up enough enthusiasm to get things done?
 """;
 

@@ -1,0 +1,39 @@
+{
+  "name": "hea-experiment-dart-commonjs-module",
+  "private": true,
+  "type": "commonjs",
+  "main": "./build/execute.dart.node.js",
+  "typings": "./web/execute.d.ts",
+  "scripts": {
+    "build": "webdev build",
+    "lint:dart": "dart analyze",
+    "lint:js": "eslint --ext \".js,.ts\" --ignore-path .gitignore .",
+    "lint:prettier": "prettier --check .",
+    "lint": "npm run lint:dart && npm run lint:js && npm run lint:prettier",
+    "lintfix": "prettier --write --list-different . && npm run lint:js -- --fix && dart fix --apply",
+    "test:dart": "dart test",
+    "test:js": "jest",
+    "test": "run test:dart && npm run test:js"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.5.1",
+    "@typescript-eslint/eslint-plugin": "^5.24.0",
+    "@typescript-eslint/parser": "^5.24.0",
+    "eslint": "^8.15.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "jest": "^28.1.0",
+    "prettier": "^2.6.2",
+    "ts-jest": "^28.0.2"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    }
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "all",
+    "printWidth": 120
+  }
+}

@@ -1,21 +1,23 @@
 import { Ref, unref } from 'vue';
-import { DateTime, FixedOffsetZone } from 'luxon';
+import { DateTime, Zone, FixedOffsetZone } from 'luxon';
 import type { Log } from '../types/api';
 import type { TimeOfDay } from '../types/datetime';
+import { pages } from './genPages_sleep';
 
 export interface User {
   id: number;
   name: string;
-  timezone: string | null;
+  zone: Zone;
   navigations: UserNavigation[];
   navigationsRecent?: string;
   active: UserActive[];
-  inBed: UserSleep[];
-  asleep: UserSleep[];
+  sleeps: UserSleep[];
+  autofills: UserAutofill[];
   resets: UserReset[];
-  checkInCount: number;
-  currentlyActive: boolean;
+  version?: string;
 
+  person?: string[];
+  otherHealthAspects?: string[];
   trackingTools?: string[];
   trackingToolModel?: string;
   timeGoBed?: TimeOfDay;
@@ -23,11 +25,26 @@ export interface User {
   minutesAsleep?: number;
   sleepLatency?: number;
   sleepGoals?: string[];
+  timeToSleep?: string[];
+  doingBeforeBed?: string[];
   goalsSleepTime?: TimeOfDay;
   goalsWakeTime?: TimeOfDay;
+  includedActivities?: string[];
   optInGroup?: string;
   groupAccept?: string;
   continueAction?: string;
+  checkInDay: number;
+  checkInTotal: number;
+
+  // Derived
+  sleepEfficiency?: number;
+  psqiScore?: number;
+  sleepEfficiencyReview?: number;
+  psqiScoreReview?: number;
+  checkInCount: number;
+  currentlyActive: boolean;
+  pageCount: number;
+  pageTotal: number;
 }
 
 export interface UserEvent {
@@ -39,8 +56,15 @@ export interface UserPeriod {
   end: DateTime;
 }
 
+export interface UserNestedPeriod extends UserPeriod {
+  innerStart: DateTime;
+  innerEnd: DateTime;
+}
+
+type UserAutofill = Partial<UserNestedPeriod>;
+
 interface UserNavigation extends UserEvent {
-  page: string;
+  page: string | null;
 }
 
 interface UserReset extends UserEvent {
@@ -49,7 +73,7 @@ interface UserReset extends UserEvent {
 
 type UserActive = UserPeriod;
 
-interface UserSleep extends UserPeriod, UserEvent {}
+interface UserSleep extends UserEvent, UserNestedPeriod {}
 
 function processSleepTimeOfDay(reference: DateTime, timeOfDay: TimeOfDay): DateTime {
   // Treat a time-of-day as "last night"
@@ -79,6 +103,13 @@ function expectTimeOfDay(data: unknown): TimeOfDay | undefined {
   return undefined;
 }
 
+function expectDateTime(data: unknown, zone: Zone): DateTime | undefined {
+  if (!data || typeof data != 'string') {
+    return undefined;
+  }
+  return DateTime.fromISO(data, { zone });
+}
+
 function expectStringArray(data: unknown): string[] | undefined {
   if (Array.isArray(data)) {
     // Note: If any array element is not a string, this will be incorrect
@@ -96,12 +127,118 @@ function expectOneOrNone(data: unknown): string | undefined {
   return undefined;
 }
 
+function expectNumber(data: unknown): number | undefined {
+  if (typeof data === 'number') {
+    return data;
+  } else if (typeof data === 'string') {
+    return parseInt(data, 10);
+  }
+  return undefined;
+}
+
+function sleepEfficiencyFromData(d: Record<string, unknown>, prefix = ''): number | undefined {
+  const goBed = expectTimeOfDay(d[prefix + 'time-go-bed']);
+  if (goBed === undefined) {
+    return undefined;
+  }
+  const outBed = expectTimeOfDay(d[prefix + 'time-out-bed']);
+  if (outBed === undefined) {
+    return undefined;
+  }
+  const bedDuration = (outBed.minute + outBed.hour * 60 - (goBed.minute + goBed.hour * 60) + 24 * 60) % (24 * 60);
+  const sleepDuration = expectNumber(d[prefix + 'minutes-asleep']);
+  if (sleepDuration === undefined) {
+    return undefined;
+  }
+  const sleepEfficiencyPercent = Math.round((sleepDuration / bedDuration) * 100);
+  return sleepEfficiencyPercent;
+}
+
+function psqiScoreFromData(d: Record<string, unknown>, prefix = ''): number | undefined {
+  const subjectiveSleepQuality = expectNumber(expectOneOrNone(d[prefix + 'overall-quality']));
+  if (subjectiveSleepQuality === undefined) {
+    return undefined;
+  }
+  const fallAsleep = expectNumber(d[prefix + 'sleep-latency']);
+  let pointsFallAsleep = 0;
+  if (fallAsleep === undefined) {
+    return undefined;
+  } else if (fallAsleep > 60) {
+    pointsFallAsleep = 3;
+  } else if (fallAsleep > 30) {
+    pointsFallAsleep = 2;
+  } else if (fallAsleep > 15) {
+    pointsFallAsleep = 2;
+  }
+  const howOftenAsleep30Minutes = expectNumber(expectOneOrNone(d[prefix + 'how-often-asleep-30-minutes']));
+  if (howOftenAsleep30Minutes === undefined) {
+    return undefined;
+  }
+  const sleepLatency = Math.ceil((pointsFallAsleep + howOftenAsleep30Minutes) / 2);
+  const sleepEfficiencyPercent = sleepEfficiencyFromData(d);
+  if (sleepEfficiencyPercent === undefined) {
+    return undefined;
+  }
+  let sleepEfficiency = 0;
+  if (sleepEfficiencyPercent < 65) {
+    sleepEfficiency = 3;
+  } else if (sleepEfficiencyPercent < 75) {
+    sleepEfficiency = 2;
+  } else if (sleepEfficiencyPercent < 85) {
+    sleepEfficiency = 1;
+  }
+  const keys = [
+    'how-often-wake-up',
+    'how-often-bathroom',
+    'how-often-breath',
+    'how-often-snore',
+    'how-often-cold',
+    'how-often-hot',
+    'how-often-bad-dreams',
+    'how-often-pain',
+    'how-often-other',
+  ];
+  let pointsDisturbance = 0;
+  for (const key of keys) {
+    const score = expectNumber(expectOneOrNone(d[prefix + key]));
+    if (score === undefined) {
+      continue;
+    }
+    pointsDisturbance += score;
+  }
+  const sleepDisturbances = Math.ceil(pointsDisturbance / keys.length);
+  const sleepMedication = expectNumber(expectOneOrNone(d[prefix + 'how-sleep-medication']));
+  if (sleepMedication === undefined) {
+    return undefined;
+  }
+  const pointsFatigue = expectNumber(expectOneOrNone(d[prefix + 'how-fatigue']));
+  if (pointsFatigue === undefined) {
+    return undefined;
+  }
+  const pointsEnthusiasm = expectNumber(expectOneOrNone(d[prefix + 'how-enthusiasm']));
+  if (pointsEnthusiasm === undefined) {
+    return undefined;
+  }
+  const daytmeDysfunction = pointsFatigue + pointsEnthusiasm;
+
+  const overallScore =
+    sleepLatency + sleepEfficiency + sleepDisturbances + subjectiveSleepQuality + sleepMedication + daytmeDysfunction;
+  return overallScore;
+}
+
 function validateCheckIn(checkIn: unknown): checkIn is LogCheckIn {
   const c = checkIn as LogCheckIn;
   if (!c.time || c['sleep-duration'] == null || !c['time-asleep-bed'] || !c['time-go-bed'] || !c['time-out-bed']) {
     return false;
   }
   return true;
+}
+
+function pageTotal(): number {
+  return pages.length;
+}
+function pageCount(name: string): number {
+  return pages.indexOf(name);
 }
 
 function processLogs(logs: Log[]): Record<string, User> {
@@ -111,20 +248,26 @@ function processLogs(logs: Log[]): Record<string, User> {
 
   for (const log of logs) {
     const userId = log.user.id;
+    const userName = log.user.name;
     const zone = FixedOffsetZone.parseSpecifier('UTC' + (log.tzClient ?? '+0'));
     let timestamp = DateTime.fromISO(log.timestamp, { zone });
 
     const user = (users[userId.toString(10)] ??= {
       id: userId,
-      name: `User ${userId.toString()}`,
-      timezone: log.tzClient,
+      name: userName,
+      zone: zone,
       navigations: [],
       active: [],
-      inBed: [],
-      asleep: [],
+      sleeps: [],
+      autofills: [],
       resets: [],
+      // Derived
       checkInCount: 0,
+      checkInDay: 0,
+      checkInTotal: 7,
       currentlyActive: false,
+      pageCount: 0,
+      pageTotal: pageTotal(),
     });
 
     if (log.key === 'navigate') {
@@ -133,7 +276,10 @@ function processLogs(logs: Log[]): Record<string, User> {
         timestamp,
         page,
       });
-      user.navigationsRecent = page;
+      if (page != 'home' && page != null) {
+        user.navigationsRecent = page;
+        user.pageCount = pageCount(page);
+      }
     }
     if (log.key === 'state') {
       const state: boolean = JSON.parse(log.value) as boolean;
@@ -152,6 +298,12 @@ function processLogs(logs: Log[]): Record<string, User> {
         lastActive = null;
       }
     }
+    if (log.key === 'version') {
+      const data: unknown = JSON.parse(log.value);
+      if (typeof data === 'string') {
+        user.version = data;
+      }
+    }
     if (log.key === 'sleep') {
       const data: unknown = JSON.parse(log.value);
       if (data === null) {
@@ -166,6 +318,8 @@ function processLogs(logs: Log[]): Record<string, User> {
       if (typeof data === 'object') {
         const d = data as Record<string, unknown>;
         // Extract key information
+        user.person = expectStringArray(d['person']);
+        user.otherHealthAspects = expectStringArray(d['other-health-aspects']);
         user.trackingTools = expectStringArray(d['tracking-tool']);
         user.trackingToolModel = d['tracking-tool-model'] as string | undefined;
         user.timeGoBed = expectTimeOfDay(d['time-go-bed']);
@@ -173,11 +327,51 @@ function processLogs(logs: Log[]): Record<string, User> {
         user.minutesAsleep = d['minutes-asleep'] as number | undefined;
         user.sleepLatency = d['sleep-latency'] as number | undefined;
         user.sleepGoals = expectStringArray(d['sleep-goals']);
+        user.timeToSleep = expectStringArray(d['time-to-sleep']);
+        user.doingBeforeBed = expectStringArray(d['doing-before-bed']);
         user.goalsSleepTime = expectTimeOfDay(d['goals-sleep-time']);
         user.goalsWakeTime = expectTimeOfDay(d['goals-wake-time']);
+        user.includedActivities = expectStringArray(d['included-activities']);
         user.optInGroup = expectOneOrNone(d['opt-in-group']);
         user.groupAccept = expectOneOrNone(d['group-accept']);
         user.continueAction = expectOneOrNone(d['continue-action']);
+        // Derived
+        user.psqiScore = psqiScoreFromData(d);
+        user.sleepEfficiency = sleepEfficiencyFromData(d); // TODO
+        user.psqiScoreReview = psqiScoreFromData(d, 'review');
+        user.sleepEfficiencyReview = sleepEfficiencyFromData(d, 'review'); // TODO
+      }
+    }
+    if (log.key === 'sleep-autofill') {
+      // {"in-bed":"2022-05-18T01:45:00.000","asleep":"2022-05-18T02:07:00.000","awake":null,"out-bed":"2022-05-18T09:02:00.000"}
+      const data: unknown = JSON.parse(log.value);
+      if (data === null) {
+        continue;
+      }
+      if (typeof data === 'object') {
+        const d = data as Record<string, unknown>;
+        const autofill = {
+          start: expectDateTime(d['in-bed'], zone),
+          innerStart: expectDateTime(d['asleep'], zone),
+          innerEnd: expectDateTime(d['awake'], zone),
+          end: expectDateTime(d['out-bed'], zone),
+        };
+        user.autofills = user.autofills.filter(
+          (o) =>
+            o.start?.toSeconds() !== autofill.start?.toSeconds() && o.end?.toSeconds() !== autofill.end?.toSeconds(),
+        );
+        user.autofills.push(autofill);
+      }
+    }
+    if (log.key === 'sleep-checkin-progress') {
+      const data: unknown = JSON.parse(log.value);
+      if (data === null) {
+        continue;
+      }
+      if (typeof data === 'object') {
+        const d = data as Record<string, unknown>;
+        user.checkInDay = d['day'] as number;
+        user.checkInTotal = d['total'] as number;
       }
     }
     if (log.key === 'sleep-checkin') {
@@ -196,17 +390,14 @@ function processLogs(logs: Log[]): Record<string, User> {
         const checkIn: unknown = data[0];
         if (checkIn && validateCheckIn(checkIn)) {
           timestamp = DateTime.fromISO(checkIn.time, { zone });
-          user.inBed.push({
+          const asleepStart = processSleepTimeOfDay(timestamp, checkIn['time-asleep-bed']);
+          const asleepEnd = asleepStart.plus({ minutes: checkIn['sleep-duration'] ?? 0 });
+          user.sleeps.push({
             timestamp,
             start: processSleepTimeOfDay(timestamp, checkIn['time-go-bed']),
             end: processSleepTimeOfDay(timestamp, checkIn['time-out-bed']),
-          });
-          const asleepStart = processSleepTimeOfDay(timestamp, checkIn['time-asleep-bed']);
-          const asleepEnd = asleepStart.plus({ minutes: checkIn['sleep-duration'] ?? 0 });
-          user.asleep.push({
-            timestamp,
-            start: asleepStart,
-            end: asleepEnd,
+            innerStart: asleepStart,
+            innerEnd: asleepEnd,
           });
         }
       }

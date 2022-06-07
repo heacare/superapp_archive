@@ -1,11 +1,10 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Page;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
 import 'package:hea/services/notification_service.dart';
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/services/sleep_checkin_service.dart';
-import 'package:hea/services/logging_service.dart';
 import 'package:hea/services/health_service.dart';
 import 'package:hea/utils/sleep_notifications.dart';
 import 'package:hea/widgets/page.dart';
@@ -64,8 +63,6 @@ class SleepCheckinState extends State<SleepCheckin> {
     () async {
       SleepAutofill? sleepAutofill =
           await serviceLocator<HealthService>().autofillRead1Day();
-      serviceLocator<LoggingService>()
-          .createLog("sleep-autofill", sleepAutofill);
       if (sleepAutofill == null) {
         autofillMessageGoBed =
             "No autofill data available. Please provide your best estimate";
@@ -162,7 +159,7 @@ class SleepCheckinState extends State<SleepCheckin> {
                       children: <Widget>[
                         IconButton(
                             iconSize: 38,
-                            icon: FaIcon(FontAwesomeIcons.times,
+                            icon: FaIcon(FontAwesomeIcons.xmark,
                                 color: Theme.of(context).colorScheme.primary),
                             onPressed: () {
                               Navigator.of(context).pop();
@@ -180,6 +177,7 @@ class SleepCheckinState extends State<SleepCheckin> {
         child: Padding(
           padding: const EdgeInsets.fromLTRB(18.0, 0.0, 18.0, 5.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text("Did you manage to wind-down before bedtime?",
                   style: Theme.of(context).textTheme.titleLarge),
@@ -221,7 +219,9 @@ class SleepCheckinState extends State<SleepCheckin> {
                   defaultTime: const TimeOfDay(hour: 20, minute: 0),
                   time: data.timeGoBed,
                   onChange: (TimeOfDay value) {
-                    data.timeGoBed = value;
+                    setState(() {
+                      data.timeGoBed = value;
+                    });
                   }),
               Text(autofillMessageGoBed ?? "",
                   style: Theme.of(context)
@@ -235,7 +235,9 @@ class SleepCheckinState extends State<SleepCheckin> {
                   defaultTime: const TimeOfDay(hour: 21, minute: 0),
                   time: data.timeAsleepBed,
                   onChange: (TimeOfDay value) {
-                    data.timeAsleepBed = value;
+                    setState(() {
+                      data.timeAsleepBed = value;
+                    });
                   }),
               Text(autofillMessageAsleepBed ?? "",
                   style: Theme.of(context)
@@ -250,10 +252,12 @@ class SleepCheckinState extends State<SleepCheckin> {
               const SizedBox(height: 64.0),
               Text("How easily did you fall asleep?",
                   style: Theme.of(context).textTheme.titleLarge),
-              Row(children: const [
-                Text("Not easy"),
-                Text("Very easy"),
-              ], mainAxisAlignment: MainAxisAlignment.spaceBetween),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const [
+                    Text("Not easy"),
+                    Text("Very easy"),
+                  ]),
               Slider(
                 value: data.easyAsleep.toDouble(),
                 max: 4,
@@ -272,7 +276,9 @@ class SleepCheckinState extends State<SleepCheckin> {
                   defaultTime: const TimeOfDay(hour: 9, minute: 0),
                   time: data.timeOutBed,
                   onChange: (TimeOfDay value) {
-                    data.timeOutBed = value;
+                    setState(() {
+                      data.timeOutBed = value;
+                    });
                   }),
               Text(autofillMessage ?? "",
                   style: Theme.of(context)
@@ -298,10 +304,12 @@ class SleepCheckinState extends State<SleepCheckin> {
               Text(
                   "How easily did you shift from feeling groggy after waking to feeling fully awake?",
                   style: Theme.of(context).textTheme.titleLarge),
-              Row(children: const [
-                Text("Easy"),
-                Text("Difficult"),
-              ], mainAxisAlignment: MainAxisAlignment.spaceBetween),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const [
+                    Text("Easy"),
+                    Text("Difficult"),
+                  ]),
               Slider(
                 value: data.easyWake.toDouble(),
                 max: 4,
@@ -317,10 +325,12 @@ class SleepCheckinState extends State<SleepCheckin> {
                 Text("Was it a stressful day for you yesterday?",
                     style: Theme.of(context).textTheme.titleLarge),
               if (stress)
-                Row(children: const [
-                  Text("Not at all"),
-                  Text("Very"),
-                ], mainAxisAlignment: MainAxisAlignment.spaceBetween),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [
+                      Text("Not at all"),
+                      Text("Very"),
+                    ]),
               if (stress)
                 Slider(
                   value: data.stressScore.toDouble(),
@@ -337,10 +347,12 @@ class SleepCheckinState extends State<SleepCheckin> {
                 Text("How did you feel about your meal choices yesterday?",
                     style: Theme.of(context).textTheme.titleLarge),
               if (diet)
-                Row(children: const [
-                  Text("Very dissatisfied"),
-                  Text("Very satisfied"),
-                ], mainAxisAlignment: MainAxisAlignment.spaceBetween),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [
+                      Text("Very dissatisfied"),
+                      Text("Very satisfied"),
+                    ]),
               if (diet)
                 Slider(
                   value: data.dietScore.toDouble(),
@@ -357,10 +369,12 @@ class SleepCheckinState extends State<SleepCheckin> {
                 Text("Did you do any exercise yesterday?",
                     style: Theme.of(context).textTheme.titleLarge),
               if (exercise)
-                Row(children: const [
-                  Text("None"),
-                  Text("More than enough"),
-                ], mainAxisAlignment: MainAxisAlignment.spaceBetween),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [
+                      Text("None"),
+                      Text("More than enough"),
+                    ]),
               if (exercise)
                 Slider(
                   value: data.exerciseScore.toDouble(),
@@ -374,7 +388,6 @@ class SleepCheckinState extends State<SleepCheckin> {
                 ),
               if (exercise) const SizedBox(height: 64.0),
             ],
-            crossAxisAlignment: CrossAxisAlignment.start,
           ),
         ),
       )),
@@ -383,7 +396,7 @@ class SleepCheckinState extends State<SleepCheckin> {
           if (validate(context)) {
             await serviceLocator<SleepCheckinService>().add(data);
             Navigator.of(context).pop();
-            scheduleSleepNotifications();
+            scheduleSleepNotifications(debounce: false);
             if (progress.allDone) {
               // Set #18
               await serviceLocator<NotificationService>().showContentReminder(

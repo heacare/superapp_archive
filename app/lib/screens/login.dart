@@ -41,7 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
         CircularProgressIndicator(),
         Text("Logging in...")
       ])));
-      await _auth.login(_email.text, _password.text);
+      await _auth.login(_email.text.trim(), _password.text);
       // Get new JWT Token and create user in backend if necessary
       await serviceLocator<ApiManager>().fetchJwtToken();
       ScaffoldMessenger.of(context).clearSnackBars();
@@ -107,9 +107,9 @@ class _LoginScreenState extends State<LoginScreen> {
             )),
             const SizedBox(height: 24.0),
             Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: Text("Say hello to longevity!",
-                    style: Theme.of(context).textTheme.headline1),
-                padding: const EdgeInsets.symmetric(vertical: 16.0)),
+                    style: Theme.of(context).textTheme.headline1)),
             Text(
                 "We provide proactive, preventive & personalised healthcare to keep you at the apex of your health.",
                 style: Theme.of(context).textTheme.headline2?.copyWith(
@@ -167,6 +167,7 @@ class _LoginScreenState extends State<LoginScreen> {
           const SizedBox(height: 24.0),
           TextFormField(
             controller: _email,
+            keyboardType: TextInputType.emailAddress,
             decoration: const InputDecoration(labelText: "Email"),
             validator: FormBuilderValidators.email(),
           ),

@@ -6,6 +6,7 @@ export interface Log {
   tzClient: string | null;
   user: {
     id: number;
+    name: string;
   };
   value: string;
 }

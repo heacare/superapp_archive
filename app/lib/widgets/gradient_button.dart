@@ -22,34 +22,32 @@ class GradientButton extends StatelessWidget {
     final a = firstColor ?? Theme.of(context).colorScheme.secondary;
     final b = secondColor ?? Theme.of(context).colorScheme.primary;
 
-    return SizedBox(
-        height: 50.0,
-        child: GestureDetector(
-          onTap: onPressed,
-          child: Container(
-            constraints: const BoxConstraints(minWidth: 88.0, minHeight: 36.0),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              gradient: noGradient
-                  ? null
-                  : LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [a, b],
-                    ),
-              color: noGradient ? const Color(0xFFEBEBEB) : null,
-              borderRadius: const BorderRadius.all(Radius.circular(15.0)),
-            ),
-            child: Text(text.toUpperCase(),
-                style: TextStyle(
-                    fontFamily: "Poppins",
-                    letterSpacing: 1.0,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.w600,
-                    height: 1.5,
-                    color: noGradient ? Colors.black : Colors.white),
-                textAlign: TextAlign.center),
-          ),
-        ));
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        alignment: Alignment.center,
+        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        decoration: BoxDecoration(
+          gradient: noGradient
+              ? null
+              : LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [a, b],
+                ),
+          color: noGradient ? const Color(0xFFEBEBEB) : null,
+          borderRadius: const BorderRadius.all(Radius.circular(15.0)),
+        ),
+        child: Text(text.toUpperCase(),
+            style: TextStyle(
+                fontFamily: "Poppins",
+                letterSpacing: 1.0,
+                fontSize: 20.0,
+                fontWeight: FontWeight.w600,
+                height: 1.5,
+                color: noGradient ? Colors.black : Colors.white),
+            textAlign: TextAlign.center),
+      ),
+    );
   }
 }

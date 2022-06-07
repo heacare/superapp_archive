@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart' show TimeOfDay;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -15,7 +16,7 @@ const String channel = "sleep_content";
 // Base ID
 const int baseId = 100;
 
-Future<void> scheduleSleepNotifications() async {
+Future<void> _scheduleSleepNotifications() async {
   String s = serviceLocator<SharedPreferences>().getString('sleep') ?? "";
   await serviceLocator<NotificationService>()
       .cancelSchedulesByChannelKey("sleep_content");
@@ -479,7 +480,7 @@ Future<void> scheduleSleepNotifications() async {
         kvReadStringList("sleep", "routine-add-30m") +
         kvReadStringList("sleep", "routine-add-15m");
     if (routine.isNotEmpty) {
-      activities = " Your activities are " + routine.join(", ");
+      activities = " Your activities are ${routine.join(", ")}";
     }
     await serviceLocator<NotificationService>().showSimpleReminder(
       baseId + 50 * 10 + 1,
@@ -554,4 +555,21 @@ Future<void> scheduleSleepNotifications() async {
         "We miss you ☹️.  If you need some help, feel free to contact us directly.",
         minHoursLater: firstReminder + nextReminder * 2);
   }
+}
+
+Timer? debounceTimer;
+
+Future<void> scheduleSleepNotifications({bool debounce = true}) async {
+  if (!debounce) {
+    await _scheduleSleepNotifications();
+    return;
+  }
+  if (debounceTimer != null) {
+    debounceTimer!.cancel();
+  }
+  debounceTimer = Timer(const Duration(seconds: 2), () async {
+    await _scheduleSleepNotifications();
+
+    debounceTimer = null;
+  });
 }

@@ -91,7 +91,7 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
     String providerName = platform == TargetPlatform.iOS
         ? "Apple Health"
         : "Google Fit"; // Assume all other platforms will log in with Google
-    String buttonText = "Sync with " + providerName;
+    String buttonText = "Sync with $providerName";
 
     return SafeArea(
         child: Container(
@@ -111,14 +111,13 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
                       style: Theme.of(context).textTheme.headline1),
                   const SizedBox(height: 10.0),
                   Text(
-                      "I use " +
-                          providerName +
-                          " to personalise your recommendations and help you live longer!",
+                      "I use $providerName to personalise your recommendations and help you live longer!",
                       style: Theme.of(context).textTheme.headline2?.copyWith(
                           fontWeight: FontWeight.w400,
                           height: 1.4,
                           color: const Color(0xFF707070))),
                   Padding(
+                      padding: const EdgeInsets.only(top: 30.0),
                       child: Column(children: [
                         GradientButton(
                             text: "Skip", onPressed: skip, noGradient: true),
@@ -127,8 +126,7 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
                           text: "SYNC DATA",
                           onPressed: fetchData,
                         ),
-                      ]),
-                      padding: const EdgeInsets.only(top: 30.0))
+                      ]))
                 ])));
   }
 
@@ -139,7 +137,7 @@ class _HealthSetupScreenState extends State<HealthSetupScreen> {
           For Android please check your OAUTH2 client ID is correct in Google Developer Console.
           For iOS check your permissions in Apple Health.
         '''),
-      ElevatedButton(child: const Text("Try again"), onPressed: fetchData)
+      ElevatedButton(onPressed: fetchData, child: const Text("Try again"))
     ]);
   }
 

@@ -1,1 +1,1 @@
-Notification fixes and add question about device
+Add the post-journey 30-day check-in and other minor bugfixes

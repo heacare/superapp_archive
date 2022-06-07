@@ -5,36 +5,32 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:hea/services/service_locator.dart';
 
 dynamic kvDump(String module) {
-  String? json =
-      serviceLocator<SharedPreferences>().getString('data-' + module);
+  String? json = serviceLocator<SharedPreferences>().getString('data-$module');
   json ??= "{}";
   return jsonDecode(json);
 }
 
 kvWrite<T>(String module, String key, T value) {
-  String? json =
-      serviceLocator<SharedPreferences>().getString('data-' + module);
+  String? json = serviceLocator<SharedPreferences>().getString('data-$module');
   json ??= "{}";
   Map object = jsonDecode(json);
   object[key] = value;
   json = jsonEncode(object);
-  serviceLocator<SharedPreferences>().setString('data-' + module, json);
+  serviceLocator<SharedPreferences>().setString('data-$module', json);
 }
 
 T? kvDelete<T>(String module, String key) {
-  String? json =
-      serviceLocator<SharedPreferences>().getString('data-' + module);
+  String? json = serviceLocator<SharedPreferences>().getString('data-$module');
   json ??= "{}";
   Map object = jsonDecode(json);
   object.remove(key);
   json = jsonEncode(object);
-  serviceLocator<SharedPreferences>().setString('data-' + module, json);
+  serviceLocator<SharedPreferences>().setString('data-$module', json);
   return null;
 }
 
 T? kvRead<T>(String module, String key) {
-  String? json =
-      serviceLocator<SharedPreferences>().getString('data-' + module);
+  String? json = serviceLocator<SharedPreferences>().getString('data-$module');
   json ??= "{}";
   Map object = jsonDecode(json);
   dynamic v = object[key];

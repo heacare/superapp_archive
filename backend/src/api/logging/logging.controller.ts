@@ -35,6 +35,7 @@ export class LoggingController {
         ...log,
         user: {
           id: log.user.id,
+          name: log.user.name,
         },
       };
     });

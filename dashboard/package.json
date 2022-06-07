@@ -14,21 +14,32 @@
     "test": "jest"
   },
   "devDependencies": {
-    "@nuxtjs/tailwindcss": "^5.0.4",
+    "@nuxtjs/tailwindcss": "^5.1.2",
     "@types/jest": "^27.5.1",
     "@types/luxon": "^2.3.2",
-    "@typescript-eslint/eslint-plugin": "^5.24.0",
-    "@typescript-eslint/parser": "^5.24.0",
-    "eslint": "^8.15.0",
+    "@typescript-eslint/eslint-plugin": "^5.27.0",
+    "@typescript-eslint/parser": "^5.27.0",
+    "eslint": "^8.16.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-vue": "^8.7.1",
+    "eslint-plugin-vue": "^9.0.1",
     "jest": "^28.1.0",
     "luxon": "^2.4.0",
     "nuxt": "3.0.0-rc.3",
-    "prettier": "^2.6.2"
+    "prettier": "^2.6.2",
+    "ts-jest": "^28.0.3"
   },
   "dependencies": {
-    "vue-tsc": "^0.34.15"
+    "vue-tsc": "^0.35.2"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    }
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "all",
+    "printWidth": 120
   }
 }

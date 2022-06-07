@@ -13,6 +13,7 @@ import 'package:hea/services/service_locator.dart';
 import 'package:hea/services/logging_service.dart';
 import 'package:hea/services/user_service.dart';
 //import 'package:hea/providers/map.dart';
+import 'package:hea/utils/sleep_log.dart';
 
 import 'package:hea/widgets/fancy_bottom_bar.dart';
 
@@ -29,8 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     super.activate();
-    serviceLocator<LoggingService>().createLog('navigate', 'home');
-    serviceLocator<LoggingService>().createLog('sleep', kvDump("sleep"));
+    sleepLog();
     return Scaffold(
         body: pageFor(index),
         bottomNavigationBar: FancyBottomNav(
@@ -61,11 +61,6 @@ class _HomeScreenState extends State<HomeScreen> {
       initialData: null,
       create: (context) => serviceLocator<UserService>().getCurrentUser(),
       child: child,
-      catchError: (context, error) {
-        log("$error");
-        log("${StackTrace.current}");
-        return null;
-      },
     );
   }
 }

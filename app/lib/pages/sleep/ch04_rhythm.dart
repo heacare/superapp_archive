@@ -224,7 +224,7 @@ class RhythmSettingCourseState extends State<RhythmSettingCourse> {
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0.0),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
-            prefix + "",
+            prefix,
             style: Theme.of(context).textTheme.bodyLarge,
           ),
           DurationPickerBlock(
@@ -247,7 +247,7 @@ class RhythmSettingCourseState extends State<RhythmSettingCourse> {
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 0.0),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
-            prefix + "",
+            prefix,
             style: Theme.of(context).textTheme.bodyLarge,
           ),
           TimePickerBlock(

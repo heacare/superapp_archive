@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hea/utils/sleep_notifications.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,6 +10,9 @@ import 'package:hea/widgets/select_list.dart';
 import 'package:hea/services/service_locator.dart';
 import 'package:hea/services/logging_service.dart';
 import 'package:hea/pages/sleep/lookup.dart';
+import 'package:hea/pages/sleep_review/lookup.dart';
+import 'package:hea/utils/sleep_notifications.dart';
+import 'package:hea/utils/sleep_log.dart';
 
 typedef PageBuilder = Widget Function();
 
@@ -41,6 +43,23 @@ class Lesson {
   }
 }
 
+String? rlookup(Widget w) {
+  String? s = sleep.rlookup(w.runtimeType);
+  if (s != null) {
+    serviceLocator<SharedPreferences>().setString('sleep', s);
+    sleepLog();
+    return s;
+  }
+
+  s = sleep_review.rlookup(w.runtimeType);
+  if (s != null) {
+    serviceLocator<SharedPreferences>().setString('sleep_review', s);
+    return s;
+  }
+
+  return null;
+}
+
 class BasePage extends StatelessWidget {
   BasePage(
       {Key? key,
@@ -58,14 +77,9 @@ class BasePage extends StatelessWidget {
   final Widget page;
   final bool hideNext;
 
-  Timer? _timer;
-
   @override
   Widget build(BuildContext context) {
-    if (_timer != null) {
-      _timer!.cancel();
-    }
-    _timer = Timer(const Duration(seconds: 5), scheduleSleepNotifications);
+    scheduleSleepNotifications();
     return Scaffold(
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(154),
@@ -79,7 +93,7 @@ class BasePage extends StatelessWidget {
                       children: <Widget>[
                         IconButton(
                             iconSize: 38,
-                            icon: FaIcon(FontAwesomeIcons.times,
+                            icon: FaIcon(FontAwesomeIcons.xmark,
                                 color: Theme.of(context).colorScheme.primary),
                             onPressed: () {
                               Navigator.of(context).pop();
@@ -93,20 +107,14 @@ class BasePage extends StatelessWidget {
                         if (prevPage != null)
                           IconButton(
                               iconSize: 24,
-                              icon: FaIcon(FontAwesomeIcons.undo,
+                              icon: FaIcon(FontAwesomeIcons.arrowRotateLeft,
                                   color: Theme.of(context).colorScheme.primary),
                               onPressed: () {
                                 Widget prev = prevPage!();
-                                String? s = sleep.rlookup(prev.runtimeType);
+                                String? s = rlookup(prev);
                                 debugPrint(s);
-                                if (s != null) {
-                                  serviceLocator<SharedPreferences>()
-                                      .setString('sleep', s);
-                                }
                                 serviceLocator<LoggingService>()
                                     .createLog('navigate', s);
-                                serviceLocator<LoggingService>()
-                                    .createLog('sleep', kvDump("sleep"));
                                 Navigator.of(context)
                                     .pushReplacement(MaterialPageRoute<void>(
                                   builder: (BuildContext context) => prev,
@@ -137,14 +145,10 @@ class BasePage extends StatelessWidget {
                   return;
                 }
                 Widget next = nextPage!();
-                String? s = sleep.rlookup(next.runtimeType);
+                String? s = rlookup(next);
                 debugPrint(s);
-                if (s != null) {
-                  serviceLocator<SharedPreferences>().setString('sleep', s);
-                }
                 serviceLocator<LoggingService>().createLog('navigate', s);
-                serviceLocator<LoggingService>()
-                    .createLog('sleep', kvDump("sleep"));
+                sleepLog();
                 Navigator.of(context).pushReplacement(MaterialPageRoute<void>(
                   builder: (BuildContext context) => next,
                 ));
@@ -183,7 +187,7 @@ abstract class Page extends StatelessWidget {
 class PageImage extends StatelessWidget {
   final Widget child;
   final double? maxHeight;
-  const PageImage(this.child, {this.maxHeight});
+  const PageImage(this.child, {this.maxHeight, Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -297,6 +301,21 @@ class MultipleChoicePageState extends State<MultipleChoicePage> {
         widget.minSelected;
   }
 
+  void skipNext() {
+    if (widget.nextPage == null) {
+      return;
+    }
+    // This is pretty bad code, duplicated from BasePage
+    Widget next = widget.nextPage!();
+    String? s = rlookup(next);
+    debugPrint(s);
+    serviceLocator<LoggingService>().createLog('navigate', s);
+    sleepLog();
+    Navigator.of(context).pushReplacement(MaterialPageRoute<void>(
+      builder: (BuildContext context) => next,
+    ));
+  }
+
   @override
   void initState() {
     super.initState();
@@ -374,11 +393,18 @@ class MultipleChoicePageState extends State<MultipleChoicePage> {
               defaultSelected: selected,
               defaultOther: other,
               onChange: (List<String> c) {
+                List<String> prevSelected = selected;
                 selected = c;
                 kvWrite<List<String>>("sleep", widget.valueName, savedValues);
                 setState(() {
                   hideNext = !canNext();
                 });
+                if (widget.maxChoice == 1 &&
+                    savedValues.length == widget.minSelected &&
+                    other == "" &&
+                    prevSelected.isEmpty) {
+                  skipNext();
+                }
               },
               onChangeOther: (String c) {
                 other = c;
@@ -440,6 +466,12 @@ class TimePickerBlockState extends State<TimePickerBlock> {
   Widget build(BuildContext context) {
     TimeOfDay? showTime = widget.time ?? selectedTime;
     return ElevatedButton(
+      onPressed: () => onTap(context),
+      style: TextButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+          primary: Colors.black,
+          backgroundColor: const Color(0xFFEBEBEB),
+          elevation: 0.0),
       child: Text(showTime != null ? showTime.format(context) : "00:00",
           textAlign: TextAlign.center,
           style: TextStyle(
@@ -449,12 +481,6 @@ class TimePickerBlockState extends State<TimePickerBlock> {
                 : const Color(0xFFDDDDDD),
             fontSize: 20.0,
           )),
-      onPressed: () => onTap(context),
-      style: TextButton.styleFrom(
-          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-          primary: Colors.black,
-          backgroundColor: const Color(0xFFEBEBEB),
-          elevation: 0.0),
     );
   }
 }
@@ -632,6 +658,8 @@ class DurationPickerBlock extends StatefulWidget {
 class DurationPickerBlockState extends State<DurationPickerBlock> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   Duration selectedDuration = const Duration();
+  Duration prevSelectedDuration = const Duration();
+  Key key = UniqueKey();
 
   @override
   void initState() {
@@ -642,7 +670,11 @@ class DurationPickerBlockState extends State<DurationPickerBlock> {
   @override
   Widget build(BuildContext context) {
     selectedDuration = widget.initialDuration ?? const Duration();
-    debugPrint("selected:" + selectedDuration.toString());
+    debugPrint("selected:$selectedDuration");
+    if (selectedDuration != prevSelectedDuration) {
+      key = UniqueKey();
+    }
+    prevSelectedDuration = selectedDuration;
     if (widget.minutesOnly) {
       return Form(
           key: _formKey,
@@ -651,14 +683,18 @@ class DurationPickerBlockState extends State<DurationPickerBlock> {
               SizedBox(
                   width: 72.0,
                   child: TextFormField(
-                      key: Key(selectedDuration.toString()),
+                      key: key,
                       textAlign: TextAlign.end,
                       initialValue: (selectedDuration.inMinutes).toString(),
+                      onFieldSubmitted: (String value) {
+                        debugPrint("submit");
+                        setState(() {
+                          key = UniqueKey();
+                        });
+                      },
                       onChanged: (String value) {
                         int minutes = int.tryParse(value) ?? 0;
-                        setState(() {
-                          selectedDuration = Duration(minutes: minutes);
-                        });
+                        selectedDuration = Duration(minutes: minutes);
                         widget.onChange(selectedDuration);
                       })),
               const SizedBox(width: 4.0),
@@ -673,18 +709,23 @@ class DurationPickerBlockState extends State<DurationPickerBlock> {
             SizedBox(
                 width: 72.0,
                 child: TextFormField(
-                    key: Key(selectedDuration.toString()),
+                    key: key,
                     textAlign: TextAlign.end,
                     initialValue: (selectedDuration.inHours).toString(),
-                    onChanged: (String value) {
-                      int hours = int.tryParse(value) ?? 0;
+                    onFieldSubmitted: (String value) {
+                      debugPrint("submit-hour");
                       setState(() {
-                        selectedDuration = Duration(
-                          hours: hours,
-                          minutes: selectedDuration.inMinutes
-                              .remainder(Duration.minutesPerHour),
-                        );
+                        key = UniqueKey();
                       });
+                    },
+                    onChanged: (String value) {
+                      debugPrint(value);
+                      int hours = int.tryParse(value) ?? 0;
+                      selectedDuration = Duration(
+                        hours: hours,
+                        minutes: selectedDuration.inMinutes
+                            .remainder(Duration.minutesPerHour),
+                      );
                       widget.onChange(selectedDuration);
                     })),
             const SizedBox(width: 4.0),
@@ -695,17 +736,22 @@ class DurationPickerBlockState extends State<DurationPickerBlock> {
             SizedBox(
                 width: 72.0,
                 child: TextFormField(
-                    key: Key(selectedDuration.toString()),
+                    key: key,
                     textAlign: TextAlign.end,
                     initialValue: (selectedDuration.inMinutes
                             .remainder(Duration.minutesPerHour))
                         .toString(),
-                    onChanged: (String value) {
-                      int minutes = int.tryParse(value) ?? 0;
+                    onFieldSubmitted: (String value) {
+                      debugPrint("submit-minute");
                       setState(() {
-                        selectedDuration = Duration(
-                            hours: selectedDuration.inHours, minutes: minutes);
+                        key = UniqueKey();
                       });
+                    },
+                    onChanged: (String value) {
+                      debugPrint(value);
+                      int minutes = int.tryParse(value) ?? 0;
+                      selectedDuration = Duration(
+                          hours: selectedDuration.inHours, minutes: minutes);
                       widget.onChange(selectedDuration);
                     })),
             const SizedBox(width: 4.0),
@@ -743,7 +789,7 @@ abstract class DurationPickerPage extends Page {
       bool wasEdited = duration?.inMinutes != snapshot.data && duration != null;
       if (duration == null && snapshot.data != null) {
         duration = Duration(minutes: snapshot.data!);
-        debugPrint("read:" + duration.toString());
+        debugPrint("read:$duration");
         kvWrite("sleep", valueName, duration!.inMinutes);
       }
       return Column(
@@ -761,7 +807,7 @@ abstract class DurationPickerPage extends Page {
                 initialDuration: duration,
                 minutesOnly: minutesOnly,
                 onChange: (duration) {
-                  debugPrint("set:" + duration.toString());
+                  debugPrint("set:$duration");
                   kvWrite("sleep", valueName, duration.inMinutes);
                 }),
             Text(!wasEdited ? autofillMessage : "",
