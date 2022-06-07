@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart'
-    show ThemeData, ColorScheme, Color, Brightness;
+import 'package:flutter/widgets.dart' show WidgetsBinding;
 import 'package:flutter/services.dart' show SystemUiOverlayStyle;
+import 'package:flutter/material.dart'
+    show ThemeData, ColorScheme, Color, Brightness, ThemeMode;
 
-class HEAThemeData {
+class Theme {
   static final ColorScheme lightColorScheme = ColorScheme.fromSeed(
     brightness: Brightness.light,
     seedColor: const Color(0xFFFF9900),
@@ -33,5 +34,23 @@ class HEAThemeData {
       colorScheme: colorScheme,
       useMaterial3: true,
     );
+  }
+
+  static SystemUiOverlayStyle resolveOverlayStyle(ThemeMode themeMode) {
+    Brightness brightness;
+    switch (themeMode) {
+      case ThemeMode.light:
+        brightness = Brightness.light;
+        break;
+      case ThemeMode.dark:
+        brightness = Brightness.dark;
+        break;
+      default:
+        brightness = WidgetsBinding.instance.window.platformBrightness;
+    }
+
+    return brightness == Brightness.light
+        ? lightSystemUiOverlayStyle
+        : darkSystemUiOverlayStyle;
   }
 }

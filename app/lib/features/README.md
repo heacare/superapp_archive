@@ -7,7 +7,7 @@ Each feature should expose a public API in a single file named after the feature
 
 Features with more than one public method must be implemented as an interface to aid unit testing.
 
-A feature may have sub-features, but the decision must be made with care. Sub-features exist as folders within the feature.
+A feature may have sub-features, but the decision must be made with care. Create sub-features when no other feature makes use of this sub-feature. Sub-features exist as folders within the feature.
 
 A feature usually includes widgets, defined across files with the suffix `_widget.dart`, `_module.dart` or `_screen.dart`. The distinction between the two follows the principles behind [Atomic Design](https://atomicdesign.bradfrost.com/chapter-2/). When communicating, we prefer using Atomic Design terms.
 
