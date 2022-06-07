@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart' show Provider;
 
-import 'display_options.dart' show DisplayOptions;
+import 'features/preferences/preferences.dart' show Preferences;
 
 class DemoScreen extends StatelessWidget {
   const DemoScreen({super.key});
@@ -14,19 +14,19 @@ class DemoScreen extends StatelessWidget {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            DisplayOptions displayOptions =
-                Provider.of<DisplayOptions>(context, listen: false);
-            if (displayOptions.themeMode == ThemeMode.system) {
-              displayOptions.themeMode = ThemeMode.light;
-            } else if (displayOptions.themeMode == ThemeMode.light) {
-              displayOptions.themeMode = ThemeMode.dark;
-            } else if (displayOptions.themeMode == ThemeMode.dark) {
-              displayOptions.themeMode = ThemeMode.system;
+            Preferences preferences =
+                Provider.of<Preferences>(context, listen: false);
+            if (preferences.themeMode == ThemeMode.system) {
+              preferences.setThemeMode(ThemeMode.light);
+            } else if (preferences.themeMode == ThemeMode.light) {
+              preferences.setThemeMode(ThemeMode.dark);
+            } else if (preferences.themeMode == ThemeMode.dark) {
+              preferences.setThemeMode(ThemeMode.system);
             }
 
             final snackBar = SnackBar(
               content: Text(
-                'Using ${displayOptions.themeMode} theme',
+                'Using ${preferences.themeMode} theme',
               ),
             );
 
@@ -35,8 +35,10 @@ class DemoScreen extends StatelessWidget {
           tooltip: "Change theme",
           child: const Icon(Icons.palette),
         ),
-        body: Row(children: const <Widget>[
-          ComponentScreen(showNavBottomBar: false)
+        body: Column(children: <Widget>[
+          Text(MaterialLocalizations.of(context)
+              .formatCompactDate(DateTime.now())),
+          const ComponentScreen(showNavBottomBar: false)
         ]));
   }
 }

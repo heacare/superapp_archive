@@ -1,15 +1,14 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/widgets.dart' hide Navigator;
 import 'package:flutter/material.dart' show MaterialApp;
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:provider/provider.dart' show ChangeNotifierProvider, Provider;
 
-import 'firebase.dart' show firebaseInitialize;
-import 'intl.dart' show intlInitialize;
-import 'crashlogger.dart' show crashloggerWrap;
-import 'theme.dart' show HEAThemeData;
-import 'display_options.dart' show DisplayOptions;
-
-import 'demo.dart' show DemoScreen;
+import 'system/firebase.dart' show firebaseInitialize;
+import 'system/crashlogger.dart' show crashloggerWrap;
+import 'system/theme.dart' show Theme;
+import 'features/preferences/preferences.dart' show Preferences, AppPreferences;
+import 'navigator.dart';
 
 import 'old/old.dart' show oldMain;
 
@@ -24,28 +23,57 @@ void main() async {
   crashloggerWrap(() async {
     WidgetsFlutterBinding.ensureInitialized();
     await firebaseInitialize();
-    await intlInitialize();
   }, () async {
-    runApp(const App());
+    Preferences preferences = await AppPreferences.load();
+    runApp(App(
+      preferences: preferences,
+    ));
   });
 }
 
 class App extends StatelessWidget {
-  const App({Key? key}) : super(key: key);
+  const App({super.key, required this.preferences});
+
+  final Preferences preferences;
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-        create: (context) => DisplayOptions()..load(),
-        builder: (context, child) {
-          return MaterialApp(
-            title: 'Happily Ever After',
-            themeMode: Provider.of<DisplayOptions>(context).themeMode,
-            theme: HEAThemeData.lightThemeData,
-            darkTheme: HEAThemeData.darkThemeData,
-            home: child,
-          );
-        },
-        child: const DemoScreen());
+    return ChangeNotifierProvider.value(
+      value: preferences,
+      child: const Navigator(),
+      builder: (context, child) {
+        Preferences preferences = Provider.of<Preferences>(context);
+        return MaterialApp(
+          title: 'Happily Ever After',
+          themeMode: preferences.themeMode,
+          theme: Theme.lightThemeData,
+          darkTheme: Theme.darkThemeData,
+          home: child,
+          localizationsDelegates: localizationsDelegates,
+          supportedLocales: supportedLocales,
+          locale: preferences.locale,
+        );
+      },
+    );
   }
 }
+
+const localizationsDelegates = [
+  GlobalMaterialLocalizations.delegate,
+  GlobalWidgetsLocalizations.delegate,
+  GlobalCupertinoLocalizations.delegate,
+];
+
+const supportedLocales = [
+  // Enable all English locales
+  Locale.fromSubtags(languageCode: 'en', scriptCode: 'SG'),
+  Locale.fromSubtags(languageCode: 'en', scriptCode: 'ZA'),
+  Locale.fromSubtags(languageCode: 'en', scriptCode: 'NZ'),
+  Locale.fromSubtags(languageCode: 'en', scriptCode: 'IN'),
+  Locale.fromSubtags(languageCode: 'en', scriptCode: 'IE'),
+  Locale.fromSubtags(languageCode: 'en', scriptCode: 'GB'),
+  Locale.fromSubtags(languageCode: 'en', scriptCode: 'CA'),
+  Locale.fromSubtags(languageCode: 'en', scriptCode: 'AU'),
+  Locale.fromSubtags(languageCode: 'en', scriptCode: 'US'),
+  Locale.fromSubtags(languageCode: 'en'),
+];
