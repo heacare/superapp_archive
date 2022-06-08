@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart' show Provider;
 
+import '../../navigator.dart' show ForceRTL;
 import '../../widgets/list_tile_centered.dart';
 import 'preferences.dart';
 
@@ -15,7 +16,10 @@ class PreferencesPage extends StatelessWidget {
           title: const Text('Settings'),
           centerTitle: true,
         ),
-        body: const PreferencesScreen(),
+        body: const Align(
+          alignment: AlignmentDirectional.topCenter,
+          child: PreferencesScreen(),
+        ),
       );
 }
 
@@ -190,10 +194,12 @@ class _Choice<T> extends StatelessWidget {
       onTap: () async {
         T? value = await showModalBottomSheet<T?>(
           context: context,
-          builder: (context) => _ChoiceModal<T>(
-            label: label,
-            choices: choices,
-            selected: selected,
+          builder: (context) => ForceRTL(
+            _ChoiceModal<T>(
+              label: label,
+              choices: choices,
+              selected: selected,
+            ),
           ),
         );
         if (value != null) {
@@ -243,16 +249,29 @@ class _ChoiceModalState<T> extends State<_ChoiceModal<T>> {
               ),
             ],
           ),
-          _buildList(context),
+          Expanded(
+            child: ListView.separated(
+              shrinkWrap: true,
+              itemCount: widget.choices.length,
+              itemBuilder: _buildListItem,
+              separatorBuilder: (context, index) =>
+                  const Divider(indent: 64, endIndent: 16, height: 0),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                child: OutlinedButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('Cancel'),
+                ),
+              ),
+            ],
+          ),
         ],
-      );
-
-  Widget _buildList(BuildContext context) => ListView.separated(
-        shrinkWrap: true,
-        itemCount: widget.choices.length,
-        itemBuilder: _buildListItem,
-        separatorBuilder: (context, index) =>
-            const Divider(indent: 64, endIndent: 16, height: 0),
       );
 
   Widget _buildListItem(BuildContext context, int index) {

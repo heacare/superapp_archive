@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart'
     show ThemeData, ColorScheme, Color, Brightness, ThemeMode;
+import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle;
 import 'package:flutter/widgets.dart' show WidgetsBinding;
 
@@ -28,10 +29,21 @@ class Theme {
     statusBarColor: const Color(0x00000000),
   );
 
-  static ThemeData _themeData(ColorScheme colorScheme) => ThemeData.from(
-        colorScheme: colorScheme,
-        useMaterial3: true,
-      );
+  static const ShapeBorder bottomSheetShape = RoundedRectangleBorder(
+    borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+  );
+
+  static ThemeData _themeData(ColorScheme colorScheme) {
+    ThemeData themeData = ThemeData.from(
+      colorScheme: colorScheme,
+      useMaterial3: true,
+    );
+    return themeData.copyWith(
+      bottomSheetTheme: themeData.bottomSheetTheme.copyWith(
+        shape: bottomSheetShape,
+      ),
+    );
+  }
 
   static SystemUiOverlayStyle resolveOverlayStyle(ThemeMode themeMode) {
     Brightness brightness;

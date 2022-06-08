@@ -1,5 +1,6 @@
 import 'dart:math' show max;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Navigator;
 import 'package:flutter/material.dart' as material show Navigator;
 import 'package:provider/provider.dart' show Consumer;
@@ -17,6 +18,9 @@ class ForceRTL extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (!kDebugMode) {
+      return child;
+    }
     Key key = UniqueKey();
     return Consumer<Preferences>(
       builder: (context, preferences, child) {

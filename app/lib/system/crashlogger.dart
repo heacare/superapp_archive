@@ -68,10 +68,19 @@ class _DebugPrintCrashLogger extends _CrashLogger {
   }
 }
 
-void crashloggerWrap(
+// ignore: do_not_use_environment
+const String crashlogger = String.fromEnvironment('CRASHLOGGER');
+
+Future<void> crashloggerWrap(
   Future<void> Function() setup,
   Future<void> Function() runApp,
-) {
+) async {
+  if (crashlogger == 'disabled') {
+    await setup();
+    await runApp();
+    return;
+  }
+
   _CrashLogger? crashLogger;
   if (isFirebaseReady && !kDebugMode && !kProfileMode) {
     // Also disable Firebase Crashlytics crash logging when in profile mode to prevent crashes in CI from flooding Crashlytics

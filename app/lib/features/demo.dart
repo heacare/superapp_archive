@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class DemoScreen extends StatelessWidget {
   const DemoScreen({super.key});
   @override
-  Widget build(BuildContext context) => Column(
+  Widget build(BuildContext context) => ListView(
         children: <Widget>[
           Text(
             MaterialLocalizations.of(context).formatCompactDate(DateTime.now()),
@@ -20,36 +20,30 @@ class ComponentScreen extends StatelessWidget {
   final bool showNavBottomBar;
 
   @override
-  Widget build(BuildContext context) => Expanded(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Align(
-            alignment: Alignment.topCenter,
-            child: SizedBox(
-              width: _maxWidthConstraint,
-              child: ListView(
-                shrinkWrap: true,
-                children: [
-                  _colDivider,
-                  _colDivider,
-                  const Buttons(),
-                  _colDivider,
-                  const FloatingActionButtons(),
-                  _colDivider,
-                  const Cards(),
-                  _colDivider,
-                  const Dialogs(),
-                  _colDivider,
-                  if (showNavBottomBar)
-                    const NavigationBars(
-                      selectedIndex: 0,
-                      isExampleBar: true,
-                    )
-                  else
-                    Container(),
-                ],
-              ),
-            ),
+  Widget build(BuildContext context) => Align(
+        alignment: Alignment.topCenter,
+        child: SizedBox(
+          width: _maxWidthConstraint,
+          child: Column(
+            children: [
+              _colDivider,
+              _colDivider,
+              const Buttons(),
+              _colDivider,
+              const FloatingActionButtons(),
+              _colDivider,
+              const Cards(),
+              _colDivider,
+              const Dialogs(),
+              _colDivider,
+              if (showNavBottomBar)
+                const NavigationBars(
+                  selectedIndex: 0,
+                  isExampleBar: true,
+                )
+              else
+                Container(),
+            ],
           ),
         ),
       );
@@ -551,52 +545,46 @@ class ColorPalettesScreen extends StatelessWidget {
           ),
         );
 
-    return Expanded(
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          if (constraints.maxWidth < narrowScreenWidthThreshold) {
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  divider,
-                  schemeLabel('Light Theme'),
-                  schemeView(lightTheme),
-                  divider,
-                  divider,
-                  schemeLabel('Dark Theme'),
-                  schemeView(darkTheme)
-                ],
-              ),
-            );
-          } else {
-            return SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 5),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        children: [
-                          schemeLabel('Light Theme'),
-                          schemeView(lightTheme)
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: Column(
-                        children: [
-                          schemeLabel('Dark Theme'),
-                          schemeView(darkTheme)
-                        ],
-                      ),
-                    )
-                  ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth < narrowScreenWidthThreshold) {
+          return Column(
+            children: [
+              divider,
+              schemeLabel('Light Theme'),
+              schemeView(lightTheme),
+              divider,
+              divider,
+              schemeLabel('Dark Theme'),
+              schemeView(darkTheme)
+            ],
+          );
+        } else {
+          return Padding(
+            padding: const EdgeInsets.only(top: 5),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    children: [
+                      schemeLabel('Light Theme'),
+                      schemeView(lightTheme)
+                    ],
+                  ),
                 ),
-              ),
-            );
-          }
-        },
-      ),
+                Expanded(
+                  child: Column(
+                    children: [
+                      schemeLabel('Dark Theme'),
+                      schemeView(darkTheme)
+                    ],
+                  ),
+                )
+              ],
+            ),
+          );
+        }
+      },
     );
   }
 }

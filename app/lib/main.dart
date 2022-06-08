@@ -15,7 +15,7 @@ import 'system/theme.dart' show Theme;
 const String compat = String.fromEnvironment('COMPAT');
 
 void main() async {
-  crashloggerWrap(() async {
+  await crashloggerWrap(() async {
     WidgetsFlutterBinding.ensureInitialized();
     await firebaseInitialize();
   }, () async {
