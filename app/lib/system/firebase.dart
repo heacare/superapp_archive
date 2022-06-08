@@ -14,6 +14,6 @@ Future<void> firebaseInitialize() async {
     );
     isFirebaseReady = true;
   } else {
-    logW("Firebase is not set up");
+    logW('Firebase is not set up');
   }
 }

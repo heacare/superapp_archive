@@ -1,16 +1,16 @@
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
 
-// As we go along, we can slowly re-implement more of ListTile
-// https://api.flutter.dev/flutter/material/ListTile/ListTile.html
-
+/// A vertically-centered version of [ListTile] implemented using [Row]s and [Column]s. As we go along, we can slowly re-implement more of [ListTile]. See https://api.flutter.dev/flutter/material/ListTile/ListTile.html
 class ListTileCentered extends StatelessWidget {
+  // Construct a [ListTileCentered]
   const ListTileCentered({
+    super.key,
     this.leading,
     this.title,
     this.subtitle,
     this.trailing,
     this.onTap,
-    this.contentPadding = const EdgeInsets.symmetric(horizontal: 16.0),
+    this.contentPadding = const EdgeInsets.symmetric(horizontal: 16),
     this.horizontalTitleGap = 16,
     this.minVerticalPadding = 4,
   });
@@ -28,7 +28,7 @@ class ListTileCentered extends StatelessWidget {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
 
-    final Widget titleText = AnimatedDefaultTextStyle(
+    Widget titleText = AnimatedDefaultTextStyle(
       style: theme.textTheme.titleMedium!,
       duration: kThemeChangeDuration,
       child: title ?? const SizedBox(),
@@ -38,7 +38,7 @@ class ListTileCentered extends StatelessWidget {
     subtitleStyle = subtitleStyle.copyWith(
       color: theme.textTheme.bodySmall!.color,
     );
-    final Widget subtitleText = AnimatedDefaultTextStyle(
+    Widget subtitleText = AnimatedDefaultTextStyle(
       style: subtitleStyle,
       duration: kThemeChangeDuration,
       child: subtitle ?? const SizedBox(),

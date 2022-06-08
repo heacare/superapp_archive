@@ -8,10 +8,11 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (compat != "disabled") {
+    if (compat != 'disabled') {
       return const old.DashboardScreen();
     }
     return const Center(
-        child: Text("Compat mode disabled and accounts not implemented"));
+      child: Text('Compat mode disabled and accounts not implemented'),
+    );
   }
 }

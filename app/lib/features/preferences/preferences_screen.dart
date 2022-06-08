@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart' show Provider;
 
-import "../../system/log.dart";
 import '../../widgets/list_tile_centered.dart';
 import 'preferences.dart';
 
@@ -11,39 +10,35 @@ class PreferencesPage extends StatelessWidget {
   const PreferencesPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Settings"),
-        centerTitle: true,
-      ),
-      body: const PreferencesScreen(),
-    );
-  }
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: const Text('Settings'),
+          centerTitle: true,
+        ),
+        body: const PreferencesScreen(),
+      );
 }
 
 class PreferencesScreen extends StatelessWidget {
   const PreferencesScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      constraints: const BoxConstraints.expand(width: 640),
-      child: Column(
-        children: _buildGroups(context),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Container(
+        constraints: const BoxConstraints.expand(width: 640),
+        child: Column(
+          children: _buildGroups(context),
+        ),
+      );
 
   List<Widget> _buildGroups(BuildContext context) {
     Preferences preferences = Provider.of<Preferences>(context);
 
     return [
       _Group(
-        title: "Display",
+        title: 'Display',
         items: [
           _Choice<ThemeMode>(
-            label: "Theme",
+            label: 'Theme',
             choices: _themeModeChoices,
             value: preferences.themeMode,
             onChanged: (value) {
@@ -52,23 +47,23 @@ class PreferencesScreen extends StatelessWidget {
           ),
           if (kDebugMode)
             _Switch(
-              label: "Force RTL",
+              label: 'Force RTL',
               value: preferences.forceRTL,
-              onChanged: (bool value) {
+              onChanged: (value) {
                 preferences.setForceRTL(value);
               },
             ),
         ],
       ),
       _Group(
-        title: "Privacy",
+        title: 'Privacy',
         items: [
           _Switch(
-            label: "Data collection",
+            label: 'Data collection',
             description:
-                "We make extensive use of your data to allow our HEAlers to guide you through your journey",
+                'We make extensive use of your data to allow our HEAlers to guide you through your journey',
             value: preferences.consentTelemetryInterim,
-            onChanged: (bool value) {
+            onChanged: (value) {
               preferences.setConsentTelemetryInterim(value);
             },
           ),
@@ -85,41 +80,44 @@ class _Group extends StatelessWidget {
   final List<Widget> items;
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
-                child:
-                    Text(title, style: Theme.of(context).textTheme.titleSmall),
+  Widget build(BuildContext context) => Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+                  child: Text(
+                    title,
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                ),
               ),
-            ),
-          ],
-        ),
-        Card(
-          clipBehavior: Clip.antiAlias,
-          margin: const EdgeInsets.symmetric(horizontal: 16),
-          child: ListView.separated(
-            shrinkWrap: true,
-            itemCount: items.length,
-            itemBuilder: (context, index) => items[index],
-            separatorBuilder: (context, index) {
-              return const Divider(indent: 16, endIndent: 16, height: 0);
-            },
+            ],
           ),
-        ),
-      ],
-    );
-  }
+          Card(
+            clipBehavior: Clip.antiAlias,
+            margin: const EdgeInsets.symmetric(horizontal: 16),
+            child: ListView.separated(
+              shrinkWrap: true,
+              itemCount: items.length,
+              itemBuilder: (context, index) => items[index],
+              separatorBuilder: (context, index) =>
+                  const Divider(indent: 16, endIndent: 16, height: 0),
+            ),
+          ),
+        ],
+      );
 }
 
 class _ItemTemplate extends StatelessWidget {
-  const _ItemTemplate(
-      {required this.label, this.description, required this.child, this.onTap});
+  const _ItemTemplate({
+    required this.label,
+    this.description,
+    required this.child,
+    this.onTap,
+  });
 
   final String label;
   final String? description;
@@ -127,23 +125,22 @@ class _ItemTemplate extends StatelessWidget {
   final GestureTapCallback? onTap;
 
   @override
-  Widget build(BuildContext context) {
-    return ListTileCentered(
-      onTap: onTap,
-      title: Text(label),
-      subtitle: description == null ? null : Text(description!),
-      trailing: child,
-      minVerticalPadding: 16,
-    );
-  }
+  Widget build(BuildContext context) => ListTileCentered(
+        onTap: onTap,
+        title: Text(label),
+        subtitle: description == null ? null : Text(description!),
+        trailing: child,
+        minVerticalPadding: 16,
+      );
 }
 
 class _Switch extends StatelessWidget {
-  const _Switch(
-      {required this.label,
-      this.description,
-      required this.value,
-      required this.onChanged});
+  const _Switch({
+    required this.label,
+    this.description,
+    required this.value,
+    required this.onChanged,
+  });
 
   final String label;
   final String? description;
@@ -151,29 +148,27 @@ class _Switch extends StatelessWidget {
   final ValueChanged<bool> onChanged;
 
   @override
-  Widget build(BuildContext context) {
-    return _ItemTemplate(
-      label: label,
-      description: description,
-      child: Switch.adaptive(
-        value: value,
-        onChanged: onChanged,
-      ),
-      onTap: () {
-        onChanged(!value);
-      },
-    );
-  }
+  Widget build(BuildContext context) => _ItemTemplate(
+        label: label,
+        description: description,
+        child: Switch.adaptive(
+          value: value,
+          onChanged: onChanged,
+        ),
+        onTap: () {
+          onChanged(!value);
+        },
+      );
 }
 
 class _Choice<T> extends StatelessWidget {
-  const _Choice(
-      {required this.label,
-      this.description,
-      required this.choices,
-      required this.value,
-      required this.onChanged})
-      : assert(choices.length > 0);
+  const _Choice({
+    required this.label,
+    this.description,
+    required this.choices,
+    required this.value,
+    required this.onChanged,
+  }) : assert(choices.length > 0);
 
   final String label;
   final String? description;
@@ -184,8 +179,9 @@ class _Choice<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _ChoiceItem<T> selected = choices.firstWhere(
-        (choice) => choice.value == value,
-        orElse: () => choices[0]);
+      (choice) => choice.value == value,
+      orElse: () => choices[0],
+    );
 
     return _ItemTemplate(
       label: label,
@@ -195,7 +191,10 @@ class _Choice<T> extends StatelessWidget {
         T? value = await showModalBottomSheet<T?>(
           context: context,
           builder: (context) => _ChoiceModal<T>(
-              label: label, choices: choices, selected: selected),
+            label: label,
+            choices: choices,
+            selected: selected,
+          ),
         );
         if (value != null) {
           onChanged(value);
@@ -206,8 +205,11 @@ class _Choice<T> extends StatelessWidget {
 }
 
 class _ChoiceModal<T> extends StatefulWidget {
-  _ChoiceModal(
-      {required this.label, required this.choices, required this.selected});
+  const _ChoiceModal({
+    required this.label,
+    required this.choices,
+    required this.selected,
+  });
 
   final String label;
   final List<_ChoiceItem<T>> choices;
@@ -220,38 +222,38 @@ class _ChoiceModal<T> extends StatefulWidget {
 class _ChoiceModalState<T> extends State<_ChoiceModal<T>> {
   T? value;
 
+  @override
   void initState() {
+    super.initState();
     value = widget.selected.value;
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-              child: Text(widget.label,
-                  style: Theme.of(context).textTheme.titleLarge),
-            ),
-          ],
-        ),
-        _buildList(context),
-      ],
-    );
-  }
+  Widget build(BuildContext context) => Column(
+        children: [
+          Row(
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                child: Text(
+                  widget.label,
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              ),
+            ],
+          ),
+          _buildList(context),
+        ],
+      );
 
-  Widget _buildList(BuildContext context) {
-    return ListView.separated(
-      shrinkWrap: true,
-      itemCount: widget.choices.length,
-      itemBuilder: _buildListItem,
-      separatorBuilder: (context, index) {
-        return Divider(indent: 64, endIndent: 16, height: 0);
-      },
-    );
-  }
+  Widget _buildList(BuildContext context) => ListView.separated(
+        shrinkWrap: true,
+        itemCount: widget.choices.length,
+        itemBuilder: _buildListItem,
+        separatorBuilder: (context, index) =>
+            const Divider(indent: 64, endIndent: 16, height: 0),
+      );
 
   Widget _buildListItem(BuildContext context, int index) {
     _ChoiceItem choice = widget.choices[index];
@@ -261,9 +263,9 @@ class _ChoiceModalState<T> extends State<_ChoiceModal<T>> {
       leading: Radio<T>(
         value: choice.value,
         groupValue: value,
-        onChanged: (T? newValue) {
+        onChanged: (newValue) {
           setState(() {
-            value = newValue!;
+            value = newValue as T;
           });
           Navigator.of(context).pop(value);
         },
@@ -283,14 +285,14 @@ class _ChoiceItem<T> {
 const List<_ChoiceItem<ThemeMode>> _themeModeChoices = [
   _ChoiceItem(
     value: ThemeMode.system,
-    label: "System",
+    label: 'System',
   ),
   _ChoiceItem(
     value: ThemeMode.light,
-    label: "Light",
+    label: 'Light',
   ),
   _ChoiceItem(
     value: ThemeMode.dark,
-    label: "Dark",
+    label: 'Dark',
   ),
 ];
