@@ -2,10 +2,41 @@ import 'dart:math' show max;
 import 'package:flutter/material.dart' hide Navigator;
 import 'package:flutter/material.dart' as material show Navigator;
 
-import 'features/dashboard/dashboard_screen.dart';
-import 'features/account/account_screen.dart';
+import 'package:provider/provider.dart' show Consumer;
+
+import 'system/log.dart';
+import 'features/preferences/preferences.dart';
 import 'features/preferences/preferences_screen.dart';
+import 'features/account/account_screen.dart';
+import 'features/dashboard/dashboard_screen.dart';
 import 'demo.dart';
+
+class ForceRTL extends StatelessWidget {
+  const ForceRTL(this.child);
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final Key _key = UniqueKey();
+    return Consumer<Preferences>(
+      builder: (context, preferences, child) {
+        if (preferences.forceRTL) {
+          return Directionality(
+            key: _key,
+            textDirection: TextDirection.rtl,
+            child: child!,
+          );
+        }
+        return Container(
+          key: _key,
+          child: child,
+        );
+      },
+      child: child,
+    );
+  }
+}
 
 typedef PreferredSizeWidgetBuilder = PreferredSizeWidget Function(
     BuildContext context);
@@ -38,10 +69,14 @@ class NavigatorPage {
 final WidgetBuilder _preferencesButton = (context) => IconButton(
       icon: const Icon(Icons.settings),
       tooltip: 'Settings',
-      onPressed: () {
+      onPressed: () async {
+        /*
         material.Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const PreferencesPage()),
+          route((context) => const PreferencesPage())
         );
+        */
+        await material.Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => const ForceRTL(PreferencesPage())));
       },
     );
 
@@ -127,7 +162,6 @@ class Navigator extends StatefulWidget {
 class _NavigatorState extends State<Navigator> {
   String _selectedKey = "";
 
-  @override
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {

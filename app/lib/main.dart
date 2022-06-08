@@ -31,7 +31,7 @@ void main() async {
 }
 
 class App extends StatelessWidget {
-  const App({super.key, required this.preferences});
+  App({super.key, required this.preferences});
 
   final Preferences preferences;
 
@@ -39,7 +39,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
       value: preferences,
-      child: const Navigator(),
+      child: const ForceRTL(Navigator()),
       builder: (context, child) {
         Preferences preferences = Provider.of<Preferences>(context);
         return MaterialApp(
