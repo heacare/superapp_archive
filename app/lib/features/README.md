@@ -3,7 +3,7 @@
 
 This folder contains business logic separated into folders for each operational domain. Each folder should contain code specific to the feature, including interfaces, abstractions, constants and widgets.
 
-Each feature should expose a public API in a single file named after the feature (`feature_name/feature_name.dart`). This forces clean interfaces between features. A feature should never call into another feature's internal implementation. This model will allow us to easily break features into their own plugin when warranted.
+Each feature should expose a public API (excluding widgets) in a single file named after the feature (`feature_name/feature_name.dart`). This forces clean interfaces between features. A feature should never call into another feature's internal implementation. This model will allow us to easily break features into their own plugin when warranted.
 
 Features with more than one public method must be implemented as an interface to aid unit testing.
 

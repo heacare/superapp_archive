@@ -1,45 +1,13 @@
 import 'package:flutter/material.dart';
 
-import 'package:provider/provider.dart' show Provider;
-
-import 'features/preferences/preferences.dart' show Preferences;
-
 class DemoScreen extends StatelessWidget {
   const DemoScreen({super.key});
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Home'),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Preferences preferences =
-                Provider.of<Preferences>(context, listen: false);
-            if (preferences.themeMode == ThemeMode.system) {
-              preferences.setThemeMode(ThemeMode.light);
-            } else if (preferences.themeMode == ThemeMode.light) {
-              preferences.setThemeMode(ThemeMode.dark);
-            } else if (preferences.themeMode == ThemeMode.dark) {
-              preferences.setThemeMode(ThemeMode.system);
-            }
-
-            final snackBar = SnackBar(
-              content: Text(
-                'Using ${preferences.themeMode} theme',
-              ),
-            );
-
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          },
-          tooltip: "Change theme",
-          child: const Icon(Icons.palette),
-        ),
-        body: Column(children: <Widget>[
-          Text(MaterialLocalizations.of(context)
-              .formatCompactDate(DateTime.now())),
-          const ComponentScreen(showNavBottomBar: false)
-        ]));
+    return Column(children: <Widget>[
+      Text(MaterialLocalizations.of(context).formatCompactDate(DateTime.now())),
+      const ComponentScreen(showNavBottomBar: true)
+    ]);
   }
 }
 
