@@ -12,20 +12,23 @@ import 'services/notification_service.dart';
 import 'utils/sleep_notifications.dart';
 import 'firebase.dart';
 
+Future<void> oldSetup() async {
+  // Locale
+  await findSystemLocale();
+
+  // Services
+  setupServiceLocator();
+  await serviceLocator.allReady();
+}
+
 Future<void> oldMain() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Firebase
   await firebaseSetup();
 
-  // Services
-  setupServiceLocator();
-  await serviceLocator.allReady();
-
-  // Locale
-  await findSystemLocale();
+  await oldSetup();
   initializeDateFormatting(Intl.systemLocale);
-
   runApp(const App());
 }
 

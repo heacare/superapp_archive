@@ -25,7 +25,7 @@ class DashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const DashboardPage(
-        expYears: 0, optYears: 0, socScore: 0, name: "TODO");
+        expYears: 0, optYears: 0, socScore: 0, name: "user");
   }
 }
 
@@ -157,10 +157,10 @@ class DashboardPage extends StatelessWidget {
                                   children: <Widget>[
                                 Text("Dashboard",
                                     style:
-                                        Theme.of(context).textTheme.headline1),
+                                        Theme.of(context).textTheme.titleLarge),
                                 Text(goodMorning,
                                     style:
-                                        Theme.of(context).textTheme.headline4),
+                                        Theme.of(context).textTheme.titleSmall),
                               ])),
                           const AvatarIcon(),
                         ])))),
@@ -176,11 +176,12 @@ class DashboardPage extends StatelessWidget {
                     lifeScore: expYears, sleepScore: 30, socialScore: 60),
 			    */
                 const SizedBox(height: 20.0),
-                Text("Modules", style: Theme.of(context).textTheme.headline3),
+                Text("Modules", style: Theme.of(context).textTheme.titleMedium),
                 const SizedBox(height: 10.0),
                 moduleListView,
                 const SizedBox(height: 30.0),
-                Text("Check-ins", style: Theme.of(context).textTheme.headline3),
+                Text("Check-ins",
+                    style: Theme.of(context).textTheme.titleSmall),
                 const SizedBox(height: 10.0),
                 ChangeNotifierProvider.value(
                   value: serviceLocator<SleepCheckinService>().getProgress(),
@@ -443,12 +444,12 @@ class ModuleListItem extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                    Text(title, style: Theme.of(context).textTheme.headline3),
+                    Text(title, style: Theme.of(context).textTheme.titleMedium),
                     const SizedBox(height: 5.0),
                     Text(description,
                         style: Theme.of(context)
                             .textTheme
-                            .bodyText2
+                            .bodyMedium
                             ?.copyWith(color: const Color(0xFF707070)))
                   ])),
             ])));
@@ -508,12 +509,12 @@ class ModuleCheckinItem extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                         Text(title,
-                            style: Theme.of(context).textTheme.headline3),
+                            style: Theme.of(context).textTheme.titleMedium),
                         const SizedBox(height: 5.0),
                         Text(subtitle,
                             style: Theme.of(context)
                                 .textTheme
-                                .bodyText2
+                                .bodyMedium
                                 ?.copyWith(color: const Color(0xFF707070)))
                       ])),
                 ]))));

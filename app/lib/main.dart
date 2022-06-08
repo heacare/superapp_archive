@@ -10,20 +10,19 @@ import 'system/theme.dart' show Theme;
 import 'features/preferences/preferences.dart' show Preferences, AppPreferences;
 import 'navigator.dart';
 
-import 'old/old.dart' show oldMain;
+import 'old/old.dart' show oldSetup;
 
-const devel = String.fromEnvironment("DEVEL", defaultValue: "");
+const compat = String.fromEnvironment("COMPAT", defaultValue: "");
 
 void main() async {
-  if (devel != "playground") {
-    await oldMain();
-    return;
-  }
-
   crashloggerWrap(() async {
     WidgetsFlutterBinding.ensureInitialized();
     await firebaseInitialize();
   }, () async {
+    if (compat != "disabled") {
+      await oldSetup();
+    }
+
     Preferences preferences = await AppPreferences.load();
     runApp(App(
       preferences: preferences,
@@ -45,8 +44,8 @@ class App extends StatelessWidget {
         Preferences preferences = Provider.of<Preferences>(context);
         return MaterialApp(
           title: 'Happily Ever After',
-          //themeMode: preferences.themeMode,
-          //theme: Theme.lightThemeData,
+          themeMode: preferences.themeMode,
+          theme: Theme.lightThemeData,
           darkTheme: Theme.darkThemeData,
           localizationsDelegates: localizationsDelegates,
           supportedLocales: supportedLocales,

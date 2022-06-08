@@ -13,7 +13,9 @@ import '../widgets/avatar_icon.dart';
 import '../widgets/gradient_button.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({Key? key, this.disableAppBar = false}) : super(key: key);
+
+  final bool disableAppBar;
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -41,30 +43,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget loaded() {
     return Scaffold(
-        appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(150),
-            child: SafeArea(
-                child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10.0, horizontal: 30.0),
-                    child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Expanded(
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                Text("Settings",
-                                    style:
-                                        Theme.of(context).textTheme.headline1),
-                                const SizedBox(height: 4.0),
-                                Text("Modify your preferences",
-                                    style:
-                                        Theme.of(context).textTheme.headline4),
-                              ])),
-                          const AvatarIcon(),
-                        ])))),
+        appBar: widget.disableAppBar
+            ? null
+            : PreferredSize(
+                preferredSize: const Size.fromHeight(150),
+                child: SafeArea(
+                    child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 30.0),
+                        child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Expanded(
+                                  child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                    Text("Settings",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleLarge),
+                                    const SizedBox(height: 4.0),
+                                    Text("Modify your preferences",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleSmall),
+                                  ])),
+                              const AvatarIcon(),
+                            ])))),
         body: SingleChildScrollView(
             padding: const EdgeInsets.all(30.0),
             child: Column(
