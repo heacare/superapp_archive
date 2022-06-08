@@ -1,4 +1,3 @@
-
 # Features
 
 This folder contains business logic separated into folders for each operational domain. Each folder should contain code specific to the feature, including interfaces, abstractions, constants and widgets.
