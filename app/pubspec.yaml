@@ -50,7 +50,6 @@ dependencies:
   firebase_messaging: ^11.4.0
   firebase_crashlytics: ^2.8.0
 
-
   # PREVIOUS VERSION
   health:
     path: plugins/health/

@@ -1,4 +1,3 @@
-
 # Widgets
 
 We follow the principles behind [Atomic Design](https://atomicdesign.bradfrost.com/chapter-2/). When communicating, we prefer using Atomic Design terms. In this folder resides all the atoms (core widgets) and some molecules (common widgets) built upon the atoms. We intentionally don't have any distinction between those two types of widgets to keep things flexible within this folder.
