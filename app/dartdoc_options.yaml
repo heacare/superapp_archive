@@ -1,0 +1,4 @@
+dartdoc:
+  nodoc:
+    - 'lib/old/**.dart'
+    - 'lib/old/*.dart'

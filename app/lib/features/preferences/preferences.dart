@@ -1,10 +1,10 @@
 import 'dart:ui' show Locale;
+
 import 'package:flutter/foundation.dart' show ChangeNotifier;
 import 'package:flutter/material.dart' show ThemeMode;
-
-import "package:shared_preferences/shared_preferences.dart"
-    show SharedPreferences;
 import 'package:intl/locale.dart' as intl show Locale;
+import 'package:shared_preferences/shared_preferences.dart'
+    show SharedPreferences;
 
 // When we're ready, we can extend Preferences to include cloud syncing of
 // these preferences using platform-specific features. See
@@ -39,56 +39,54 @@ class AppPreferences extends Preferences {
 
   @override
   ThemeMode get themeMode {
-    String? themeMode = _getString("themeMode");
+    String? themeMode = _getString('themeMode');
     return ThemeMode.values
         .firstWhere((m) => m.name == themeMode, orElse: () => ThemeMode.system);
   }
 
   @override
   Future<void> setThemeMode(ThemeMode themeMode) async {
-    await _setString("themeMode", themeMode.name);
+    await _setString('themeMode', themeMode.name);
   }
 
   @override
-  bool get forceRTL {
-    return _getBool("forceRTL") ?? false;
-  }
+  bool get forceRTL => _getBool('forceRTL') ?? false;
 
   @override
   Future<void> setForceRTL(bool rtl) async {
-    await _setBool("forceRTL", rtl);
+    await _setBool('forceRTL', rtl);
   }
 
   @override
   Locale? get locale {
-    String? locale = _getString("locale");
+    String? locale = _getString('locale');
     if (locale == null) {
       return null;
     }
     intl.Locale parsed = intl.Locale.parse(locale);
     return Locale.fromSubtags(
-        languageCode: parsed.languageCode,
-        scriptCode: parsed.scriptCode,
-        countryCode: parsed.countryCode);
+      languageCode: parsed.languageCode,
+      scriptCode: parsed.scriptCode,
+      countryCode: parsed.countryCode,
+    );
   }
 
   @override
   Future<void> setLocale(Locale? locale) async {
     if (locale == null) {
-      await _remove("locale");
+      await _remove('locale');
       return;
     }
-    await _setString("locale", locale.toLanguageTag());
+    await _setString('locale', locale.toLanguageTag());
   }
 
   @override
-  bool get consentTelemetryInterim {
-    return _getBool("consentTelemetryInterim") ?? false;
-  }
+  bool get consentTelemetryInterim =>
+      _getBool('consentTelemetryInterim') ?? false;
 
   @override
   Future<void> setConsentTelemetryInterim(bool consent) async {
-    await _setBool("consentTelemetryInterim", consent);
+    await _setBool('consentTelemetryInterim', consent);
   }
 
   Future<void> _remove(String key) async {
@@ -101,25 +99,19 @@ class AppPreferences extends Preferences {
     notifyListeners();
   }
 
-  String? _getString(String key) {
-    return _instance.getString(key);
-  }
+  String? _getString(String key) => _instance.getString(key);
 
   Future<void> _setInt(String key, int value) async {
     await _instance.setInt(key, value);
     notifyListeners();
   }
 
-  int? _getInt(String key) {
-    return _instance.getInt(key);
-  }
+  int? _getInt(String key) => _instance.getInt(key);
 
   Future<void> _setBool(String key, bool value) async {
     await _instance.setBool(key, value);
     notifyListeners();
   }
 
-  bool? _getBool(String key) {
-    return _instance.getBool(key);
-  }
+  bool? _getBool(String key) => _instance.getBool(key);
 }

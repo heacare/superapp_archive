@@ -1,11 +1,10 @@
-import 'package:flutter/widgets.dart' show WidgetsBinding;
-import 'package:flutter/services.dart' show SystemUiOverlayStyle;
 import 'package:flutter/material.dart'
     show ThemeData, ColorScheme, Color, Brightness, ThemeMode;
+import 'package:flutter/services.dart' show SystemUiOverlayStyle;
+import 'package:flutter/widgets.dart' show WidgetsBinding;
 
 class Theme {
   static final ColorScheme lightColorScheme = ColorScheme.fromSeed(
-    brightness: Brightness.light,
     seedColor: const Color(0xFFFF9900),
     primary: const Color(0xFFFF9900),
     secondary: const Color(0xFFFF00FF),
@@ -29,12 +28,10 @@ class Theme {
     statusBarColor: const Color(0x00000000),
   );
 
-  static ThemeData _themeData(ColorScheme colorScheme) {
-    return ThemeData.from(
-      colorScheme: colorScheme,
-      useMaterial3: true,
-    );
-  }
+  static ThemeData _themeData(ColorScheme colorScheme) => ThemeData.from(
+        colorScheme: colorScheme,
+        useMaterial3: true,
+      );
 
   static SystemUiOverlayStyle resolveOverlayStyle(ThemeMode themeMode) {
     Brightness brightness;
