@@ -1,4 +1,11 @@
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
+
+import 'package:provider/provider.dart' show Provider;
+
+import "../../system/log.dart";
+import '../../widgets/list_tile_centered.dart';
+import 'preferences.dart';
 
 class PreferencesPage extends StatelessWidget {
   const PreferencesPage({super.key});
@@ -20,21 +27,54 @@ class PreferencesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _Group(
-          title: "Display",
-          items: [
-            _Switch(
-              label: MaterialLocalizations.of(context)
-                  .formatCompactDate(DateTime.now()),
-              value: true,
-              onChanged: (bool value) {},
-            )
-          ],
-        ),
-      ],
+    return Container(
+      constraints: const BoxConstraints.expand(width: 640),
+      child: Column(
+        children: _buildGroups(context),
+      ),
     );
+  }
+
+  List<Widget> _buildGroups(BuildContext context) {
+    Preferences preferences = Provider.of<Preferences>(context);
+
+    return [
+      _Group(
+        title: "Display",
+        items: [
+          _Choice<ThemeMode>(
+            label: "Theme",
+            choices: _themeModeChoices,
+            value: preferences.themeMode,
+            onChanged: (value) {
+              preferences.setThemeMode(value);
+            },
+          ),
+          if (kDebugMode)
+            _Switch(
+              label: "Force RTL",
+              value: preferences.forceRTL,
+              onChanged: (bool value) {
+                preferences.setForceRTL(value);
+              },
+            ),
+        ],
+      ),
+      _Group(
+        title: "Privacy",
+        items: [
+          _Switch(
+            label: "Data collection",
+            description:
+                "We make extensive use of your data to allow our HEAlers to guide you through your journey",
+            value: preferences.consentTelemetryInterim,
+            onChanged: (bool value) {
+              preferences.setConsentTelemetryInterim(value);
+            },
+          ),
+        ],
+      ),
+    ];
   }
 }
 
@@ -46,12 +86,55 @@ class _Group extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      Row(
-        children: [Text(title, style: Theme.of(context).textTheme.titleSmall)],
-      ),
-      ...items,
-    ]);
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+                child:
+                    Text(title, style: Theme.of(context).textTheme.titleSmall),
+              ),
+            ),
+          ],
+        ),
+        Card(
+          clipBehavior: Clip.antiAlias,
+          margin: const EdgeInsets.symmetric(horizontal: 16),
+          child: ListView.separated(
+            shrinkWrap: true,
+            itemCount: items.length,
+            itemBuilder: (context, index) => items[index],
+            separatorBuilder: (context, index) {
+              return const Divider(indent: 16, endIndent: 16, height: 0);
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _ItemTemplate extends StatelessWidget {
+  const _ItemTemplate(
+      {required this.label, this.description, required this.child, this.onTap});
+
+  final String label;
+  final String? description;
+  final Widget child;
+  final GestureTapCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTileCentered(
+      onTap: onTap,
+      title: Text(label),
+      subtitle: description == null ? null : Text(description!),
+      trailing: child,
+      minVerticalPadding: 16,
+    );
   }
 }
 
@@ -69,24 +152,145 @@ class _Switch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(label, style: Theme.of(context).textTheme.bodyLarge),
-              if (description != null)
-                Text(description!,
-                    style: Theme.of(context).textTheme.bodyMedium),
-            ],
-          ),
-        ),
-        Switch(
-          value: value,
-          onChanged: onChanged,
-        ),
-      ],
+    return _ItemTemplate(
+      label: label,
+      description: description,
+      child: Switch.adaptive(
+        value: value,
+        onChanged: onChanged,
+      ),
+      onTap: () {
+        onChanged(!value);
+      },
     );
   }
 }
+
+class _Choice<T> extends StatelessWidget {
+  const _Choice(
+      {required this.label,
+      this.description,
+      required this.choices,
+      required this.value,
+      required this.onChanged})
+      : assert(choices.length > 0);
+
+  final String label;
+  final String? description;
+  final List<_ChoiceItem<T>> choices;
+  final T value;
+  final ValueChanged<T> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    _ChoiceItem<T> selected = choices.firstWhere(
+        (choice) => choice.value == value,
+        orElse: () => choices[0]);
+
+    return _ItemTemplate(
+      label: label,
+      description: description,
+      child: Text(selected.label, style: Theme.of(context).textTheme.bodyLarge),
+      onTap: () async {
+        T? value = await showModalBottomSheet<T?>(
+          context: context,
+          builder: (context) => _ChoiceModal<T>(
+              label: label, choices: choices, selected: selected),
+        );
+        if (value != null) {
+          onChanged(value);
+        }
+      },
+    );
+  }
+}
+
+class _ChoiceModal<T> extends StatefulWidget {
+  _ChoiceModal(
+      {required this.label, required this.choices, required this.selected});
+
+  final String label;
+  final List<_ChoiceItem<T>> choices;
+  final _ChoiceItem<T> selected;
+
+  @override
+  State<_ChoiceModal<T>> createState() => _ChoiceModalState<T>();
+}
+
+class _ChoiceModalState<T> extends State<_ChoiceModal<T>> {
+  T? value;
+
+  void initState() {
+    value = widget.selected.value;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              child: Text(widget.label,
+                  style: Theme.of(context).textTheme.titleLarge),
+            ),
+          ],
+        ),
+        _buildList(context),
+      ],
+    );
+  }
+
+  Widget _buildList(BuildContext context) {
+    return ListView.separated(
+      shrinkWrap: true,
+      itemCount: widget.choices.length,
+      itemBuilder: _buildListItem,
+      separatorBuilder: (context, index) {
+        return Divider(indent: 64, endIndent: 16, height: 0);
+      },
+    );
+  }
+
+  Widget _buildListItem(BuildContext context, int index) {
+    _ChoiceItem choice = widget.choices[index];
+
+    return ListTileCentered(
+      title: Text(choice.label),
+      leading: Radio<T>(
+        value: choice.value,
+        groupValue: value,
+        onChanged: (T? newValue) {
+          setState(() {
+            value = newValue!;
+          });
+          Navigator.of(context).pop(value);
+        },
+      ),
+      minVerticalPadding: 16,
+    );
+  }
+}
+
+class _ChoiceItem<T> {
+  const _ChoiceItem({required this.value, required this.label});
+
+  final T value;
+  final String label;
+}
+
+const List<_ChoiceItem<ThemeMode>> _themeModeChoices = [
+  _ChoiceItem(
+    value: ThemeMode.system,
+    label: "System",
+  ),
+  _ChoiceItem(
+    value: ThemeMode.light,
+    label: "Light",
+  ),
+  _ChoiceItem(
+    value: ThemeMode.dark,
+    label: "Dark",
+  ),
+];

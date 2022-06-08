@@ -15,6 +15,9 @@ abstract class Preferences extends ChangeNotifier {
   ThemeMode get themeMode;
   Future<void> setThemeMode(ThemeMode themeMode);
 
+  bool get forceRTL;
+  Future<void> setForceRTL(bool rtl);
+
   Locale? get locale;
   Future<void> setLocale(Locale? locale);
 
@@ -44,6 +47,16 @@ class AppPreferences extends Preferences {
   @override
   Future<void> setThemeMode(ThemeMode themeMode) async {
     await _setString("themeMode", themeMode.name);
+  }
+
+  @override
+  bool get forceRTL {
+    return _getBool("forceRTL") ?? false;
+  }
+
+  @override
+  Future<void> setForceRTL(bool rtl) async {
+    await _setBool("forceRTL", rtl);
   }
 
   @override
