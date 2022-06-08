@@ -103,7 +103,7 @@ class BasePage extends StatelessWidget {
                             child: Text(title,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 4,
-                                style: Theme.of(context).textTheme.headline2)),
+                                style: Theme.of(context).textTheme.titleLarge)),
                         if (prevPage != null)
                           IconButton(
                               iconSize: 24,

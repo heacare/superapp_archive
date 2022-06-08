@@ -6,7 +6,7 @@ class DemoScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(children: <Widget>[
       Text(MaterialLocalizations.of(context).formatCompactDate(DateTime.now())),
-      const ComponentScreen(showNavBottomBar: true)
+      const ComponentScreen(showNavBottomBar: false)
     ]);
   }
 }

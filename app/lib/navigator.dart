@@ -1,10 +1,121 @@
-import 'package:flutter/material.dart';
+import 'dart:math' show max;
+import 'package:flutter/material.dart' hide Navigator;
+import 'package:flutter/material.dart' as material show Navigator;
 
-import 'package:provider/provider.dart' show Provider;
-
-import 'features/preferences/preferences.dart';
+import 'features/dashboard/dashboard_screen.dart';
+import 'features/account/account_screen.dart';
+import 'features/preferences/preferences_screen.dart';
 import 'demo.dart';
-import 'system/log.dart';
+
+typedef PreferredSizeWidgetBuilder = PreferredSizeWidget Function(
+    BuildContext context);
+
+class NavigatorPage {
+  const NavigatorPage(
+      {required this.key,
+      required this.tooltip,
+      required this.label,
+      required this.icon,
+      required this.selectedIcon,
+      this.screen,
+      this.desktopScreen,
+      this.appBar,
+      this.desktopAppBar});
+
+  final String key;
+  final String tooltip;
+  final String label;
+  final Icon icon;
+  final Icon selectedIcon;
+
+  final WidgetBuilder? screen;
+  final WidgetBuilder? desktopScreen;
+
+  final PreferredSizeWidgetBuilder? appBar;
+  final PreferredSizeWidgetBuilder? desktopAppBar;
+}
+
+final WidgetBuilder _preferencesButton = (context) => IconButton(
+      icon: const Icon(Icons.settings),
+      tooltip: 'Settings',
+      onPressed: () {
+        material.Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const PreferencesPage()),
+        );
+      },
+    );
+
+final List<NavigatorPage> _navigatorPages = [
+  NavigatorPage(
+    key: 'home',
+    tooltip: '',
+    label: 'Home',
+    icon: const Icon(Icons.chair_outlined),
+    selectedIcon: const Icon(Icons.chair),
+    screen: (context) => const DashboardScreen(),
+    desktopScreen: (context) => const DashboardScreen(),
+  ),
+  NavigatorPage(
+    key: 'health',
+    tooltip: '',
+    label: 'Health',
+    icon: const Icon(Icons.analytics_outlined),
+    selectedIcon: const Icon(Icons.analytics),
+    screen: (context) => const DemoScreen(),
+    desktopScreen: (context) => const DemoScreen(),
+  ),
+  NavigatorPage(
+    key: 'account',
+    tooltip: '',
+    label: 'Account',
+    icon: const Icon(Icons.person_outline),
+    selectedIcon: const Icon(Icons.person),
+    screen: (context) => const AccountScreen(),
+    appBar: (context) => AppBar(
+      title: const Text("Account"),
+      centerTitle: true,
+      actions: [_preferencesButton(context)],
+    ),
+    desktopScreen: (context) => const AccountScreen(),
+    desktopAppBar: (context) => AppBar(
+      title: const Text("Account"),
+      centerTitle: true,
+    ),
+  ),
+  NavigatorPage(
+    key: 'settings',
+    tooltip: '',
+    label: 'Settings',
+    icon: const Icon(Icons.settings_outlined),
+    selectedIcon: const Icon(Icons.settings),
+    desktopScreen: (context) => const PreferencesScreen(),
+    desktopAppBar: (context) => AppBar(
+      title: const Text("Settings"),
+      centerTitle: true,
+    ),
+  ),
+];
+
+final List<NavigatorPage> _pages =
+    _navigatorPages.where((page) => page.screen != null).toList();
+final List<NavigationDestination> _destinations = _pages
+    .map((page) => NavigationDestination(
+          tooltip: page.tooltip,
+          label: page.label,
+          icon: page.icon,
+          selectedIcon: page.selectedIcon,
+        ))
+    .toList();
+
+final List<NavigatorPage> _desktopPages =
+    _navigatorPages.where((page) => page.desktopScreen != null).toList();
+final List<NavigationRailDestination> _desktopDestinations = _desktopPages
+    .map((page) => NavigationRailDestination(
+          label: Text(page.label),
+          icon: page.icon,
+          selectedIcon: page.selectedIcon,
+        ))
+    .toList();
 
 class Navigator extends StatefulWidget {
   const Navigator({super.key});
@@ -14,61 +125,80 @@ class Navigator extends StatefulWidget {
 }
 
 class _NavigatorState extends State<Navigator> {
-  int _currentIndex = 0;
-
-  final List<Widget> _children = const [
-    DemoScreen(),
-    DemoScreen(),
-    DemoScreen(),
-    DemoScreen(),
-  ];
-
-  final List<BottomNavigationBarItem> _items = const [
-    BottomNavigationBarItem(label: "Add", icon: Icon(Icons.add)),
-    BottomNavigationBarItem(label: "History", icon: Icon(Icons.history)),
-    BottomNavigationBarItem(label: "Meh", icon: Icon(Icons.analytics_outlined)),
-    BottomNavigationBarItem(label: "Settings", icon: Icon(Icons.settings)),
-  ];
+  String _selectedKey = "";
 
   @override
+  @override
   Widget build(BuildContext context) {
-    ColorScheme colorScheme = Theme.of(context).colorScheme;
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Happily Ever After'),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          items: _items,
-          currentIndex: _currentIndex,
-          onTap: (int i) {
-            setState(() {
-              _currentIndex = i;
-            });
-          },
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Preferences preferences =
-                Provider.of<Preferences>(context, listen: false);
-            if (preferences.themeMode == ThemeMode.system) {
-              preferences.setThemeMode(ThemeMode.light);
-            } else if (preferences.themeMode == ThemeMode.light) {
-              preferences.setThemeMode(ThemeMode.dark);
-            } else if (preferences.themeMode == ThemeMode.dark) {
-              preferences.setThemeMode(ThemeMode.system);
-            }
+    return LayoutBuilder(builder: (context, constraints) {
+      if (constraints.maxWidth < 1024) {
+        return _build(context);
+      } else {
+        return _buildDesktop(context);
+      }
+    });
+  }
 
-            final snackBar = SnackBar(
-              content: Text(
-                'Using ${preferences.themeMode} theme',
-              ),
-            );
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          },
-          tooltip: "Change theme",
-          child: const Icon(Icons.palette),
-        ),
-        body: _children[_currentIndex]);
+  int _selectedIndex(List<NavigatorPage> pages) {
+    return max(pages.indexWhere((page) => page.key == _selectedKey), 0);
+  }
+
+  void _setCurrentIndex(List<NavigatorPage> pages, int index) {
+    _selectedKey = pages[index].key;
+  }
+
+  Widget _build(BuildContext context) {
+    int selectedIndex = _selectedIndex(_pages);
+    NavigatorPage selectedPage = _pages[selectedIndex];
+
+    return Scaffold(
+      appBar: selectedPage.appBar?.call(context),
+      body: selectedPage.screen!.call(context),
+      bottomNavigationBar: NavigationBar(
+        onDestinationSelected: (int index) {
+          setState(() {
+            _setCurrentIndex(_pages, index);
+          });
+        },
+        selectedIndex: selectedIndex,
+        destinations: _destinations,
+      ),
+    );
+  }
+
+  Widget _buildDesktop(BuildContext context) {
+    int selectedIndex = _selectedIndex(_desktopPages);
+    NavigatorPage selectedPage = _desktopPages[selectedIndex];
+
+    return Scaffold(
+      body: Row(
+        children: [
+          NavigationRail(
+            onDestinationSelected: (int index) {
+              setState(() {
+                _setCurrentIndex(_desktopPages, index);
+              });
+            },
+            selectedIndex: selectedIndex,
+            destinations: _desktopDestinations,
+            labelType: NavigationRailLabelType.all,
+            leading: Container(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: Image.asset("assets/brand/mark_160.png", width: 48),
+            ),
+          ),
+          Expanded(
+            child: Column(
+              children: [
+                if (selectedPage.desktopAppBar != null)
+                  selectedPage.desktopAppBar!(context),
+                if (selectedPage.desktopScreen != null)
+                  Expanded(child: selectedPage.desktopScreen!(context)),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

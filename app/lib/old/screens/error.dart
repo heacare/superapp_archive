@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import '../widgets/gradient_button.dart';
 import '../old.dart';
 
-const svgAssetName = "assets/svg/error.svg";
+const svgAssetName = "assets/artwork/error.svg";
 
 class ErrorScreen extends StatelessWidget {
   const ErrorScreen({Key? key}) : super(key: key);
