@@ -45,13 +45,13 @@ class App extends StatelessWidget {
         Preferences preferences = Provider.of<Preferences>(context);
         return MaterialApp(
           title: 'Happily Ever After',
-          themeMode: preferences.themeMode,
-          theme: Theme.lightThemeData,
+          //themeMode: preferences.themeMode,
+          //theme: Theme.lightThemeData,
           darkTheme: Theme.darkThemeData,
-          home: child,
           localizationsDelegates: localizationsDelegates,
           supportedLocales: supportedLocales,
           locale: preferences.locale,
+          home: child,
         );
       },
     );
