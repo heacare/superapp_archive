@@ -238,7 +238,7 @@ class DoneWithHealer extends MarkdownPage {
   @override
   final nextPage = () => continuePage(null);
   @override
-  final prevPage = () => DoneContinue();
+  final prevPage = null;
 
   @override
   final title = "Get healer help";
@@ -257,7 +257,7 @@ class DoneWithTeam extends MultipleChoicePage {
   @override
   final nextPage = () => continuePage(null);
   @override
-  final prevPage = () => DoneContinue();
+  final prevPage = null;
 
   @override
   final title = "Get team help";
