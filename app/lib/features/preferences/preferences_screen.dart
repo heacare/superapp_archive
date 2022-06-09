@@ -1,11 +1,12 @@
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 
+import 'package:package_info_plus/package_info_plus.dart' show PackageInfo;
 import 'package:provider/provider.dart' show Provider;
+import 'package:url_launcher/url_launcher.dart' show launchUrl;
 
-import '../../navigator.dart' show ForceRTL;
-import '../../widgets/list_tile_centered.dart';
 import 'preferences.dart';
+import 'preferences_widgets.dart';
 
 class PreferencesPage extends StatelessWidget {
   const PreferencesPage({super.key});
@@ -38,10 +39,10 @@ class PreferencesScreen extends StatelessWidget {
     Preferences preferences = Provider.of<Preferences>(context);
 
     return [
-      _Group(
+      PreferenceGroup(
         title: 'Display',
         items: [
-          _Choice<ThemeMode>(
+          PreferenceChoice<ThemeMode>(
             label: 'Theme',
             choices: _themeModeChoices,
             value: preferences.themeMode,
@@ -50,7 +51,7 @@ class PreferencesScreen extends StatelessWidget {
             },
           ),
           if (kDebugMode)
-            _Switch(
+            PreferenceSwitch(
               label: 'Force RTL',
               value: preferences.forceRTL,
               onChanged: (value) {
@@ -59,10 +60,10 @@ class PreferencesScreen extends StatelessWidget {
             ),
         ],
       ),
-      _Group(
+      PreferenceGroup(
         title: 'Privacy',
         items: [
-          _Switch(
+          PreferenceSwitch(
             label: 'Data collection',
             description:
                 'We make extensive use of your data to allow our HEAlers to guide you through your journey',
@@ -71,248 +72,58 @@ class PreferencesScreen extends StatelessWidget {
               preferences.setConsentTelemetryInterim(value);
             },
           ),
+          PreferenceInfo(
+            label: 'Privacy policy',
+            onTap: () async {
+              await launchUrl(_privacyPolicyUrl);
+            },
+          ),
+        ],
+      ),
+      PreferenceGroup(
+        title: 'About',
+        items: [
+          PreferenceInfo(
+            label: 'Feedback',
+            onTap: () async {
+              await launchUrl(_feedbackUrl);
+            },
+          ),
+          FutureBuilder<PackageInfo>(
+            future: PackageInfo.fromPlatform(),
+            builder: (context, snapshot) {
+              String version = 'Loading';
+              if (snapshot.data != null) {
+                version =
+                    '${snapshot.data!.version}+${snapshot.data!.buildNumber}';
+              }
+              return PreferenceInfo(
+                label: 'Version',
+                value: version,
+              );
+            },
+          ),
         ],
       ),
     ];
   }
 }
 
-class _Group extends StatelessWidget {
-  const _Group({required this.title, required this.items});
-
-  final String title;
-  final List<Widget> items;
-
-  @override
-  Widget build(BuildContext context) => Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
-                  child: Text(
-                    title,
-                    style: Theme.of(context).textTheme.titleSmall,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Card(
-            clipBehavior: Clip.antiAlias,
-            margin: const EdgeInsets.symmetric(horizontal: 16),
-            child: ListView.separated(
-              shrinkWrap: true,
-              itemCount: items.length,
-              itemBuilder: (context, index) => items[index],
-              separatorBuilder: (context, index) =>
-                  const Divider(indent: 16, endIndent: 16, height: 0),
-            ),
-          ),
-        ],
-      );
-}
-
-class _ItemTemplate extends StatelessWidget {
-  const _ItemTemplate({
-    required this.label,
-    this.description,
-    required this.child,
-    this.onTap,
-  });
-
-  final String label;
-  final String? description;
-  final Widget child;
-  final GestureTapCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) => ListTileCentered(
-        onTap: onTap,
-        title: Text(label),
-        subtitle: description == null ? null : Text(description!),
-        trailing: child,
-        minVerticalPadding: 16,
-      );
-}
-
-class _Switch extends StatelessWidget {
-  const _Switch({
-    required this.label,
-    this.description,
-    required this.value,
-    required this.onChanged,
-  });
-
-  final String label;
-  final String? description;
-  final bool value;
-  final ValueChanged<bool> onChanged;
-
-  @override
-  Widget build(BuildContext context) => _ItemTemplate(
-        label: label,
-        description: description,
-        child: Switch.adaptive(
-          value: value,
-          onChanged: onChanged,
-        ),
-        onTap: () {
-          onChanged(!value);
-        },
-      );
-}
-
-class _Choice<T> extends StatelessWidget {
-  const _Choice({
-    required this.label,
-    this.description,
-    required this.choices,
-    required this.value,
-    required this.onChanged,
-  }) : assert(choices.length > 0);
-
-  final String label;
-  final String? description;
-  final List<_ChoiceItem<T>> choices;
-  final T value;
-  final ValueChanged<T> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    _ChoiceItem<T> selected = choices.firstWhere(
-      (choice) => choice.value == value,
-      orElse: () => choices[0],
-    );
-
-    return _ItemTemplate(
-      label: label,
-      description: description,
-      child: Text(selected.label, style: Theme.of(context).textTheme.bodyLarge),
-      onTap: () async {
-        T? value = await showModalBottomSheet<T?>(
-          context: context,
-          builder: (context) => ForceRTL(
-            _ChoiceModal<T>(
-              label: label,
-              choices: choices,
-              selected: selected,
-            ),
-          ),
-        );
-        if (value != null) {
-          onChanged(value);
-        }
-      },
-    );
-  }
-}
-
-// TODO(serverwentdown): abstract away modal sheet as a standard dialog
-class _ChoiceModal<T> extends StatefulWidget {
-  const _ChoiceModal({
-    required this.label,
-    required this.choices,
-    required this.selected,
-  });
-
-  final String label;
-  final List<_ChoiceItem<T>> choices;
-  final _ChoiceItem<T> selected;
-
-  @override
-  State<_ChoiceModal<T>> createState() => _ChoiceModalState<T>();
-}
-
-class _ChoiceModalState<T> extends State<_ChoiceModal<T>> {
-  T? value;
-
-  @override
-  void initState() {
-    super.initState();
-    value = widget.selected.value;
-  }
-
-  @override
-  Widget build(BuildContext context) => Column(
-        children: [
-          Row(
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                child: Text(
-                  widget.label,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ),
-            ],
-          ),
-          Expanded(
-            child: ListView.separated(
-              shrinkWrap: true,
-              itemCount: widget.choices.length,
-              itemBuilder: _buildListItem,
-              separatorBuilder: (context, index) =>
-                  const Divider(indent: 64, endIndent: 16, height: 0),
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                child: OutlinedButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('Cancel'),
-                ),
-              ),
-            ],
-          ),
-        ],
-      );
-
-  Widget _buildListItem(BuildContext context, int index) {
-    _ChoiceItem choice = widget.choices[index];
-
-    return ListTileCentered(
-      title: Text(choice.label),
-      leading: Radio<T>(
-        value: choice.value,
-        groupValue: value,
-        onChanged: (newValue) {
-          setState(() {
-            value = newValue as T;
-          });
-          Navigator.of(context).pop(value);
-        },
-      ),
-      minVerticalPadding: 16,
-    );
-  }
-}
-
-class _ChoiceItem<T> {
-  const _ChoiceItem({required this.value, required this.label});
-
-  final T value;
-  final String label;
-}
-
-const List<_ChoiceItem<ThemeMode>> _themeModeChoices = [
-  _ChoiceItem(
+const List<PreferenceChoiceItem<ThemeMode>> _themeModeChoices = [
+  PreferenceChoiceItem(
     value: ThemeMode.system,
     label: 'System',
   ),
-  _ChoiceItem(
+  PreferenceChoiceItem(
     value: ThemeMode.light,
     label: 'Light',
   ),
-  _ChoiceItem(
+  PreferenceChoiceItem(
     value: ThemeMode.dark,
     label: 'Dark',
   ),
 ];
+
+final Uri _privacyPolicyUrl = Uri.parse('https://hea.care/privacy');
+
+final Uri _feedbackUrl = Uri.parse('mailto:hello@hea.care');

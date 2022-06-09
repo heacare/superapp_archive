@@ -12,7 +12,7 @@ class DashboardScreen extends StatelessWidget {
       return const old.DashboardScreen();
     }
     return const Center(
-      child: Text('Compat mode disabled and accounts not implemented'),
+      child: Text('Compat mode disabled and dashboard not implemented'),
     );
   }
 }

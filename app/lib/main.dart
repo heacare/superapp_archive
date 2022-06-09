@@ -2,8 +2,11 @@ import 'package:flutter/material.dart' show MaterialApp;
 import 'package:flutter/services.dart' show SystemChrome;
 import 'package:flutter/widgets.dart' hide Navigator;
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:provider/provider.dart' show ChangeNotifierProvider, Provider;
+import 'package:provider/provider.dart'
+    show Provider, MultiProvider, ChangeNotifierProvider;
 
+import 'features/account/account.dart' show Account, AppAccount;
+import 'features/account/wallet.dart' show Wallet, WalletConnectWallet;
 import 'features/preferences/preferences.dart' show Preferences, AppPreferences;
 import 'navigator.dart';
 import 'old/old.dart' show oldSetup;
@@ -24,22 +27,37 @@ void main() async {
     }
 
     Preferences preferences = await AppPreferences.load();
+    Account account = AppAccount();
+    Wallet wallet = await WalletConnectWallet.load();
     runApp(
       App(
         preferences: preferences,
+        account: account,
+        wallet: wallet,
       ),
     );
   });
 }
 
 class App extends StatelessWidget {
-  const App({super.key, required this.preferences});
+  const App({
+    super.key,
+    required this.preferences,
+    required this.account,
+    required this.wallet,
+  });
 
   final Preferences preferences;
+  final Account account;
+  final Wallet wallet;
 
   @override
-  Widget build(BuildContext context) => ChangeNotifierProvider.value(
-        value: preferences,
+  Widget build(BuildContext context) => MultiProvider(
+        providers: [
+          ChangeNotifierProvider<Preferences>.value(value: preferences),
+          ChangeNotifierProvider<Account>.value(value: account),
+          ChangeNotifierProvider<Wallet>.value(value: wallet),
+        ],
         child: const ForceRTL(Navigator()),
         builder: (context, child) {
           Preferences preferences = Provider.of<Preferences>(context);

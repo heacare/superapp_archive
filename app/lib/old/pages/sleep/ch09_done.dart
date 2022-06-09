@@ -286,7 +286,6 @@ $groupInstructions
 
 Widget continuePage(String? choice) {
   choice ??= kvReadStringList("sleep", "continue-action")[0];
-  choice!;
   if (choice.startsWith("more-checkin")) {
     return DiaryStart();
   } else if (choice.startsWith("change-routine")) {
