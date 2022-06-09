@@ -7,6 +7,11 @@ def git_ensure_status_clean():
     assert status.stdout == b""
 
 
+def git_get_current_branch() -> str:
+    rev = run(["git", "rev-parse", "--abbrev-ref", "HEAD"], capture_output=True, check=True)
+    return rev.stdout.strip()
+
+
 def git_push(refs: List[str], remote="origin"):
     run(["git", "push", remote, *refs], check=True)
 

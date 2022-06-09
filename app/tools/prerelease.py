@@ -7,8 +7,9 @@ from lib.release_notes import *
 
 
 git_ensure_status_clean()
+branch = git_get_current_branch()
 # Ensure pushed
-git_push(["main"])
+git_push([branch])
 # Set release_notes
 print("In past tense, describe the changes that have been made")
 release_notes = input("Release notes: ")
@@ -29,7 +30,7 @@ tag = f"v{version}"
 git_tag(tag)
 # Perform Git push
 input("Press enter to push")
-git_push(["main", tag])
+git_push([branch, tag])
 
 
 # vim: set et ts=4 sw=4:
