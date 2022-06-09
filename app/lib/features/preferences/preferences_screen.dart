@@ -210,6 +210,7 @@ class _Choice<T> extends StatelessWidget {
   }
 }
 
+// TODO(serverwentdown): abstract away modal sheet as a standard dialog
 class _ChoiceModal<T> extends StatefulWidget {
   const _ChoiceModal({
     required this.label,
