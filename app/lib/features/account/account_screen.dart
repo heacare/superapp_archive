@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart' show Provider;
+import 'package:qr_flutter/qr_flutter.dart' show QrImage, QrVersions;
 
 import '../../main.dart';
 import '../../old/screens/profile.dart' as old;
@@ -18,7 +19,14 @@ class AccountScreen extends StatelessWidget {
       child: Center(
         child: Column(
           children: [
+            if (wallet.walletConnectUri != null)
+              QrImage(
+                foregroundColor: Theme.of(context).colorScheme.onBackground,
+                data: wallet.walletConnectUri!,
+                size: 200,
+              ),
             TextFormField(
+              key: Key(wallet.walletConnectUri ?? ''),
               initialValue: wallet.walletConnectUri ?? 'No URI',
               readOnly: true,
             ),

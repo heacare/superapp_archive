@@ -10,6 +10,7 @@ import 'features/account/wallet.dart' show Wallet, WalletConnectWallet;
 import 'features/preferences/preferences.dart' show Preferences, AppPreferences;
 import 'navigator.dart';
 import 'old/old.dart' show oldSetup;
+import 'system/additional_licenses.dart' show licensesInitialize;
 import 'system/crashlogger.dart' show crashloggerWrap;
 import 'system/firebase.dart' show firebaseInitialize;
 import 'system/theme.dart' show Theme;
@@ -26,6 +27,7 @@ void main() async {
       await oldSetup();
     }
 
+    licensesInitialize();
     Preferences preferences = await AppPreferences.load();
     Account account = AppAccount();
     Wallet wallet = await WalletConnectWallet.load();
@@ -33,6 +35,8 @@ void main() async {
       App(
         preferences: preferences,
         account: account,
+        // TODO(serverwentdown): Make Wallet part of Account's structure, and
+        // account should serve as an abstraction on top of Wallet types
         wallet: wallet,
       ),
     );
