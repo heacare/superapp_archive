@@ -103,6 +103,12 @@ class PreferencesScreen extends StatelessWidget {
               );
             },
           ),
+          PreferenceInfo(
+            label: 'Open-source licenses',
+            onTap: () async {
+              showLicensePage(context: context);
+            },
+          ),
         ],
       ),
     ];

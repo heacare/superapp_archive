@@ -12,25 +12,27 @@ class AccountScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (compat != 'disabled') {
-      return const old.ProfileScreen(disableAppBar: true);
-    }
     Wallet wallet = Provider.of<Wallet>(context);
     logD('rebuild');
-    return Center(
-      child: Column(
-        children: [
-          TextFormField(
-            initialValue: wallet.walletConnectUri ?? 'No URI',
-            readOnly: true,
-          ),
-          ElevatedButton(
-            child: const Text('Connect'),
-            onPressed: () async {
-              await wallet.connect();
-            },
-          ),
-        ],
+    return SingleChildScrollView(
+      child: Center(
+        child: Column(
+          children: [
+            TextFormField(
+              initialValue: wallet.walletConnectUri ?? 'No URI',
+              readOnly: true,
+            ),
+            ElevatedButton(
+              child: const Text('Connect'),
+              onPressed: () async {
+                await wallet.connect();
+              },
+            ),
+            if (compat != 'disabled') const SizedBox(height: 64),
+            if (compat != 'disabled')
+              const old.ProfileScreen(disableScaffold: true),
+          ],
+        ),
       ),
     );
   }
