@@ -13,11 +13,13 @@ class WalletConnect extends StatelessWidget {
     Account account = Provider.of<Account>(context);
     return QrCodeDialog(
       data: account.wallet?.walletConnectUri,
-      child: TextFormField(
-        key: Key(account.wallet?.walletConnectUri ?? ''),
-        initialValue: account.wallet?.walletConnectUri ?? '',
-        readOnly: true,
-      ),
+      child: account.wallet?.walletConnectUri != null
+          ? TextFormField(
+              key: Key(account.wallet?.walletConnectUri ?? ''),
+              initialValue: account.wallet?.walletConnectUri ?? '',
+              readOnly: true,
+            )
+          : const CircularProgressIndicator(),
     );
   }
 }

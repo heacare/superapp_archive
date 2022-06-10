@@ -1,3 +1,4 @@
+import 'dart:async' show unawaited;
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart' show Provider;
@@ -20,7 +21,10 @@ class AccountScreen extends StatelessWidget {
             ElevatedButton(
               child: const Text('WalletConnect'),
               onPressed: () async {
-                await account.wallet!.connect();
+                unawaited(() async {
+                  await Future.delayed(const Duration(milliseconds: 100));
+                  await account.wallet!.connect();
+                }());
                 await showWalletConnectDialog(context);
               },
             ),
