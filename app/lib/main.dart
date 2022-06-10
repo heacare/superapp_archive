@@ -6,7 +6,6 @@ import 'package:provider/provider.dart'
     show Provider, MultiProvider, ChangeNotifierProvider;
 
 import 'features/account/account.dart' show Account, AppAccount;
-import 'features/account/wallet.dart' show Wallet, WalletConnectWallet;
 import 'features/preferences/preferences.dart' show Preferences, AppPreferences;
 import 'navigator.dart';
 import 'old/old.dart' show oldSetup;
@@ -29,15 +28,11 @@ void main() async {
 
     licensesInitialize();
     Preferences preferences = await AppPreferences.load();
-    Account account = AppAccount();
-    Wallet wallet = await WalletConnectWallet.load();
+    Account account = await AppAccount.load();
     runApp(
       App(
         preferences: preferences,
         account: account,
-        // TODO(serverwentdown): Make Wallet part of Account's structure, and
-        // account should serve as an abstraction on top of Wallet types
-        wallet: wallet,
       ),
     );
   });
@@ -48,19 +43,16 @@ class App extends StatelessWidget {
     super.key,
     required this.preferences,
     required this.account,
-    required this.wallet,
   });
 
   final Preferences preferences;
   final Account account;
-  final Wallet wallet;
 
   @override
   Widget build(BuildContext context) => MultiProvider(
         providers: [
           ChangeNotifierProvider<Preferences>.value(value: preferences),
           ChangeNotifierProvider<Account>.value(value: account),
-          ChangeNotifierProvider<Wallet>.value(value: wallet),
         ],
         child: const ForceRTL(Navigator()),
         builder: (context, child) {

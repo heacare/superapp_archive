@@ -1,39 +1,27 @@
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart' show Provider;
-import 'package:qr_flutter/qr_flutter.dart' show QrImage, QrVersions;
 
 import '../../main.dart';
 import '../../old/screens/profile.dart' as old;
-import '../../system/log.dart';
-import 'wallet.dart';
+import 'account.dart' show Account;
+import 'wallet_walletconnect_widget.dart' show showWalletConnectDialog;
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    Wallet wallet = Provider.of<Wallet>(context);
-    logD('rebuild');
+    Account account = Provider.of<Account>(context);
     return SingleChildScrollView(
       child: Center(
         child: Column(
           children: [
-            if (wallet.walletConnectUri != null)
-              QrImage(
-                foregroundColor: Theme.of(context).colorScheme.onBackground,
-                data: wallet.walletConnectUri!,
-                size: 200,
-              ),
-            TextFormField(
-              key: Key(wallet.walletConnectUri ?? ''),
-              initialValue: wallet.walletConnectUri ?? 'No URI',
-              readOnly: true,
-            ),
             ElevatedButton(
-              child: const Text('Connect'),
+              child: const Text('WalletConnect'),
               onPressed: () async {
-                await wallet.connect();
+                await account.wallet!.connect();
+                await showWalletConnectDialog(context);
               },
             ),
             if (compat != 'disabled') const SizedBox(height: 64),
