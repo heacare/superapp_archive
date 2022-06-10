@@ -31,9 +31,9 @@ class ForceRTL extends StatelessWidget {
             child: child!,
           );
         }
-        return Container(
+        return Visibility(
           key: key,
-          child: child,
+          child: child!,
         );
       },
       child: child,

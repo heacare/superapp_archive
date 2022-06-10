@@ -8,18 +8,16 @@ class QrCode extends StatelessWidget {
   final String data;
 
   @override
-  Widget build(BuildContext context) {
-    return FittedBox(
-      child: SizedBox(
-        width: 300,
-        height: 300,
-        child: QrImage(
-          foregroundColor: Theme.of(context).colorScheme.onBackground,
-          data: data,
+  Widget build(BuildContext context) => FittedBox(
+        child: SizedBox(
+          width: 300,
+          height: 300,
+          child: QrImage(
+            foregroundColor: Theme.of(context).colorScheme.onBackground,
+            data: data,
+          ),
         ),
-      ),
-    );
-  }
+      );
 }
 
 class QrCodeDialog extends StatelessWidget {
@@ -29,23 +27,21 @@ class QrCodeDialog extends StatelessWidget {
   final Widget? child;
 
   @override
-  Widget build(BuildContext context) {
-    return ConstrainedBox(
-      // TODO(serverwentdown): Can we limit the height of the widget to be
-      // the height of the QR code + the height of the child
-      constraints: const BoxConstraints(maxHeight: 340),
-      child: Column(
-        children: [
-          if (data != null)
-            Expanded(
-              child: QrCode(data!),
+  Widget build(BuildContext context) => ConstrainedBox(
+        // TODO(serverwentdown): Can we limit the height of the widget to be
+        // the height of the QR code + the height of the child
+        constraints: const BoxConstraints(maxHeight: 340),
+        child: Column(
+          children: [
+            if (data != null)
+              Expanded(
+                child: QrCode(data!),
+              ),
+            ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 300),
+              child: child,
             ),
-          ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 300),
-            child: child,
-          ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
 }

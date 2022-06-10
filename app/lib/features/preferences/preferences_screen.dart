@@ -17,10 +17,7 @@ class PreferencesPage extends StatelessWidget {
           title: const Text('Settings'),
           centerTitle: true,
         ),
-        body: const Align(
-          alignment: AlignmentDirectional.topCenter,
-          child: PreferencesScreen(),
-        ),
+        body: const PreferencesScreen(),
       );
 }
 
@@ -28,12 +25,24 @@ class PreferencesScreen extends StatelessWidget {
   const PreferencesScreen({super.key});
 
   @override
-  Widget build(BuildContext context) => Container(
-        constraints: const BoxConstraints.expand(width: 640),
-        child: Column(
-          children: _buildGroups(context),
+  Widget build(BuildContext context) {
+    List<Widget> items = _buildGroups(context);
+    return SingleChildScrollView(
+      child: Container(
+        alignment: AlignmentDirectional.topCenter,
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 640),
+          padding: const EdgeInsetsDirectional.only(bottom: 16),
+          child: ListView.separated(
+            shrinkWrap: true,
+            itemCount: items.length,
+            itemBuilder: (context, index) => items[index],
+            separatorBuilder: (context, index) => const SizedBox(height: 8),
+          ),
         ),
-      );
+      ),
+    );
+  }
 
   List<Widget> _buildGroups(BuildContext context) {
     Preferences preferences = Provider.of<Preferences>(context);
