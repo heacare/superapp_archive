@@ -91,7 +91,7 @@ class WalletConnectWallet extends Wallet with WalletConnect {
 /// WalletConnect client. Re-implements most of the client aspects of
 /// `wallet_connect` but with internal APIs replicating the reference
 /// Client API v1.0, as per the [official API reference](https://docs.walletconnect.com/client-api)
-abstract class WalletConnect {
+mixin WalletConnect {
   /// Underlying WebSocket channel. Exists only when a connection is
   /// established and active, null when the connection is closed
   WebSocketChannel? _channel;
@@ -324,14 +324,14 @@ bool _isJsonRpcErrorResponse(Map<String, dynamic> payload) =>
 WCSocketMessage _parseMessage(String event) {
   try {
     return WCSocketMessage.fromJson(jsonDecode(event));
+    // ignore: avoid_catching_errors
   } on FormatException catch (e) {
     // Handle most JSON parser errors. Data sent can be manipulated
     logW('Bridge: ignoring invalid message received: $e');
     // For now, re-throw to submit error to crashlogger just in case
     rethrow;
+    // ignore: avoid_catching_errors
   } on TypeError catch (e) {
-    // ignore: avoid_catching_errors
-    // ignore: avoid_catching_errors
     // Handle most JSON conversion errors. Data sent can be manipulated
     logW('Bridge: ignoring invalid message received: $e');
     // For now, re-throw to submit error to crashlogger just in case
@@ -343,14 +343,14 @@ WCSocketMessage _parseMessage(String event) {
 WCEncryptionPayload _parseEncryptedPayload(String payload) {
   try {
     return WCEncryptionPayload.fromJson(jsonDecode(payload));
+    // ignore: avoid_catching_errors
   } on FormatException catch (e) {
     // Handle most JSON parser errors. Data sent can be manipulated
     logW('Bridge: ignoring invalid message received: $e');
     // For now, re-throw to submit error to crashlogger just in case
     rethrow;
+    // ignore: avoid_catching_errors
   } on TypeError catch (e) {
-    // ignore: avoid_catching_errors
-    // ignore: avoid_catching_errors
     // Handle most JSON conversion errors. Data sent can be manipulated
     logW('Bridge: ignoring invalid message received: $e');
     // For now, re-throw to submit error to crashlogger just in case
