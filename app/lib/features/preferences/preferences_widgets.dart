@@ -129,7 +129,9 @@ class PreferenceChoice<T> extends StatelessWidget {
       description: description,
       child: Text(selected.label, style: Theme.of(context).textTheme.bodyLarge),
       onTap: () async {
+        double maxHeight = choices.length <= 3 ? 320 : double.infinity;
         T? value = await showModalBottomSheet<T?>(
+          constraints: BoxConstraints(maxHeight: maxHeight),
           context: context,
           builder: (context) => ForceRTL(
             PreferenceChoiceModal<T>(
@@ -247,6 +249,7 @@ class PreferenceInfo extends StatelessWidget {
     required this.label,
     this.description,
     this.value,
+    this.trailer,
     this.onTap,
     this.onLongPress,
   });
@@ -254,6 +257,7 @@ class PreferenceInfo extends StatelessWidget {
   final String label;
   final String? description;
   final String? value;
+  final Widget? trailer;
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
 
@@ -263,8 +267,16 @@ class PreferenceInfo extends StatelessWidget {
         description: description,
         onTap: onTap,
         onLongPress: onLongPress,
-        child: value != null
-            ? Text(value!, style: Theme.of(context).textTheme.bodyLarge)
-            : const SizedBox(),
+        child: Row(
+          children: [
+            if (value != null)
+              Text(value!, style: Theme.of(context).textTheme.bodyLarge),
+            if (trailer != null)
+              IconTheme(
+                data: Theme.of(context).iconTheme.copyWith(opacity: 0.38),
+                child: trailer!,
+              ),
+          ],
+        ),
       );
 }
