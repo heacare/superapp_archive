@@ -8,6 +8,9 @@ abstract class Wallet extends ChangeNotifier {
   /// Trigger the connection request
   Future<void> connect();
 
+  /// Perform a disconnection
+  Future<void> disconnect();
+
   /// Wallet is connected when an account is ready to be used
   bool get connected => account != null;
 

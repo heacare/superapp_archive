@@ -36,8 +36,8 @@ class AppAccount extends Account {
       return;
     }
     _wallet = WalletConnectWallet.fromJson(wallet);
-    _wallet!.addListener(notifyListeners);
     await _wallet!.start();
+    _wallet!.addListener(notifyListeners);
   }
 
   @override

@@ -108,6 +108,20 @@ class WalletConnect extends StatelessWidget {
           if (wallet.connected) {
             Navigator.of(context).pop(wallet);
           }
+          if (wallet.connectError != null) {
+            return SizedBox(
+              width: 360,
+              height: 420,
+              child: Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(16),
+                child: Text(
+                  'WalletConnect failed: ${wallet.connectError}',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            );
+          }
           Widget? tabs;
           if (defaultTargetPlatform == TargetPlatform.android ||
               defaultTargetPlatform == TargetPlatform.iOS) {

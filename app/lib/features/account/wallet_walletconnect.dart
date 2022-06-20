@@ -6,6 +6,7 @@ import 'package:convert/convert.dart' show hex;
 import 'package:json_annotation/json_annotation.dart'
     show JsonSerializable, JsonKey;
 import 'package:uuid/uuid.dart' show Uuid;
+import 'package:wallet_connect/models/jsonrpc/json_rpc_error.dart';
 import 'package:wallet_connect/models/jsonrpc/json_rpc_error_response.dart';
 import 'package:wallet_connect/models/jsonrpc/json_rpc_request.dart';
 import 'package:wallet_connect/models/jsonrpc/json_rpc_response.dart';
@@ -84,6 +85,7 @@ class WalletConnectWallet extends Wallet {
       session: session,
       clientId: clientId,
       onConnect: _onConnect,
+      onConnectError: _onConnectError,
       onSessionUpdate: _onSessionUpdate,
       onDisconnect: _onDisconnect,
     );
@@ -91,6 +93,11 @@ class WalletConnectWallet extends Wallet {
 
   void _onConnect(WCApproveSessionResponse payload) {
     account = payload.accounts[0];
+    notifyListeners();
+  }
+
+  void _onConnectError(JsonRpcError error) {
+    connectError = error.message;
     notifyListeners();
   }
 
@@ -115,8 +122,18 @@ class WalletConnectWallet extends Wallet {
     notifyListeners();
   }
 
+  @override
+  Future<void> disconnect() async {
+    await _client!.killSession();
+    account = null;
+    notifyListeners();
+  }
+
   @JsonKey(ignore: true)
   bool connectReady = false;
+
+  @JsonKey(ignore: true)
+  String? connectError;
 
   String get walletConnectUri => session.toUri();
 
@@ -136,6 +153,7 @@ class WalletConnect {
     required this.session,
     required this.clientId,
     required this.onConnect,
+    required this.onConnectError,
     required this.onSessionUpdate,
     required this.onDisconnect,
   }) {
@@ -147,6 +165,9 @@ class WalletConnect {
 
   /// Handles successful session creation
   final void Function(WCApproveSessionResponse payload) onConnect;
+
+  /// Handles failed session creation
+  final void Function(JsonRpcError error) onConnectError;
 
   /// Handles session updates
   final void Function(WCSessionUpdate payload) onSessionUpdate;
@@ -225,16 +246,16 @@ class WalletConnect {
 
   /// Handles stream errors
   void _handleStreamError(dynamic error) {
-    assert(_channel!.closeCode != null);
     logD('Bridge: ${_channel?.closeCode} ${_channel?.closeReason} $error');
+    assert(_channel!.closeCode != null);
     _channel = null;
     // TODO(serverwentdown): How should the client handle closed connections? Is it really necessary to keep a persistent connection using retry logic?
   }
 
   /// Handles stream completion
   void _handleStreamDone() {
-    assert(_channel!.closeCode != null);
     logD('Bridge: ${_channel?.closeCode} ${_channel?.closeReason} done');
+    assert(_channel!.closeCode != null);
     _channel = null;
     // TODO(serverwentdown): See _handleStreamError
   }
@@ -262,7 +283,11 @@ class WalletConnect {
 
   /// Handle error response messages
   void _handleErrorResponse(JsonRpcErrorResponse response) {
-    throw Exception('Bridge: unhandled error response $response');
+    if (response.id == _handshakeId) {
+      onConnectError(response.error);
+    } else {
+      throw Exception('Bridge: unhandled error response $response');
+    }
   }
 
   /// Sends an arbitrary payload in a topic over the socket
@@ -323,6 +348,26 @@ class WalletConnect {
           peerMeta: _clientMeta,
           chainId: _chainId,
         ).toJson()
+      ],
+    );
+    await _sendRequest(request, topic: session.topic);
+  }
+
+  /// Disconnect request ID
+  int _disconnectId = 0;
+
+  /// Kills the WalletConnect session
+  Future<void> killSession() async {
+    _ensureConnected();
+
+    _disconnectId = _generateId();
+    JsonRpcRequest request = JsonRpcRequest(
+      id: _disconnectId,
+      method: WCMethod.SESSION_UPDATE,
+      params: [
+        WCSessionUpdate(
+          approved: false,
+        ).toJson(),
       ],
     );
     await _sendRequest(request, topic: session.topic);
