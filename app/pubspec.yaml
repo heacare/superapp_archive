@@ -57,7 +57,7 @@ dependencies:
   # Firebase
   firebase_core: ^1.17.0
   firebase_messaging: ^11.4.0
-  firebase_crashlytics: ^2.8.0
+  firebase_crashlytics: ^2.8.2
 
   # PREVIOUS VERSION
   health:
