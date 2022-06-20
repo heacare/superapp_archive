@@ -18,6 +18,8 @@ import 'wallet_walletconnect_registry.dart'
         RegistryWalletLinks,
         RegistryWalletImageUrl;
 
+// TODO(serverwentdown): Use same dialog for prompts to sign transactions
+
 class WalletConnect extends StatelessWidget {
   const WalletConnect({super.key, required this.wallet});
 
@@ -145,7 +147,7 @@ class WalletConnectWalletPicker extends StatelessWidget {
           child: const Text('Connect'),
           onPressed: () {
             Uri launchUri = Uri.parse(uri);
-            logD('$launchUri');
+            logD('WalletConnect: launching $launchUri');
             launchUrl(launchUri);
           },
         ),
@@ -175,7 +177,7 @@ class WalletConnectWalletPicker extends StatelessWidget {
                 launchString = '${links.native}//wc?uri=$uri';
               }
               Uri launchUri = Uri.parse(launchString!);
-              logD('$launchUri');
+              logD('WalletConnect: launching $launchUri');
               launchUrl(launchUri, mode: LaunchMode.externalApplication);
             },
           );
