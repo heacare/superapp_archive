@@ -10,8 +10,8 @@ class QrCode extends StatelessWidget {
   @override
   Widget build(BuildContext context) => FittedBox(
         child: SizedBox(
-          width: 300,
-          height: 300,
+          width: 360,
+          height: 360,
           child: QrImage(
             foregroundColor: Theme.of(context).colorScheme.onBackground,
             data: data,
@@ -38,7 +38,7 @@ class QrCodeDialog extends StatelessWidget {
                 child: QrCode(data!),
               ),
             ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 300),
+              constraints: const BoxConstraints(maxWidth: 360),
               child: child,
             ),
           ],

@@ -3,7 +3,8 @@ import 'dart:math' show Random;
 import 'dart:typed_data' show Uint8List;
 
 import 'package:convert/convert.dart' show hex;
-import 'package:json_annotation/json_annotation.dart' show JsonSerializable;
+import 'package:json_annotation/json_annotation.dart'
+    show JsonSerializable, JsonKey;
 import 'package:uuid/uuid.dart' show Uuid;
 import 'package:wallet_connect/models/jsonrpc/json_rpc_error_response.dart';
 import 'package:wallet_connect/models/jsonrpc/json_rpc_request.dart';
@@ -104,6 +105,7 @@ class WalletConnectWallet extends Wallet {
   }
 
   @override
+  @JsonKey(ignore: true)
   String? account;
 
   @override
@@ -113,6 +115,7 @@ class WalletConnectWallet extends Wallet {
     notifyListeners();
   }
 
+  @JsonKey(ignore: true)
   bool connectReady = false;
 
   String get walletConnectUri => session.toUri();

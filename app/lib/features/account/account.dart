@@ -36,15 +36,20 @@ class AppAccount extends Account {
       return;
     }
     _wallet = WalletConnectWallet.fromJson(wallet);
-    await _wallet?.start();
+    _wallet!.addListener(notifyListeners);
+    await _wallet!.start();
   }
 
   @override
   Wallet? get wallet => _wallet;
   @override
   Future<void> setWallet(Wallet wallet) async {
+    if (_wallet != null) {
+      _wallet!.dispose();
+    }
     _wallet = wallet;
     await kvWrite(_database, 'account.wallet', _wallet);
+    _wallet!.addListener(notifyListeners);
     notifyListeners();
   }
 

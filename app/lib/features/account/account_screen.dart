@@ -17,8 +17,8 @@ class AccountScreen extends StatelessWidget {
       child: Center(
         child: Column(
           children: [
-            Text('Connected: ${account.wallet?.connected}'),
             Text('Account: ${account.wallet?.account}'),
+            Text('Connected: ${account.wallet?.connected}'),
             ElevatedButton(
               child: const Text('WalletConnect'),
               onPressed: () async {

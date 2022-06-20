@@ -53,6 +53,9 @@ dependencies:
   # Notifications
   awesome_notifications: ^0.6.21
 
+  # Networking
+  http: ^0.13.4
+
   # Media
   flutter_svg: ^1.0.3
   qr_flutter: ^4.0.0
@@ -69,7 +72,6 @@ dependencies:
   # PREVIOUS VERSION
   health:
     path: plugins/health/
-  http: ^0.13.4
   get_it: ^7.2.0
   firebase_auth: ^3.3.18
   flutter_markdown: ^0.6.10
