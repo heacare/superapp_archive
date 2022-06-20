@@ -11,6 +11,9 @@ class WalletConnect extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Account account = Provider.of<Account>(context);
+    if (account.wallet?.connected ?? false) {
+      Navigator.of(context).pop();
+    }
     return QrCodeDialog(
       data: account.wallet?.walletConnectUri,
       child: account.wallet?.walletConnectUri != null

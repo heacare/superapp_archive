@@ -18,13 +18,17 @@ class AccountScreen extends StatelessWidget {
       child: Center(
         child: Column(
           children: [
+		    Text('Connected: ${account.wallet?.connected}'),
+		    Text('Account: ${account.wallet?.account}'),
             ElevatedButton(
               child: const Text('WalletConnect'),
               onPressed: () async {
-                unawaited(() async {
-                  await Future.delayed(const Duration(milliseconds: 100));
-                  await account.wallet!.connect();
-                }());
+                unawaited(
+                  () async {
+                    await Future.delayed(const Duration(milliseconds: 100));
+                    await account.wallet!.connect();
+                  }(),
+                );
                 await showWalletConnectDialog(context);
               },
             ),
