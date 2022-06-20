@@ -6,6 +6,7 @@ import 'package:provider/provider.dart'
     show Provider, MultiProvider, ChangeNotifierProvider;
 
 import 'features/account/account.dart' show Account, AppAccount;
+import 'features/database/database.dart' show Database, databaseOpen;
 import 'features/preferences/preferences.dart' show Preferences, AppPreferences;
 import 'navigator.dart';
 import 'old/old.dart' show oldSetup;
@@ -27,8 +28,10 @@ void main() async {
     }
 
     licensesInitialize();
+    // TODO(serverwentdown): Improve shared_preferences and sqflite startup time
     Preferences preferences = await AppPreferences.load();
-    Account account = await AppAccount.load();
+    Database database = await databaseOpen();
+    Account account = await AppAccount.load(database);
     runApp(
       App(
         preferences: preferences,

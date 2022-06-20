@@ -1,5 +1,8 @@
+import 'dart:async' show unawaited;
+
 import 'package:flutter/foundation.dart' show ChangeNotifier;
 
+import '../../features/database/database.dart' show Database, kvRead, kvWrite;
 import 'wallet.dart' show Wallet;
 import 'wallet_walletconnect.dart' show WalletConnectWallet;
 
@@ -7,28 +10,48 @@ abstract class Account extends ChangeNotifier {
   String? get name;
   Future<void> setName(String name);
 
-  /// For now, expose the entire wallet object to the client
+  // TODO(serverwentdown): Should the entire wallet be exposed to consumers?
   Wallet? get wallet;
+  Future<void> setWallet(Wallet wallet);
 }
 
 class AppAccount extends Account {
-  AppAccount._(this._wallet);
+  AppAccount._(this._database);
 
-  final Wallet _wallet;
+  final Database _database;
+  Wallet? _wallet;
 
-  static Future<Account> load() async {
-    AppAccount account = AppAccount._(WalletConnectWallet());
-    account._wallet.addListener(() {
-      account.notifyListeners();
-    });
+  static Future<Account> load(Database database) async {
+    AppAccount account = AppAccount._(database);
+
+    // If wallet exists, restore wallet
+    unawaited(account._restoreWallet());
+
     return account;
+  }
+
+  Future<void> _restoreWallet() async {
+    Map<String, dynamic>? wallet = await kvRead(_database, 'account.wallet');
+    if (wallet == null) {
+      return;
+    }
+    _wallet = WalletConnectWallet.fromJson(wallet);
+    await _wallet?.start();
+  }
+
+  @override
+  Wallet? get wallet => _wallet;
+  @override
+  Future<void> setWallet(Wallet wallet) async {
+    _wallet = wallet;
+    await kvWrite(_database, 'account.wallet', _wallet);
+    notifyListeners();
   }
 
   @override
   String? get name => 'TODO';
   @override
-  Future<void> setName(String name) async {}
-
-  @override
-  Wallet get wallet => _wallet;
+  Future<void> setName(String name) async {
+    notifyListeners();
+  }
 }

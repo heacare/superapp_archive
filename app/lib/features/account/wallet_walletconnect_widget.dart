@@ -1,41 +1,61 @@
+import 'dart:async' show unawaited;
+
 import 'package:flutter/material.dart';
 
-import 'package:provider/provider.dart' show Provider;
-
 import '../../widgets/qr_code.dart' show QrCodeDialog;
-import 'account.dart' show Account;
+import 'wallet.dart' show Wallet;
+import 'wallet_walletconnect.dart' show WalletConnectWallet;
 
 class WalletConnect extends StatelessWidget {
-  const WalletConnect({super.key});
+  const WalletConnect({super.key, required this.wallet});
+
+  final WalletConnectWallet wallet;
 
   @override
-  Widget build(BuildContext context) {
-    Account account = Provider.of<Account>(context);
-    if (account.wallet?.connected ?? false) {
-      Navigator.of(context).pop();
-    }
-    return QrCodeDialog(
-      data: account.wallet?.walletConnectUri,
-      child: account.wallet?.walletConnectUri != null
-          ? TextFormField(
-              key: Key(account.wallet?.walletConnectUri ?? ''),
-              initialValue: account.wallet?.walletConnectUri ?? '',
+  Widget build(BuildContext context) => AnimatedBuilder(
+        animation: wallet,
+        builder: (context, child) {
+          if (wallet.connected) {
+            Navigator.of(context).pop(wallet);
+          }
+          if (!wallet.connectReady) {
+            return const QrCodeDialog(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+          return QrCodeDialog(
+            data: wallet.walletConnectUri,
+            child: TextFormField(
+              initialValue: wallet.walletConnectUri,
               readOnly: true,
-            )
-          : const CircularProgressIndicator(),
-    );
-  }
+            ),
+          );
+        },
+      );
 }
 
-Future<void> showWalletConnectDialog(BuildContext context) async {
-  await showDialog(
+Future<Wallet?> showWalletConnectDialog(BuildContext context) async {
+  var wallet = WalletConnectWallet.createSession();
+  unawaited(
+    () async {
+      await Future.delayed(const Duration(milliseconds: 200));
+      await wallet.start();
+      await wallet.connect();
+    }(),
+  );
+  return showDialog(
     context: context,
     builder: (context) => AlertDialog(
       title: const Text('WalletConnect'),
-      content: const WalletConnect(),
+      content: WalletConnect(wallet: wallet),
       actions: [
         TextButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            Navigator.pop(context);
+            wallet.dispose();
+          },
           child: const Text('Cancel'),
         ),
       ],
