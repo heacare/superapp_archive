@@ -3,13 +3,20 @@ import 'dart:async' show unawaited;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, TargetPlatform;
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart' show launchUrl;
+import 'package:url_launcher/url_launcher.dart' show launchUrl, LaunchMode;
 
 import '../../system/log.dart';
+import '../../widgets/button.dart' show buttonStylePrimaryLarge;
 import '../../widgets/qr_code.dart' show QrCodeDialog;
+import '../../widgets/tabbar.dart' show tabBarIndicatorInverse;
 import 'wallet.dart' show Wallet;
 import 'wallet_walletconnect.dart' show WalletConnectWallet;
-import 'wallet_walletconnect_registry.dart';
+import 'wallet_walletconnect_registry.dart'
+    show
+        registryGetWallets,
+        RegistryWallet,
+        RegistryWalletLinks,
+        RegistryWalletImageUrl;
 
 class WalletConnect extends StatelessWidget {
   const WalletConnect({super.key, required this.wallet});
@@ -21,8 +28,9 @@ class WalletConnect extends StatelessWidget {
         length: 3,
         child: Column(
           children: [
-            const TabBar(
-              tabs: [
+            TabBar(
+              indicator: tabBarIndicatorInverse(context),
+              tabs: const [
                 Tab(text: 'Mobile'),
                 Tab(text: 'QR Code'),
                 Tab(text: 'Desktop'),
@@ -46,8 +54,9 @@ class WalletConnect extends StatelessWidget {
         length: 2,
         child: Column(
           children: [
-            const TabBar(
-              tabs: [
+            TabBar(
+              indicator: tabBarIndicatorInverse(context),
+              tabs: const [
                 Tab(text: 'Mobile'),
                 Tab(text: 'QR Code'),
               ],
@@ -132,6 +141,7 @@ class WalletConnectWalletPicker extends StatelessWidget {
     if (defaultTargetPlatform == TargetPlatform.android) {
       return Center(
         child: ElevatedButton(
+          style: buttonStylePrimaryLarge(context),
           child: const Text('Connect'),
           onPressed: () {
             Uri launchUri = Uri.parse(uri);
@@ -166,7 +176,7 @@ class WalletConnectWalletPicker extends StatelessWidget {
               }
               Uri launchUri = Uri.parse(launchString!);
               logD('$launchUri');
-              launchUrl(launchUri);
+              launchUrl(launchUri, mode: LaunchMode.externalApplication);
             },
           );
         },

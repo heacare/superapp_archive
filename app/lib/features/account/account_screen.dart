@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart' show Provider;
 
-import '../../main.dart';
+import '../../main.dart' show compat;
 import '../../old/screens/profile.dart' as old;
+import '../../widgets/button.dart' show buttonStylePrimary;
 import 'account.dart' show Account;
 import 'wallet.dart' show Wallet;
 import 'wallet_walletconnect_widget.dart' show showWalletConnectDialog;
@@ -20,6 +21,7 @@ class AccountScreen extends StatelessWidget {
             Text('Account: ${account.wallet?.account}'),
             Text('Connected: ${account.wallet?.connected}'),
             ElevatedButton(
+              style: buttonStylePrimary(context),
               child: const Text('WalletConnect'),
               onPressed: () async {
                 Wallet? wallet = await showWalletConnectDialog(context);

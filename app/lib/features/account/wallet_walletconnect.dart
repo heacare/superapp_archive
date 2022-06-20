@@ -24,7 +24,7 @@ import 'package:web_socket_channel/web_socket_channel.dart'
     show WebSocketChannel, WebSocketChannelException;
 
 import '../../system/log.dart';
-import 'wallet.dart';
+import 'wallet.dart' show Wallet;
 
 part 'wallet_walletconnect.g.dart';
 
