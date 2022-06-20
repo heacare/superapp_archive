@@ -51,9 +51,7 @@ Uint8List _generateKey(int length) {
 int _generateId() => DateTime.now().millisecondsSinceEpoch;
 
 /// Implementation of a Wallet that communicates with an external wallet using
-/// WalletConnect. Re-implements most of the client aspects of `wallet_connect`
-/// but with internal APIs replicating the reference Client API v1.0, as per
-/// the [official API reference](https://docs.walletconnect.com/client-api)
+/// WalletConnect
 class WalletConnectWallet extends Wallet with WalletConnect {
   @override
   void _onConnect(WCApproveSessionResponse payload) {
@@ -91,6 +89,7 @@ class WalletConnectWallet extends Wallet with WalletConnect {
 /// WalletConnect client. Re-implements most of the client aspects of
 /// `wallet_connect` but with internal APIs replicating the reference
 /// Client API v1.0, as per the [official API reference](https://docs.walletconnect.com/client-api)
+/// and the [reference TypeScript implementation](https://github.com/WalletConnect/walletconnect-monorepo/blob/v1.0/packages/clients/core/src/index.ts)
 mixin WalletConnect {
   /// Underlying WebSocket channel. Exists only when a connection is
   /// established and active, null when the connection is closed

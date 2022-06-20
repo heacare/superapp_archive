@@ -43,6 +43,10 @@ dependencies:
   package_info_plus: ^1.4.2
   url_launcher: ^6.0.20
 
+  # Storage
+  sqflite: ^2.0.2+1
+  sqflite_common_ffi: ^2.1.1
+
   # Notifications
   awesome_notifications: ^0.6.21
 
