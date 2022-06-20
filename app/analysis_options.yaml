@@ -147,6 +147,7 @@ analyzer:
     valid_regexps: error
     void_checks: error
   exclude:
+    - 'lib/**/*.g.dart'
     - 'plugins/health/**'
     - 'lib/old/**'
 # Additional information about this file can be found at

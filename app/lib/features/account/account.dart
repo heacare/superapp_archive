@@ -38,6 +38,9 @@ class AppAccount extends Account {
     _wallet = WalletConnectWallet.fromJson(wallet);
     await _wallet!.start();
     _wallet!.addListener(notifyListeners);
+    _wallet!.addListener(() async {
+      await kvWrite(_database, 'account.wallet', _wallet);
+    });
   }
 
   @override
@@ -50,6 +53,9 @@ class AppAccount extends Account {
     _wallet = wallet;
     await kvWrite(_database, 'account.wallet', _wallet);
     _wallet!.addListener(notifyListeners);
+    _wallet!.addListener(() async {
+      await kvWrite(_database, 'account.wallet', _wallet);
+    });
     notifyListeners();
   }
 

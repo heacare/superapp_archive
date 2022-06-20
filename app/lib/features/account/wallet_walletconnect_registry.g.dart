@@ -7,8 +7,7 @@ part of 'wallet_walletconnect_registry.dart';
 // **************************************************************************
 
 RegistryGetWalletsResponse _$RegistryGetWalletsResponseFromJson(
-  Map<String, dynamic> json,
-) =>
+        Map<String, dynamic> json) =>
     RegistryGetWalletsResponse(
       listings: (json['listings'] as Map<String, dynamic>).map(
         (k, e) =>
@@ -18,8 +17,7 @@ RegistryGetWalletsResponse _$RegistryGetWalletsResponseFromJson(
     );
 
 Map<String, dynamic> _$RegistryGetWalletsResponseToJson(
-  RegistryGetWalletsResponse instance,
-) =>
+        RegistryGetWalletsResponse instance) =>
     <String, dynamic>{
       'listings': instance.listings,
       'count': instance.count,
@@ -32,18 +30,15 @@ RegistryWallet _$RegistryWalletFromJson(Map<String, dynamic> json) =>
       imageUrl: json['image_url'] == null
           ? null
           : RegistryWalletImageUrl.fromJson(
-              json['image_url'] as Map<String, dynamic>,
-            ),
+              json['image_url'] as Map<String, dynamic>),
       mobile: json['mobile'] == null
           ? null
           : RegistryWalletLinks.fromJson(
-              json['mobile'] as Map<String, dynamic>,
-            ),
+              json['mobile'] as Map<String, dynamic>),
       desktop: json['desktop'] == null
           ? null
           : RegistryWalletLinks.fromJson(
-              json['desktop'] as Map<String, dynamic>,
-            ),
+              json['desktop'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$RegistryWalletToJson(RegistryWallet instance) =>
@@ -56,8 +51,7 @@ Map<String, dynamic> _$RegistryWalletToJson(RegistryWallet instance) =>
     };
 
 RegistryWalletImageUrl _$RegistryWalletImageUrlFromJson(
-  Map<String, dynamic> json,
-) =>
+        Map<String, dynamic> json) =>
     RegistryWalletImageUrl(
       sm: json['sm'] as String?,
       md: json['md'] as String?,
@@ -65,8 +59,7 @@ RegistryWalletImageUrl _$RegistryWalletImageUrlFromJson(
     );
 
 Map<String, dynamic> _$RegistryWalletImageUrlToJson(
-  RegistryWalletImageUrl instance,
-) =>
+        RegistryWalletImageUrl instance) =>
     <String, dynamic>{
       'sm': instance.sm,
       'md': instance.md,
@@ -80,8 +73,7 @@ RegistryWalletLinks _$RegistryWalletLinksFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$RegistryWalletLinksToJson(
-  RegistryWalletLinks instance,
-) =>
+        RegistryWalletLinks instance) =>
     <String, dynamic>{
       'native': instance.native,
       'universal': instance.universal,

@@ -112,7 +112,6 @@ class WalletConnectWallet extends Wallet {
   }
 
   @override
-  @JsonKey(ignore: true)
   String? account;
 
   @override
