@@ -9,6 +9,18 @@ class PreferenceGroup extends StatelessWidget {
   final String title;
   final List<Widget> items;
 
+  Widget _buildItems(BuildContext context) => Column(
+        children: items
+            .expand(
+              (item) => [
+                const Divider(indent: 16, endIndent: 16, height: 0),
+                item,
+              ],
+            )
+            .skip(1)
+            .toList(),
+      );
+
   @override
   Widget build(BuildContext context) => Column(
         children: [
@@ -29,13 +41,7 @@ class PreferenceGroup extends StatelessWidget {
           Card(
             clipBehavior: Clip.antiAlias,
             margin: const EdgeInsets.symmetric(horizontal: 16),
-            child: ListView.separated(
-              shrinkWrap: true,
-              itemCount: items.length,
-              itemBuilder: (context, index) => items[index],
-              separatorBuilder: (context, index) =>
-                  const Divider(indent: 16, endIndent: 16, height: 0),
-            ),
+            child: _buildItems(context),
           ),
         ],
       );
@@ -47,16 +53,19 @@ class _ItemTemplate extends StatelessWidget {
     this.description,
     required this.child,
     this.onTap,
+    this.onLongPress,
   });
 
   final String label;
   final String? description;
   final Widget child;
   final GestureTapCallback? onTap;
+  final GestureTapCallback? onLongPress;
 
   @override
   Widget build(BuildContext context) => ListTileCentered(
         onTap: onTap,
+        onLongPress: onLongPress,
         title: Text(label),
         subtitle: description == null ? null : Text(description!),
         trailing: child,
@@ -239,18 +248,21 @@ class PreferenceInfo extends StatelessWidget {
     this.description,
     this.value,
     this.onTap,
+    this.onLongPress,
   });
 
   final String label;
   final String? description;
   final String? value;
   final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
 
   @override
   Widget build(BuildContext context) => _ItemTemplate(
         label: label,
         description: description,
         onTap: onTap,
+        onLongPress: onLongPress,
         child: value != null
             ? Text(value!, style: Theme.of(context).textTheme.bodyLarge)
             : const SizedBox(),

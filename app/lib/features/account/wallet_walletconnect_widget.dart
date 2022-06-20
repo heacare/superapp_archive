@@ -3,9 +3,9 @@ import 'dart:async' show unawaited;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, TargetPlatform;
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart' show launchUrl, LaunchMode;
 
 import '../../system/log.dart';
+import '../../system/url_launcher.dart' show launchUrl, LaunchMode;
 import '../../widgets/button.dart' show buttonStylePrimaryLarge;
 import '../../widgets/qr_code.dart' show QrCodeDialog;
 import '../../widgets/tabbar.dart' show tabBarIndicatorInverse;
@@ -162,7 +162,10 @@ class WalletConnectWalletPicker extends StatelessWidget {
           onPressed: () {
             Uri launchUri = Uri.parse(uri);
             logD('WalletConnect: launching $launchUri');
-            launchUrl(launchUri);
+            launchUrl(
+              launchUri,
+              mode: LaunchMode.externalNonBrowserApplication,
+            );
           },
         ),
       );
@@ -192,7 +195,10 @@ class WalletConnectWalletPicker extends StatelessWidget {
               }
               Uri launchUri = Uri.parse(launchString!);
               logD('WalletConnect: launching $launchUri');
-              launchUrl(launchUri, mode: LaunchMode.externalApplication);
+              launchUrl(
+                launchUri,
+                mode: LaunchMode.externalNonBrowserApplication,
+              );
             },
           );
         },

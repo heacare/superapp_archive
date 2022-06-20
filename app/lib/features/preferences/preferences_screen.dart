@@ -1,9 +1,10 @@
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart' show PackageInfo;
 import 'package:provider/provider.dart' show Provider;
-import 'package:url_launcher/url_launcher.dart' show launchUrl;
 
+import '../../system/url_launcher.dart' show launchUrl, LaunchMode;
 import 'preferences.dart';
 import 'preferences_widgets.dart';
 
@@ -26,18 +27,14 @@ class PreferencesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> items = _buildGroups(context);
-    return SingleChildScrollView(
+    return Center(
       child: Container(
-        alignment: AlignmentDirectional.topCenter,
-        child: Container(
-          constraints: const BoxConstraints(maxWidth: 640),
+        constraints: const BoxConstraints(maxWidth: 600),
+        child: ListView.separated(
           padding: const EdgeInsetsDirectional.only(bottom: 16),
-          child: ListView.separated(
-            shrinkWrap: true,
-            itemCount: items.length,
-            itemBuilder: (context, index) => items[index],
-            separatorBuilder: (context, index) => const SizedBox(height: 8),
-          ),
+          itemCount: items.length,
+          itemBuilder: (context, index) => items[index],
+          separatorBuilder: (context, index) => const SizedBox(height: 8),
         ),
       ),
     );
@@ -83,7 +80,7 @@ class PreferencesScreen extends StatelessWidget {
           PreferenceInfo(
             label: 'Privacy policy',
             onTap: () async {
-              await launchUrl(_privacyPolicyUrl);
+              await launchUrl(_privacyPolicyUrl, context: context);
             },
           ),
         ],
@@ -93,8 +90,22 @@ class PreferencesScreen extends StatelessWidget {
         items: [
           PreferenceInfo(
             label: 'Feedback',
+            value: _feedbackEmail,
             onTap: () async {
-              await launchUrl(_feedbackUrl);
+              await launchUrl(
+                _feedbackUrl,
+                mode: LaunchMode.externalNonBrowserApplication,
+              );
+            },
+            onLongPress: () async {
+              var data = const ClipboardData(text: _feedbackEmail);
+              await Clipboard.setData(data);
+            },
+          ),
+          PreferenceInfo(
+            label: 'Source code',
+            onTap: () async {
+              await launchUrl(_sourceUrl, context: context);
             },
           ),
           FutureBuilder<PackageInfo>(
@@ -139,5 +150,6 @@ const List<PreferenceChoiceItem<ThemeMode>> _themeModeChoices = [
 ];
 
 final Uri _privacyPolicyUrl = Uri.parse('https://hea.care/privacy');
-
-final Uri _feedbackUrl = Uri.parse('mailto:hello@hea.care');
+final Uri _sourceUrl = Uri.parse('https://github.com/heacare/hea');
+const String _feedbackEmail = 'hello@hea.care';
+final Uri _feedbackUrl = Uri.parse('mailto:$_feedbackEmail');

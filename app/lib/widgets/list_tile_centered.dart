@@ -10,6 +10,7 @@ class ListTileCentered extends StatelessWidget {
     this.subtitle,
     this.trailing,
     this.onTap,
+    this.onLongPress,
     this.contentPadding = const EdgeInsets.symmetric(horizontal: 16),
     this.horizontalTitleGap = 16,
     this.minVerticalPadding = 4,
@@ -20,6 +21,7 @@ class ListTileCentered extends StatelessWidget {
   final Widget? subtitle;
   final Widget? trailing;
   final GestureTapCallback? onTap;
+  final GestureTapCallback? onLongPress;
   final EdgeInsetsGeometry contentPadding;
   final double horizontalTitleGap;
   final double minVerticalPadding;
@@ -48,6 +50,7 @@ class ListTileCentered extends StatelessWidget {
 
     return InkWell(
       onTap: onTap,
+      onLongPress: onLongPress,
       child: SafeArea(
         top: false,
         bottom: false,
