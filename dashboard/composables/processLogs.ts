@@ -5,8 +5,8 @@ import type { TimeOfDay } from '../types/datetime';
 import { pages } from './genPages_sleep';
 
 export interface User {
-  id: number;
-  name: string;
+  id?: string;
+  name?: string;
   zone: Zone;
   navigations: UserNavigation[];
   navigationsRecent?: string;
@@ -247,12 +247,12 @@ function processLogs(logs: Log[]): Record<string, User> {
   let lastActive: DateTime | null = DateTime.fromMillis(0);
 
   for (const log of logs) {
-    const userId = log.user.id;
-    const userName = log.user.name;
+    const userId = log.user?.id.toString(10) ?? log.accountId ?? '?';
+    const userName = log.user?.name;
     const zone = FixedOffsetZone.parseSpecifier('UTC' + (log.tzClient ?? '+0'));
     let timestamp = DateTime.fromISO(log.timestamp, { zone });
 
-    const user = (users[userId.toString(10)] ??= {
+    const user = (users[userId] ??= {
       id: userId,
       name: userName,
       zone: zone,

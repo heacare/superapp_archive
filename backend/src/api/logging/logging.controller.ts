@@ -38,10 +38,12 @@ export class LoggingController {
     return logs.map((log): LogDumpSimplifiedDto => {
       return {
         ...log,
-        user: {
-          id: log.user.id,
-          name: log.user.name,
-        },
+        user: log.user
+          ? {
+              id: log.user.id,
+              name: log.user.name,
+            }
+          : undefined,
       };
     });
   }

@@ -4,9 +4,10 @@ export interface Log {
   timestamp: string;
   tsClient: string | null;
   tzClient: string | null;
-  user: {
+  user?: {
     id: number;
     name: string;
   };
   value: string;
+  accountId?: string;
 }
