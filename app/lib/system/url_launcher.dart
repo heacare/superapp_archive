@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart'
+    show defaultTargetPlatform, TargetPlatform;
 import 'package:flutter/material.dart' show BuildContext, Theme;
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart' as custom_tabs;
 import 'package:url_launcher/url_launcher.dart' as basic;
@@ -18,7 +20,17 @@ Future<bool> launchUrl(
   LaunchMode mode = LaunchMode.customTabs,
   BuildContext? context,
 }) async {
-  switch (mode) {
+  LaunchMode allowedMode = mode;
+  switch (defaultTargetPlatform) {
+    case TargetPlatform.android:
+    case TargetPlatform.iOS:
+      break;
+    default:
+      if (allowedMode == LaunchMode.customTabs) {
+        allowedMode = LaunchMode.externalApplication;
+      }
+  }
+  switch (allowedMode) {
     case LaunchMode.customTabs:
       await custom_tabs.launch(
         url.toString(),

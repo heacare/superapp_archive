@@ -125,11 +125,13 @@ class WalletConnect extends StatelessWidget {
             );
           }
           Widget? tabs;
-          if (defaultTargetPlatform == TargetPlatform.android ||
-              defaultTargetPlatform == TargetPlatform.iOS) {
-            tabs = _buildTabs(context, wallet);
-          } else {
-            tabs = _buildTabsDesktop(context, wallet);
+          switch (defaultTargetPlatform) {
+            case TargetPlatform.android:
+            case TargetPlatform.iOS:
+              tabs = _buildTabs(context, wallet);
+              break;
+            default:
+              tabs = _buildTabsDesktop(context, wallet);
           }
           return SizedBox(
             width: 360,
@@ -156,56 +158,57 @@ class WalletConnectWalletPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (defaultTargetPlatform == TargetPlatform.android) {
-      return Center(
-        child: ElevatedButton(
-          style: buttonStylePrimaryLarge(context),
-          child: const Text('Connect'),
-          onPressed: () {
-            Uri launchUri = Uri.parse(uri);
-            logD('WalletConnect: launching $launchUri');
-            launchUrl(
-              launchUri,
-              mode: LaunchMode.externalNonBrowserApplication,
-            );
-          },
-        ),
-      );
-    }
-
-    return FutureBuilder<List<RegistryWallet>>(
-      future: registryGetWallets(desktop: desktop),
-      builder: (context, snapshot) => ListView.builder(
-        shrinkWrap: true,
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        itemCount: snapshot.data?.length ?? 0,
-        itemBuilder: (context, index) {
-          var item = snapshot.data![index];
-          return ListTile(
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            leading: _buildImage(item.imageUrl),
-            title: Text(item.name),
-            onTap: () {
-              String? launchString;
-              RegistryWalletLinks links =
-                  desktop ? item.desktop! : item.mobile!;
-              if (links.validUniversal) {
-                launchString = '${links.universal}/wc?uri=$uri';
-              } else if (links.validNative) {
-                launchString = '${links.native}//wc?uri=$uri';
-              }
-              Uri launchUri = Uri.parse(launchString!);
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+        return Center(
+          child: ElevatedButton(
+            style: buttonStylePrimaryLarge(context),
+            child: const Text('Connect'),
+            onPressed: () {
+              Uri launchUri = Uri.parse(uri);
               logD('WalletConnect: launching $launchUri');
               launchUrl(
                 launchUri,
                 mode: LaunchMode.externalNonBrowserApplication,
               );
             },
-          );
-        },
-      ),
-    );
+          ),
+        );
+      default:
+        return FutureBuilder<List<RegistryWallet>>(
+          future: registryGetWallets(desktop: desktop),
+          builder: (context, snapshot) => ListView.builder(
+            shrinkWrap: true,
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            itemCount: snapshot.data?.length ?? 0,
+            itemBuilder: (context, index) {
+              var item = snapshot.data![index];
+              return ListTile(
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                leading: _buildImage(item.imageUrl),
+                title: Text(item.name),
+                onTap: () {
+                  String? launchString;
+                  RegistryWalletLinks links =
+                      desktop ? item.desktop! : item.mobile!;
+                  if (links.validUniversal) {
+                    launchString = '${links.universal}/wc?uri=$uri';
+                  } else if (links.validNative) {
+                    launchString = '${links.native}//wc?uri=$uri';
+                  }
+                  Uri launchUri = Uri.parse(launchString!);
+                  logD('WalletConnect: launching $launchUri');
+                  launchUrl(
+                    launchUri,
+                    mode: LaunchMode.externalNonBrowserApplication,
+                  );
+                },
+              );
+            },
+          ),
+        );
+    }
   }
 
   Widget? _buildImage(RegistryWalletImageUrl? imageUrl) {

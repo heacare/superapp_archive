@@ -8,13 +8,15 @@ import 'log.dart';
 bool isFirebaseReady = false;
 
 Future<void> firebaseInitialize() async {
-  if (defaultTargetPlatform == TargetPlatform.android ||
-      defaultTargetPlatform == TargetPlatform.iOS) {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-    isFirebaseReady = true;
-  } else {
-    logW('Firebase is not set up');
+  switch (defaultTargetPlatform) {
+    case TargetPlatform.android:
+    case TargetPlatform.iOS:
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+      isFirebaseReady = true;
+      break;
+    default:
+      logW('Firebase is not set up');
   }
 }
