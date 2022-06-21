@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../system/theme.dart' as hea_theme show Theme;
+
 class DemoScreen extends StatelessWidget {
   const DemoScreen({super.key});
   @override
@@ -65,15 +67,12 @@ void Function()? handlePressed(
             SnackBar snackBar = SnackBar(
               content: Text(
                 'Yay! $buttonName is clicked!',
-                style: TextStyle(color: Theme.of(context).colorScheme.surface),
               ),
               action: SnackBarAction(
-                textColor: Theme.of(context).colorScheme.surface,
                 label: 'Close',
                 onPressed: () {},
               ),
             );
-
             ScaffoldMessenger.of(context).showSnackBar(snackBar);
           };
 
@@ -524,11 +523,8 @@ class ColorPalettesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color selectedColor = Theme.of(context).primaryColor;
-    ThemeData lightTheme =
-        ThemeData(colorSchemeSeed: selectedColor, brightness: Brightness.light);
-    ThemeData darkTheme =
-        ThemeData(colorSchemeSeed: selectedColor, brightness: Brightness.dark);
+    ThemeData lightTheme = hea_theme.Theme.lightThemeData;
+    ThemeData darkTheme = hea_theme.Theme.darkThemeData;
 
     Widget schemeLabel(String brightness) => Padding(
           padding: const EdgeInsets.symmetric(vertical: 15),

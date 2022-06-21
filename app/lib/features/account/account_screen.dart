@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart' show Provider;
 
 import '../../main.dart' show compat;
@@ -37,7 +38,11 @@ class AccountScreen extends StatelessWidget {
             if (!(account.wallet?.connected ?? false))
               ElevatedButton(
                 style: buttonStylePrimary(context),
-                child: const Text('WalletConnect'),
+                child: SvgPicture.asset(
+                  'assets/integrations/walletconnect-banner.svg',
+                  height: 20,
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
                 onPressed: () async {
                   Wallet? wallet = await showWalletConnectDialog(context);
                   if (wallet != null) {

@@ -130,6 +130,8 @@ flutter:
     - assets/style/
     - assets/artwork/
     - assets/brand/
+    - assets/integrations/
+    # PREVIOUS VERSION
     - assets/images/sleep/
 
   # An image asset can refer to one or more resolution-specific "variants", see

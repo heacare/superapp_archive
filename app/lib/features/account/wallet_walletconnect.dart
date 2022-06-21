@@ -40,7 +40,7 @@ final Uri _bridge = Uri.parse('https://bridge.walletconnect.org');
 final WCPeerMeta _clientMeta = WCPeerMeta(
   name: 'Happily Ever After',
   url: 'https://hea.care',
-  description: 'Test integration with WalletConnect',
+  description: 'Happily Ever After integration with WalletConnect',
   icons: ['https://hea.care/images/logo.png'],
 );
 // TODO(serverwentdown): Does this ensure the user is using the Optimism chain?

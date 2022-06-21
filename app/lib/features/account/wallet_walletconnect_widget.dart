@@ -3,6 +3,7 @@ import 'dart:async' show unawaited;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, TargetPlatform;
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart' show SvgPicture;
 
 import '../../system/log.dart';
 import '../../system/url_launcher.dart' show launchUrl, LaunchMode;
@@ -226,7 +227,12 @@ Future<Wallet?> showWalletConnectDialog(BuildContext context) async {
   return showDialog(
     context: context,
     builder: (context) => AlertDialog(
-      title: const Text('WalletConnect'),
+      title: Center(
+        child: SvgPicture.asset(
+          'assets/integrations/walletconnect-banner.svg',
+          width: 180,
+        ),
+      ),
       contentPadding: const EdgeInsets.only(top: 20),
       content: WalletConnect(wallet: wallet),
     ),
