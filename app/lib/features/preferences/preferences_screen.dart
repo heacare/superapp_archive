@@ -104,12 +104,6 @@ class PreferencesScreen extends StatelessWidget {
               await Clipboard.setData(data);
             },
           ),
-          PreferenceInfo(
-            label: 'Source code',
-            onTap: () async {
-              await launchUrl(_sourceUrl, context: context);
-            },
-          ),
           FutureBuilder<PackageInfo>(
             future: PackageInfo.fromPlatform(),
             builder: (context, snapshot) {
@@ -122,6 +116,12 @@ class PreferencesScreen extends StatelessWidget {
                 label: 'Version',
                 value: version,
               );
+            },
+          ),
+          PreferenceInfo(
+            label: 'Source code',
+            onTap: () async {
+              await launchUrl(_sourceUrl, context: context);
             },
           ),
           PreferenceInfo(
