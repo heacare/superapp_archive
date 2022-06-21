@@ -16,6 +16,11 @@ export class LoggingController {
     await this.logging.create(user, log);
   }
 
+  @Post('unauth')
+  async createLogUnauth(@Body() log: LogDto): Promise<void> {
+    await this.logging.create(null, log);
+  }
+
   @Get('dump')
   async dumpLog(@Query() query: LogDumpDto): Promise<LogDumpSimplifiedDto[]> {
     if (!LOGGING_DUMP_SECRET) {

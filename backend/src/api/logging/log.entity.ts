@@ -8,8 +8,8 @@ export class Log {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, (user) => user.logs)
-  user: User;
+  @ManyToOne(() => User, (user) => user.logs, { nullable: true })
+  user?: User;
 
   @Column({ type: 'timestamp' })
   timestamp: Date;
@@ -25,4 +25,7 @@ export class Log {
 
   @Column()
   value: string;
+
+  @Column({ nullable: true })
+  accountId?: string;
 }

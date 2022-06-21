@@ -16,6 +16,10 @@ export class LogDto {
 
   @IsString()
   value: string;
+
+  @IsString()
+  @IsOptional()
+  accountId: string;
 }
 
 export class LogDumpDto {
