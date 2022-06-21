@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart'
-    show ThemeData, ColorScheme, Color, Brightness, ThemeMode, SnackBarBehavior;
+    show
+        ThemeData,
+        ColorScheme,
+        Color,
+        Colors,
+        Brightness,
+        ThemeMode,
+        SnackBarBehavior;
 import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle;
 import 'package:flutter/widgets.dart' show WidgetsBinding;
@@ -36,11 +43,17 @@ class Theme {
 
   static final SystemUiOverlayStyle lightSystemUiOverlayStyle =
       SystemUiOverlayStyle.dark.copyWith(
-    statusBarColor: const Color(0x00FFFFFF),
+    statusBarColor: Colors.transparent,
+    systemNavigationBarColor: Colors.transparent,
+    systemNavigationBarIconBrightness: Brightness.dark,
+    systemNavigationBarContrastEnforced: false,
   );
   static final SystemUiOverlayStyle darkSystemUiOverlayStyle =
       SystemUiOverlayStyle.light.copyWith(
-    statusBarColor: const Color(0x00000000),
+    statusBarColor: Colors.transparent,
+    systemNavigationBarColor: Colors.transparent,
+    systemNavigationBarIconBrightness: Brightness.light,
+    systemNavigationBarContrastEnforced: false,
   );
 
   static const ShapeBorder bottomSheetShape = RoundedRectangleBorder(

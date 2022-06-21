@@ -31,7 +31,9 @@ class PreferencesScreen extends StatelessWidget {
       child: Container(
         constraints: const BoxConstraints(maxWidth: 600),
         child: ListView.separated(
-          padding: const EdgeInsetsDirectional.only(bottom: 16),
+          padding: MediaQuery.of(context)
+              .padding
+              .add(const EdgeInsets.only(bottom: 16)),
           itemCount: items.length,
           itemBuilder: (context, index) => items[index],
           separatorBuilder: (context, index) => const SizedBox(height: 8),
@@ -151,5 +153,6 @@ const List<PreferenceChoiceItem<ThemeMode>> _themeModeChoices = [
 
 final Uri _privacyPolicyUrl = Uri.parse('https://hea.care/privacy');
 final Uri _sourceUrl = Uri.parse('https://github.com/heacare/hea');
+//final Uri _websiteUrl = Uri.parse('https://hea.care');
 const String _feedbackEmail = 'hello@hea.care';
 final Uri _feedbackUrl = Uri.parse('mailto:$_feedbackEmail');

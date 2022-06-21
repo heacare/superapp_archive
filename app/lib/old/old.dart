@@ -194,13 +194,7 @@ class AppState extends State<App> {
             theme: _getThemeData(),
             // TODO design a loading page and a 'error' page
             // Match Firebase initialization result
-            home: AnnotatedRegion<SystemUiOverlayStyle>(
-                value: SystemUiOverlayStyle.dark.copyWith(
-                  systemNavigationBarColor: const Color(0xFFFFFFFF),
-                  systemNavigationBarIconBrightness: Brightness.dark,
-                  statusBarColor: const Color(0x40FFFFFF),
-                ),
-                child: LifecycleHandler(true, mainScreen()))));
+            home: LifecycleHandler(true, mainScreen())));
   }
 
   Widget mainScreen() {

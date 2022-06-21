@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart' show MaterialApp;
-import 'package:flutter/services.dart' show SystemChrome;
+import 'package:flutter/services.dart' show SystemChrome, SystemUiMode;
 import 'package:flutter/widgets.dart' hide Navigator;
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart'
@@ -52,29 +52,34 @@ class App extends StatelessWidget {
   final Account account;
 
   @override
-  Widget build(BuildContext context) => MultiProvider(
-        providers: [
-          ChangeNotifierProvider<Preferences>.value(value: preferences),
-          ChangeNotifierProvider<Account>.value(value: account),
-        ],
-        child: const ForceRTL(Navigator()),
-        builder: (context, child) {
-          Preferences preferences = Provider.of<Preferences>(context);
-          SystemChrome.setSystemUIOverlayStyle(
-            Theme.resolveOverlayStyle(preferences.themeMode),
-          );
-          return MaterialApp(
-            title: 'Happily Ever After',
-            themeMode: preferences.themeMode,
-            theme: Theme.lightThemeData,
-            darkTheme: Theme.darkThemeData,
-            localizationsDelegates: localizationsDelegates,
-            supportedLocales: supportedLocales,
-            locale: preferences.locale,
-            home: child,
-          );
-        },
-      );
+  Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.edgeToEdge,
+    );
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<Preferences>.value(value: preferences),
+        ChangeNotifierProvider<Account>.value(value: account),
+      ],
+      child: const ForceRTL(Navigator()),
+      builder: (context, child) {
+        Preferences preferences = Provider.of<Preferences>(context);
+        SystemChrome.setSystemUIOverlayStyle(
+          Theme.resolveOverlayStyle(preferences.themeMode),
+        );
+        return MaterialApp(
+          title: 'Happily Ever After',
+          themeMode: preferences.themeMode,
+          theme: Theme.lightThemeData,
+          darkTheme: Theme.darkThemeData,
+          localizationsDelegates: localizationsDelegates,
+          supportedLocales: supportedLocales,
+          locale: preferences.locale,
+          home: child,
+        );
+      },
+    );
+  }
 }
 
 const List<LocalizationsDelegate<Object>> localizationsDelegates = [

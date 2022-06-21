@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart' show SvgPicture;
 
+import '../../navigator.dart' show ForceRTL;
 import '../../system/log.dart';
 import '../../system/url_launcher.dart' show launchUrl, LaunchMode;
 import '../../widgets/button.dart' show buttonStylePrimaryLarge;
@@ -226,15 +227,17 @@ Future<Wallet?> showWalletConnectDialog(BuildContext context) async {
   );
   return showDialog(
     context: context,
-    builder: (context) => AlertDialog(
-      title: Center(
-        child: SvgPicture.asset(
-          'assets/integrations/walletconnect-banner.svg',
-          width: 180,
+    builder: (context) => ForceRTL(
+      AlertDialog(
+        title: Center(
+          child: SvgPicture.asset(
+            'assets/integrations/walletconnect-banner.svg',
+            width: 180,
+          ),
         ),
+        contentPadding: const EdgeInsets.only(top: 20),
+        content: WalletConnect(wallet: wallet),
       ),
-      contentPadding: const EdgeInsets.only(top: 20),
-      content: WalletConnect(wallet: wallet),
     ),
   );
 }

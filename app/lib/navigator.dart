@@ -195,7 +195,6 @@ class _NavigatorState extends State<Navigator> {
   Widget _build(BuildContext context) {
     int selectedIndex = _selectedIndex(_pages);
     _NavigatorPage selectedPage = _pages[selectedIndex];
-
     return Scaffold(
       appBar: selectedPage.appBar?.call(context),
       body: selectedPage.screen!.call(context),

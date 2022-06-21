@@ -129,7 +129,7 @@ class PreferenceChoice<T> extends StatelessWidget {
       description: description,
       child: Text(selected.label, style: Theme.of(context).textTheme.bodyLarge),
       onTap: () async {
-        double maxHeight = choices.length <= 3 ? 320 : double.infinity;
+        double maxHeight = choices.length <= 3 ? 360 : double.infinity;
         T? value = await showModalBottomSheet<T?>(
           constraints: BoxConstraints(maxHeight: maxHeight),
           context: context,
@@ -177,43 +177,45 @@ class PreferenceChoiceModalState<T> extends State<PreferenceChoiceModal<T>> {
   }
 
   @override
-  Widget build(BuildContext context) => Column(
-        children: [
-          Row(
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                child: Text(
-                  widget.label,
-                  style: Theme.of(context).textTheme.titleLarge,
+  Widget build(BuildContext context) => SafeArea(
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  child: Text(
+                    widget.label,
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          Expanded(
-            child: ListView.separated(
-              shrinkWrap: true,
-              itemCount: widget.choices.length,
-              itemBuilder: _buildListItem,
-              separatorBuilder: (context, index) =>
-                  const Divider(indent: 64, endIndent: 16, height: 0),
+              ],
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                child: OutlinedButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('Cancel'),
-                ),
+            Expanded(
+              child: ListView.separated(
+                shrinkWrap: true,
+                itemCount: widget.choices.length,
+                itemBuilder: _buildListItem,
+                separatorBuilder: (context, index) =>
+                    const Divider(indent: 64, endIndent: 16, height: 0),
               ),
-            ],
-          ),
-        ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                  child: OutlinedButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('Cancel'),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       );
 
   Widget _buildListItem(BuildContext context, int index) {
