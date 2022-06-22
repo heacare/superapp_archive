@@ -93,6 +93,7 @@ dependencies:
   markdown: ^5.0.0
   build_runner: ^2.1.11
   json_serializable: ^6.2.0
+  dynamic_color: ^1.4.0
 
 dev_dependencies:
   # The following packages are for unit testing

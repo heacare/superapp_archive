@@ -10,7 +10,6 @@ import '../../system/log.dart';
 import '../../system/url_launcher.dart' show launchUrl, LaunchMode;
 import '../../widgets/button.dart' show buttonStylePrimaryLarge;
 import '../../widgets/qr_code.dart' show QrCodeDialog;
-import '../../widgets/tabbar.dart' show tabBarIndicatorInverse;
 import 'wallet.dart' show Wallet;
 import 'wallet_walletconnect.dart' show WalletConnectWallet;
 import 'wallet_walletconnect_registry.dart'
@@ -32,9 +31,8 @@ class WalletConnect extends StatelessWidget {
         length: 3,
         child: Column(
           children: [
-            TabBar(
-              indicator: tabBarIndicatorInverse(context),
-              tabs: const [
+            const TabBar(
+              tabs: [
                 Tab(text: 'Mobile'),
                 Tab(text: 'QR Code'),
                 Tab(text: 'Desktop'),
@@ -58,9 +56,8 @@ class WalletConnect extends StatelessWidget {
         length: 2,
         child: Column(
           children: [
-            TabBar(
-              indicator: tabBarIndicatorInverse(context),
-              tabs: const [
+            const TabBar(
+              tabs: [
                 Tab(text: 'Mobile'),
                 Tab(text: 'QR Code'),
               ],

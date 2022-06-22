@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../system/theme.dart' as hea_theme show Theme;
+import '../system/theme.dart' show resolveThemeData;
 
 class DemoScreen extends StatelessWidget {
   const DemoScreen({super.key});
@@ -523,8 +523,14 @@ class ColorPalettesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ThemeData lightTheme = hea_theme.Theme.lightThemeData;
-    ThemeData darkTheme = hea_theme.Theme.darkThemeData;
+    ThemeData lightTheme = resolveThemeData(
+      Brightness.light,
+      null,
+    );
+    ThemeData darkTheme = resolveThemeData(
+      Brightness.dark,
+      null,
+    );
 
     Widget schemeLabel(String brightness) => Padding(
           padding: const EdgeInsets.symmetric(vertical: 15),

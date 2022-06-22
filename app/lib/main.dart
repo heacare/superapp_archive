@@ -1,4 +1,7 @@
-import 'package:flutter/material.dart' show MaterialApp;
+import 'dart:async' show unawaited;
+
+import 'package:dynamic_color/dynamic_color.dart' show DynamicColorBuilder;
+import 'package:flutter/material.dart' show MaterialApp, ThemeData, Brightness;
 import 'package:flutter/services.dart' show SystemChrome, SystemUiMode;
 import 'package:flutter/widgets.dart' hide Navigator;
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -13,7 +16,7 @@ import 'old/old.dart' show oldSetup;
 import 'system/additional_licenses.dart' show licensesInitialize;
 import 'system/crashlogger.dart' show crashloggerWrap;
 import 'system/firebase.dart' show firebaseInitialize;
-import 'system/theme.dart' show Theme;
+import 'system/theme.dart' show resolveThemeData, resolveOverlayStyle;
 
 // ignore: do_not_use_environment
 const String compat = String.fromEnvironment('COMPAT');
@@ -32,6 +35,11 @@ void main() async {
     Preferences preferences = await AppPreferences.load();
     Database database = await databaseOpen();
     Account account = await AppAccount.load(database);
+    unawaited(
+      SystemChrome.setEnabledSystemUIMode(
+        SystemUiMode.edgeToEdge,
+      ),
+    );
     runApp(
       App(
         preferences: preferences,
@@ -52,34 +60,42 @@ class App extends StatelessWidget {
   final Account account;
 
   @override
-  Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIMode(
-      SystemUiMode.edgeToEdge,
-    );
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<Preferences>.value(value: preferences),
-        ChangeNotifierProvider<Account>.value(value: account),
-      ],
-      child: const ForceRTL(Navigator()),
-      builder: (context, child) {
-        Preferences preferences = Provider.of<Preferences>(context);
-        SystemChrome.setSystemUIOverlayStyle(
-          Theme.resolveOverlayStyle(preferences.themeMode),
-        );
-        return MaterialApp(
-          title: 'Happily Ever After',
-          themeMode: preferences.themeMode,
-          theme: Theme.lightThemeData,
-          darkTheme: Theme.darkThemeData,
-          localizationsDelegates: localizationsDelegates,
-          supportedLocales: supportedLocales,
-          locale: preferences.locale,
-          home: child,
-        );
-      },
-    );
-  }
+  Widget build(BuildContext context) => DynamicColorBuilder(
+        builder: (lightDynamic, darkDynamic) {
+          ThemeData lightThemeData = resolveThemeData(
+            Brightness.light,
+            lightDynamic,
+          );
+          ThemeData darkThemeData = resolveThemeData(
+            Brightness.dark,
+            darkDynamic,
+          );
+
+          return MultiProvider(
+            providers: [
+              ChangeNotifierProvider<Preferences>.value(value: preferences),
+              ChangeNotifierProvider<Account>.value(value: account),
+            ],
+            child: const ForceRTL(Navigator()),
+            builder: (context, child) {
+              Preferences preferences = Provider.of<Preferences>(context);
+              SystemChrome.setSystemUIOverlayStyle(
+                resolveOverlayStyle(preferences.themeMode),
+              );
+              return MaterialApp(
+                title: 'Happily Ever After',
+                themeMode: preferences.themeMode,
+                theme: lightThemeData,
+                darkTheme: darkThemeData,
+                localizationsDelegates: localizationsDelegates,
+                supportedLocales: supportedLocales,
+                locale: preferences.locale,
+                home: child,
+              );
+            },
+          );
+        },
+      );
 }
 
 const List<LocalizationsDelegate<Object>> localizationsDelegates = [
