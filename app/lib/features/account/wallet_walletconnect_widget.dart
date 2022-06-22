@@ -225,6 +225,7 @@ Future<Wallet?> showWalletConnectDialog(BuildContext context) async {
       await wallet.connect();
     }(),
   );
+  // TODO(serverwentdown): Enable state restoration https://api.flutter.dev/flutter/material/showDialog.html#state-restoration-in-dialogs
   return showDialog(
     context: context,
     builder: (context) => ForceRTL(

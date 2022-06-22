@@ -21,7 +21,9 @@ class AccountScreen extends StatelessWidget {
         child: Center(
           child: Column(
             children: [
-              Text('Account: ${account.wallet?.account}'),
+              Text('Account: ${account.metadata.id}'),
+              Text('Name: ${account.metadata.name}'),
+              Text('Wallet: ${account.wallet?.account}'),
               Text('Connected: ${account.wallet?.connected}'),
               if (account.wallet?.connected ?? false)
                 ElevatedButton(

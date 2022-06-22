@@ -71,20 +71,15 @@ class _NavigatorPage {
   final _PreferredSizeWidgetBuilder? desktopAppBar;
 }
 
+Route _preferencesRouteBuilder(context, arguments) => MaterialPageRoute(
+      builder: (context) => const ForceRTL(PreferencesPage()),
+    );
+
 Widget _preferencesButton(context) => IconButton(
       icon: const Icon(Icons.settings),
       tooltip: 'Settings',
       onPressed: () async {
-        /*
-        material.Navigator.of(context).push(
-          route((context) => const PreferencesPage())
-        );
-        */
-        await material.Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => const ForceRTL(PreferencesPage()),
-          ),
-        );
+        material.Navigator.of(context).restorablePush(_preferencesRouteBuilder);
       },
     );
 
@@ -171,8 +166,22 @@ class Navigator extends StatefulWidget {
   State<Navigator> createState() => _NavigatorState();
 }
 
-class _NavigatorState extends State<Navigator> {
-  String _selectedKey = '';
+class _NavigatorState extends State<Navigator> with RestorationMixin {
+  final RestorableString _selectedKey = RestorableString('');
+
+  @override
+  void dispose() {
+    _selectedKey.dispose();
+    super.dispose();
+  }
+
+  @override
+  String get restorationId => 'navigator';
+
+  @override
+  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
+    registerForRestoration(_selectedKey, 'selected_key');
+  }
 
   @override
   Widget build(BuildContext context) => LayoutBuilder(
@@ -186,10 +195,10 @@ class _NavigatorState extends State<Navigator> {
       );
 
   int _selectedIndex(List<_NavigatorPage> pages) =>
-      max(pages.indexWhere((page) => page.key == _selectedKey), 0);
+      max(pages.indexWhere((page) => page.key == _selectedKey.value), 0);
 
   void _setCurrentIndex(List<_NavigatorPage> pages, int index) {
-    _selectedKey = pages[index].key;
+    _selectedKey.value = pages[index].key;
   }
 
   Widget _build(BuildContext context) {

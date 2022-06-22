@@ -10,9 +10,10 @@ import 'package:provider/provider.dart'
 
 import 'features/account/account.dart' show Account, AppAccount;
 import 'features/database/database.dart' show Database, databaseOpen;
+import 'features/interim_data_collection/interim_data_collection.dart';
 import 'features/preferences/preferences.dart' show Preferences, AppPreferences;
 import 'navigator.dart';
-import 'old/old.dart' show oldSetup;
+import 'old/old.dart' show oldSetup, LifecycleHandler;
 import 'system/additional_licenses.dart' show licensesInitialize;
 import 'system/crashlogger.dart' show crashloggerWrap;
 import 'system/firebase.dart' show firebaseInitialize;
@@ -35,6 +36,7 @@ void main() async {
     Preferences preferences = await AppPreferences.load();
     Database database = await databaseOpen();
     Account account = await AppAccount.load(database);
+    interimDataCollectionSetup(account);
     unawaited(
       SystemChrome.setEnabledSystemUIMode(
         SystemUiMode.edgeToEdge,
@@ -90,7 +92,10 @@ class App extends StatelessWidget {
                 localizationsDelegates: localizationsDelegates,
                 supportedLocales: supportedLocales,
                 locale: preferences.locale,
-                home: child,
+                restorationScopeId: 'root',
+                home: compat != 'disabled'
+                    ? LifecycleHandler(true, child!)
+                    : child,
               );
             },
           );

@@ -3,6 +3,7 @@ import 'dart:convert' show jsonEncode;
 import 'package:http/http.dart' as http;
 
 import '../../system/log.dart';
+import '../account/account.dart';
 
 final Uri _logUnauthUrl =
     Uri.parse('https://api.alpha.hea.care/api/logging/unauth');
@@ -47,7 +48,14 @@ String dateOffset(Duration offset) {
   return '$sign$h:$m';
 }
 
-Future<void> createLog(String key, dynamic value, String accountId) async {
+Account? _account;
+
+void interimDataCollectionSetup(Account account) {
+  _account = account;
+}
+
+Future<void> collectSimpleKv(String key, dynamic value) async {
+  String accountId = _account?.metadata.id ?? '';
   var body = _Log.fromDynamic(key, DateTime.now(), value, accountId).toJson();
   var resp = await http.post(
     _logUnauthUrl,
