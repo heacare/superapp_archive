@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart' show Provider;
 
 import '../../widgets/screen.dart' show Screen;
+import '../../widgets/date_picker_form_field.dart' show DatePickerFormField;
 import 'account.dart' show Account;
 import 'metadata.dart' show SexAtBirth, RelationshipStatus, WorkPeriod;
 
@@ -21,8 +22,7 @@ class _EditPageState extends State<EditPage> {
   }
 
   void _formSave() {
-    FormState state = _formKey.currentState!;
-    state.save();
+    FormState state = _formKey.currentState!..save();
   }
 
   @override
@@ -49,7 +49,6 @@ class _EditPageState extends State<EditPage> {
         body: _buildScreen(context),
       );
 
-  @override
   Widget _buildScreen(BuildContext context) {
     Account account = Provider.of<Account>(context);
     return Screen(
@@ -78,13 +77,12 @@ class _EditPageState extends State<EditPage> {
                 },
               ),
               const SizedBox(height: 16),
-              TextFormField(
-                keyboardType: TextInputType.datetime,
+              DatePickerFormField(
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Birthday',
                 ),
-                onTap: () async {},
+                initialValue: account.metadata.birthday,
                 onSaved: (value) {},
               ),
               const SizedBox(height: 16),

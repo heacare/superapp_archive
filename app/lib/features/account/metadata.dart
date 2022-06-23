@@ -11,13 +11,16 @@ abstract class AccountMetadata extends ChangeNotifier {
   String? get name;
   Future<void> setName(String? name);
 
+  DateTime? get birthday;
+  Future<void> setBirthday(DateTime? birthday);
+
   SexAtBirth? get sexAtBirth;
   Future<void> setSexAtBirth(SexAtBirth? sexAtBirth);
 
-  RelationshipStatus? relationshipStatus;
+  RelationshipStatus? get relationshipStatus;
   Future<void> setRelationshipStatus(RelationshipStatus? relationshipStatus);
 
-  WorkPeriod? workPeriod;
+  WorkPeriod? get workPeriod;
   Future<void> setWorkPeriod(WorkPeriod? workPeriod);
 
   Map<String, dynamic> toJson();
@@ -48,6 +51,14 @@ class AppAccountMetadata extends AccountMetadata {
   @override
   Future<void> setName(String? name) async {
     this.name = name;
+    notifyListeners();
+  }
+
+  @override
+  DateTime? birthday;
+  @override
+  Future<void> setBirthday(DateTime? birthday) async {
+    this.birthday = birthday;
     notifyListeners();
   }
 

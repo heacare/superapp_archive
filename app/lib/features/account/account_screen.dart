@@ -31,6 +31,7 @@ class AccountScreen extends StatelessWidget {
           style: buttonStylePrimary(context),
           child: const Text('Edit profile'),
           onPressed: () async {
+            // TODO(serverwentdown): Consider using a dialog on larger screens
             Navigator.of(context).restorablePush(_editRouteBuilder);
           },
         ),
