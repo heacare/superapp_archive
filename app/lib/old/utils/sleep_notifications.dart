@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/material.dart' show TimeOfDay;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,6 +19,9 @@ const String channel = "sleep_content";
 const int baseId = 100;
 
 Future<void> _scheduleSleepNotifications() async {
+  if (!(Platform.isAndroid || Platform.isIOS)) {
+    return;
+  }
   String s = serviceLocator<SharedPreferences>().getString('sleep') ?? "";
   await serviceLocator<NotificationService>()
       .cancelSchedulesByChannelKey("sleep_content");

@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart' show ChangeNotifier;
-import 'package:json_annotation/json_annotation.dart' show JsonSerializable;
+import 'package:json_annotation/json_annotation.dart'
+    show JsonSerializable, $enumDecodeNullable;
 
 part 'metadata.g.dart';
 
@@ -8,7 +9,16 @@ abstract class AccountMetadata extends ChangeNotifier {
   Future<void> setId(String id);
 
   String? get name;
-  Future<void> setName(String name);
+  Future<void> setName(String? name);
+
+  SexAtBirth? get sexAtBirth;
+  Future<void> setSexAtBirth(SexAtBirth? sexAtBirth);
+
+  RelationshipStatus? relationshipStatus;
+  Future<void> setRelationshipStatus(RelationshipStatus? relationshipStatus);
+
+  WorkPeriod? workPeriod;
+  Future<void> setWorkPeriod(WorkPeriod? workPeriod);
 
   Map<String, dynamic> toJson();
 }
@@ -40,4 +50,48 @@ class AppAccountMetadata extends AccountMetadata {
     this.name = name;
     notifyListeners();
   }
+
+  @override
+  SexAtBirth? sexAtBirth;
+  @override
+  Future<void> setSexAtBirth(SexAtBirth? sexAtBirth) async {
+    this.sexAtBirth = sexAtBirth;
+    notifyListeners();
+  }
+
+  @override
+  RelationshipStatus? relationshipStatus;
+  @override
+  Future<void> setRelationshipStatus(
+    RelationshipStatus? relationshipStatus,
+  ) async {
+    this.relationshipStatus = relationshipStatus;
+    notifyListeners();
+  }
+
+  @override
+  WorkPeriod? workPeriod;
+  @override
+  Future<void> setWorkPeriod(WorkPeriod? workPeriod) async {
+    this.workPeriod = workPeriod;
+    notifyListeners();
+  }
+}
+
+enum SexAtBirth {
+  male,
+  female,
+  unknown,
+}
+
+enum RelationshipStatus {
+  single,
+  coupled,
+  married,
+}
+
+enum WorkPeriod {
+  day,
+  night,
+  mixed,
 }

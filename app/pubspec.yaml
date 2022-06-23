@@ -84,7 +84,7 @@ dependencies:
   country_picker: ^2.0.15
   google_maps_flutter: ^2.1.5
   location: ^4.4.0
-  permission_handler: ^9.2.0
+  permission_handler: ^10.0.0
   cupertino_icons: ^1.0.4
   syncfusion_flutter_gauges: ^20.1.56
   font_awesome_flutter: ^10.1.0

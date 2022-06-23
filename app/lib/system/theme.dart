@@ -57,6 +57,11 @@ ThemeData resolveThemeData(
 
   return themeData.copyWith(
     toggleableActiveColor: colorScheme.primary,
+    // TODO(serverwentdown): Proper design
+    cardTheme: themeData.cardTheme.copyWith(
+      elevation: 0,
+      color: const Color(0xFFEEEEEE),
+    ),
     snackBarTheme: themeData.snackBarTheme.copyWith(
       actionTextColor: colorScheme.inversePrimary,
       behavior: SnackBarBehavior.floating,

@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart' show ChangeNotifier;
 import 'package:uuid/uuid.dart' show Uuid;
 
 import '../../features/database/database.dart' show Database, kvRead, kvWrite;
+import '../../system/log.dart';
 import 'metadata.dart' show AccountMetadata, AppAccountMetadata;
 import 'wallet.dart' show Wallet;
 import 'wallet_walletconnect.dart' show WalletConnectWallet;
@@ -19,44 +20,43 @@ abstract class Account extends ChangeNotifier {
 }
 
 class AppAccount extends Account {
-  AppAccount._(this._database, {required this.metadata});
+  AppAccount._(this._database);
 
   final Database _database;
 
   static Future<Account> load(Database database) async {
-    AppAccount account = AppAccount._(
-      database,
-      metadata: await _loadMetadata(database),
-    );
+    AppAccount account = AppAccount._(database);
 
-    // Listen for events
-    account.metadata.addListener(() async {
-      await account._saveMetadata();
-    });
-
+    // Restore metadata
+    await account._restoreMetadata();
     // If wallet exists, restore wallet
     unawaited(account._restoreWallet());
 
     return account;
   }
 
-  @override
-  final AccountMetadata metadata;
-  static Future<AccountMetadata> _loadMetadata(Database database) async {
-    Map<String, dynamic>? metadata = await kvRead(database, 'account.metadata');
+  late AccountMetadata _metadata;
+  Future<void> _restoreMetadata() async {
+    Map<String, dynamic>? metadata =
+        await kvRead(_database, 'account.metadata');
     if (metadata == null) {
-      AccountMetadata metadata = AppAccountMetadata(
+      _metadata = AppAccountMetadata(
         id: uuid.v4(),
       );
-      await kvWrite(database, 'account.metadata', metadata.toJson());
-      return metadata;
+      await _saveMetadata();
     }
-    return AppAccountMetadata.fromJson(metadata);
+    _metadata = AppAccountMetadata.fromJson(metadata!);
+    _metadata.addListener(notifyListeners);
+    _metadata.addListener(_saveMetadata);
   }
 
   Future<void> _saveMetadata() async {
+    logD('Account: Persisting metadata');
     await kvWrite(_database, 'account.metadata', metadata.toJson());
   }
+
+  @override
+  AccountMetadata get metadata => _metadata;
 
   Wallet? _wallet;
   Future<void> _restoreWallet() async {
@@ -65,11 +65,15 @@ class AppAccount extends Account {
       return;
     }
     _wallet = WalletConnectWallet.fromJson(wallet);
+    // TODO(serverwentdown): Make it clear when to call start()
     await _wallet!.start();
     _wallet!.addListener(notifyListeners);
-    _wallet!.addListener(() async {
-      await kvWrite(_database, 'account.wallet', _wallet);
-    });
+    _wallet!.addListener(_saveWallet);
+  }
+
+  Future<void> _saveWallet() async {
+    logD('Account: Persisting wallet');
+    await kvWrite(_database, 'account.wallet', _wallet);
   }
 
   @override
@@ -80,11 +84,9 @@ class AppAccount extends Account {
       _wallet!.dispose();
     }
     _wallet = wallet;
-    await kvWrite(_database, 'account.wallet', _wallet);
+    await _saveWallet();
     _wallet!.addListener(notifyListeners);
-    _wallet!.addListener(() async {
-      await kvWrite(_database, 'account.wallet', _wallet);
-    });
+    _wallet!.addListener(_saveWallet);
     notifyListeners();
   }
 }

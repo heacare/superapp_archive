@@ -5,6 +5,7 @@ import 'package:package_info_plus/package_info_plus.dart' show PackageInfo;
 import 'package:provider/provider.dart' show Provider;
 
 import '../../system/url_launcher.dart' show launchUrl, LaunchMode;
+import '../../widgets/screen.dart' show Screen, listViewPaddingTB;
 import 'preferences.dart';
 import 'preferences_widgets.dart';
 
@@ -27,17 +28,13 @@ class PreferencesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> items = _buildGroups(context);
-    return Center(
-      child: Container(
-        constraints: const BoxConstraints(maxWidth: 600),
-        child: ListView.separated(
-          padding: MediaQuery.of(context)
-              .padding
-              .add(const EdgeInsets.only(bottom: 16)),
-          itemCount: items.length,
-          itemBuilder: (context, index) => items[index],
-          separatorBuilder: (context, index) => const SizedBox(height: 8),
-        ),
+    return Screen(
+      listView: true,
+      child: ListView.separated(
+        padding: listViewPaddingTB(context, bottom: 16),
+        itemCount: items.length,
+        itemBuilder: (context, index) => items[index],
+        separatorBuilder: (context, index) => const SizedBox(height: 8),
       ),
     );
   }

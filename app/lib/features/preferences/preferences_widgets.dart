@@ -164,10 +164,10 @@ class PreferenceChoiceModal<T> extends StatefulWidget {
 
   @override
   State<PreferenceChoiceModal<T>> createState() =>
-      PreferenceChoiceModalState<T>();
+      _PreferenceChoiceModalState<T>();
 }
 
-class PreferenceChoiceModalState<T> extends State<PreferenceChoiceModal<T>> {
+class _PreferenceChoiceModalState<T> extends State<PreferenceChoiceModal<T>> {
   T? value;
 
   @override

@@ -31,6 +31,7 @@
 .pub/
 /build/
 /coverage/
+*.g.dart
 # Flutter testing related
 /test/full_coverage_test.dart
 

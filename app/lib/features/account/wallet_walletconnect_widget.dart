@@ -108,37 +108,28 @@ class WalletConnect extends StatelessWidget {
             Navigator.of(context).pop(wallet);
           }
           if (wallet.connectError != null) {
-            return SizedBox(
-              width: 360,
-              height: 420,
-              child: Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(16),
-                child: Text(
-                  'WalletConnect failed: ${wallet.connectError}',
-                  textAlign: TextAlign.center,
-                ),
+            return Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.all(16),
+              child: Text(
+                'WalletConnect failed: ${wallet.connectError}',
+                textAlign: TextAlign.center,
               ),
             );
           }
-          Widget? tabs;
+          if (!wallet.connectReady) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
           switch (defaultTargetPlatform) {
             case TargetPlatform.android:
             case TargetPlatform.iOS:
-              tabs = _buildTabs(context, wallet);
-              break;
+              return _buildTabs(context, wallet);
             default:
-              tabs = _buildTabsDesktop(context, wallet);
+              return _buildTabsDesktop(context, wallet);
           }
-          return SizedBox(
-            width: 360,
-            height: 420,
-            child: wallet.connectReady
-                ? tabs
-                : const Center(
-                    child: CircularProgressIndicator(),
-                  ),
-          );
         },
       );
 }
@@ -174,39 +165,73 @@ class WalletConnectWalletPicker extends StatelessWidget {
       default:
         return FutureBuilder<List<RegistryWallet>>(
           future: registryGetWallets(desktop: desktop),
-          builder: (context, snapshot) => ListView.builder(
-            shrinkWrap: true,
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            itemCount: snapshot.data?.length ?? 0,
-            itemBuilder: (context, index) {
-              var item = snapshot.data![index];
-              return ListTile(
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                leading: _buildImage(item.imageUrl),
-                title: Text(item.name),
-                onTap: () {
-                  String? launchString;
-                  RegistryWalletLinks links =
-                      desktop ? item.desktop! : item.mobile!;
-                  if (links.validUniversal) {
-                    launchString = '${links.universal}/wc?uri=$uri';
-                  } else if (links.validNative) {
-                    launchString = '${links.native}//wc?uri=$uri';
-                  }
-                  Uri launchUri = Uri.parse(launchString!);
-                  logD('WalletConnect: launching $launchUri');
-                  launchUrl(
-                    launchUri,
-                    mode: LaunchMode.externalNonBrowserApplication,
-                  );
-                },
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(16),
+                child: Text(
+                  'Unable to fetch list of wallets from the WalletConnect registry. Ensure you are connected to the internet. ${snapshot.error}',
+                  textAlign: TextAlign.center,
+                ),
               );
-            },
-          ),
+            }
+
+            if (!snapshot.hasData) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            return ListView.builder(
+              shrinkWrap: true,
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              itemCount: snapshot.data?.length ?? 0,
+              itemBuilder: (context, index) => WalletConnectWalletPickerItem(
+                item: snapshot.data![index],
+                uri: uri,
+                desktop: desktop,
+              ),
+            );
+          },
         );
     }
   }
+}
+
+class WalletConnectWalletPickerItem extends StatelessWidget {
+  const WalletConnectWalletPickerItem({
+    super.key,
+    required this.item,
+    required this.uri,
+    required this.desktop,
+  });
+
+  final RegistryWallet item;
+  final String uri;
+  final bool desktop;
+
+  @override
+  Widget build(BuildContext context) => ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        leading: _buildImage(item.imageUrl),
+        title: Text(item.name),
+        onTap: () {
+          String? launchString;
+          RegistryWalletLinks links = desktop ? item.desktop! : item.mobile!;
+          if (links.validUniversal) {
+            launchString = '${links.universal}/wc?uri=$uri';
+          } else if (links.validNative) {
+            launchString = '${links.native}//wc?uri=$uri';
+          }
+          Uri launchUri = Uri.parse(launchString!);
+          logD('WalletConnect: launching $launchUri');
+          launchUrl(
+            launchUri,
+            mode: LaunchMode.externalNonBrowserApplication,
+          );
+        },
+      );
 
   Widget? _buildImage(RegistryWalletImageUrl? imageUrl) {
     if (imageUrl?.sm == null) {
@@ -237,7 +262,11 @@ Future<Wallet?> showWalletConnectDialog(BuildContext context) async {
           ),
         ),
         contentPadding: const EdgeInsets.only(top: 20),
-        content: WalletConnect(wallet: wallet),
+        content: SizedBox(
+          width: 320,
+          height: 420,
+          child: WalletConnect(wallet: wallet),
+        ),
       ),
     ),
   );
