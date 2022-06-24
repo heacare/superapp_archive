@@ -21,6 +21,7 @@ class Screen extends StatelessWidget {
       wrappedChild = child!;
     } else {
       wrappedChild = Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: children!,
       );
     }
@@ -34,9 +35,9 @@ class Screen extends StatelessWidget {
     }
 
     if (!fullWidth) {
-      wrappedChild = Center(
-        heightFactor: 1,
-        child: Container(
+      wrappedChild = Align(
+        alignment: Alignment.topCenter,
+        child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 600),
           child: wrappedChild,
         ),

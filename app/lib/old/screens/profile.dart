@@ -82,8 +82,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           onPressed: () =>
               serviceLocator<NotificationService>().showPreferences()),
       const SizedBox(height: 8.0),
-      GradientButton(text: "Logout", onPressed: logout),
-      const SizedBox(height: 32.0),
       GradientButton(
           text: "Send 60 days health data",
           onPressed: () async {

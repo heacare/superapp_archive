@@ -43,145 +43,165 @@ class _EditPageState extends State<EditPage> {
             ),
           ],
         ),
-        body: _buildScreen(context),
+        body: EditScreen(
+          formKey: _formKey,
+        ),
       );
+}
 
-  Widget _buildScreen(BuildContext context) {
+class EditScreen extends StatelessWidget {
+  const EditScreen({super.key, required this.formKey});
+
+  final GlobalKey<FormState> formKey;
+
+  @override
+  Widget build(BuildContext context) {
     Account account = Provider.of<Account>(context);
     return Screen(
       child: Form(
-        key: _formKey,
+        key: formKey,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Column(
-            children: [
-              TextFormField(
-                keyboardType: TextInputType.name,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Name',
-                ),
-                validator: (value) {
-                  if (value == '') {
-                    return 'Name is required';
-                  }
-                  return null;
-                },
-                initialValue: account.metadata.name,
-                onSaved: (value) {
-                  account.metadata.setName(value);
-                },
-              ),
-              const SizedBox(height: 16),
-              DatePickerFormField(
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Birthday',
-                ),
-                validator: (value) {
-                  if (value == null) {
-                    return 'Birthday is required';
-                  }
-                  return null;
-                },
-                initialValue: account.metadata.birthday,
-                onSaved: (value) {
-                  account.metadata.setBirthday(value);
-                },
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Town/city',
-                ),
-                onTap: () async {},
-                onSaved: (value) {},
-              ),
-              const SizedBox(height: 16),
-              DropdownButtonFormField<SexAtBirth>(
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Sex at birth',
-                ),
-                items: SexAtBirth.values
-                    .map(
-                      (value) => DropdownMenuItem(
-                        value: value,
-                        child: Text(_sexAtBirthText(value)),
-                      ),
-                    )
-                    .toList(),
-                onChanged: (value) async {},
-                validator: (value) {
-                  if (value == null) {
-                    return 'Sex at birth is required';
-                  }
-                  return null;
-                },
-                value: account.metadata.sexAtBirth,
-                onSaved: (value) {
-                  account.metadata.setSexAtBirth(value);
-                },
-              ),
-              const SizedBox(height: 16),
-              DropdownButtonFormField<RelationshipStatus>(
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Relationship status',
-                ),
-                items: RelationshipStatus.values
-                    .map(
-                      (value) => DropdownMenuItem(
-                        value: value,
-                        child: Text(_relationshipStatusText(value)),
-                      ),
-                    )
-                    .toList(),
-                onChanged: (value) async {},
-                validator: (value) {
-                  if (value == null) {
-                    return 'Relationship status is required';
-                  }
-                  return null;
-                },
-                value: account.metadata.relationshipStatus,
-                onSaved: (value) {
-                  account.metadata.setRelationshipStatus(value);
-                },
-              ),
-              const SizedBox(height: 16),
-              DropdownButtonFormField<WorkPeriod>(
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Work/study hours',
-                ),
-                items: WorkPeriod.values
-                    .map(
-                      (value) => DropdownMenuItem(
-                        value: value,
-                        child: Text(_workPeriodText(value)),
-                      ),
-                    )
-                    .toList(),
-                onChanged: (value) async {},
-                validator: (value) {
-                  if (value == null) {
-                    return 'Work/study hours is required';
-                  }
-                  return null;
-                },
-                value: account.metadata.workPeriod,
-                onSaved: (value) {
-                  account.metadata.setWorkPeriod(value);
-                },
-              ),
-            ],
-          ),
+          child: _buildFields(context, account),
         ),
       ),
     );
   }
+
+  Widget _buildFields(BuildContext context, Account account) => Column(
+        children: [
+          TextFormField(
+            keyboardType: TextInputType.name,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Name',
+            ),
+            validator: (value) {
+              if (value == '') {
+                return 'Name is required';
+              }
+              return null;
+            },
+            initialValue: account.metadata.name,
+            onSaved: (value) {
+              account.metadata.setName(value);
+            },
+          ),
+          const SizedBox(height: 16),
+          DatePickerFormField(
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Birthday',
+            ),
+            validator: (value) {
+              if (value == null) {
+                return 'Birthday is required';
+              }
+              return null;
+            },
+            initialValue: account.metadata.birthday,
+            onSaved: (value) {
+              account.metadata.setBirthday(value);
+            },
+          ),
+          const SizedBox(height: 16),
+          TextFormField(
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Town/city and country',
+              hintText: 'London, UK',
+            ),
+            validator: (value) {
+              if (value == '') {
+                return 'Town/city and country is required';
+              }
+              return null;
+            },
+            initialValue: account.metadata.regionText,
+            onSaved: (value) {
+              account.metadata.setRegionText(value);
+            },
+          ),
+          const SizedBox(height: 16),
+          DropdownButtonFormField<SexAtBirth>(
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Sex at birth',
+            ),
+            items: SexAtBirth.values
+                .map(
+                  (value) => DropdownMenuItem(
+                    value: value,
+                    child: Text(_sexAtBirthText(value)),
+                  ),
+                )
+                .toList(),
+            onChanged: (value) async {},
+            validator: (value) {
+              if (value == null) {
+                return 'Sex at birth is required';
+              }
+              return null;
+            },
+            value: account.metadata.sexAtBirth,
+            onSaved: (value) {
+              account.metadata.setSexAtBirth(value);
+            },
+          ),
+          const SizedBox(height: 16),
+          DropdownButtonFormField<RelationshipStatus>(
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Relationship status',
+            ),
+            items: RelationshipStatus.values
+                .map(
+                  (value) => DropdownMenuItem(
+                    value: value,
+                    child: Text(_relationshipStatusText(value)),
+                  ),
+                )
+                .toList(),
+            onChanged: (value) async {},
+            validator: (value) {
+              if (value == null) {
+                return 'Relationship status is required';
+              }
+              return null;
+            },
+            value: account.metadata.relationshipStatus,
+            onSaved: (value) {
+              account.metadata.setRelationshipStatus(value);
+            },
+          ),
+          const SizedBox(height: 16),
+          DropdownButtonFormField<WorkPeriod>(
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Work/study hours',
+            ),
+            items: WorkPeriod.values
+                .map(
+                  (value) => DropdownMenuItem(
+                    value: value,
+                    child: Text(_workPeriodText(value)),
+                  ),
+                )
+                .toList(),
+            onChanged: (value) async {},
+            validator: (value) {
+              if (value == null) {
+                return 'Work/study hours is required';
+              }
+              return null;
+            },
+            value: account.metadata.workPeriod,
+            onSaved: (value) {
+              account.metadata.setWorkPeriod(value);
+            },
+          ),
+        ],
+      );
 }
 
 String _sexAtBirthText(SexAtBirth sexAtBirth) {

@@ -5,11 +5,12 @@ import 'package:flutter/material.dart' hide Navigator;
 import 'package:flutter/material.dart' as material show Navigator;
 import 'package:provider/provider.dart' show Consumer;
 
-import 'features/account/account_screen.dart';
-import 'features/dashboard/dashboard_screen.dart';
-import 'features/demo.dart';
-import 'features/preferences/preferences.dart';
-import 'features/preferences/preferences_screen.dart';
+import 'features/account/account_screen.dart' show AccountScreen;
+import 'features/dashboard/dashboard_screen.dart' show DashboardScreen;
+import 'features/demo.dart' show DemoScreen;
+import 'features/preferences/preferences.dart' show Preferences;
+import 'features/preferences/preferences_screen.dart'
+    show PreferencesPage, PreferencesScreen;
 
 class ForceRTL extends StatelessWidget {
   const ForceRTL(this.child, {super.key});
@@ -222,7 +223,6 @@ class _NavigatorState extends State<Navigator> with RestorationMixin {
   Widget _buildDesktop(BuildContext context) {
     int selectedIndex = _selectedIndex(_desktopPages);
     _NavigatorPage selectedPage = _desktopPages[selectedIndex];
-
     return Scaffold(
       body: Row(
         children: [
@@ -237,7 +237,11 @@ class _NavigatorState extends State<Navigator> with RestorationMixin {
             labelType: NavigationRailLabelType.all,
             leading: Container(
               padding: const EdgeInsets.symmetric(vertical: 16),
-              child: Image.asset('assets/brand/mark_160.png', width: 48),
+              child: Image.asset(
+                'assets/brand/mark_160.png',
+                width: 48,
+                height: 48,
+              ),
             ),
           ),
           Expanded(

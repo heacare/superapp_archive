@@ -14,6 +14,10 @@ abstract class AccountMetadata extends ChangeNotifier {
   DateTime? get birthday;
   Future<void> setBirthday(DateTime? birthday);
 
+  String? get regionText;
+  Future<void> setRegionText(String? regionText);
+  // TODO(serverwentdown): Picker for ISO 3166-2 (country-adm1, https://www.geonames.org)
+
   SexAtBirth? get sexAtBirth;
   Future<void> setSexAtBirth(SexAtBirth? sexAtBirth);
 
@@ -59,6 +63,14 @@ class AppAccountMetadata extends AccountMetadata {
   @override
   Future<void> setBirthday(DateTime? birthday) async {
     this.birthday = birthday;
+    notifyListeners();
+  }
+
+  @override
+  String? regionText;
+  @override
+  Future<void> setRegionText(String? regionText) async {
+    this.regionText = regionText;
     notifyListeners();
   }
 
