@@ -12,6 +12,7 @@ class DatePickerFormField extends StatefulWidget {
     this.onSaved,
     this.validator,
     this.format = DateFormat.YEAR_NUM_MONTH_DAY,
+    this.showHintText = false,
   });
 
   final DateTime? initialValue;
@@ -19,6 +20,7 @@ class DatePickerFormField extends StatefulWidget {
   final FormFieldSetter<DateTime>? onSaved;
   final FormFieldValidator<DateTime>? validator;
   final String format;
+  final bool showHintText;
 
   @override
   State<DatePickerFormField> createState() => _DatePickerFormFieldState();
@@ -93,9 +95,11 @@ class _DatePickerFormFieldState extends State<DatePickerFormField> {
     return TextFormField(
       controller: _controller,
       focusNode: _focusNode,
-      decoration: widget.decoration.copyWith(
-        hintText: hintText,
-      ),
+      decoration: widget.showHintText
+          ? widget.decoration.copyWith(
+              hintText: hintText,
+            )
+          : widget.decoration,
       keyboardType: TextInputType.none,
       readOnly: true,
       onTap: _showDatePicker,
