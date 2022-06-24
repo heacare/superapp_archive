@@ -45,9 +45,9 @@ class AppAccount extends Account {
       );
       await _saveMetadata();
     }
-    _metadata = AppAccountMetadata.fromJson(metadata!);
-    _metadata.addListener(notifyListeners);
-    _metadata.addListener(_saveMetadata);
+    _metadata = AppAccountMetadata.fromJson(metadata!)
+      ..addListener(notifyListeners)
+      ..addListener(_saveMetadata);
   }
 
   Future<void> _saveMetadata() async {

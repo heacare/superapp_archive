@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart' show Provider;
 
-import '../../widgets/screen.dart' show Screen;
 import '../../widgets/date_picker_form_field.dart' show DatePickerFormField;
+import '../../widgets/screen.dart' show Screen;
 import 'account.dart' show Account;
 import 'metadata.dart' show SexAtBirth, RelationshipStatus, WorkPeriod;
 
@@ -16,13 +16,10 @@ class EditPage extends StatefulWidget {
 class _EditPageState extends State<EditPage> {
   final _formKey = GlobalKey<FormState>();
 
-  bool _formValid() {
-    FormState state = _formKey.currentState!;
-    return state.validate();
-  }
+  bool _formValidate() => _formKey.currentState!.validate();
 
   void _formSave() {
-    FormState state = _formKey.currentState!..save();
+    _formKey.currentState!.save();
   }
 
   @override
@@ -37,7 +34,7 @@ class _EditPageState extends State<EditPage> {
                 primary: Theme.of(context).colorScheme.onSurface,
               ),
               onPressed: () async {
-                if (_formValid()) {
+                if (_formValidate()) {
                   _formSave();
                   Navigator.of(context).pop();
                 }
@@ -54,7 +51,6 @@ class _EditPageState extends State<EditPage> {
     return Screen(
       child: Form(
         key: _formKey,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Column(
@@ -66,8 +62,8 @@ class _EditPageState extends State<EditPage> {
                   labelText: 'Name',
                 ),
                 validator: (value) {
-                  if (value == null) {
-                    return 'wtf';
+                  if (value == '') {
+                    return 'Name is required';
                   }
                   return null;
                 },
@@ -82,8 +78,16 @@ class _EditPageState extends State<EditPage> {
                   border: OutlineInputBorder(),
                   labelText: 'Birthday',
                 ),
+                validator: (value) {
+                  if (value == null) {
+                    return 'Birthday is required';
+                  }
+                  return null;
+                },
                 initialValue: account.metadata.birthday,
-                onSaved: (value) {},
+                onSaved: (value) {
+                  account.metadata.setBirthday(value);
+                },
               ),
               const SizedBox(height: 16),
               TextFormField(
@@ -109,6 +113,12 @@ class _EditPageState extends State<EditPage> {
                     )
                     .toList(),
                 onChanged: (value) async {},
+                validator: (value) {
+                  if (value == null) {
+                    return 'Sex at birth is required';
+                  }
+                  return null;
+                },
                 value: account.metadata.sexAtBirth,
                 onSaved: (value) {
                   account.metadata.setSexAtBirth(value);
@@ -129,6 +139,12 @@ class _EditPageState extends State<EditPage> {
                     )
                     .toList(),
                 onChanged: (value) async {},
+                validator: (value) {
+                  if (value == null) {
+                    return 'Relationship status is required';
+                  }
+                  return null;
+                },
                 value: account.metadata.relationshipStatus,
                 onSaved: (value) {
                   account.metadata.setRelationshipStatus(value);
@@ -149,6 +165,12 @@ class _EditPageState extends State<EditPage> {
                     )
                     .toList(),
                 onChanged: (value) async {},
+                validator: (value) {
+                  if (value == null) {
+                    return 'Work/study hours is required';
+                  }
+                  return null;
+                },
                 value: account.metadata.workPeriod,
                 onSaved: (value) {
                   account.metadata.setWorkPeriod(value);

@@ -4,7 +4,8 @@ import 'package:dynamic_color/dynamic_color.dart' show DynamicColorBuilder;
 import 'package:flutter/material.dart' show MaterialApp, ThemeData, Brightness;
 import 'package:flutter/services.dart' show SystemChrome, SystemUiMode;
 import 'package:flutter/widgets.dart' hide Navigator;
-import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart'
+    show AppLocalizations;
 import 'package:provider/provider.dart'
     show Provider, MultiProvider, ChangeNotifierProvider;
 
@@ -89,8 +90,8 @@ class App extends StatelessWidget {
                 themeMode: preferences.themeMode,
                 theme: lightThemeData,
                 darkTheme: darkThemeData,
-                localizationsDelegates: localizationsDelegates,
-                supportedLocales: supportedLocales,
+                localizationsDelegates: AppLocalizations.localizationsDelegates,
+                supportedLocales: AppLocalizations.supportedLocales,
                 locale: preferences.locale,
                 restorationScopeId: 'root',
                 home: compat != 'disabled'
@@ -102,23 +103,3 @@ class App extends StatelessWidget {
         },
       );
 }
-
-const List<LocalizationsDelegate<Object>> localizationsDelegates = [
-  GlobalMaterialLocalizations.delegate,
-  GlobalWidgetsLocalizations.delegate,
-  GlobalCupertinoLocalizations.delegate,
-];
-
-const List<Locale> supportedLocales = [
-  // Enable all English locales
-  Locale.fromSubtags(languageCode: 'en', scriptCode: 'SG'),
-  Locale.fromSubtags(languageCode: 'en', scriptCode: 'ZA'),
-  Locale.fromSubtags(languageCode: 'en', scriptCode: 'NZ'),
-  Locale.fromSubtags(languageCode: 'en', scriptCode: 'IN'),
-  Locale.fromSubtags(languageCode: 'en', scriptCode: 'IE'),
-  Locale.fromSubtags(languageCode: 'en', scriptCode: 'GB'),
-  Locale.fromSubtags(languageCode: 'en', scriptCode: 'CA'),
-  Locale.fromSubtags(languageCode: 'en', scriptCode: 'AU'),
-  Locale.fromSubtags(languageCode: 'en', scriptCode: 'US'),
-  Locale.fromSubtags(languageCode: 'en'),
-];

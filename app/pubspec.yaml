@@ -40,6 +40,7 @@ dependencies:
   json_annotation: ^4.5.0
 
   # System
+  dynamic_color: ^1.4.0
   shared_preferences: ^2.0.15
   package_info_plus: ^1.4.2
   url_launcher: ^6.0.20
@@ -91,9 +92,6 @@ dependencies:
   lazy_load_scrollview: ^1.3.0
   visibility_detector: ^0.3.3
   markdown: ^5.0.0
-  build_runner: ^2.1.11
-  json_serializable: ^6.2.0
-  dynamic_color: ^1.4.0
 
 dev_dependencies:
   # The following packages are for unit testing
@@ -108,6 +106,12 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.1
 
+  # Build
+  build_runner: ^2.1.11
+
+  # Framework
+  json_serializable: ^6.2.0
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -120,7 +124,7 @@ flutter:
 
   # The following line enables l10n generation. For details, see
   # https://docs.flutter.dev/development/accessibility-and-localization/internationalization#adding-your-own-localized-messages
-  #generate: true
+  generate: true
 
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart' show debugPrint;
+import 'package:flutter/foundation.dart' show debugPrint, kDebugMode;
 
 import '../models/log.dart';
 import 'api_manager.dart';
@@ -15,6 +15,8 @@ class LoggingServiceImpl implements LoggingService {
 
   @override
   Future<void> createLog(String key, dynamic value) async {
-    collectSimpleKv(key, value);
+    if (!kDebugMode) {
+      collectSimpleKv(key, value);
+    }
   }
 }

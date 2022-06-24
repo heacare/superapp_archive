@@ -1,0 +1,6 @@
+{
+	"dateHintyMd": "mm/dd/yyyy",
+	"@dateHintyMd": {
+		"description": "The date hint for the format 'yMd' in the current locale. See https://github.com/dart-lang/intl/tree/master/lib/src/data/dates/patterns"
+	}
+}
