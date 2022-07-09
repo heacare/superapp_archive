@@ -15,9 +15,10 @@ class AppOnboarding extends Onboarding {
   final Account _account;
 
   static Future<Onboarding> load(
-      Preferences preferences, Account account) async {
-    return AppOnboarding._(preferences, account);
-  }
+    Preferences preferences,
+    Account account,
+  ) async =>
+      AppOnboarding._(preferences, account);
 
   @override
   bool get showOnboarding => false;
