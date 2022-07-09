@@ -8,6 +8,7 @@ from json import dump as dump_json
 from xml.dom.minidom import parse as parse_xml, Node, Attr
 from lib.pubspec import *
 
+
 def iterate_node_attributes(node: Node) -> Generator[Attr, None, None]:
     if node.attributes is None:
         return
@@ -57,6 +58,7 @@ def export_vectordrawable(input: str, output: str, width: int):
 class UnsupportedSVGError(Exception):
     pass
 
+
 parser = ArgumentParser()
 parser.add_argument("source", help="source asset folder containing Figma exports")
 args = parser.parse_args()
@@ -66,6 +68,8 @@ source = Path(args.source)
 
 print("Android")
 android_res = Path("android", "app", "src", "main", "res")
+
+
 def android_copy_raster(input_name: str, output_name: str, type: str = "drawable"):
     dpis = ("ldpi", "mdpi", "hdpi", "xhdpi", "xxhdpi", "xxxhdpi")
     for dpi in dpis:
@@ -74,6 +78,8 @@ def android_copy_raster(input_name: str, output_name: str, type: str = "drawable
             res_dpi = android_res / f"{type}-{dpi}"
             res_dpi.mkdir(exist_ok=True)
             copyfile(source_file, res_dpi / f"{output_name}.png")
+
+
 android_copy_raster("android_icon_background", "ic_launcher_background")
 android_copy_raster("android_icon_legacy", "ic_launcher", type="mipmap")
 export_vectordrawable(
