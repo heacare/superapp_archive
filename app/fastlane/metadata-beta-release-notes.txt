@@ -1,1 +1,1 @@
-Add the post-journey 30-day check-in and other minor bugfixes
+Fix continue with healer and team
