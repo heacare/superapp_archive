@@ -33,6 +33,8 @@ jobs:
             ${{ runner.os }}-pods-
       - run: flutter pub get
         working-directory: app
+      - run: flutter pub run build_runner build
+        working-directory: app
       - run: flutter build ios --profile --no-codesign
         working-directory: app
       # If and when switching back to GitHub-hosted runners, please move the

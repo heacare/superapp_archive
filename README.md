@@ -88,6 +88,7 @@ If you're working on Android, ask Ambrose for the debug keystore file. See the s
 ### Running
 
 ```
+flutter pub run build_runner build # only when schemas have changed
 flutter run
 flutter run --device-id DEVICE_ID
 # For a list of devices

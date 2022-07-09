@@ -31,6 +31,8 @@ jobs:
             ${{ runner.os }}-flutter-
       - run: flutter pub get
         working-directory: app
+      - run: flutter pub run build_runner build
+        working-directory: app
       - run: flutter analyze app --no-fatal-infos | sed 's/^   info/warning/g'
       - run: flutter format app --output none --set-exit-if-changed
 
@@ -52,6 +54,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-flutter-
       - run: flutter pub get
+        working-directory: app
+      - run: flutter pub run build_runner build
         working-directory: app
       - run: python tools/generate_full_coverage.py
         working-directory: app
