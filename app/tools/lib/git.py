@@ -8,7 +8,9 @@ def git_ensure_status_clean():
 
 
 def git_get_current_branch() -> str:
-    rev = run(["git", "rev-parse", "--abbrev-ref", "HEAD"], capture_output=True, check=True)
+    rev = run(
+        ["git", "rev-parse", "--abbrev-ref", "HEAD"], capture_output=True, check=True
+    )
     return rev.stdout.strip()
 
 
