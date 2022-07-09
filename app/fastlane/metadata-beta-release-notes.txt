@@ -1,1 +1,1 @@
-Fix continue with healer and team
+Reworked accounts and logging system. Added WalletConnect.
