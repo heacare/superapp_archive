@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart' show PackageInfo;
 import 'package:provider/provider.dart' show Provider;
 
+import '../../system/metadata.dart'
+    show privacyPolicyUrl, sourceUrl, feedbackEmail, feedbackUrl;
 import '../../system/url_launcher.dart' show launchUrl, LaunchMode;
 import '../../widgets/screen.dart' show Screen, listViewPaddingTB;
 import 'preferences.dart';
@@ -71,7 +73,7 @@ class PreferencesScreen extends StatelessWidget {
             label: 'Data collection',
             description:
                 'We make extensive use of your data to allow our HEAlers to guide you through your journey',
-            value: preferences.consentTelemetryInterim,
+            value: preferences.consentTelemetryInterim ?? false,
             onChanged: (value) {
               preferences.setConsentTelemetryInterim(value);
             },
@@ -79,7 +81,7 @@ class PreferencesScreen extends StatelessWidget {
           PreferenceInfo(
             label: 'Privacy policy',
             onTap: () async {
-              await launchUrl(_privacyPolicyUrl, context: context);
+              await launchUrl(privacyPolicyUrl, context: context);
             },
           ),
         ],
@@ -89,15 +91,15 @@ class PreferencesScreen extends StatelessWidget {
         items: [
           PreferenceInfo(
             label: 'Feedback',
-            value: _feedbackEmail,
+            value: feedbackEmail,
             onTap: () async {
               await launchUrl(
-                _feedbackUrl,
+                feedbackUrl,
                 mode: LaunchMode.externalNonBrowserApplication,
               );
             },
             onLongPress: () async {
-              var data = const ClipboardData(text: _feedbackEmail);
+              var data = const ClipboardData(text: feedbackEmail);
               await Clipboard.setData(data);
             },
           ),
@@ -118,7 +120,7 @@ class PreferencesScreen extends StatelessWidget {
           PreferenceInfo(
             label: 'Source code',
             onTap: () async {
-              await launchUrl(_sourceUrl, context: context);
+              await launchUrl(sourceUrl, context: context);
             },
           ),
           PreferenceInfo(
@@ -147,9 +149,3 @@ const List<PreferenceChoiceItem<ThemeMode>> _themeModeChoices = [
     label: 'Dark',
   ),
 ];
-
-final Uri _privacyPolicyUrl = Uri.parse('https://hea.care/privacy');
-final Uri _sourceUrl = Uri.parse('https://github.com/heacare/hea');
-//final Uri _websiteUrl = Uri.parse('https://hea.care');
-const String _feedbackEmail = 'hello@hea.care';
-final Uri _feedbackUrl = Uri.parse('mailto:$_feedbackEmail');

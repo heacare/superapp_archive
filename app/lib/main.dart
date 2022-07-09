@@ -11,7 +11,9 @@ import 'package:provider/provider.dart'
 
 import 'features/account/account.dart' show Account, AppAccount;
 import 'features/database/database.dart' show Database, databaseOpen;
-import 'features/interim_data_collection/interim_data_collection.dart';
+import 'features/interim_data_collection/interim_data_collection.dart'
+    show interimDataCollectionSetup;
+import 'features/onboarding/onboarding.dart' show Onboarding, AppOnboarding;
 import 'features/preferences/preferences.dart' show Preferences, AppPreferences;
 import 'navigator.dart';
 import 'old/old.dart' show oldSetup, LifecycleHandler;
@@ -37,6 +39,7 @@ void main() async {
     Preferences preferences = await AppPreferences.load();
     Database database = await databaseOpen();
     Account account = await AppAccount.load(database);
+    Onboarding onboarding = await AppOnboarding.load(preferences, account);
     interimDataCollectionSetup(account);
     unawaited(
       SystemChrome.setEnabledSystemUIMode(
@@ -47,6 +50,7 @@ void main() async {
       App(
         preferences: preferences,
         account: account,
+        onboarding: onboarding,
       ),
     );
   });
@@ -57,10 +61,12 @@ class App extends StatelessWidget {
     super.key,
     required this.preferences,
     required this.account,
+    required this.onboarding,
   });
 
   final Preferences preferences;
   final Account account;
+  final Onboarding onboarding;
 
   @override
   Widget build(BuildContext context) => DynamicColorBuilder(
@@ -78,6 +84,7 @@ class App extends StatelessWidget {
             providers: [
               ChangeNotifierProvider<Preferences>.value(value: preferences),
               ChangeNotifierProvider<Account>.value(value: account),
+              ChangeNotifierProvider<Onboarding>.value(value: onboarding),
             ],
             child: const ForceRTL(Navigator()),
             builder: (context, child) {

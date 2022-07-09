@@ -21,7 +21,7 @@ abstract class Preferences extends ChangeNotifier {
   Locale? get locale;
   Future<void> setLocale(Locale? locale);
 
-  bool get consentTelemetryInterim;
+  bool? get consentTelemetryInterim;
   Future<void> setConsentTelemetryInterim(bool consent);
 }
 
@@ -81,8 +81,7 @@ class AppPreferences extends Preferences {
   }
 
   @override
-  bool get consentTelemetryInterim =>
-      _getBool('consentTelemetryInterim') ?? false;
+  bool? get consentTelemetryInterim => _getBool('consentTelemetryInterim');
 
   @override
   Future<void> setConsentTelemetryInterim(bool consent) async {
