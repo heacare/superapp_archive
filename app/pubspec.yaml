@@ -59,7 +59,7 @@ dependencies:
   http: ^0.13.4
 
   # Media
-  flutter_svg: ^1.0.3
+  flutter_svg: ^1.1.1+1
   qr_flutter: ^4.0.0
 
   # Simple widgets
