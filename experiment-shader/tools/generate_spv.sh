@@ -16,13 +16,12 @@ naga \
 	assets/gradient.frag
 
 sed -i -r \
-	's/uniform .+ \{ (.+) \};/layout(location = 0) uniform \1/' \
+	's/uniform .+block_([0-9]+).+ \{ (.+) \};/layout(location = \1) uniform \2/' \
 	assets/gradient.frag
 
 echo Compiling frag
 glslc \
 	--target-env=opengl \
-	-fauto-bind-uniforms \
 	-o assets/gradient.spv \
 	assets/gradient.frag
 

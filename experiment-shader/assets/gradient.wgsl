@@ -92,16 +92,21 @@ fn snoise(v: vec2<f32>) -> f32 {
 
 @group(0) @binding(0)
 var<uniform> t: f32;
+@group(0) @binding(1)
+var<uniform> s: f32;
 
 let pi = 3.1415;
 
-@fragment
-fn fs_main(
-	@builtin(position) position: vec4<f32>,
-) -> @location(0) vec4<f32> {
-	var coord1 = position.xy / 500.;
-	var coord2 = position.xy / 450.;
-	var coord3 = position.xy / 400.;
+
+fn gradient(
+	position: vec2<f32>,
+	t: f32,
+	s: f32,
+) -> vec4<f32> {
+	var coord = position / 1000. / s;
+	var coord1 = coord;
+	var coord2 = coord * 0.95;
+	var coord3 = coord * 0.8;
 
 	coord1.x += sin(t * pi * 2.);
 	coord1.y += cos(t * pi * 2.);
@@ -110,12 +115,16 @@ fn fs_main(
 	coord3.x += sin((t - 0.5) * pi * 2.);
 	coord3.y += cos((t - 0.5) * pi * 2.);
 
-	coord1.x *= 1.5 + sin(t * pi * 2.) * 0.2;
+	coord1.x *= 2.0 + sin(t * pi * 2.) * 0.2;
 	coord1.y *= 0.9 + -cos(t * pi * 2.) * 0.5;
-	coord2.x *= 1.5 + sin(t * pi * 2.) * 0.2;
+	coord2.x *= 2.0 + sin(t * pi * 2.) * 0.2;
 	coord2.y *= 0.9 + -cos(t * pi * 2.) * 0.5;
-	coord3.x *= 1.5;
+	coord3.x *= 2.0;
 	coord3.y *= 0.9;
+
+	coord1 = coord1 + 1000.;
+	coord2 = coord2 + 1000.;
+	coord3 = coord3 + 1000.;
 
 	let s = snoise(coord1) + snoise(coord2) + snoise(coord3);
 	let t = s * 0.4 + 0.6;
@@ -134,4 +143,11 @@ fn fs_main(
 	);
 
 	return vec4<f32>(o, 1.);
+}
+
+@fragment
+fn fs_main(
+	@builtin(position) position: vec4<f32>,
+) -> @location(0) vec4<f32> {
+	return gradient(position.xy, t, s);
 }

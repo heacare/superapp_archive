@@ -17,10 +17,21 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      themeMode: ThemeMode.light,
+      theme: ThemeData.from(
+        colorScheme: const ColorScheme.dark(),
+        useMaterial3: true,
+      ),
       home: FutureProvider<GradientProgram?>(
         initialData: null,
         create: (context) => loadGradientProgram(),
         child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            shadowColor: Colors.transparent,
+            title: Image.asset("assets/logo_white.png", height: 48),
+            centerTitle: true,
+          ),
           body: GradientContainer(
             child: ListView.builder(
                 itemCount: 100,
@@ -53,8 +64,8 @@ class _GradientContainerState extends State<GradientContainer>
   @override
   void initState() {
     super.initState();
-    _controller =
-        AnimationController(vsync: this, duration: const Duration(seconds: 60));
+    _controller = AnimationController(
+        vsync: this, duration: const Duration(seconds: 120));
     _controller.repeat();
   }
 
@@ -66,10 +77,14 @@ class _GradientContainerState extends State<GradientContainer>
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("build");
     GradientProgram? program = Provider.of<GradientProgram?>(context);
     CustomPainter? painter;
     if (program != null) {
-      painter = GradientPainter(program, _controller);
+      painter = GradientPainter(
+        program: program,
+        animation: _controller,
+      );
     }
     return CustomPaint(
       painter: painter,
@@ -94,17 +109,23 @@ class GradientProgram {
 }
 
 class GradientPainter extends CustomPainter {
-  GradientPainter(this.program, this.t) : super(repaint: t);
+  GradientPainter(
+      {required this.program, required this.animation, this.scale = 1.0})
+      : super(repaint: animation);
 
   GradientProgram program;
-  Animation<double> t;
+  Animation<double> animation;
+  double scale;
 
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint();
+    double s = (1000 + size.width + size.height) / 1600 * scale;
+    debugPrint("$s");
     paint.shader = program.main.shader(
       floatUniforms: Float32List.fromList([
-        t.value,
+        animation.value,
+        s,
       ]),
     );
     canvas.drawPaint(paint);

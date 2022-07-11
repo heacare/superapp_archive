@@ -5,6 +5,8 @@ precision highp int;
 
 layout(location = 0) uniform float _group_0_binding_0_fs;
 
+layout(location = 1) uniform float _group_0_binding_1_fs;
+
 layout(location = 0) out vec4 _fs2p_location0;
 
 vec3 mod289_3_(vec3 x) {
@@ -63,67 +65,75 @@ float snoise(vec2 v) {
     return (130.0 * dot(_e124, g));
 }
 
-void main() {
-    vec4 position = gl_FragCoord;
+vec4 gradient(vec2 position_1, float t, float s) {
+    vec2 coord = vec2(0.0);
     vec2 coord1_ = vec2(0.0);
     vec2 coord2_ = vec2(0.0);
     vec2 coord3_ = vec2(0.0);
-    coord1_ = (position.xy / vec2(500.0));
-    coord2_ = (position.xy / vec2(450.0));
-    coord3_ = (position.xy / vec2(400.0));
-    float _e19 = coord1_.x;
-    float _e20 = _group_0_binding_0_fs;
-    coord1_.x = (_e19 + sin(((_e20 * 3.1414999961853027) * 2.0)));
-    float _e27 = coord1_.y;
-    float _e28 = _group_0_binding_0_fs;
-    coord1_.y = (_e27 + cos(((_e28 * 3.1414999961853027) * 2.0)));
-    float _e35 = coord2_.x;
-    float _e36 = _group_0_binding_0_fs;
-    coord2_.x = (_e35 + sin((((_e36 + 0.4000000059604645) * 3.1414999961853027) * 2.0)));
-    float _e45 = coord2_.y;
-    float _e46 = _group_0_binding_0_fs;
-    coord2_.y = (_e45 + cos((((_e46 + 0.4000000059604645) * 3.1414999961853027) * 2.0)));
+    coord = ((position_1 / vec2(1000.0)) / vec2(s));
+    vec2 _e12 = coord;
+    coord1_ = _e12;
+    vec2 _e14 = coord;
+    coord2_ = (_e14 * 0.949999988079071);
+    vec2 _e18 = coord;
+    coord3_ = (_e18 * 0.800000011920929);
+    float _e23 = coord1_.x;
+    coord1_.x = (_e23 + sin(((t * 3.1414999961853027) * 2.0)));
+    float _e30 = coord1_.y;
+    coord1_.y = (_e30 + cos(((t * 3.1414999961853027) * 2.0)));
+    float _e37 = coord2_.x;
+    coord2_.x = (_e37 + sin((((t + 0.4000000059604645) * 3.1414999961853027) * 2.0)));
+    float _e46 = coord2_.y;
+    coord2_.y = (_e46 + cos((((t + 0.4000000059604645) * 3.1414999961853027) * 2.0)));
     float _e55 = coord3_.x;
-    float _e56 = _group_0_binding_0_fs;
-    coord3_.x = (_e55 + sin((((_e56 - 0.5) * 3.1414999961853027) * 2.0)));
-    float _e65 = coord3_.y;
-    float _e66 = _group_0_binding_0_fs;
-    coord3_.y = (_e65 + cos((((_e66 - 0.5) * 3.1414999961853027) * 2.0)));
-    float _e75 = coord1_.x;
-    float _e77 = _group_0_binding_0_fs;
-    coord1_.x = (_e75 * (1.5 + (sin(((_e77 * 3.1414999961853027) * 2.0)) * 0.20000000298023224)));
-    float _e87 = coord1_.y;
-    float _e89 = _group_0_binding_0_fs;
-    coord1_.y = (_e87 * (0.8999999761581421 + ((-cos(((_e89 * 3.1414999961853027) * 2.0))) * 0.5)));
-    float _e100 = coord2_.x;
-    float _e102 = _group_0_binding_0_fs;
-    coord2_.x = (_e100 * (1.5 + (sin(((_e102 * 3.1414999961853027) * 2.0)) * 0.20000000298023224)));
-    float _e112 = coord2_.y;
-    float _e114 = _group_0_binding_0_fs;
-    coord2_.y = (_e112 * (0.8999999761581421 + ((-cos(((_e114 * 3.1414999961853027) * 2.0))) * 0.5)));
-    float _e125 = coord3_.x;
-    coord3_.x = (_e125 * 1.5);
-    float _e129 = coord3_.y;
-    coord3_.y = (_e129 * 0.8999999761581421);
-    vec2 _e132 = coord1_;
-    float _e133 = snoise(_e132);
-    vec2 _e134 = coord2_;
-    float _e135 = snoise(_e134);
-    vec2 _e137 = coord3_;
-    float _e138 = snoise(_e137);
-    float s = ((_e133 + _e135) + _e138);
-    float t_1 = ((s * 0.4000000059604645) + 0.6000000238418579);
+    coord3_.x = (_e55 + sin((((t - 0.5) * 3.1414999961853027) * 2.0)));
+    float _e64 = coord3_.y;
+    coord3_.y = (_e64 + cos((((t - 0.5) * 3.1414999961853027) * 2.0)));
+    float _e73 = coord1_.x;
+    coord1_.x = (_e73 * (2.0 + (sin(((t * 3.1414999961853027) * 2.0)) * 0.20000000298023224)));
+    float _e84 = coord1_.y;
+    coord1_.y = (_e84 * (0.8999999761581421 + ((-cos(((t * 3.1414999961853027) * 2.0))) * 0.5)));
+    float _e96 = coord2_.x;
+    coord2_.x = (_e96 * (2.0 + (sin(((t * 3.1414999961853027) * 2.0)) * 0.20000000298023224)));
+    float _e107 = coord2_.y;
+    coord2_.y = (_e107 * (0.8999999761581421 + ((-cos(((t * 3.1414999961853027) * 2.0))) * 0.5)));
+    float _e119 = coord3_.x;
+    coord3_.x = (_e119 * 2.0);
+    float _e123 = coord3_.y;
+    coord3_.y = (_e123 * 0.8999999761581421);
+    vec2 _e126 = coord1_;
+    coord1_ = (_e126 + vec2(1000.0));
+    vec2 _e130 = coord2_;
+    coord2_ = (_e130 + vec2(1000.0));
+    vec2 _e134 = coord3_;
+    coord3_ = (_e134 + vec2(1000.0));
+    vec2 _e138 = coord1_;
+    float _e139 = snoise(_e138);
+    vec2 _e140 = coord2_;
+    float _e141 = snoise(_e140);
+    vec2 _e143 = coord3_;
+    float _e144 = snoise(_e143);
+    float s_2 = ((_e139 + _e141) + _e144);
+    float t_2 = ((s_2 * 0.4000000059604645) + 0.6000000238418579);
     vec3 a = vec3(1.0, 0.0, 1.0);
     vec3 b = vec3(1.0, 0.6000000238418579, 0.0);
-    vec3 o = ((a * (1.0 - t_1)) + (b * t_1));
+    vec3 o = ((a * (1.0 - t_2)) + (b * t_2));
     vec3 o_1 = ((o * 0.75) + vec3(0.25));
-    vec2 _e162 = coord1_;
-    float _e163 = snoise(_e162);
-    vec2 _e167 = coord3_;
-    float _e168 = snoise(_e167);
-    float b_1 = (pow(((_e163 / 2.0) + (((1.0 - _e168) - 0.5) / 2.0)), 4.0) * 0.20000000298023224);
+    vec2 _e168 = coord1_;
+    float _e169 = snoise(_e168);
+    vec2 _e173 = coord3_;
+    float _e174 = snoise(_e173);
+    float b_1 = (pow(((_e169 / 2.0) + (((1.0 - _e174) - 0.5) / 2.0)), 4.0) * 0.20000000298023224);
     vec3 o_2 = clamp((o_1 + vec3(b_1)), vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
-    _fs2p_location0 = vec4(o_2, 1.0);
+    return vec4(o_2, 1.0);
+}
+
+void main() {
+    vec4 position = gl_FragCoord;
+    float _e5 = _group_0_binding_0_fs;
+    float _e6 = _group_0_binding_1_fs;
+    vec4 _e7 = gradient(position.xy, _e5, _e6);
+    _fs2p_location0 = _e7;
     return;
 }
 
