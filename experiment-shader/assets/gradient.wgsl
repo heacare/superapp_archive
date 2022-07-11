@@ -103,7 +103,7 @@ fn gradient(
 	t: f32,
 	s: f32,
 ) -> vec4<f32> {
-	var coord = position / 1000. / s;
+	var coord = position / 600. / s;
 	var coord1 = coord;
 	var coord2 = coord * 0.95;
 	var coord3 = coord * 0.8;

@@ -70,7 +70,7 @@ vec4 gradient(vec2 position_1, float t, float s) {
     vec2 coord1_ = vec2(0.0);
     vec2 coord2_ = vec2(0.0);
     vec2 coord3_ = vec2(0.0);
-    coord = ((position_1 / vec2(1000.0)) / vec2(s));
+    coord = ((position_1 / vec2(600.0)) / vec2(s));
     vec2 _e12 = coord;
     coord1_ = _e12;
     vec2 _e14 = coord;
