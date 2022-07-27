@@ -178,7 +178,7 @@ These were the sleep goals you picked to pursue. Which of these sleep goals are 
   @override
   final maxChoice = 0;
   @override
-  final minSelected = 1;
+  final minSelected = 0;
   @override
   final valueName = "review-goals";
   @override

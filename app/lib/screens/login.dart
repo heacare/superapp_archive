@@ -37,10 +37,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          duration: const Duration(minutes: 30),
           content: Row(children: const [
-        CircularProgressIndicator(),
-        Text("Logging in...")
-      ])));
+            CircularProgressIndicator(),
+            Text("Logging in...")
+          ])));
       await _auth.login(_email.text.trim(), _password.text);
       // Get new JWT Token and create user in backend if necessary
       await serviceLocator<ApiManager>().fetchJwtToken();
@@ -60,10 +61,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          duration: const Duration(minutes: 30),
           content: Row(children: const [
-        CircularProgressIndicator(),
-        Text("Logging in...")
-      ])));
+            CircularProgressIndicator(),
+            Text("Logging in...")
+          ])));
       await _auth.signup(_email.text, _password.text);
       // Get new JWT Token and create user in backend if necessary
       await serviceLocator<ApiManager>().fetchJwtToken();
