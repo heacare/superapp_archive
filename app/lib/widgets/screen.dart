@@ -15,7 +15,7 @@ class Screen extends StatelessWidget {
   final List<Widget>? children;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     Widget wrappedChild;
     if (child != null) {
       wrappedChild = child!;
@@ -49,9 +49,9 @@ class Screen extends StatelessWidget {
 }
 
 EdgeInsetsGeometry listViewPaddingTB(
-  BuildContext context, {
-  double top = 0,
-  double bottom = 0,
+  final BuildContext context, {
+  final double top = 0,
+  final double bottom = 0,
 }) =>
     MediaQuery.of(context)
         .padding

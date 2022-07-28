@@ -9,10 +9,10 @@ class PreferenceGroup extends StatelessWidget {
   final String title;
   final List<Widget> items;
 
-  Widget _buildItems(BuildContext context) => Column(
+  Widget _buildItems(final BuildContext context) => Column(
         children: items
             .expand(
-              (item) => [
+              (final Widget item) => [
                 const Divider(indent: 16, endIndent: 16, height: 0),
                 item,
               ],
@@ -22,7 +22,7 @@ class PreferenceGroup extends StatelessWidget {
       );
 
   @override
-  Widget build(BuildContext context) => Column(
+  Widget build(final BuildContext context) => Column(
         children: [
           Row(
             children: [
@@ -63,7 +63,7 @@ class _ItemTemplate extends StatelessWidget {
   final GestureTapCallback? onLongPress;
 
   @override
-  Widget build(BuildContext context) => ListTileCentered(
+  Widget build(final BuildContext context) => ListTileCentered(
         onTap: onTap,
         onLongPress: onLongPress,
         title: Text(label),
@@ -88,7 +88,7 @@ class PreferenceSwitch extends StatelessWidget {
   final ValueChanged<bool> onChanged;
 
   @override
-  Widget build(BuildContext context) => _ItemTemplate(
+  Widget build(final BuildContext context) => _ItemTemplate(
         label: label,
         description: description,
         child: Switch.adaptive(
@@ -118,9 +118,9 @@ class PreferenceChoice<T> extends StatelessWidget {
   final ValueChanged<T> onChanged;
 
   @override
-  Widget build(BuildContext context) {
-    PreferenceChoiceItem<T> selected = choices.firstWhere(
-      (choice) => choice.value == value,
+  Widget build(final BuildContext context) {
+    final PreferenceChoiceItem<T> selected = choices.firstWhere(
+      (final PreferenceChoiceItem<T> choice) => choice.value == value,
       orElse: () => choices[0],
     );
 
@@ -129,11 +129,11 @@ class PreferenceChoice<T> extends StatelessWidget {
       description: description,
       child: Text(selected.label, style: Theme.of(context).textTheme.bodyLarge),
       onTap: () async {
-        double maxHeight = choices.length <= 3 ? 360 : double.infinity;
-        T? value = await showModalBottomSheet<T?>(
+        final double maxHeight = choices.length <= 3 ? 360 : double.infinity;
+        final T? value = await showModalBottomSheet<T?>(
           constraints: BoxConstraints(maxHeight: maxHeight),
           context: context,
-          builder: (context) => ForceRTL(
+          builder: (final BuildContext context) => ForceRTL(
             PreferenceChoiceModal<T>(
               label: label,
               choices: choices,
@@ -177,7 +177,7 @@ class _PreferenceChoiceModalState<T> extends State<PreferenceChoiceModal<T>> {
   }
 
   @override
-  Widget build(BuildContext context) => SafeArea(
+  Widget build(final BuildContext context) => SafeArea(
         child: Column(
           children: [
             Row(
@@ -197,8 +197,9 @@ class _PreferenceChoiceModalState<T> extends State<PreferenceChoiceModal<T>> {
                 shrinkWrap: true,
                 itemCount: widget.choices.length,
                 itemBuilder: _buildListItem,
-                separatorBuilder: (context, index) =>
-                    const Divider(indent: 64, endIndent: 16, height: 0),
+                separatorBuilder:
+                    (final BuildContext context, final int index) =>
+                        const Divider(indent: 64, endIndent: 16, height: 0),
               ),
             ),
             Row(
@@ -218,15 +219,15 @@ class _PreferenceChoiceModalState<T> extends State<PreferenceChoiceModal<T>> {
         ),
       );
 
-  Widget _buildListItem(BuildContext context, int index) {
-    PreferenceChoiceItem choice = widget.choices[index];
+  Widget _buildListItem(final BuildContext context, final int index) {
+    final PreferenceChoiceItem choice = widget.choices[index];
 
     return ListTileCentered(
       title: Text(choice.label),
       leading: Radio<T>(
         value: choice.value,
         groupValue: value,
-        onChanged: (newValue) {
+        onChanged: (final newValue) {
           setState(() {
             value = newValue as T;
           });
@@ -264,7 +265,7 @@ class PreferenceInfo extends StatelessWidget {
   final VoidCallback? onLongPress;
 
   @override
-  Widget build(BuildContext context) => _ItemTemplate(
+  Widget build(final BuildContext context) => _ItemTemplate(
         label: label,
         description: description,
         onTap: onTap,

@@ -6,19 +6,19 @@ import '../../widgets/gradient.dart' show gradient;
 import 'account.dart' show Account;
 import 'edit_screen.dart' show EditPage;
 
-Route _editRouteBuilder(context, arguments) => MaterialPageRoute(
-      builder: (context) => const ForceRTL(EditPage()),
+Route _editRouteBuilder(final context, final arguments) => MaterialPageRoute(
+      builder: (final BuildContext context) => const ForceRTL(EditPage()),
     );
 
 class AccountOverview extends StatelessWidget {
   const AccountOverview({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    TextTheme textTheme = Theme.of(context).textTheme;
-    ColorScheme colorScheme = Theme.of(context).colorScheme;
+  Widget build(final BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
-    Account account = Provider.of<Account>(context);
+    final Account account = Provider.of<Account>(context);
 
     return Container(
       decoration: gradient(context),

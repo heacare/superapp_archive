@@ -1,7 +1,8 @@
 import 'dart:async' show unawaited;
 
 import 'package:dynamic_color/dynamic_color.dart' show DynamicColorBuilder;
-import 'package:flutter/material.dart' show MaterialApp, ThemeData, Brightness;
+import 'package:flutter/material.dart'
+    show MaterialApp, ThemeData, Brightness, ColorScheme;
 import 'package:flutter/services.dart' show SystemChrome, SystemUiMode;
 import 'package:flutter/widgets.dart' hide Navigator;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart'
@@ -36,10 +37,11 @@ void main() async {
 
     licensesInitialize();
     // TODO(serverwentdown): Improve shared_preferences and sqflite startup time
-    Preferences preferences = await AppPreferences.load();
-    Database database = await databaseOpen();
-    Account account = await AppAccount.load(database);
-    Onboarding onboarding = await AppOnboarding.load(preferences, account);
+    final Preferences preferences = await AppPreferences.load();
+    final Database database = await databaseOpen();
+    final Account account = await AppAccount.load(database);
+    final Onboarding onboarding =
+        await AppOnboarding.load(preferences, account);
     interimDataCollectionSetup(account);
     unawaited(
       SystemChrome.setEnabledSystemUIMode(
@@ -69,13 +71,14 @@ class App extends StatelessWidget {
   final Onboarding onboarding;
 
   @override
-  Widget build(BuildContext context) => DynamicColorBuilder(
-        builder: (lightDynamic, darkDynamic) {
-          ThemeData lightThemeData = resolveThemeData(
+  Widget build(final BuildContext context) => DynamicColorBuilder(
+        builder:
+            (final ColorScheme? lightDynamic, final ColorScheme? darkDynamic) {
+          final ThemeData lightThemeData = resolveThemeData(
             Brightness.light,
             lightDynamic,
           );
-          ThemeData darkThemeData = resolveThemeData(
+          final ThemeData darkThemeData = resolveThemeData(
             Brightness.dark,
             darkDynamic,
           );
@@ -87,8 +90,8 @@ class App extends StatelessWidget {
               ChangeNotifierProvider<Onboarding>.value(value: onboarding),
             ],
             child: const ForceRTL(Navigator()),
-            builder: (context, child) {
-              Preferences preferences = Provider.of<Preferences>(context);
+            builder: (final BuildContext context, final Widget? child) {
+              final Preferences preferences = Provider.of<Preferences>(context);
               SystemChrome.setSystemUIOverlayStyle(
                 resolveOverlayStyle(preferences.themeMode),
               );

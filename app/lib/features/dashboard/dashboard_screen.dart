@@ -7,7 +7,7 @@ class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     if (compat != 'disabled') {
       return const old.DashboardScreen();
     }

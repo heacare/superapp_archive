@@ -6,7 +6,7 @@ class OnboardingPage extends StatelessWidget {
   const OnboardingPage({super.key});
 
   @override
-  Widget build(BuildContext context) => const Scaffold(
+  Widget build(final BuildContext context) => const Scaffold(
         body: OnboardingScreen(),
       );
 }
@@ -15,7 +15,7 @@ class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({super.key});
 
   @override
-  Widget build(BuildContext context) => const Screen(
+  Widget build(final BuildContext context) => const Screen(
         child: Center(
           child: Text('Test'),
         ),

@@ -10,7 +10,7 @@ class AccountScreen extends StatelessWidget {
   const AccountScreen({super.key});
 
   @override
-  Widget build(BuildContext context) => const Screen(
+  Widget build(final BuildContext context) => const Screen(
         children: [
           AccountOverview(),
           WalletOverview(),

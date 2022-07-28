@@ -8,7 +8,7 @@ class QrCode extends StatelessWidget {
   final String data;
 
   @override
-  Widget build(BuildContext context) => FittedBox(
+  Widget build(final BuildContext context) => FittedBox(
         child: SizedBox(
           width: 360,
           height: 360,
@@ -27,7 +27,7 @@ class QrCodeDialog extends StatelessWidget {
   final Widget? child;
 
   @override
-  Widget build(BuildContext context) => ConstrainedBox(
+  Widget build(final BuildContext context) => ConstrainedBox(
         // TODO(serverwentdown): Can we limit the height of the widget to be
         // the height of the QR code + the height of the child
         constraints: const BoxConstraints(maxHeight: 340),

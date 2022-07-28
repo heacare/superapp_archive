@@ -13,16 +13,16 @@ import 'package:shared_preferences/shared_preferences.dart'
 
 abstract class Preferences extends ChangeNotifier {
   ThemeMode get themeMode;
-  Future<void> setThemeMode(ThemeMode themeMode);
+  Future<void> setThemeMode(final ThemeMode themeMode);
 
   bool get forceRTL;
-  Future<void> setForceRTL(bool rtl);
+  Future<void> setForceRTL(final bool rtl);
 
   Locale? get locale;
-  Future<void> setLocale(Locale? locale);
+  Future<void> setLocale(final Locale? locale);
 
   bool? get consentTelemetryInterim;
-  Future<void> setConsentTelemetryInterim(bool consent);
+  Future<void> setConsentTelemetryInterim(final bool consent);
 }
 
 class AppPreferences extends Preferences {
@@ -31,7 +31,7 @@ class AppPreferences extends Preferences {
   final SharedPreferences _instance;
 
   static Future<Preferences> load() async {
-    AppPreferences preferences =
+    final AppPreferences preferences =
         AppPreferences._(await SharedPreferences.getInstance());
     // PlatformDispatcher.instance.onLocaleChanged = preferences.onLocaleChanged;
     return preferences;
@@ -39,13 +39,15 @@ class AppPreferences extends Preferences {
 
   @override
   ThemeMode get themeMode {
-    String? themeMode = _getString('themeMode');
-    return ThemeMode.values
-        .firstWhere((m) => m.name == themeMode, orElse: () => ThemeMode.system);
+    final String? themeMode = _getString('themeMode');
+    return ThemeMode.values.firstWhere(
+      (final ThemeMode m) => m.name == themeMode,
+      orElse: () => ThemeMode.system,
+    );
   }
 
   @override
-  Future<void> setThemeMode(ThemeMode themeMode) async {
+  Future<void> setThemeMode(final ThemeMode themeMode) async {
     await _setString('themeMode', themeMode.name);
   }
 
@@ -53,17 +55,17 @@ class AppPreferences extends Preferences {
   bool get forceRTL => _getBool('forceRTL') ?? false;
 
   @override
-  Future<void> setForceRTL(bool rtl) async {
+  Future<void> setForceRTL(final bool rtl) async {
     await _setBool('forceRTL', rtl);
   }
 
   @override
   Locale? get locale {
-    String? locale = _getString('locale');
+    final String? locale = _getString('locale');
     if (locale == null) {
       return null;
     }
-    intl.Locale parsed = intl.Locale.parse(locale);
+    final intl.Locale parsed = intl.Locale.parse(locale);
     return Locale.fromSubtags(
       languageCode: parsed.languageCode,
       scriptCode: parsed.scriptCode,
@@ -72,7 +74,7 @@ class AppPreferences extends Preferences {
   }
 
   @override
-  Future<void> setLocale(Locale? locale) async {
+  Future<void> setLocale(final Locale? locale) async {
     if (locale == null) {
       await _remove('locale');
       return;
@@ -84,33 +86,33 @@ class AppPreferences extends Preferences {
   bool? get consentTelemetryInterim => _getBool('consentTelemetryInterim');
 
   @override
-  Future<void> setConsentTelemetryInterim(bool consent) async {
+  Future<void> setConsentTelemetryInterim(final bool consent) async {
     await _setBool('consentTelemetryInterim', consent);
   }
 
-  Future<void> _remove(String key) async {
+  Future<void> _remove(final String key) async {
     await _instance.remove(key);
     notifyListeners();
   }
 
-  Future<void> _setString(String key, String value) async {
+  Future<void> _setString(final String key, final String value) async {
     await _instance.setString(key, value);
     notifyListeners();
   }
 
-  String? _getString(String key) => _instance.getString(key);
+  String? _getString(final String key) => _instance.getString(key);
 
-  Future<void> _setInt(String key, int value) async {
+  Future<void> _setInt(final String key, final int value) async {
     await _instance.setInt(key, value);
     notifyListeners();
   }
 
-  int? _getInt(String key) => _instance.getInt(key);
+  int? _getInt(final String key) => _instance.getInt(key);
 
-  Future<void> _setBool(String key, bool value) async {
+  Future<void> _setBool(final String key, final bool value) async {
     await _instance.setBool(key, value);
     notifyListeners();
   }
 
-  bool? _getBool(String key) => _instance.getBool(key);
+  bool? _getBool(final String key) => _instance.getBool(key);
 }

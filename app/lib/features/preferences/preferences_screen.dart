@@ -15,7 +15,7 @@ class PreferencesPage extends StatelessWidget {
   const PreferencesPage({super.key});
 
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(final BuildContext context) => Scaffold(
         appBar: AppBar(
           title: const Text('Settings'),
           centerTitle: true,
@@ -28,21 +28,23 @@ class PreferencesScreen extends StatelessWidget {
   const PreferencesScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    List<Widget> items = _buildGroups(context);
+  Widget build(final BuildContext context) {
+    final List<Widget> items = _buildGroups(context);
     return Screen(
       listView: true,
       child: ListView.separated(
         padding: listViewPaddingTB(context, bottom: 16),
         itemCount: items.length,
-        itemBuilder: (context, index) => items[index],
-        separatorBuilder: (context, index) => const SizedBox(height: 8),
+        itemBuilder: (final BuildContext context, final int index) =>
+            items[index],
+        separatorBuilder: (final BuildContext context, final int index) =>
+            const SizedBox(height: 8),
       ),
     );
   }
 
-  List<Widget> _buildGroups(BuildContext context) {
-    Preferences preferences = Provider.of<Preferences>(context);
+  List<Widget> _buildGroups(final BuildContext context) {
+    final Preferences preferences = Provider.of<Preferences>(context);
 
     return [
       PreferenceGroup(
@@ -52,17 +54,13 @@ class PreferencesScreen extends StatelessWidget {
             label: 'Theme',
             choices: _themeModeChoices,
             value: preferences.themeMode,
-            onChanged: (value) {
-              preferences.setThemeMode(value);
-            },
+            onChanged: preferences.setThemeMode,
           ),
           if (kDebugMode)
             PreferenceSwitch(
               label: 'Force RTL',
               value: preferences.forceRTL,
-              onChanged: (value) {
-                preferences.setForceRTL(value);
-              },
+              onChanged: preferences.setForceRTL,
             ),
         ],
       ),
@@ -74,9 +72,7 @@ class PreferencesScreen extends StatelessWidget {
             description:
                 'We make extensive use of your data to allow our HEAlers to guide you through your journey',
             value: preferences.consentTelemetryInterim ?? false,
-            onChanged: (value) {
-              preferences.setConsentTelemetryInterim(value);
-            },
+            onChanged: preferences.setConsentTelemetryInterim,
           ),
           PreferenceInfo(
             label: 'Privacy policy',
@@ -99,13 +95,16 @@ class PreferencesScreen extends StatelessWidget {
               );
             },
             onLongPress: () async {
-              var data = const ClipboardData(text: feedbackEmail);
+              const ClipboardData data = ClipboardData(text: feedbackEmail);
               await Clipboard.setData(data);
             },
           ),
           FutureBuilder<PackageInfo>(
             future: PackageInfo.fromPlatform(),
-            builder: (context, snapshot) {
+            builder: (
+              final BuildContext context,
+              final AsyncSnapshot<PackageInfo> snapshot,
+            ) {
               String version = 'Loading';
               if (snapshot.data != null) {
                 version =

@@ -6,26 +6,28 @@ part 'metadata.g.dart';
 
 abstract class AccountMetadata extends ChangeNotifier {
   String get id;
-  Future<void> setId(String id);
+  Future<void> setId(final String id);
 
   String? get name;
-  Future<void> setName(String? name);
+  Future<void> setName(final String? name);
 
   DateTime? get birthday;
-  Future<void> setBirthday(DateTime? birthday);
+  Future<void> setBirthday(final DateTime? birthday);
 
   String? get regionText;
-  Future<void> setRegionText(String? regionText);
+  Future<void> setRegionText(final String? regionText);
   // TODO(serverwentdown): Picker for ISO 3166-2 (country-adm1, https://www.geonames.org)
 
   SexAtBirth? get sexAtBirth;
-  Future<void> setSexAtBirth(SexAtBirth? sexAtBirth);
+  Future<void> setSexAtBirth(final SexAtBirth? sexAtBirth);
 
   RelationshipStatus? get relationshipStatus;
-  Future<void> setRelationshipStatus(RelationshipStatus? relationshipStatus);
+  Future<void> setRelationshipStatus(
+    final RelationshipStatus? relationshipStatus,
+  );
 
   WorkPeriod? get workPeriod;
-  Future<void> setWorkPeriod(WorkPeriod? workPeriod);
+  Future<void> setWorkPeriod(final WorkPeriod? workPeriod);
 
   Map<String, dynamic> toJson();
 }
@@ -36,7 +38,7 @@ class AppAccountMetadata extends AccountMetadata {
     required this.id,
     this.name,
   });
-  factory AppAccountMetadata.fromJson(Map<String, dynamic> json) =>
+  factory AppAccountMetadata.fromJson(final Map<String, dynamic> json) =>
       _$AppAccountMetadataFromJson(json);
 
   @override
@@ -45,7 +47,7 @@ class AppAccountMetadata extends AccountMetadata {
   @override
   String id;
   @override
-  Future<void> setId(String id) async {
+  Future<void> setId(final String id) async {
     this.id = id;
     notifyListeners();
   }
@@ -53,7 +55,7 @@ class AppAccountMetadata extends AccountMetadata {
   @override
   String? name;
   @override
-  Future<void> setName(String? name) async {
+  Future<void> setName(final String? name) async {
     this.name = name;
     notifyListeners();
   }
@@ -61,7 +63,7 @@ class AppAccountMetadata extends AccountMetadata {
   @override
   DateTime? birthday;
   @override
-  Future<void> setBirthday(DateTime? birthday) async {
+  Future<void> setBirthday(final DateTime? birthday) async {
     this.birthday = birthday;
     notifyListeners();
   }
@@ -69,7 +71,7 @@ class AppAccountMetadata extends AccountMetadata {
   @override
   String? regionText;
   @override
-  Future<void> setRegionText(String? regionText) async {
+  Future<void> setRegionText(final String? regionText) async {
     this.regionText = regionText;
     notifyListeners();
   }
@@ -77,7 +79,7 @@ class AppAccountMetadata extends AccountMetadata {
   @override
   SexAtBirth? sexAtBirth;
   @override
-  Future<void> setSexAtBirth(SexAtBirth? sexAtBirth) async {
+  Future<void> setSexAtBirth(final SexAtBirth? sexAtBirth) async {
     this.sexAtBirth = sexAtBirth;
     notifyListeners();
   }
@@ -86,7 +88,7 @@ class AppAccountMetadata extends AccountMetadata {
   RelationshipStatus? relationshipStatus;
   @override
   Future<void> setRelationshipStatus(
-    RelationshipStatus? relationshipStatus,
+    final RelationshipStatus? relationshipStatus,
   ) async {
     this.relationshipStatus = relationshipStatus;
     notifyListeners();
@@ -95,7 +97,7 @@ class AppAccountMetadata extends AccountMetadata {
   @override
   WorkPeriod? workPeriod;
   @override
-  Future<void> setWorkPeriod(WorkPeriod? workPeriod) async {
+  Future<void> setWorkPeriod(final WorkPeriod? workPeriod) async {
     this.workPeriod = workPeriod;
     notifyListeners();
   }

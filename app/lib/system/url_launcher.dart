@@ -16,9 +16,9 @@ enum LaunchMode {
 }
 
 Future<bool> launchUrl(
-  Uri url, {
-  LaunchMode mode = LaunchMode.customTabs,
-  BuildContext? context,
+  final Uri url, {
+  final LaunchMode mode = LaunchMode.customTabs,
+  final BuildContext? context,
 }) async {
   LaunchMode allowedMode = mode;
   switch (defaultTargetPlatform) {

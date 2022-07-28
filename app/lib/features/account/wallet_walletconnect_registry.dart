@@ -10,14 +10,17 @@ final Uri _registry =
     Uri.parse('https://registry.walletconnect.com/api/v1/wallets');
 
 /// Get the list of advertised wallets in the public WalletConnect registry
-Future<List<RegistryWallet>> registryGetWallets({required bool desktop}) async {
+Future<List<RegistryWallet>> registryGetWallets({
+  required final bool desktop,
+}) async {
   // TODO(serverwentdown): Cache this list for 7 days
-  var response = await http.get(_registry);
+  final http.Response response = await http.get(_registry);
   assert(response.headers['content-type'] == 'application/json');
-  var data = RegistryGetWalletsResponse.fromJson(jsonDecode(response.body));
+  final RegistryGetWalletsResponse data =
+      RegistryGetWalletsResponse.fromJson(jsonDecode(response.body));
   return data.listings.values
       .where(
-        (value) =>
+        (final RegistryWallet value) =>
             (desktop ? value.desktop?.valid : value.mobile?.valid) ?? false,
       )
       .toList();
@@ -27,7 +30,9 @@ Future<List<RegistryWallet>> registryGetWallets({required bool desktop}) async {
 class RegistryGetWalletsResponse {
   RegistryGetWalletsResponse({required this.listings, required this.count});
 
-  factory RegistryGetWalletsResponse.fromJson(Map<String, dynamic> json) =>
+  factory RegistryGetWalletsResponse.fromJson(
+    final Map<String, dynamic> json,
+  ) =>
       _$RegistryGetWalletsResponseFromJson(json);
 
   final Map<String, RegistryWallet> listings;
@@ -47,7 +52,7 @@ class RegistryWallet {
   });
   //final RegistryWalletLinks? desktop;
 
-  factory RegistryWallet.fromJson(Map<String, dynamic> json) =>
+  factory RegistryWallet.fromJson(final Map<String, dynamic> json) =>
       _$RegistryWalletFromJson(json);
 
   final String name;
@@ -68,7 +73,7 @@ class RegistryWalletImageUrl {
     required this.lg,
   });
 
-  factory RegistryWalletImageUrl.fromJson(Map<String, dynamic> json) =>
+  factory RegistryWalletImageUrl.fromJson(final Map<String, dynamic> json) =>
       _$RegistryWalletImageUrlFromJson(json);
 
   final String? sm;
@@ -82,7 +87,7 @@ class RegistryWalletImageUrl {
 class RegistryWalletLinks {
   const RegistryWalletLinks({required this.native, required this.universal});
 
-  factory RegistryWalletLinks.fromJson(Map<String, dynamic> json) =>
+  factory RegistryWalletLinks.fromJson(final Map<String, dynamic> json) =>
       _$RegistryWalletLinksFromJson(json);
 
   final String? native;

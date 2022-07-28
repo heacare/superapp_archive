@@ -47,9 +47,9 @@ final WCPeerMeta _clientMeta = WCPeerMeta(
 const int _chainId = 10;
 
 /// Generate a random key
-Uint8List _generateKey(int length) {
-  Uint8List bytes = Uint8List(length);
-  for (var i = 0; i < bytes.length; i++) {
+Uint8List _generateKey(final int length) {
+  final Uint8List bytes = Uint8List(length);
+  for (int i = 0; i < bytes.length; i++) {
     bytes[i] = _random.nextInt(256);
   }
   return bytes;
@@ -64,7 +64,7 @@ int _generateId() => DateTime.now().millisecondsSinceEpoch;
 class WalletConnectWallet extends Wallet {
   WalletConnectWallet({required this.session, required this.clientId});
 
-  factory WalletConnectWallet.fromJson(Map<String, dynamic> json) =>
+  factory WalletConnectWallet.fromJson(final Map<String, dynamic> json) =>
       _$WalletConnectWalletFromJson(json);
   factory WalletConnectWallet.createSession() => WalletConnectWallet(
         session: _createSession(),
@@ -91,17 +91,17 @@ class WalletConnectWallet extends Wallet {
     );
   }
 
-  void _onConnect(WCApproveSessionResponse payload) {
+  void _onConnect(final WCApproveSessionResponse payload) {
     account = payload.accounts[0];
     notifyListeners();
   }
 
-  void _onConnectError(JsonRpcError error) {
+  void _onConnectError(final JsonRpcError error) {
     connectError = error.message;
     notifyListeners();
   }
 
-  void _onSessionUpdate(WCSessionUpdate payload) {
+  void _onSessionUpdate(final WCSessionUpdate payload) {
     account = payload.accounts?[0];
     notifyListeners();
   }
@@ -201,7 +201,7 @@ class WalletConnect {
   }
 
   /// Handles all incoming messages
-  Future<void> _handleStream(dynamic event) async {
+  Future<void> _handleStream(final dynamic event) async {
     if (event is! String) {
       throw Exception(
         'Bridge: invalid message type received: ${event.runtimeType}',
@@ -209,22 +209,22 @@ class WalletConnect {
     }
 
     // Parse message
-    WCSocketMessage message = _parseMessage(event);
+    final WCSocketMessage message = _parseMessage(event);
     if (message.topic != clientId && message.topic != session.topic) {
       logW('Bridge: ignoring message for unknown topic ${message.topic}');
       return;
     }
     // All events should be encrypted events
-    WCEncryptionPayload encryptedPayload =
+    final WCEncryptionPayload encryptedPayload =
         _parseEncryptedPayload(message.payload);
     // Decrypt the payload
-    String decryptedPayload =
+    final String decryptedPayload =
         await WCCipher.decrypt(encryptedPayload, session.key);
-    Map<String, dynamic> payload = jsonDecode(decryptedPayload);
+    final Map<String, dynamic> payload = jsonDecode(decryptedPayload);
     logD('Bridge: receive $payload');
 
     if (_isJsonRpcRequest(payload)) {
-      JsonRpcRequest request = JsonRpcRequest.fromJson(payload);
+      final JsonRpcRequest request = JsonRpcRequest.fromJson(payload);
       switch (request.method) {
         case WCMethod.SESSION_UPDATE:
           _handleSessionUpdate(request.params!.first);
@@ -233,10 +233,11 @@ class WalletConnect {
           throw Exception('Bridge: unhandled request $request');
       }
     } else if (_isJsonRpcResponse(payload)) {
-      JsonRpcResponse response = JsonRpcResponse.fromJson(payload);
+      final JsonRpcResponse response = JsonRpcResponse.fromJson(payload);
       _handleResponse(response);
     } else if (_isJsonRpcErrorResponse(payload)) {
-      JsonRpcErrorResponse response = JsonRpcErrorResponse.fromJson(payload);
+      final JsonRpcErrorResponse response =
+          JsonRpcErrorResponse.fromJson(payload);
       _handleErrorResponse(response);
     } else {
       throw Exception('Bridge: unhandled message $payload');
@@ -244,7 +245,7 @@ class WalletConnect {
   }
 
   /// Handles stream errors
-  void _handleStreamError(dynamic error) {
+  void _handleStreamError(final dynamic error) {
     logD('Bridge: ${_channel?.closeCode} ${_channel?.closeReason} $error');
     assert(_channel!.closeCode != null);
     _channel = null;
@@ -260,8 +261,8 @@ class WalletConnect {
   }
 
   /// Handle wc_sessionUpdate message
-  void _handleSessionUpdate(dynamic params) {
-    WCSessionUpdate sessionUpdate = WCSessionUpdate.fromJson(params);
+  void _handleSessionUpdate(final dynamic params) {
+    final WCSessionUpdate sessionUpdate = WCSessionUpdate.fromJson(params);
     if (sessionUpdate.approved) {
       onSessionUpdate(sessionUpdate);
     } else {
@@ -270,10 +271,11 @@ class WalletConnect {
   }
 
   /// Handle response messages
-  void _handleResponse(JsonRpcResponse response) {
+  void _handleResponse(final JsonRpcResponse response) {
     // Handle handshake responses
     if (response.id == _handshakeId) {
-      var approval = WCApproveSessionResponse.fromJson(response.result);
+      final WCApproveSessionResponse approval =
+          WCApproveSessionResponse.fromJson(response.result);
       onConnect(approval);
     } else {
       throw Exception('Bridge: unhandled response $response');
@@ -281,7 +283,7 @@ class WalletConnect {
   }
 
   /// Handle error response messages
-  void _handleErrorResponse(JsonRpcErrorResponse response) {
+  void _handleErrorResponse(final JsonRpcErrorResponse response) {
     if (response.id == _handshakeId) {
       onConnectError(response.error);
     } else {
@@ -290,37 +292,37 @@ class WalletConnect {
   }
 
   /// Sends an arbitrary payload in a topic over the socket
-  void _send(String payload, String topic) {
-    WCSocketMessage message = WCSocketMessage(
+  void _send(final String payload, final String topic) {
+    final WCSocketMessage message = WCSocketMessage(
       topic: topic,
       type: MessageType.PUB,
       payload: payload,
       // TODO(serverwentdown): Add `silent` field
     );
-    String encoded = jsonEncode(message.toJson());
+    final String encoded = jsonEncode(message.toJson());
     logD('Bridge: send $encoded');
     _channel!.sink.add(encoded);
   }
 
   /// Subscribes to payloads in a topic over the socket
-  void _subscribe(String topic) {
-    WCSocketMessage message = WCSocketMessage(
+  void _subscribe(final String topic) {
+    final WCSocketMessage message = WCSocketMessage(
       topic: topic,
       type: MessageType.SUB,
       payload: '',
     );
-    String encoded = jsonEncode(message.toJson());
+    final String encoded = jsonEncode(message.toJson());
     logD('Bridge: send $encoded');
     _channel!.sink.add(encoded);
   }
 
   /// Sends a [JsonRpcRequest] over the socket to the peer
   Future<void> _sendRequest(
-    JsonRpcRequest request, {
-    required String topic,
+    final JsonRpcRequest request, {
+    required final String topic,
   }) async {
-    String payload = jsonEncode(request.toJson());
-    WCEncryptionPayload encryptedPayload =
+    final String payload = jsonEncode(request.toJson());
+    final WCEncryptionPayload encryptedPayload =
         await WCCipher.encrypt(payload, session.key);
     _send(jsonEncode(encryptedPayload), topic);
   }
@@ -338,7 +340,7 @@ class WalletConnect {
     // Instead, we simply send a handshake (wc_sessionRequest)
 
     _handshakeId = _generateId();
-    JsonRpcRequest request = JsonRpcRequest(
+    final JsonRpcRequest request = JsonRpcRequest(
       id: _handshakeId,
       method: WCMethod.SESSION_REQUEST,
       params: [
@@ -360,7 +362,7 @@ class WalletConnect {
     _ensureConnected();
 
     _disconnectId = _generateId();
-    JsonRpcRequest request = JsonRpcRequest(
+    final JsonRpcRequest request = JsonRpcRequest(
       id: _disconnectId,
       method: WCMethod.SESSION_UPDATE,
       params: [
@@ -397,17 +399,17 @@ class WalletConnectException implements Exception {
   }
 }
 
-bool _isJsonRpcRequest(Map<String, dynamic> payload) =>
+bool _isJsonRpcRequest(final Map<String, dynamic> payload) =>
     payload.containsKey('method');
 
-bool _isJsonRpcResponse(Map<String, dynamic> payload) =>
+bool _isJsonRpcResponse(final Map<String, dynamic> payload) =>
     payload.containsKey('result');
 
-bool _isJsonRpcErrorResponse(Map<String, dynamic> payload) =>
+bool _isJsonRpcErrorResponse(final Map<String, dynamic> payload) =>
     payload.containsKey('error');
 
 /// Parses incoming WebSocket messages
-WCSocketMessage _parseMessage(String event) {
+WCSocketMessage _parseMessage(final String event) {
   try {
     return WCSocketMessage.fromJson(jsonDecode(event));
     // ignore: avoid_catching_errors
@@ -426,7 +428,7 @@ WCSocketMessage _parseMessage(String event) {
 }
 
 /// Decrypts the payload of incoming WebSocket messages
-WCEncryptionPayload _parseEncryptedPayload(String payload) {
+WCEncryptionPayload _parseEncryptedPayload(final String payload) {
   try {
     return WCEncryptionPayload.fromJson(jsonDecode(payload));
     // ignore: avoid_catching_errors
@@ -446,7 +448,7 @@ WCEncryptionPayload _parseEncryptedPayload(String payload) {
 
 /// Creates a new WCSession object from random values
 WCSession _createSession() {
-  Uint8List key = _generateKey(32);
+  final Uint8List key = _generateKey(32);
   return WCSession(
     topic: _uuid.v4(),
     version: '1',

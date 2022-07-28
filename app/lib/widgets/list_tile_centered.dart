@@ -27,10 +27,10 @@ class ListTileCentered extends StatelessWidget {
   final double minVerticalPadding;
 
   @override
-  Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
+  Widget build(final BuildContext context) {
+    final ThemeData theme = Theme.of(context);
 
-    Widget titleText = AnimatedDefaultTextStyle(
+    final Widget titleText = AnimatedDefaultTextStyle(
       style: theme.textTheme.titleMedium!,
       duration: kThemeChangeDuration,
       child: title ?? const SizedBox(),
@@ -40,13 +40,13 @@ class ListTileCentered extends StatelessWidget {
     subtitleStyle = subtitleStyle.copyWith(
       color: theme.textTheme.bodySmall!.color,
     );
-    Widget subtitleText = AnimatedDefaultTextStyle(
+    final Widget subtitleText = AnimatedDefaultTextStyle(
       style: subtitleStyle,
       duration: kThemeChangeDuration,
       child: subtitle ?? const SizedBox(),
     );
 
-    TextDirection textDirection = Directionality.of(context);
+    final TextDirection textDirection = Directionality.of(context);
 
     return InkWell(
       onTap: onTap,

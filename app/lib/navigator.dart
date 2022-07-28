@@ -18,13 +18,17 @@ class ForceRTL extends StatelessWidget {
   final Widget child;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     if (!kDebugMode) {
       return child;
     }
-    Key key = UniqueKey();
+    final Key key = UniqueKey();
     return Consumer<Preferences>(
-      builder: (context, preferences, child) {
+      builder: (
+        final BuildContext context,
+        final Preferences preferences,
+        final Widget? child,
+      ) {
         if (preferences.forceRTL) {
           return Directionality(
             key: key,
@@ -72,11 +76,13 @@ class _NavigatorPage {
   final _PreferredSizeWidgetBuilder? desktopAppBar;
 }
 
-Route _preferencesRouteBuilder(context, arguments) => MaterialPageRoute(
-      builder: (context) => const ForceRTL(PreferencesPage()),
+Route _preferencesRouteBuilder(final context, final arguments) =>
+    MaterialPageRoute(
+      builder: (final BuildContext context) =>
+          const ForceRTL(PreferencesPage()),
     );
 
-Widget _preferencesButton(context) => IconButton(
+Widget _preferencesButton(final context) => IconButton(
       icon: const Icon(Icons.settings),
       tooltip: 'Settings',
       onPressed: () async {
@@ -91,8 +97,8 @@ final List<_NavigatorPage> _navigatorPages = [
     label: 'Home',
     icon: const Icon(Icons.chair_outlined),
     selectedIcon: const Icon(Icons.chair),
-    screen: (context) => const DashboardScreen(),
-    desktopScreen: (context) => const DashboardScreen(),
+    screen: (final BuildContext context) => const DashboardScreen(),
+    desktopScreen: (final BuildContext context) => const DashboardScreen(),
   ),
   _NavigatorPage(
     key: 'health',
@@ -100,8 +106,8 @@ final List<_NavigatorPage> _navigatorPages = [
     label: 'Health',
     icon: const Icon(Icons.analytics_outlined),
     selectedIcon: const Icon(Icons.analytics),
-    screen: (context) => const DemoScreen(),
-    desktopScreen: (context) => const DemoScreen(),
+    screen: (final BuildContext context) => const DemoScreen(),
+    desktopScreen: (final BuildContext context) => const DemoScreen(),
   ),
   _NavigatorPage(
     key: 'account',
@@ -109,14 +115,14 @@ final List<_NavigatorPage> _navigatorPages = [
     label: 'Account',
     icon: const Icon(Icons.person_outline),
     selectedIcon: const Icon(Icons.person),
-    screen: (context) => const AccountScreen(),
-    appBar: (context) => AppBar(
+    screen: (final BuildContext context) => const AccountScreen(),
+    appBar: (final BuildContext context) => AppBar(
       title: const Text('Account'),
       centerTitle: true,
       actions: [_preferencesButton(context)],
     ),
-    desktopScreen: (context) => const AccountScreen(),
-    desktopAppBar: (context) => AppBar(
+    desktopScreen: (final BuildContext context) => const AccountScreen(),
+    desktopAppBar: (final BuildContext context) => AppBar(
       title: const Text('Account'),
       centerTitle: true,
     ),
@@ -127,19 +133,20 @@ final List<_NavigatorPage> _navigatorPages = [
     label: 'Settings',
     icon: const Icon(Icons.settings_outlined),
     selectedIcon: const Icon(Icons.settings),
-    desktopScreen: (context) => const PreferencesScreen(),
-    desktopAppBar: (context) => AppBar(
+    desktopScreen: (final BuildContext context) => const PreferencesScreen(),
+    desktopAppBar: (final BuildContext context) => AppBar(
       title: const Text('Settings'),
       centerTitle: true,
     ),
   ),
 ];
 
-final List<_NavigatorPage> _pages =
-    _navigatorPages.where((page) => page.screen != null).toList();
+final List<_NavigatorPage> _pages = _navigatorPages
+    .where((final _NavigatorPage page) => page.screen != null)
+    .toList();
 final List<NavigationDestination> _destinations = _pages
     .map(
-      (page) => NavigationDestination(
+      (final _NavigatorPage page) => NavigationDestination(
         tooltip: page.tooltip,
         label: page.label,
         icon: page.icon,
@@ -148,11 +155,12 @@ final List<NavigationDestination> _destinations = _pages
     )
     .toList();
 
-final List<_NavigatorPage> _desktopPages =
-    _navigatorPages.where((page) => page.desktopScreen != null).toList();
+final List<_NavigatorPage> _desktopPages = _navigatorPages
+    .where((final _NavigatorPage page) => page.desktopScreen != null)
+    .toList();
 final List<NavigationRailDestination> _desktopDestinations = _desktopPages
     .map(
-      (page) => NavigationRailDestination(
+      (final _NavigatorPage page) => NavigationRailDestination(
         label: Text(page.label),
         icon: page.icon,
         selectedIcon: page.selectedIcon,
@@ -180,13 +188,17 @@ class _NavigatorState extends State<Navigator> with RestorationMixin {
   String get restorationId => 'navigator';
 
   @override
-  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
+  void restoreState(
+    final RestorationBucket? oldBucket,
+    final bool initialRestore,
+  ) {
     registerForRestoration(_selectedKey, 'selected_key');
   }
 
   @override
-  Widget build(BuildContext context) => LayoutBuilder(
-        builder: (context, constraints) {
+  Widget build(final BuildContext context) => LayoutBuilder(
+        builder:
+            (final BuildContext context, final BoxConstraints constraints) {
           if (constraints.maxWidth < 1024) {
             return _build(context);
           } else {
@@ -195,21 +207,25 @@ class _NavigatorState extends State<Navigator> with RestorationMixin {
         },
       );
 
-  int _selectedIndex(List<_NavigatorPage> pages) =>
-      max(pages.indexWhere((page) => page.key == _selectedKey.value), 0);
+  int _selectedIndex(final List<_NavigatorPage> pages) => max(
+        pages.indexWhere(
+          (final _NavigatorPage page) => page.key == _selectedKey.value,
+        ),
+        0,
+      );
 
-  void _setCurrentIndex(List<_NavigatorPage> pages, int index) {
+  void _setCurrentIndex(final List<_NavigatorPage> pages, final int index) {
     _selectedKey.value = pages[index].key;
   }
 
-  Widget _build(BuildContext context) {
-    int selectedIndex = _selectedIndex(_pages);
-    _NavigatorPage selectedPage = _pages[selectedIndex];
+  Widget _build(final BuildContext context) {
+    final int selectedIndex = _selectedIndex(_pages);
+    final _NavigatorPage selectedPage = _pages[selectedIndex];
     return Scaffold(
       appBar: selectedPage.appBar?.call(context),
       body: selectedPage.screen!.call(context),
       bottomNavigationBar: NavigationBar(
-        onDestinationSelected: (index) {
+        onDestinationSelected: (final int index) {
           setState(() {
             _setCurrentIndex(_pages, index);
           });
@@ -220,14 +236,14 @@ class _NavigatorState extends State<Navigator> with RestorationMixin {
     );
   }
 
-  Widget _buildDesktop(BuildContext context) {
-    int selectedIndex = _selectedIndex(_desktopPages);
-    _NavigatorPage selectedPage = _desktopPages[selectedIndex];
+  Widget _buildDesktop(final BuildContext context) {
+    final int selectedIndex = _selectedIndex(_desktopPages);
+    final _NavigatorPage selectedPage = _desktopPages[selectedIndex];
     return Scaffold(
       body: Row(
         children: [
           NavigationRail(
-            onDestinationSelected: (index) {
+            onDestinationSelected: (final int index) {
               setState(() {
                 _setCurrentIndex(_desktopPages, index);
               });

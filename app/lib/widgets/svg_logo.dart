@@ -18,12 +18,12 @@ class SvgLogo extends StatelessWidget {
   final Color? color;
 
   @override
-  Widget build(BuildContext context) => SvgPicture.asset(
+  Widget build(final BuildContext context) => SvgPicture.asset(
         'assets/integrations/walletconnect-banner.svg',
         width: aspectRatio * height,
         height: height,
         color: color ?? Theme.of(context).colorScheme.onPrimary,
-        placeholderBuilder: (context) => SizedBox(
+        placeholderBuilder: (final BuildContext context) => SizedBox(
           width: aspectRatio * height,
           height: height,
           child: Center(child: Text(placeholder)),

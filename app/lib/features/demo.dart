@@ -5,7 +5,7 @@ import '../system/theme.dart' show resolveThemeData;
 class DemoScreen extends StatelessWidget {
   const DemoScreen({super.key});
   @override
-  Widget build(BuildContext context) => ListView(
+  Widget build(final BuildContext context) => ListView(
         children: <Widget>[
           Text(
             MaterialLocalizations.of(context).formatCompactDate(DateTime.now()),
@@ -22,7 +22,7 @@ class ComponentScreen extends StatelessWidget {
   final bool showNavBottomBar;
 
   @override
-  Widget build(BuildContext context) => Align(
+  Widget build(final BuildContext context) => Align(
         alignment: Alignment.topCenter,
         child: SizedBox(
           width: _maxWidthConstraint,
@@ -57,14 +57,14 @@ const double _cardWidth = 115;
 const double _maxWidthConstraint = 400;
 
 void Function()? handlePressed(
-  BuildContext context,
-  bool isDisabled,
-  String buttonName,
+  final BuildContext context,
+  final bool isDisabled,
+  final String buttonName,
 ) =>
     isDisabled
         ? null
         : () {
-            SnackBar snackBar = SnackBar(
+            final SnackBar snackBar = SnackBar(
               content: Text(
                 'Yay! $buttonName is clicked!',
               ),
@@ -85,7 +85,7 @@ class Buttons extends StatefulWidget {
 
 class _ButtonsState extends State<Buttons> {
   @override
-  Widget build(BuildContext context) => Wrap(
+  Widget build(final BuildContext context) => Wrap(
         alignment: WrapAlignment.spaceEvenly,
         children: const <Widget>[
           ButtonsWithoutIcon(isDisabled: false),
@@ -102,7 +102,7 @@ class ButtonsWithoutIcon extends StatelessWidget {
   final bool isDisabled;
 
   @override
-  Widget build(BuildContext context) => IntrinsicWidth(
+  Widget build(final BuildContext context) => IntrinsicWidth(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
@@ -152,7 +152,7 @@ class ButtonsWithIcon extends StatelessWidget {
   const ButtonsWithIcon({super.key});
 
   @override
-  Widget build(BuildContext context) => IntrinsicWidth(
+  Widget build(final BuildContext context) => IntrinsicWidth(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
@@ -210,7 +210,7 @@ class FloatingActionButtons extends StatelessWidget {
   const FloatingActionButtons({super.key});
 
   @override
-  Widget build(BuildContext context) => Padding(
+  Widget build(final BuildContext context) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: Wrap(
           alignment: WrapAlignment.spaceEvenly,
@@ -245,7 +245,7 @@ class Cards extends StatelessWidget {
   const Cards({super.key});
 
   @override
-  Widget build(BuildContext context) => Padding(
+  Widget build(final BuildContext context) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: Wrap(
           alignment: WrapAlignment.spaceEvenly,
@@ -335,10 +335,10 @@ class Dialogs extends StatefulWidget {
 }
 
 class _DialogsState extends State<Dialogs> {
-  void openDialog(BuildContext context) {
+  void openDialog(final BuildContext context) {
     showDialog<void>(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (final BuildContext context) => AlertDialog(
         title: const Text('Basic Dialog Title'),
         content: const Text(
           'A dialog is a type of modal window that appears in front of app content to provide critical information, or prompt for a decision to be made.',
@@ -358,7 +358,7 @@ class _DialogsState extends State<Dialogs> {
   }
 
   @override
-  Widget build(BuildContext context) => Padding(
+  Widget build(final BuildContext context) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: TextButton(
           child: const Text(
@@ -399,7 +399,7 @@ const List<NavigationDestination> appBarDestinations = [
 
 final List<NavigationRailDestination> navRailDestinations = appBarDestinations
     .map(
-      (destination) => NavigationRailDestination(
+      (final NavigationDestination destination) => NavigationRailDestination(
         icon: Tooltip(
           message: destination.label,
           child: destination.icon,
@@ -459,9 +459,9 @@ class _NavigationBarsState extends State<NavigationBars> {
   }
 
   @override
-  Widget build(BuildContext context) => NavigationBar(
+  Widget build(final BuildContext context) => NavigationBar(
         selectedIndex: _selectedIndex,
-        onDestinationSelected: (index) {
+        onDestinationSelected: (final int index) {
           setState(() {
             _selectedIndex = index;
           });
@@ -497,12 +497,12 @@ class _NavigationRailSectionState extends State<NavigationRailSection> {
   }
 
   @override
-  Widget build(BuildContext context) => NavigationRail(
+  Widget build(final BuildContext context) => NavigationRail(
         minWidth: 50,
         destinations: navRailDestinations,
         selectedIndex: _selectedIndex,
         useIndicator: true,
-        onDestinationSelected: (index) {
+        onDestinationSelected: (final int index) {
           setState(() {
             _selectedIndex = index;
           });
@@ -522,17 +522,17 @@ class ColorPalettesScreen extends StatelessWidget {
   const ColorPalettesScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    ThemeData lightTheme = resolveThemeData(
+  Widget build(final BuildContext context) {
+    final ThemeData lightTheme = resolveThemeData(
       Brightness.light,
       null,
     );
-    ThemeData darkTheme = resolveThemeData(
+    final ThemeData darkTheme = resolveThemeData(
       Brightness.dark,
       null,
     );
 
-    Widget schemeLabel(String brightness) => Padding(
+    Widget schemeLabel(final String brightness) => Padding(
           padding: const EdgeInsets.symmetric(vertical: 15),
           child: Text(
             brightness,
@@ -540,7 +540,7 @@ class ColorPalettesScreen extends StatelessWidget {
           ),
         );
 
-    Widget schemeView(ThemeData theme) => Padding(
+    Widget schemeView(final ThemeData theme) => Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: ColorSchemeView(
             colorScheme: theme.colorScheme,
@@ -548,7 +548,7 @@ class ColorPalettesScreen extends StatelessWidget {
         );
 
     return LayoutBuilder(
-      builder: (context, constraints) {
+      builder: (final BuildContext context, final BoxConstraints constraints) {
         if (constraints.maxWidth < narrowScreenWidthThreshold) {
           return Column(
             children: [
@@ -597,7 +597,7 @@ class ColorSchemeView extends StatelessWidget {
   final ColorScheme colorScheme;
 
   @override
-  Widget build(BuildContext context) => Column(
+  Widget build(final BuildContext context) => Column(
         children: [
           ColorGroup(
             children: [
@@ -770,7 +770,7 @@ class ColorGroup extends StatelessWidget {
   final List<Widget> children;
 
   @override
-  Widget build(BuildContext context) => Card(
+  Widget build(final BuildContext context) => Card(
         clipBehavior: Clip.antiAlias,
         child: Column(
           children: children,
@@ -790,8 +790,8 @@ class ColorChip extends StatelessWidget {
   final Color? onColor;
   final String label;
 
-  static Color contrastColor(Color color) {
-    Brightness brightness = ThemeData.estimateBrightnessForColor(color);
+  static Color contrastColor(final Color color) {
+    final Brightness brightness = ThemeData.estimateBrightnessForColor(color);
     switch (brightness) {
       case Brightness.dark:
         return Colors.white;
@@ -801,8 +801,8 @@ class ColorChip extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    Color labelColor = onColor ?? contrastColor(color);
+  Widget build(final BuildContext context) {
+    final Color labelColor = onColor ?? contrastColor(color);
 
     return ColoredBox(
       color: color,

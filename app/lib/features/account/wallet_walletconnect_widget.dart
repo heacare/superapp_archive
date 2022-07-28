@@ -26,7 +26,10 @@ class WalletConnect extends StatelessWidget {
 
   final WalletConnectWallet wallet;
 
-  Widget _buildTabsDesktop(BuildContext context, WalletConnectWallet wallet) =>
+  Widget _buildTabsDesktop(
+    final BuildContext context,
+    final WalletConnectWallet wallet,
+  ) =>
       DefaultTabController(
         length: 3,
         child: Column(
@@ -51,7 +54,10 @@ class WalletConnect extends StatelessWidget {
         ),
       );
 
-  Widget _buildTabs(BuildContext context, WalletConnectWallet wallet) =>
+  Widget _buildTabs(
+    final BuildContext context,
+    final WalletConnectWallet wallet,
+  ) =>
       DefaultTabController(
         length: 2,
         child: Column(
@@ -75,16 +81,19 @@ class WalletConnect extends StatelessWidget {
       );
 
   Widget _buildTabMobile(
-    BuildContext context,
-    WalletConnectWallet wallet, {
-    bool desktop = false,
+    final BuildContext context,
+    final WalletConnectWallet wallet, {
+    final bool desktop = false,
   }) =>
       WalletConnectWalletPicker(
         uri: wallet.walletConnectUri,
         desktop: desktop,
       );
 
-  Widget _buildTabQR(BuildContext context, WalletConnectWallet wallet) =>
+  Widget _buildTabQR(
+    final BuildContext context,
+    final WalletConnectWallet wallet,
+  ) =>
       Padding(
         padding: const EdgeInsets.all(16),
         child: QrCodeDialog(
@@ -101,9 +110,9 @@ class WalletConnect extends StatelessWidget {
       );
 
   @override
-  Widget build(BuildContext context) => AnimatedBuilder(
+  Widget build(final BuildContext context) => AnimatedBuilder(
         animation: wallet,
-        builder: (context, child) {
+        builder: (final BuildContext context, final Widget? child) {
           if (wallet.connected) {
             Navigator.of(context).pop(wallet);
           }
@@ -145,7 +154,7 @@ class WalletConnectWalletPicker extends StatelessWidget {
   final bool desktop;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return Center(
@@ -153,7 +162,7 @@ class WalletConnectWalletPicker extends StatelessWidget {
             style: buttonStylePrimaryLarge(context),
             child: const Text('Connect'),
             onPressed: () {
-              Uri launchUri = Uri.parse(uri);
+              final Uri launchUri = Uri.parse(uri);
               logD('WalletConnect: launching $launchUri');
               launchUrl(
                 launchUri,
@@ -165,7 +174,10 @@ class WalletConnectWalletPicker extends StatelessWidget {
       default:
         return FutureBuilder<List<RegistryWallet>>(
           future: registryGetWallets(desktop: desktop),
-          builder: (context, snapshot) {
+          builder: (
+            final BuildContext context,
+            final AsyncSnapshot<List<RegistryWallet>> snapshot,
+          ) {
             if (snapshot.hasError) {
               return Container(
                 alignment: Alignment.center,
@@ -187,7 +199,8 @@ class WalletConnectWalletPicker extends StatelessWidget {
               shrinkWrap: true,
               padding: const EdgeInsets.symmetric(vertical: 8),
               itemCount: snapshot.data?.length ?? 0,
-              itemBuilder: (context, index) => WalletConnectWalletPickerItem(
+              itemBuilder: (final BuildContext context, final int index) =>
+                  WalletConnectWalletPickerItem(
                 item: snapshot.data![index],
                 uri: uri,
                 desktop: desktop,
@@ -212,19 +225,20 @@ class WalletConnectWalletPickerItem extends StatelessWidget {
   final bool desktop;
 
   @override
-  Widget build(BuildContext context) => ListTile(
+  Widget build(final BuildContext context) => ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         leading: _buildImage(item.imageUrl),
         title: Text(item.name),
         onTap: () {
           String? launchString;
-          RegistryWalletLinks links = desktop ? item.desktop! : item.mobile!;
+          final RegistryWalletLinks links =
+              desktop ? item.desktop! : item.mobile!;
           if (links.validUniversal) {
             launchString = '${links.universal}/wc?uri=$uri';
           } else if (links.validNative) {
             launchString = '${links.native}//wc?uri=$uri';
           }
-          Uri launchUri = Uri.parse(launchString!);
+          final Uri launchUri = Uri.parse(launchString!);
           logD('WalletConnect: launching $launchUri');
           launchUrl(
             launchUri,
@@ -233,7 +247,7 @@ class WalletConnectWalletPickerItem extends StatelessWidget {
         },
       );
 
-  Widget? _buildImage(RegistryWalletImageUrl? imageUrl) {
+  Widget? _buildImage(final RegistryWalletImageUrl? imageUrl) {
     if (imageUrl?.sm == null) {
       return null;
     }
@@ -241,8 +255,8 @@ class WalletConnectWalletPickerItem extends StatelessWidget {
   }
 }
 
-Future<Wallet?> showWalletConnectDialog(BuildContext context) async {
-  var wallet = WalletConnectWallet.createSession();
+Future<Wallet?> showWalletConnectDialog(final BuildContext context) async {
+  final WalletConnectWallet wallet = WalletConnectWallet.createSession();
   unawaited(
     () async {
       await Future.delayed(const Duration(milliseconds: 200));
@@ -253,7 +267,7 @@ Future<Wallet?> showWalletConnectDialog(BuildContext context) async {
   // TODO(serverwentdown): Enable state restoration https://api.flutter.dev/flutter/material/showDialog.html#state-restoration-in-dialogs
   return showDialog(
     context: context,
-    builder: (context) => ForceRTL(
+    builder: (final BuildContext context) => ForceRTL(
       AlertDialog(
         title: Center(
           child: SvgPicture.asset(

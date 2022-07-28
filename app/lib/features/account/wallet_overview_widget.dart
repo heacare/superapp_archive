@@ -11,12 +11,13 @@ class WalletOverview extends StatelessWidget {
   const WalletOverview({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    TextTheme textTheme = Theme.of(context).textTheme;
-    ColorScheme colorScheme = Theme.of(context).colorScheme;
+  Widget build(final BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
-    Account account = Provider.of<Account>(context);
-    ScaffoldMessengerState scaffoldMessenger = ScaffoldMessenger.of(context);
+    final Account account = Provider.of<Account>(context);
+    final ScaffoldMessengerState scaffoldMessenger =
+        ScaffoldMessenger.of(context);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -57,7 +58,7 @@ class WalletOverview extends StatelessWidget {
                 color: colorScheme.onPrimary,
               ),
               onPressed: () async {
-                Wallet? wallet = await showWalletConnectDialog(context);
+                final Wallet? wallet = await showWalletConnectDialog(context);
                 if (wallet != null) {
                   await account.setWallet(wallet);
                   scaffoldMessenger.showSnackBar(

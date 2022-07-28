@@ -14,7 +14,7 @@ class EditPage extends StatefulWidget {
 }
 
 class _EditPageState extends State<EditPage> {
-  final _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool _formValidate() => _formKey.currentState!.validate();
 
@@ -23,7 +23,7 @@ class _EditPageState extends State<EditPage> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(final BuildContext context) => Scaffold(
         appBar: AppBar(
           title: const Text('Edit profile'),
           centerTitle: true,
@@ -55,8 +55,8 @@ class EditScreen extends StatelessWidget {
   final GlobalKey<FormState> formKey;
 
   @override
-  Widget build(BuildContext context) {
-    Account account = Provider.of<Account>(context);
+  Widget build(final BuildContext context) {
+    final Account account = Provider.of<Account>(context);
     return Screen(
       child: Form(
         key: formKey,
@@ -68,7 +68,8 @@ class EditScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildFields(BuildContext context, Account account) => Column(
+  Widget _buildFields(final BuildContext context, final Account account) =>
+      Column(
         children: [
           TextFormField(
             keyboardType: TextInputType.name,
@@ -76,14 +77,14 @@ class EditScreen extends StatelessWidget {
               border: OutlineInputBorder(),
               labelText: 'Name',
             ),
-            validator: (value) {
+            validator: (final String? value) {
               if (value == '') {
                 return 'Name is required';
               }
               return null;
             },
             initialValue: account.metadata.name,
-            onSaved: (value) {
+            onSaved: (final String? value) {
               account.metadata.setName(value);
             },
           ),
@@ -93,14 +94,14 @@ class EditScreen extends StatelessWidget {
               border: OutlineInputBorder(),
               labelText: 'Birthday',
             ),
-            validator: (value) {
+            validator: (final DateTime? value) {
               if (value == null) {
                 return 'Birthday is required';
               }
               return null;
             },
             initialValue: account.metadata.birthday,
-            onSaved: (value) {
+            onSaved: (final DateTime? value) {
               account.metadata.setBirthday(value);
             },
           ),
@@ -111,14 +112,14 @@ class EditScreen extends StatelessWidget {
               labelText: 'Town/city and country',
               hintText: 'London, UK',
             ),
-            validator: (value) {
+            validator: (final String? value) {
               if (value == '') {
                 return 'Town/city and country is required';
               }
               return null;
             },
             initialValue: account.metadata.regionText,
-            onSaved: (value) {
+            onSaved: (final String? value) {
               account.metadata.setRegionText(value);
             },
           ),
@@ -130,21 +131,21 @@ class EditScreen extends StatelessWidget {
             ),
             items: SexAtBirth.values
                 .map(
-                  (value) => DropdownMenuItem(
+                  (final SexAtBirth value) => DropdownMenuItem(
                     value: value,
                     child: Text(_sexAtBirthText(value)),
                   ),
                 )
                 .toList(),
-            onChanged: (value) async {},
-            validator: (value) {
+            onChanged: (final SexAtBirth? value) async {},
+            validator: (final SexAtBirth? value) {
               if (value == null) {
                 return 'Sex at birth is required';
               }
               return null;
             },
             value: account.metadata.sexAtBirth,
-            onSaved: (value) {
+            onSaved: (final SexAtBirth? value) {
               account.metadata.setSexAtBirth(value);
             },
           ),
@@ -156,21 +157,21 @@ class EditScreen extends StatelessWidget {
             ),
             items: RelationshipStatus.values
                 .map(
-                  (value) => DropdownMenuItem(
+                  (final RelationshipStatus value) => DropdownMenuItem(
                     value: value,
                     child: Text(_relationshipStatusText(value)),
                   ),
                 )
                 .toList(),
-            onChanged: (value) async {},
-            validator: (value) {
+            onChanged: (final RelationshipStatus? value) async {},
+            validator: (final RelationshipStatus? value) {
               if (value == null) {
                 return 'Relationship status is required';
               }
               return null;
             },
             value: account.metadata.relationshipStatus,
-            onSaved: (value) {
+            onSaved: (final RelationshipStatus? value) {
               account.metadata.setRelationshipStatus(value);
             },
           ),
@@ -182,21 +183,21 @@ class EditScreen extends StatelessWidget {
             ),
             items: WorkPeriod.values
                 .map(
-                  (value) => DropdownMenuItem(
+                  (final WorkPeriod value) => DropdownMenuItem(
                     value: value,
                     child: Text(_workPeriodText(value)),
                   ),
                 )
                 .toList(),
-            onChanged: (value) async {},
-            validator: (value) {
+            onChanged: (final WorkPeriod? value) async {},
+            validator: (final WorkPeriod? value) {
               if (value == null) {
                 return 'Work/study hours is required';
               }
               return null;
             },
             value: account.metadata.workPeriod,
-            onSaved: (value) {
+            onSaved: (final WorkPeriod? value) {
               account.metadata.setWorkPeriod(value);
             },
           ),
@@ -204,7 +205,7 @@ class EditScreen extends StatelessWidget {
       );
 }
 
-String _sexAtBirthText(SexAtBirth sexAtBirth) {
+String _sexAtBirthText(final SexAtBirth sexAtBirth) {
   switch (sexAtBirth) {
     case SexAtBirth.male:
       return 'Male';
@@ -215,7 +216,7 @@ String _sexAtBirthText(SexAtBirth sexAtBirth) {
   }
 }
 
-String _relationshipStatusText(RelationshipStatus relationshipStatus) {
+String _relationshipStatusText(final RelationshipStatus relationshipStatus) {
   switch (relationshipStatus) {
     case RelationshipStatus.single:
       return 'Single';
@@ -226,7 +227,7 @@ String _relationshipStatusText(RelationshipStatus relationshipStatus) {
   }
 }
 
-String _workPeriodText(WorkPeriod workPeriod) {
+String _workPeriodText(final WorkPeriod workPeriod) {
   switch (workPeriod) {
     case WorkPeriod.day:
       return 'Day worker';

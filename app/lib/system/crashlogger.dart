@@ -14,12 +14,17 @@ import 'firebase.dart' show isFirebaseReady;
 import 'log.dart';
 
 abstract class _CrashLogger {
-  void _recordFlutterError(FlutterErrorDetails details, {required bool fatal});
+  void _recordFlutterError(
+    final FlutterErrorDetails details, {
+    required final bool fatal,
+  });
 
-  void _recordFlutterFatalError(FlutterErrorDetails flutterErrorDetails) =>
+  void _recordFlutterFatalError(
+    final FlutterErrorDetails flutterErrorDetails,
+  ) =>
       _recordFlutterError(flutterErrorDetails, fatal: true);
 
-  void _recordZoneError(Object error, StackTrace stack) {
+  void _recordZoneError(final Object error, final StackTrace stack) {
     _recordFlutterError(
       FlutterErrorDetails(
         exception: error,
@@ -32,7 +37,10 @@ abstract class _CrashLogger {
 
   Future<void> _setup() async {}
 
-  void wrap(Future<void> Function() setup, Future<void> Function() runApp) {
+  void wrap(
+    final Future<void> Function() setup,
+    final Future<void> Function() runApp,
+  ) {
     runZonedGuarded(
       () async {
         await setup();
@@ -54,14 +62,20 @@ class _FirebaseCrashLogger extends _CrashLogger {
   }
 
   @override
-  void _recordFlutterError(FlutterErrorDetails details, {required bool fatal}) {
+  void _recordFlutterError(
+    final FlutterErrorDetails details, {
+    required final bool fatal,
+  }) {
     _record!(details, fatal: fatal);
   }
 }
 
 class _DebugPrintCrashLogger extends _CrashLogger {
   @override
-  void _recordFlutterError(FlutterErrorDetails details, {required bool fatal}) {
+  void _recordFlutterError(
+    final FlutterErrorDetails details, {
+    required final bool fatal,
+  }) {
     debugPrint(
       'UNCAUGHT ${details.exceptionAsString()} (fatal: $fatal)\n${details.stack.toString()}',
     );
@@ -72,8 +86,8 @@ class _DebugPrintCrashLogger extends _CrashLogger {
 const String crashlogger = String.fromEnvironment('CRASHLOGGER');
 
 Future<void> crashloggerWrap(
-  Future<void> Function() setup,
-  Future<void> Function() runApp,
+  final Future<void> Function() setup,
+  final Future<void> Function() runApp,
 ) async {
   if (crashlogger == 'disabled') {
     await setup();

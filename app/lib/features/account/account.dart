@@ -9,12 +9,12 @@ import 'metadata.dart' show AccountMetadata, AppAccountMetadata;
 import 'wallet.dart' show Wallet;
 import 'wallet_walletconnect.dart' show WalletConnectWallet;
 
-const uuid = Uuid();
+const Uuid uuid = Uuid();
 
 abstract class Account extends ChangeNotifier {
   // TODO(serverwentdown): Should the entire wallet be exposed to consumers?
   Wallet? get wallet;
-  Future<void> setWallet(Wallet wallet);
+  Future<void> setWallet(final Wallet wallet);
 
   AccountMetadata get metadata;
 }
@@ -24,8 +24,8 @@ class AppAccount extends Account {
 
   final Database _database;
 
-  static Future<Account> load(Database database) async {
-    AppAccount account = AppAccount._(database);
+  static Future<Account> load(final Database database) async {
+    final AppAccount account = AppAccount._(database);
 
     // Restore metadata
     await account._restoreMetadata();
@@ -37,15 +37,17 @@ class AppAccount extends Account {
 
   late AccountMetadata _metadata;
   Future<void> _restoreMetadata() async {
-    Map<String, dynamic>? metadata =
-        await kvRead(_database, 'account.metadata');
+    final Map<String, dynamic>? metadata =
+        await kvRead(_database, 'account.metadata') as Map<String, dynamic>?;
     if (metadata == null) {
       _metadata = AppAccountMetadata(
         id: uuid.v4(),
       );
       await _saveMetadata();
+    } else {
+      _metadata = AppAccountMetadata.fromJson(metadata);
     }
-    _metadata = AppAccountMetadata.fromJson(metadata!)
+    _metadata
       ..addListener(notifyListeners)
       ..addListener(_saveMetadata);
   }
@@ -60,7 +62,8 @@ class AppAccount extends Account {
 
   Wallet? _wallet;
   Future<void> _restoreWallet() async {
-    Map<String, dynamic>? wallet = await kvRead(_database, 'account.wallet');
+    final Map<String, dynamic>? wallet =
+        await kvRead(_database, 'account.wallet') as Map<String, dynamic>?;
     if (wallet == null) {
       return;
     }
@@ -79,7 +82,7 @@ class AppAccount extends Account {
   @override
   Wallet? get wallet => _wallet;
   @override
-  Future<void> setWallet(Wallet wallet) async {
+  Future<void> setWallet(final Wallet wallet) async {
     if (_wallet != null) {
       _wallet!.dispose();
     }

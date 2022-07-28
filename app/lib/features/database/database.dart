@@ -28,7 +28,7 @@ Future<Database> databaseOpen() async {
     path = join((await getApplicationSupportDirectory()).path, path);
   }
 
-  Database database = await factory.openDatabase(
+  final Database database = await factory.openDatabase(
     path,
     options: OpenDatabaseOptions(
       version: 1,
@@ -38,7 +38,10 @@ Future<Database> databaseOpen() async {
   return database;
 }
 
-Future<void> _databaseOnCreate(Database database, int version) async {
+Future<void> _databaseOnCreate(
+  final Database database,
+  final int version,
+) async {
   await database.execute(
     '''
 CREATE TABLE kv (
@@ -51,8 +54,8 @@ CREATE TABLE kv (
 
 /// Reads a value from the key-value database. Useful for JSON serializable
 /// global objects
-Future<dynamic> kvRead(Database database, String key) async {
-  List<Map<String, Object?>> rows = await database.query(
+Future<dynamic> kvRead(final Database database, final String key) async {
+  final List<Map<String, Object?>> rows = await database.query(
     'kv',
     where: 'key = ?',
     whereArgs: [key],
@@ -60,13 +63,17 @@ Future<dynamic> kvRead(Database database, String key) async {
   if (rows.isEmpty) {
     return null;
   }
-  Map<String, Object?> row = rows.first;
+  final Map<String, Object?> row = rows.first;
   return jsonDecode(row['value']! as String);
 }
 
 /// Writes a value to the key-value database. Useful for JSON serializable
 /// global objects
-Future<void> kvWrite(Database database, String key, dynamic value) async {
+Future<void> kvWrite(
+  final Database database,
+  final String key,
+  final dynamic value,
+) async {
   await database.insert(
     'kv',
     {

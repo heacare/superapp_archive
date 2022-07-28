@@ -35,8 +35,8 @@ final ColorScheme _darkColorSchemeFallback = ColorScheme.fromSeed(
 );
 
 ThemeData resolveThemeData(
-  Brightness brightness,
-  ColorScheme? colorSchemeDynamic,
+  final Brightness brightness,
+  final ColorScheme? colorSchemeDynamic,
 ) {
   ColorScheme? colorScheme = colorSchemeDynamic;
   if (colorScheme == null) {
@@ -50,7 +50,7 @@ ThemeData resolveThemeData(
     }
   }
 
-  ThemeData themeData = ThemeData.from(
+  final ThemeData themeData = ThemeData.from(
     colorScheme: colorScheme,
     useMaterial3: true,
   );
@@ -96,7 +96,7 @@ final SystemUiOverlayStyle _darkSystemUiOverlayStyle =
   systemNavigationBarContrastEnforced: false,
 );
 
-SystemUiOverlayStyle resolveOverlayStyle(ThemeMode themeMode) {
+SystemUiOverlayStyle resolveOverlayStyle(final ThemeMode themeMode) {
   Brightness brightness;
   switch (themeMode) {
     case ThemeMode.light:
@@ -122,7 +122,7 @@ const ShapeBorder _bottomSheetShape = RoundedRectangleBorder(
 
 // TabBar
 
-Decoration _tabBarIndicator(ColorScheme colorScheme) => BoxDecoration(
+Decoration _tabBarIndicator(final ColorScheme colorScheme) => BoxDecoration(
       border: Border(
         bottom: BorderSide(
           width: 2,
