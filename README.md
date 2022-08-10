@@ -7,6 +7,7 @@
 [![fastlane-beta](https://github.com/happilyeveraftercorp/hea/actions/workflows/fastlane-beta.yaml/badge.svg)](https://github.com/happilyeveraftercorp/hea/actions/workflows/fastlane-beta.yaml)
 
 ## Story
+
 When Happily Ever After started, we had a vision for universal preventive healthcare. Our initial approach was a superapp that did everything, which we quickly realised was vastly inferior to a solution promoting collaboration and a federation of interoperable apps (go web3!). Thus, Happily Ever After evolved from an all-in-one health super app, to an ecosystem that prides itself on collaboration, open-source tools and shared meaning.
 
 We are archiving this project here to remind us of our roots, and to be public about our past experiments and their outcomes ✨
