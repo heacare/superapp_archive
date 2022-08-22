@@ -70,7 +70,7 @@ dependencies:
   web_socket_channel: ^2.2.0
 
   # Firebase
-  firebase_core: ^1.17.0
+  firebase_core: ^1.21.0
   firebase_messaging: ^11.4.0
   firebase_crashlytics: ^2.8.0
 
