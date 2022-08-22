@@ -23,7 +23,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
       - name: Format yaml, md, json, hbs, js
-        uses: actionsx/prettier@3de869a32607c555c4d8f367228691f6e141d37a
+        uses: actionsx/prettier@13639c769e72c3e51d53ae383b681a684c883233
         with:
           args: --config backend/package.json --write '**/*.yaml' '**/*.yml' '**/*.md' '**/*.json' '**/*.hbs' '**/*.js' '!app/fastlane/README.md'
       - name: Format app/tools
